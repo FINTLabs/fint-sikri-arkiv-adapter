@@ -6,7 +6,7 @@ import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.adapter.FintAdapterEndpoints;
 import no.fint.adapter.FintAdapterProps;
-import no.fint.documaster.service.EventHandlerService;
+import no.fint.sikri.service.EventHandlerService;
 import no.fint.event.model.HeaderConstants;
 import no.fint.sse.FintSse;
 import no.fint.sse.FintSseConfig;
