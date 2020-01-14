@@ -1,13 +1,7 @@
 package no.fint.sikri.handler.kulturminne;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.exception.NotTilskuddfartoyException;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyDefaults;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
-import no.fint.sikri.handler.Handler;
-import no.fint.sikri.service.ValidationService;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.Problem;
@@ -15,6 +9,11 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.kultur.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.sikri.data.exception.NotTilskuddfartoyException;
+import no.fint.sikri.data.kulturminne.TilskuddFartoyDefaults;
+import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
+import no.fint.sikri.handler.Handler;
+import no.fint.sikri.service.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,8 +78,8 @@ public class UpdateTilskuddFartoyHandler implements Handler {
             return;
         }
         String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
-        TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(caseNumber, tilskuddFartoyResource);
-        response.setData(ImmutableList.of(result));
+        //TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(caseNumber, tilskuddFartoyResource);
+        //response.setData(ImmutableList.of(result));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
     }
 
@@ -96,8 +95,8 @@ public class UpdateTilskuddFartoyHandler implements Handler {
                 log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
                 return;
             }
-            TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
-            response.setData(ImmutableList.of(tilskuddFartoy));
+            //TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
+            //response.setData(ImmutableList.of(tilskuddFartoy));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (NotTilskuddfartoyException e) {
             response.setResponseStatus(ResponseStatus.REJECTED);

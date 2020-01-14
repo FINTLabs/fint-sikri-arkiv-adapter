@@ -1,6 +1,6 @@
 package no.fint.sikri.data.utilities
 
-import no.fint.documaster.data.exception.UnableToParseTitle
+import no.fint.sikri.data.exception.UnableToParseTitle
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource
 import spock.lang.Specification
 

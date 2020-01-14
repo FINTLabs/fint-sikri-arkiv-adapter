@@ -2,9 +2,6 @@ package no.fint.sikri.handler.noark;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.noark.dokument.DokumentfilService;
-import no.fint.sikri.handler.Handler;
-import no.fint.sikri.service.ValidationService;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.Problem;
@@ -12,6 +9,9 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.administrasjon.arkiv.DokumentfilResource;
+import no.fint.sikri.data.noark.dokument.DokumentfilService;
+import no.fint.sikri.handler.Handler;
+import no.fint.sikri.service.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class CreateDokumentfilHandler implements Handler {
         log.info("Format: {}, data: {}...", dokumentfilResource.getFormat(), StringUtils.substring(dokumentfilResource.getData(), 0, 25));
 
         response.getData().clear();
-        response.addData(dokumentfilService.createDokumentfil(dokumentfilResource));
+        //response.addData(dokumentfilService.createDokumentfil(dokumentfilResource));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
 
     }

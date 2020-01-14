@@ -1,8 +1,6 @@
 package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.QueryInput;
-import no.documaster.model.Result__1;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondanseService;
@@ -47,7 +45,7 @@ public class JournalpostFactory {
 
     @Autowired
     private NokkelordService nokkelordService;
-
+/*
     public JournalpostResource toFintResource(Result__1 result) {
         JournalpostResource journalpost = new JournalpostResource();
 
@@ -60,19 +58,7 @@ public class JournalpostFactory {
         journalpost.setJournalSekvensnummer(Long.valueOf(result.getFields().getJournalsekvensnummer()));
         journalpost.setBeskrivelse(result.getFields().getBeskrivelse());
 
-/*
-        optionalValue(result.getFiles())
-                .map(ArrayOfDocumentFileResult::getDocumentFileResult)
-                .map(List::size)
-                .map(Integer::longValue)
-                .ifPresent(journalpost::setAntallVedlegg);
-*/
-/*
-        optionalValue(result.getDocumentDate())
-                .map(XMLGregorianCalendar::toGregorianCalendar)
-                .map(GregorianCalendar::getTime)
-                .ifPresent(journalpost::setDokumentetsDato);
-*/
+
 
         // FIXME: 2019-05-08 check for empty
         journalpost.setReferanseArkivDel(Collections.emptyList());
@@ -90,13 +76,6 @@ public class JournalpostFactory {
         journalpost.setMerknad(merknadService.queryForRegistrering(result.getId()));
         journalpost.setNokkelord(nokkelordService.queryForRegistrering(result.getId()));
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId()));
-/*
-        optionalValue(result.getResponsibleEnterprise())
-                .map(ResponsibleEnterprise::getRecno)
-                .map(String::valueOf)
-                .map(Link.apply(Organisasjonselement.class, "organisasjonsid"))
-                .ifPresent(journalpost::addAdministrativEnhet);
-*/
 
 
         journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getFields().getJournalansvarligBrukerIdent()));
@@ -118,4 +97,6 @@ public class JournalpostFactory {
         }
         throw new IllegalArgumentException("Illegal arguments: " + saksmappe);
     }
+
+ */
 }

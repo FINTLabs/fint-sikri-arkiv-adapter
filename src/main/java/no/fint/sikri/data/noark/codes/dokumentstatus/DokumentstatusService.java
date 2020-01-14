@@ -1,27 +1,26 @@
 package no.fint.sikri.data.noark.codes.dokumentstatus;
 
-import no.documaster.model.Result;
-import no.fint.sikri.data.utilities.BegrepMapper;
-import no.fint.sikri.service.Noark5WebService;
+import no.fint.arkiv.sikri.oms.DocumentStatusType;
 import no.fint.model.resource.administrasjon.arkiv.DokumentStatusResource;
+import no.fint.sikri.data.utilities.BegrepMapper;
+import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 @Service
 public class DokumentstatusService {
 
     @Autowired
-    private Noark5WebService noark5WebService;
+    private SikriObjectModelService sikriObjectModelService;
 
     public Stream<DokumentStatusResource> getDocumentStatusTable() {
-        return noark5WebService.getCodeLists("Dokument", "dokumentstatus")
-                .getResults()
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.DOCUMENT_STATUS, null, 0, Collections.emptyList())
                 .stream()
-                .map(Result::getValues)
-                .flatMap(List::stream)
-                .map(BegrepMapper.mapValue(DokumentStatusResource::new));
+                .map(DocumentStatusType.class::cast)
+                .map(BegrepMapper::mapDokumentStatus);
     }
 }

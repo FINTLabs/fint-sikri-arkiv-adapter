@@ -1,20 +1,8 @@
 package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.QueryInput;
-import no.documaster.model.Result__1;
-import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.data.utilities.QueryUtils;
-import no.fint.model.administrasjon.arkiv.Arkivressurs;
-import no.fint.model.administrasjon.arkiv.DokumentStatus;
-import no.fint.model.administrasjon.arkiv.DokumentType;
-import no.fint.model.administrasjon.arkiv.TilknyttetRegistreringSom;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Slf4j
 @Service
@@ -22,6 +10,7 @@ public class DokumentbeskrivelseFactory {
     @Autowired
     private DokumentobjektService dokumentobjektService;
 
+    /*
     public DokumentbeskrivelseResource toFintResource(Result__1 result) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
         resource.setTittel(result.getFields().getTittel());
@@ -43,4 +32,6 @@ public class DokumentbeskrivelseFactory {
     public QueryInput createQueryInput(String id) {
         return QueryUtils.createQueryInput("Dokument", "refRegistrering.id", id);
     }
+
+     */
 }

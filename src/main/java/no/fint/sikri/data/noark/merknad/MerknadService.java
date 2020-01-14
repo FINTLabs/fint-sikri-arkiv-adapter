@@ -1,9 +1,8 @@
 package no.fint.sikri.data.noark.merknad;
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.QueryInput;
-import no.fint.sikri.service.Noark5WebService;
 import no.fint.model.resource.administrasjon.arkiv.MerknadResource;
+import no.fint.sikri.service.SikriObjectModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +16,18 @@ public class MerknadService {
     private MerknadFactory merknadFactory;
 
     @Autowired
-    private Noark5WebService noark5WebService;
+    private SikriObjectModelService sikriObjectModelService;
 
     public List<MerknadResource> queryForMappe(String id) {
-        QueryInput queryInput = merknadFactory.createQueryInput("refMappe.id", id);
-        return merknadFactory.toFintResourceList(noark5WebService.query(queryInput)
-                .getResults());
+        //QueryInput queryInput = merknadFactory.createQueryInput("refMappe.id", id);
+        return null; //merknadFactory.toFintResourceList(noark5WebService.query(queryInput)
+        //.getResults());
     }
 
     public List<MerknadResource> queryForRegistrering(String id) {
-        QueryInput queryInput = merknadFactory.createQueryInput("refRegistrering.id", id);
-        return merknadFactory.toFintResourceList(noark5WebService.query(queryInput)
-                .getResults());
+        //QueryInput queryInput = merknadFactory.createQueryInput("refRegistrering.id", id);
+        return null;//merknadFactory.toFintResourceList(noark5WebService.query(queryInput)
+        //.getResults());
     }
 
 }

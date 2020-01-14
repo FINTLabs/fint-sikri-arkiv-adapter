@@ -1,25 +1,12 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.QueryResult;
-import no.documaster.model.Result__1;
-import no.fint.sikri.data.exception.GetDocumentException;
-import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
-import no.fint.sikri.data.exception.NotTilskuddfartoyException;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.repository.KodeverkRepository;
-import no.fint.model.kultur.kulturminnevern.TilskuddFartoy;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static no.fint.sikri.data.utilities.FintUtils.createIdentifikator;
 
 @Slf4j
 @Service
@@ -39,7 +26,7 @@ public class TilskuddFartoyFactory {
 
     @Autowired
     private TilskuddFartoyDefaults tilskuddFartoyDefaults;
-
+/*
     public TilskuddFartoyResource toFintResource(Result__1 input) {
         if (input.getFields().getVirksomhetsspesifikkeMetadata() == null
                 || input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak() == null
@@ -71,5 +58,7 @@ public class TilskuddFartoyFactory {
         }
         return resources;
     }
+
+ */
 
 }

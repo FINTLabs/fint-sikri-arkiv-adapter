@@ -25,33 +25,33 @@ public class GetTilskuddFartoyHandler implements Handler {
 
     @Override
     public void accept(Event<FintLinks> response) {
-        String query = response.getQuery();
-        try {
-            response.getData().clear();
-            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseByMappeId(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
-            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
-            } else if (StringUtils.startsWithIgnoreCase(query, "soknadsnummer/")) {
-                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySoknadsnummer(StringUtils.removeStartIgnoreCase(query, "soknadsnummer/")));
-            } else if (StringUtils.startsWith(query, "?")) {
-                tilskuddfartoyService.searchTilskuddFartoyCaseByQueryParams(getQueryParams(query)).forEach(response::addData);
-            } else {
-                throw new IllegalArgumentException("Invalid query: " + query);
-            }
-            response.setResponseStatus(ResponseStatus.ACCEPTED);
-        } catch (GetTilskuddFartoyNotFoundException e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setStatusCode("NOT_FOUND");
-            response.setMessage(e.getMessage());
-        } catch (NotTilskuddfartoyException e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setStatusCode("NOT_A_TILSKUDDFARTOY_SAK");
-            response.setMessage(e.getMessage());
-        } catch (GetTilskuddFartoyException | GetDocumentException | IllegalCaseNumberFormat e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage(e.getMessage());
-        }
+//        String query = response.getQuery();
+//        try {
+//            response.getData().clear();
+//            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
+//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseByMappeId(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
+//            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
+//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
+//            } else if (StringUtils.startsWithIgnoreCase(query, "soknadsnummer/")) {
+//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySoknadsnummer(StringUtils.removeStartIgnoreCase(query, "soknadsnummer/")));
+//            } else if (StringUtils.startsWith(query, "?")) {
+//                tilskuddfartoyService.searchTilskuddFartoyCaseByQueryParams(getQueryParams(query)).forEach(response::addData);
+//            } else {
+//                throw new IllegalArgumentException("Invalid query: " + query);
+//            }
+//            response.setResponseStatus(ResponseStatus.ACCEPTED);
+//        } catch (GetTilskuddFartoyNotFoundException e) {
+//            response.setResponseStatus(ResponseStatus.REJECTED);
+//            response.setStatusCode("NOT_FOUND");
+//            response.setMessage(e.getMessage());
+//        } catch (NotTilskuddfartoyException e) {
+//            response.setResponseStatus(ResponseStatus.REJECTED);
+//            response.setStatusCode("NOT_A_TILSKUDDFARTOY_SAK");
+//            response.setMessage(e.getMessage());
+//        } catch (GetTilskuddFartoyException | GetDocumentException | IllegalCaseNumberFormat e) {
+//            response.setResponseStatus(ResponseStatus.REJECTED);
+//            response.setMessage(e.getMessage());
+//        }
 
     }
 

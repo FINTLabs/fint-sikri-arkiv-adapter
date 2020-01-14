@@ -1,6 +1,6 @@
 package no.fint.sikri.data
 
-import no.fint.documaster.data.utilities.FintUtils
+import no.fint.sikri.data.utilities.FintUtils
 import spock.lang.Specification
 
 class FintUtilsSpec extends Specification {

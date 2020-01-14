@@ -1,6 +1,6 @@
 package no.fint.adapter.sse
 
-import no.fint.documaster.service.EventHandlerService
+import no.fint.sikri.service.EventHandlerService
 import no.fint.event.model.DefaultActions
 import no.fint.event.model.Event
 import org.glassfish.jersey.media.sse.InboundEvent

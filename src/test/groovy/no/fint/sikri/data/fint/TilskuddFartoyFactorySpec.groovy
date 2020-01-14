@@ -1,13 +1,12 @@
 package no.fint.sikri.data.fint
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.documaster.model.QueryResult
-import no.fint.documaster.data.kulturminne.TilskuddFartoyFactory
-import no.fint.documaster.data.noark.common.NoarkFactory
-import no.fint.documaster.data.noark.journalpost.JournalpostService
-import no.fint.documaster.data.noark.merknad.MerknadService
-import no.fint.documaster.data.noark.nokkelord.NokkelordService
-import no.fint.documaster.data.noark.part.PartService
+import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory
+import no.fint.sikri.data.noark.common.NoarkFactory
+import no.fint.sikri.data.noark.journalpost.JournalpostService
+import no.fint.sikri.data.noark.merknad.MerknadService
+import no.fint.sikri.data.noark.nokkelord.NokkelordService
+import no.fint.sikri.data.noark.part.PartService
 import spock.lang.Specification
 
 class TilskuddFartoyFactorySpec extends Specification {
@@ -17,7 +16,6 @@ class TilskuddFartoyFactorySpec extends Specification {
     private NoarkFactory noarkFactory
     private PartService partService
     private ObjectMapper objectMapper
-    private QueryResult queryResult
 
     void setup() {
         journalpostService = Mock()

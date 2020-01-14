@@ -1,18 +1,8 @@
 package no.fint.sikri.data.noark.part;
 
-import no.documaster.model.QueryInput;
-import no.documaster.model.QueryResult;
-import no.documaster.model.Result__1;
-import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.data.utilities.QueryUtils;
 import no.fint.sikri.repository.KodeverkRepository;
-import no.fint.model.resource.administrasjon.arkiv.PartResource;
-import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PartFactory {
@@ -20,6 +10,7 @@ public class PartFactory {
     @Autowired
     KodeverkRepository kodeverkRepository;
 
+    /*
     public PartResource toFintResource(Result__1 result) {
 
         if (result == null) {
@@ -55,4 +46,6 @@ public class PartFactory {
         }
         throw new IllegalArgumentException("Invalid SaksmappeResource: " + saksmappe);
     }
+
+     */
 }

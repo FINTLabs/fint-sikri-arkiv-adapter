@@ -1,7 +1,6 @@
 package no.fint.sikri.data.utilities;
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.Fields;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
@@ -45,17 +44,17 @@ public final class FintUtils {
         return Date.from(localDate.atStartOfDay().toInstant(ZoneOffset.UTC));
     }
 
-    public static Kontaktinformasjon createKontaktinformasjon(Fields fields) {
-        return getKontaktinformasjon(fields.getEpostadresse(), null, String.valueOf(fields.getAdditionalProperties().get("telefonnummer")));
-    }
-
-    public static AdresseResource createAdresse(Fields fields) {
-        AdresseResource adresse = new AdresseResource();
-        adresse.setAdresselinje(Collections.singletonList(fields.getPostadresse()));
-        adresse.setPostnummer(fields.getPostnummer());
-        adresse.setPoststed(fields.getPoststed());
-        return adresse;
-    }
+//    public static Kontaktinformasjon createKontaktinformasjon(Fields fields) {
+//        return getKontaktinformasjon(fields.getEpostadresse(), null, String.valueOf(fields.getAdditionalProperties().get("telefonnummer")));
+//    }
+//
+//    public static AdresseResource createAdresse(Fields fields) {
+//        AdresseResource adresse = new AdresseResource();
+//        adresse.setAdresselinje(Collections.singletonList(fields.getPostadresse()));
+//        adresse.setPostnummer(fields.getPostnummer());
+//        adresse.setPoststed(fields.getPoststed());
+//        return adresse;
+//    }
 
     public static <T> Optional<T> optionalValue(T value) {
         return Optional.ofNullable(value);

@@ -57,7 +57,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         setupEphorteIdentity();
     }
 
-    public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, List<String> relatedObject) {
+    public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, List<String> relatedObjects) {
         FilteredQueryArguments filteredQueryArguments = objectFactory.createFilteredQueryArguments();
 
         if (count > 0) {
@@ -69,9 +69,9 @@ public class SikriObjectModelService extends SikriAbstractService {
             filteredQueryArguments.setFilterExpression(objectFactory.createFilteredQueryArgumentsFilterExpression(filter));
         }
 
-        JAXBElement<ArrayOfstring> relatedObjects = objectFactory.createFilteredQueryArgumentsRelatedObjects(objectFactory.createArrayOfstring());
-        relatedObject.forEach(o -> relatedObjects.getValue().getString().add(o));
-        filteredQueryArguments.setRelatedObjects(relatedObjects);
+        JAXBElement<ArrayOfstring> related = objectFactory.createFilteredQueryArgumentsRelatedObjects(objectFactory.createArrayOfstring());
+        relatedObjects.forEach(o -> related.getValue().getString().add(o));
+        filteredQueryArguments.setRelatedObjects(related);
 
         QueryResult queryResult = objectModelService.filteredQuery(ephorteIdentity, filteredQueryArguments);
 

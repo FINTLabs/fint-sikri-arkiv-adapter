@@ -1,27 +1,26 @@
 package no.fint.sikri.data.noark.codes.saksstatus;
 
-import no.documaster.model.Result;
-import no.fint.sikri.data.utilities.BegrepMapper;
-import no.fint.sikri.service.Noark5WebService;
+import no.fint.arkiv.sikri.oms.CaseStatusType;
 import no.fint.model.resource.administrasjon.arkiv.SaksstatusResource;
+import no.fint.sikri.data.utilities.BegrepMapper;
+import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 @Service
 public class SaksStatusService {
 
     @Autowired
-    private Noark5WebService noark5WebService;
+    private SikriObjectModelService sikriObjectModelService;
 
     public Stream<SaksstatusResource> getCaseStatusTable() {
-        return noark5WebService.getCodeLists("Saksmappe", "saksstatus")
-                .getResults()
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE_STATUS, null, 0, Collections.emptyList())
                 .stream()
-                .map(Result::getValues)
-                .flatMap(List::stream)
-                .map(BegrepMapper.mapValue(SaksstatusResource::new));
+                .map(CaseStatusType.class::cast)
+                .map(BegrepMapper::mapSaksstatus);
     }
 }

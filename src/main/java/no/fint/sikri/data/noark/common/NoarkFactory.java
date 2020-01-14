@@ -1,6 +1,5 @@
 package no.fint.sikri.data.noark.common;
 
-import no.documaster.model.Result__1;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
@@ -27,6 +26,7 @@ public class NoarkFactory {
     @Autowired
     private NokkelordService nokkelordService;
 
+    /*
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(Result__1 input, T resource) {
         String caseNumber = input.getFields().getMappeIdent();
         Integer caseYear = input.getFields().getSaksaar();
@@ -56,5 +56,7 @@ public class NoarkFactory {
 
         return resource;
     }
+
+     */
     
 }

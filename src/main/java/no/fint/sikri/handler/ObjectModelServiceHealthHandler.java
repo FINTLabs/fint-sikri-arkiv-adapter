@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @Service
-public class ObjectModelServiceHealthHanlder implements Handler {
+public class ObjectModelServiceHealthHandler implements Handler {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;

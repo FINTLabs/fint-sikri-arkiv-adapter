@@ -1,6 +1,6 @@
 package no.fint.sikri.service;
 
-import no.fint.sikri.data.utilities.RequestUtilities;
+import no.fint.sikri.utilities.RequestUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.namespace.QName;

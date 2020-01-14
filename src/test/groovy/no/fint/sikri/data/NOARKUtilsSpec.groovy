@@ -1,8 +1,8 @@
 package no.fint.sikri.data
 
-import no.fint.documaster.data.exception.IllegalCaseNumberFormat
-import no.fint.documaster.data.exception.IllegalDocumentNumberFormat
-import no.fint.documaster.data.utilities.NOARKUtils
+import no.fint.sikri.data.exception.IllegalCaseNumberFormat
+import no.fint.sikri.data.exception.IllegalDocumentNumberFormat
+import no.fint.sikri.data.utilities.NOARKUtils
 import spock.lang.Specification
 
 class NOARKUtilsSpec extends Specification {

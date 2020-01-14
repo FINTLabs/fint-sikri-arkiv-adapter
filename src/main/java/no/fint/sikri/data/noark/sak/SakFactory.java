@@ -2,10 +2,6 @@ package no.fint.sikri.data.noark.sak;
 
 
 import lombok.extern.slf4j.Slf4j;
-import no.documaster.model.Parameters;
-import no.documaster.model.QueryInput;
-import no.documaster.model.QueryResult;
-import no.documaster.model.Result__1;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.utilities.QueryUtils;
 import no.fint.model.resource.administrasjon.arkiv.SakResource;
@@ -25,6 +21,7 @@ public class SakFactory {
     @Autowired
     private NoarkFactory noarkFactory;
 
+    /*
     public SakResource toFintResource(Result__1 result) {
         return noarkFactory.applyValuesForSaksmappe(result, new SakResource());
     }
@@ -74,4 +71,6 @@ public class SakFactory {
     public QueryInput getQueryInputFromSystemId(String systemId) {
         return createQueryInput("id", systemId);
     }
+    
+     */
 }

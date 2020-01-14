@@ -3,10 +3,10 @@ package no.fint.sikri.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.*;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.model.resource.administrasjon.arkiv.DokumentfilResource;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.FileNotFound;
 import no.fint.sikri.data.noark.dokument.DokumentfilService;
-import no.fint.model.resource.administrasjon.arkiv.DokumentfilResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -104,8 +104,8 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     @Override
     public Path load(String docId) throws Exception {
         log.info("Loading {} ...", docId);
-        DokumentfilResource resource = dokumentfilService.getDokumentfil(docId);
-        return saveFile(resource);
+        //DokumentfilResource resource = dokumentfilService.getDokumentfil(docId);
+        return null;//return saveFile(resource);
     }
 
 }

@@ -1,19 +1,11 @@
 package no.fint.sikri.data.noark.part;
 
-import no.documaster.model.QueryResult;
-import no.documaster.model.Result__1;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.PartResource;
-import no.fint.model.resource.administrasjon.arkiv.PartRolleResource;
-import no.fint.model.resource.administrasjon.arkiv.PartsinformasjonResource;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PartsinformasjonFactory {
 
+    /*
     public PartsinformasjonResource toFintResource(Result__1 result) {
 
         if (result == null) {
@@ -33,5 +25,5 @@ public class PartsinformasjonFactory {
         }
         return output;
     }
-
+*/
 }

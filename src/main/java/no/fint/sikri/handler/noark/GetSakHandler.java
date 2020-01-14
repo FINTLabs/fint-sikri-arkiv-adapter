@@ -28,27 +28,27 @@ public class GetSakHandler implements Handler {
 
     @Override
     public void accept(Event<FintLinks> response) {
-        String query = response.getQuery();
-        try {
-            response.getData().clear();
-            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-                response.addData(sakService.getSakByCaseNumber(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
-            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-                response.addData(sakService.getSakBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
-            } else if (StringUtils.startsWith(query, "?")) {
-                sakService.searchSakByQueryParams(getQueryParams(query)).forEach(response::addData);
-            } else {
-                throw new IllegalArgumentException("Invalid query: " + query);
-            }
-            response.setResponseStatus(ResponseStatus.ACCEPTED);
-        } catch (CaseNotFound e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setStatusCode("NOT_FOUND");
-            response.setMessage(e.getMessage());
-        } catch (GetCaseException | GetDocumentException | IllegalCaseNumberFormat e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage(e.getMessage());
-        }
+//        String query = response.getQuery();
+//        try {
+//            response.getData().clear();
+//            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
+//                response.addData(sakService.getSakByCaseNumber(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
+//            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
+//                response.addData(sakService.getSakBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
+//            } else if (StringUtils.startsWith(query, "?")) {
+//                sakService.searchSakByQueryParams(getQueryParams(query)).forEach(response::addData);
+//            } else {
+//                throw new IllegalArgumentException("Invalid query: " + query);
+//            }
+//            response.setResponseStatus(ResponseStatus.ACCEPTED);
+//        } catch (CaseNotFound e) {
+//            response.setResponseStatus(ResponseStatus.REJECTED);
+//            response.setStatusCode("NOT_FOUND");
+//            response.setMessage(e.getMessage());
+//        } catch (GetCaseException | GetDocumentException | IllegalCaseNumberFormat e) {
+//            response.setResponseStatus(ResponseStatus.REJECTED);
+//            response.setMessage(e.getMessage());
+//        }
 
     }
 

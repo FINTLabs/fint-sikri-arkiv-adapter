@@ -1,12 +1,12 @@
 package no.fint.sikri.handler.noark;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.noark.klassifikasjonssystem.KlassifikasjonssystemService;
-import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
+import no.fint.sikri.handler.Handler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -13,4 +13,8 @@ public enum SikriObjectTypes {
     public static final String DOCUMENT_DESCRIPTION = "DocumentDescription";
     public static final String DOCUMENT_OBJECT = "DocumentObject";
 
+    public static final String CASE_STATUS = "CaseStatus";
+    public static final String DOCUMENT_STATUS = "DocumentStatus";
+    public static final String DOCUMENT_CATEGORY = "DocumentCategory";
+    public static final String REGISTRY_ENTRY_TYPE = "RegistryEntryType";
 }

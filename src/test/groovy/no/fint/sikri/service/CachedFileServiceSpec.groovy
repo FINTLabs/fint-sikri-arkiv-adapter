@@ -2,7 +2,7 @@ package no.fint.sikri.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.cache.LoadingCache
-import no.fint.documaster.AdapterProps
+import no.fint.sikri.AdapterProps
 import spock.lang.Specification
 
 import java.nio.file.Files
