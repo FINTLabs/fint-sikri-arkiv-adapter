@@ -1,8 +1,0 @@
-{
-  "type": "Saksmappe",
-  "offset": 0,
-  "limit": 100,
-  "query": "id == @id",
-  "parameters": {
-  }
-}

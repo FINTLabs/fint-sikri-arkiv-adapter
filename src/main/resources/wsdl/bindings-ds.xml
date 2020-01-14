@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxws:bindings wsdlLocation="DocumentServiceV3.wsdl"
+                xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" version="2.1"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!--
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/documents/v3']">
+        <jaxb:schemaBindings>
+            <jaxb:nameXmlTransform>
+                <jaxb:elementName suffix="Element"/>
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxws:bindings>
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://schemas.microsoft.com/2003/10/Serialization/']">
+        <jaxb:schemaBindings>
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName suffix="Type"/>
+                <jaxb:elementName suffix="Element"/>
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxws:bindings>
+    -->
+
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema/xs:element[@name='Guid']">
+        <jaxb:class name="Guid2"/>
+    </jaxws:bindings>
+</jaxws:bindings>
+

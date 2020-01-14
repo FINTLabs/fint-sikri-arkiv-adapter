@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="DocumentService" targetNamespace="http://www.gecko.no/ephorte/services/documents/v3"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                  xmlns:tns="http://www.gecko.no/ephorte/services/documents/v3"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
+    <wsp:Policy wsu:Id="BasicHttpBinding_Mtom_Streamed_DocumentService_policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsoma:OptimizedMimeSerialization
+                        xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization"/>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="BasicHttpsBinding_Mtom_Streamed_DocumentService_policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsoma:OptimizedMimeSerialization
+                        xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization"/>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false"/>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic256/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Strict/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/Message"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.microsoft.com/Message">
+            <xs:simpleType name="StreamBody">
+                <xs:restriction base="xs:base64Binary"/>
+            </xs:simpleType>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.gecko.no/ephorte/services/documents/v3"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:import namespace="http://schemas.microsoft.com/Message"/>
+            <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+            <xs:element name="UploadMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Content" type="q1:StreamBody"
+                                    xmlns:q1="http://schemas.microsoft.com/Message"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ContentType" nillable="true" type="xs:string"/>
+            <xs:complexType name="EphorteIdentity">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Database" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Role" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ExternalSystemName" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="EphorteIdentity" nillable="true" type="tns:EphorteIdentity"/>
+            <xs:element name="FileName" nillable="true" type="xs:string"/>
+            <xs:element name="StorageIdentifier" nillable="true" type="xs:string"/>
+            <xs:element name="UploadReturnMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Identifier" nillable="true" type="xs:string"/>
+            <xs:element name="CheckinMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Content" type="q2:StreamBody"
+                                    xmlns:q2="http://schemas.microsoft.com/Message"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="DocumentCriteria">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="DocumentId" type="xs:int"/>
+                    <xs:element minOccurs="0" name="EphorteIdentity" nillable="true" type="tns:EphorteIdentity"/>
+                    <xs:element minOccurs="0" name="Variant" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="Version" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="DocumentCriteria" nillable="true" type="tns:DocumentCriteria"/>
+            <xs:element name="Guid" type="q3:guid" xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/"/>
+            <xs:element name="Path" nillable="true" type="xs:string"/>
+            <xs:element name="CancelCheckoutRequest">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CommitteeHandlingDocumentId" type="xs:int"/>
+            <xs:element name="DocumentId" type="xs:int"/>
+            <xs:element name="Identity" nillable="true" type="tns:EphorteIdentity"/>
+            <xs:element name="JournalpostId" type="xs:int"/>
+            <xs:element name="MeetingDocumentId" type="xs:int"/>
+            <xs:element name="Variant" nillable="true" type="xs:string"/>
+            <xs:element name="Version" type="xs:int"/>
+            <xs:element name="CheckoutRequest">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CheckoutResponseMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Content" type="q4:StreamBody"
+                                    xmlns:q4="http://schemas.microsoft.com/Message"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DocumentReturnMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Content" type="q5:StreamBody"
+                                    xmlns:q5="http://schemas.microsoft.com/Message"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetJournalpostDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetMoeteDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DocumentType" nillable="true" type="xs:string"/>
+            <xs:element name="MoId" type="xs:int"/>
+            <xs:element name="GetUtvalgDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="SakType" nillable="true" type="xs:string"/>
+            <xs:element name="UbId" type="xs:int"/>
+            <xs:element name="GetUploadedDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetTempDocumentContentMessage">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+                   targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                   xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/">
+            <xs:element name="anyType" nillable="true" type="xs:anyType"/>
+            <xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+            <xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+            <xs:element name="boolean" nillable="true" type="xs:boolean"/>
+            <xs:element name="byte" nillable="true" type="xs:byte"/>
+            <xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+            <xs:element name="decimal" nillable="true" type="xs:decimal"/>
+            <xs:element name="double" nillable="true" type="xs:double"/>
+            <xs:element name="float" nillable="true" type="xs:float"/>
+            <xs:element name="int" nillable="true" type="xs:int"/>
+            <xs:element name="long" nillable="true" type="xs:long"/>
+            <xs:element name="QName" nillable="true" type="xs:QName"/>
+            <xs:element name="short" nillable="true" type="xs:short"/>
+            <xs:element name="string" nillable="true" type="xs:string"/>
+            <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+            <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+            <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+            <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+            <xs:element name="char" nillable="true" type="tns:char"/>
+            <xs:simpleType name="char">
+                <xs:restriction base="xs:int"/>
+            </xs:simpleType>
+            <xs:element name="duration" nillable="true" type="tns:duration"/>
+            <xs:simpleType name="duration">
+                <xs:restriction base="xs:duration">
+                    <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+                    <xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+                    <xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="guid" nillable="true" type="tns:guid"/>
+            <xs:simpleType name="guid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="FactoryType" type="xs:QName"/>
+            <xs:attribute name="Id" type="xs:ID"/>
+            <xs:attribute name="Ref" type="xs:IDREF"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="UploadMessage">
+        <wsdl:part name="parameters" element="tns:UploadMessage"/>
+    </wsdl:message>
+    <wsdl:message name="UploadMessage_Headers">
+        <wsdl:part name="ContentType" element="tns:ContentType"/>
+        <wsdl:part name="EphorteIdentity" element="tns:EphorteIdentity"/>
+        <wsdl:part name="FileName" element="tns:FileName"/>
+        <wsdl:part name="StorageIdentifier" element="tns:StorageIdentifier"/>
+    </wsdl:message>
+    <wsdl:message name="UploadReturnMessage">
+        <wsdl:part name="parameters" element="tns:UploadReturnMessage"/>
+    </wsdl:message>
+    <wsdl:message name="UploadReturnMessage_Headers">
+        <wsdl:part name="FileName" element="tns:FileName"/>
+        <wsdl:part name="Identifier" element="tns:Identifier"/>
+    </wsdl:message>
+    <wsdl:message name="CheckinMessage">
+        <wsdl:part name="parameters" element="tns:CheckinMessage"/>
+    </wsdl:message>
+    <wsdl:message name="CheckinMessage_Headers">
+        <wsdl:part name="ContentType" element="tns:ContentType"/>
+        <wsdl:part name="DocumentCriteria" element="tns:DocumentCriteria"/>
+        <wsdl:part name="Guid" element="tns:Guid"/>
+        <wsdl:part name="Path" element="tns:Path"/>
+    </wsdl:message>
+    <wsdl:message name="DocumentService_Checkin_OutputMessage"/>
+    <wsdl:message name="CancelCheckoutRequest">
+        <wsdl:part name="parameters" element="tns:CancelCheckoutRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CancelCheckoutRequest_Headers">
+        <wsdl:part name="CommitteeHandlingDocumentId" element="tns:CommitteeHandlingDocumentId"/>
+        <wsdl:part name="DocumentId" element="tns:DocumentId"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="JournalpostId" element="tns:JournalpostId"/>
+        <wsdl:part name="MeetingDocumentId" element="tns:MeetingDocumentId"/>
+        <wsdl:part name="Variant" element="tns:Variant"/>
+        <wsdl:part name="Version" element="tns:Version"/>
+    </wsdl:message>
+    <wsdl:message name="DocumentService_CancelCheckout_OutputMessage"/>
+    <wsdl:message name="CheckoutRequest">
+        <wsdl:part name="parameters" element="tns:CheckoutRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CheckoutRequest_Headers">
+        <wsdl:part name="DocumentId" element="tns:DocumentId"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="Variant" element="tns:Variant"/>
+        <wsdl:part name="Version" element="tns:Version"/>
+    </wsdl:message>
+    <wsdl:message name="CheckoutResponseMessage">
+        <wsdl:part name="parameters" element="tns:CheckoutResponseMessage"/>
+    </wsdl:message>
+    <wsdl:message name="CheckoutResponseMessage_Headers">
+        <wsdl:part name="ContentType" element="tns:ContentType"/>
+    </wsdl:message>
+    <wsdl:message name="GetDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetDocumentContentMessage_Headers">
+        <wsdl:part name="DocumentId" element="tns:DocumentId"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="Variant" element="tns:Variant"/>
+        <wsdl:part name="Version" element="tns:Version"/>
+    </wsdl:message>
+    <wsdl:message name="DocumentReturnMessage">
+        <wsdl:part name="parameters" element="tns:DocumentReturnMessage"/>
+    </wsdl:message>
+    <wsdl:message name="DocumentReturnMessage_Headers">
+        <wsdl:part name="ContentType" element="tns:ContentType"/>
+        <wsdl:part name="FileName" element="tns:FileName"/>
+    </wsdl:message>
+    <wsdl:message name="GetJournalpostDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetJournalpostDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetJournalpostDocumentContentMessage_Headers">
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="JournalpostId" element="tns:JournalpostId"/>
+    </wsdl:message>
+    <wsdl:message name="GetMoeteDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetMoeteDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetMoeteDocumentContentMessage_Headers">
+        <wsdl:part name="DocumentType" element="tns:DocumentType"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="MoId" element="tns:MoId"/>
+    </wsdl:message>
+    <wsdl:message name="GetUtvalgDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetUtvalgDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetUtvalgDocumentContentMessage_Headers">
+        <wsdl:part name="Identity" element="tns:Identity"/>
+        <wsdl:part name="SakType" element="tns:SakType"/>
+        <wsdl:part name="UbId" element="tns:UbId"/>
+    </wsdl:message>
+    <wsdl:message name="GetUploadedDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetUploadedDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetUploadedDocumentContentMessage_Headers">
+        <wsdl:part name="Identifier" element="tns:Identifier"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+    </wsdl:message>
+    <wsdl:message name="GetTempDocumentContentMessage">
+        <wsdl:part name="parameters" element="tns:GetTempDocumentContentMessage"/>
+    </wsdl:message>
+    <wsdl:message name="GetTempDocumentContentMessage_Headers">
+        <wsdl:part name="Identifier" element="tns:Identifier"/>
+        <wsdl:part name="Identity" element="tns:Identity"/>
+    </wsdl:message>
+    <wsdl:portType name="DocumentService">
+        <wsdl:operation name="UploadFile">
+            <wsdl:input wsaw:Action="UploadFile" name="UploadMessage" message="tns:UploadMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/UploadFileResponse"
+                    name="UploadReturnMessage" message="tns:UploadReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="Checkin">
+            <wsdl:input wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkin"
+                        name="CheckinMessage" message="tns:CheckinMessage"/>
+            <wsdl:output wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CheckinResponse"
+                         message="tns:DocumentService_Checkin_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="CancelCheckout">
+            <wsdl:input wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CancelCheckout"
+                        name="CancelCheckoutRequest" message="tns:CancelCheckoutRequest"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CancelCheckoutResponse"
+                    message="tns:DocumentService_CancelCheckout_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="Checkout">
+            <wsdl:input wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkout"
+                        name="CheckoutRequest" message="tns:CheckoutRequest"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CheckoutResponse"
+                    name="CheckoutResponseMessage" message="tns:CheckoutResponseMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentBase">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentBase"
+                    name="GetDocumentContentMessage" message="tns:GetDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentBaseResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByJournalPostId">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByJournalPostId"
+                    name="GetJournalpostDocumentContentMessage" message="tns:GetJournalpostDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByJournalPostIdResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByMoId">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByMoId"
+                    name="GetMoeteDocumentContentMessage" message="tns:GetMoeteDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByMoIdResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByUbId">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByUbId"
+                    name="GetUtvalgDocumentContentMessage" message="tns:GetUtvalgDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByUbIdResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetUploadedDocumentContentByUploadId">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetUploadedDocumentContentByUploadId"
+                    name="GetUploadedDocumentContentMessage" message="tns:GetUploadedDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetUploadedDocumentContentByUploadIdResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetTempDocumentContentByTempId">
+            <wsdl:input
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetTempDocumentContentByTempId"
+                    name="GetTempDocumentContentMessage" message="tns:GetTempDocumentContentMessage"/>
+            <wsdl:output
+                    wsaw:Action="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetTempDocumentContentByTempIdResponse"
+                    name="DocumentReturnMessage" message="tns:DocumentReturnMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BasicHttpBinding_Mtom_Streamed_DocumentService" type="tns:DocumentService">
+        <wsp:PolicyReference URI="#BasicHttpBinding_Mtom_Streamed_DocumentService_policy"/>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="UploadFile">
+            <soap:operation soapAction="UploadFile" style="document"/>
+            <wsdl:input name="UploadMessage">
+                <soap:header message="tns:UploadMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="EphorteIdentity" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="FileName" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="StorageIdentifier" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UploadReturnMessage">
+                <soap:header message="tns:UploadReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:header message="tns:UploadReturnMessage_Headers" part="Identifier" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Checkin">
+            <soap:operation soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkin"
+                            style="document"/>
+            <wsdl:input name="CheckinMessage">
+                <soap:header message="tns:CheckinMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="DocumentCriteria" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="Guid" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="Path" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CancelCheckout">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CancelCheckout"
+                    style="document"/>
+            <wsdl:input name="CancelCheckoutRequest">
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="CommitteeHandlingDocumentId"
+                             use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="JournalpostId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="MeetingDocumentId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Checkout">
+            <soap:operation soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkout"
+                            style="document"/>
+            <wsdl:input name="CheckoutRequest">
+                <soap:header message="tns:CheckoutRequest_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CheckoutResponseMessage">
+                <soap:header message="tns:CheckoutResponseMessage_Headers" part="ContentType" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentBase">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentBase"
+                    style="document"/>
+            <wsdl:input name="GetDocumentContentMessage">
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByJournalPostId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByJournalPostId"
+                    style="document"/>
+            <wsdl:input name="GetJournalpostDocumentContentMessage">
+                <soap:header message="tns:GetJournalpostDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetJournalpostDocumentContentMessage_Headers" part="JournalpostId"
+                             use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByMoId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByMoId"
+                    style="document"/>
+            <wsdl:input name="GetMoeteDocumentContentMessage">
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="DocumentType" use="literal"/>
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="MoId" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByUbId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByUbId"
+                    style="document"/>
+            <wsdl:input name="GetUtvalgDocumentContentMessage">
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="SakType" use="literal"/>
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="UbId" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetUploadedDocumentContentByUploadId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetUploadedDocumentContentByUploadId"
+                    style="document"/>
+            <wsdl:input name="GetUploadedDocumentContentMessage">
+                <soap:header message="tns:GetUploadedDocumentContentMessage_Headers" part="Identifier" use="literal"/>
+                <soap:header message="tns:GetUploadedDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetTempDocumentContentByTempId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetTempDocumentContentByTempId"
+                    style="document"/>
+            <wsdl:input name="GetTempDocumentContentMessage">
+                <soap:header message="tns:GetTempDocumentContentMessage_Headers" part="Identifier" use="literal"/>
+                <soap:header message="tns:GetTempDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="BasicHttpsBinding_Mtom_Streamed_DocumentService" type="tns:DocumentService">
+        <wsp:PolicyReference URI="#BasicHttpsBinding_Mtom_Streamed_DocumentService_policy"/>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="UploadFile">
+            <soap:operation soapAction="UploadFile" style="document"/>
+            <wsdl:input name="UploadMessage">
+                <soap:header message="tns:UploadMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="EphorteIdentity" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="FileName" use="literal"/>
+                <soap:header message="tns:UploadMessage_Headers" part="StorageIdentifier" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="UploadReturnMessage">
+                <soap:header message="tns:UploadReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:header message="tns:UploadReturnMessage_Headers" part="Identifier" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Checkin">
+            <soap:operation soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkin"
+                            style="document"/>
+            <wsdl:input name="CheckinMessage">
+                <soap:header message="tns:CheckinMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="DocumentCriteria" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="Guid" use="literal"/>
+                <soap:header message="tns:CheckinMessage_Headers" part="Path" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CancelCheckout">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/CancelCheckout"
+                    style="document"/>
+            <wsdl:input name="CancelCheckoutRequest">
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="CommitteeHandlingDocumentId"
+                             use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="JournalpostId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="MeetingDocumentId" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:CancelCheckoutRequest_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Checkout">
+            <soap:operation soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/Checkout"
+                            style="document"/>
+            <wsdl:input name="CheckoutRequest">
+                <soap:header message="tns:CheckoutRequest_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:CheckoutRequest_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CheckoutResponseMessage">
+                <soap:header message="tns:CheckoutResponseMessage_Headers" part="ContentType" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentBase">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentBase"
+                    style="document"/>
+            <wsdl:input name="GetDocumentContentMessage">
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="DocumentId" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Variant" use="literal"/>
+                <soap:header message="tns:GetDocumentContentMessage_Headers" part="Version" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByJournalPostId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByJournalPostId"
+                    style="document"/>
+            <wsdl:input name="GetJournalpostDocumentContentMessage">
+                <soap:header message="tns:GetJournalpostDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetJournalpostDocumentContentMessage_Headers" part="JournalpostId"
+                             use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByMoId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByMoId"
+                    style="document"/>
+            <wsdl:input name="GetMoeteDocumentContentMessage">
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="DocumentType" use="literal"/>
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetMoeteDocumentContentMessage_Headers" part="MoId" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetDocumentContentByUbId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetDocumentContentByUbId"
+                    style="document"/>
+            <wsdl:input name="GetUtvalgDocumentContentMessage">
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="SakType" use="literal"/>
+                <soap:header message="tns:GetUtvalgDocumentContentMessage_Headers" part="UbId" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetUploadedDocumentContentByUploadId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetUploadedDocumentContentByUploadId"
+                    style="document"/>
+            <wsdl:input name="GetUploadedDocumentContentMessage">
+                <soap:header message="tns:GetUploadedDocumentContentMessage_Headers" part="Identifier" use="literal"/>
+                <soap:header message="tns:GetUploadedDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetTempDocumentContentByTempId">
+            <soap:operation
+                    soapAction="http://www.gecko.no/ephorte/services/documents/v3/DocumentService/GetTempDocumentContentByTempId"
+                    style="document"/>
+            <wsdl:input name="GetTempDocumentContentMessage">
+                <soap:header message="tns:GetTempDocumentContentMessage_Headers" part="Identifier" use="literal"/>
+                <soap:header message="tns:GetTempDocumentContentMessage_Headers" part="Identity" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="DocumentReturnMessage">
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="ContentType" use="literal"/>
+                <soap:header message="tns:DocumentReturnMessage_Headers" part="FileName" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="DocumentService">
+        <wsdl:port name="BasicHttpBinding_Mtom_Streamed_DocumentService"
+                   binding="tns:BasicHttpBinding_Mtom_Streamed_DocumentService">
+            <soap:address
+                    location="http://saassncore003.aspad.ergo.no/nCore-intrfk/Services/Documents/V3/DocumentService.svc"/>
+        </wsdl:port>
+        <wsdl:port name="BasicHttpsBinding_Mtom_Streamed_DocumentService"
+                   binding="tns:BasicHttpsBinding_Mtom_Streamed_DocumentService">
+            <soap:address
+                    location="https://saassncore003.public.cloudservices.no/nCore-intrfk/Services/Documents/V3/DocumentService.svc"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

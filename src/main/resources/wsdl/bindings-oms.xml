@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxws:bindings wsdlLocation="ObjectModelServiceV3En.wsdl"
+                xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" version="2.1"
+                xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                >
+
+
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en']">
+        <jaxb:schemaBindings>
+            <jaxb:nameXmlTransform>
+                <jaxb:elementName suffix="Element"/>
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxws:bindings>
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en/dataobjects']">
+        <jaxb:schemaBindings>
+            <jaxb:nameXmlTransform>
+                <jaxb:typeName suffix="Type"/>
+            </jaxb:nameXmlTransform>
+        </jaxb:schemaBindings>
+    </jaxws:bindings>
+
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema/xs:complexType[@name='DataObject']/xs:attribute[@ref='ser:Id']">
+        <jaxb:property name="DataObjectId" />
+    </jaxws:bindings>
+</jaxws:bindings>
+

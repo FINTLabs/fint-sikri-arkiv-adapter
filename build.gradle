@@ -9,19 +9,18 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:${js2pVersion}")
     }
 }
 
 plugins {
     id 'com.github.ben-manes.versions' version '0.27.0'
+    id "no.nils.wsdl2java" version "0.10"
 }
 
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'jsonschema2pojo'
 
 javadoc {
     source = sourceSets.main.allJava
@@ -54,6 +53,9 @@ repositories {
 dependencies {
     compile 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:1.11.1'
 
+    // enable extension support for wsdl2java
+    wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:1.11.1'
+    wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics:1.11.1'
 
     compile('com.github.springfox.loader:springfox-loader:1.2.0')
     compile('com.google.guava:guava:28.1-jre')
@@ -88,11 +90,20 @@ dependencies {
     compile 'io.projectreactor:reactor-core:3.3.1.RELEASE'
 }
 
-jsonSchema2Pojo {
-    targetPackage = 'no.documaster.model'
-    sourceType = 'json'
-    includeGetters = true
-    includeSetters = true
+wsdl2java {
+    generatedWsdlDir = file('generated-sources')
+    wsdlDir = file("$projectDir/src/main/resources/wsdl")
+    locale = Locale.ENGLISH
+    wsdlsToGenerate = [
+            ['-xjc-XtoString', '-client', '-b', "$projectDir/src/main/resources/wsdl/bindings-oms.xml", '-p', 'no.fint.arkiv.sikri.oms', '-autoNameResolution', "$projectDir/src/main/resources/wsdl/ObjectModelServiceV3En.wsdl"],
+            ['-xjc-XtoString', '-client', '-b', "$projectDir/src/main/resources/wsdl/bindings-ds.xml", '-p', 'no.fint.arkiv.sikri.ds', "$projectDir/src/main/resources/wsdl/DocumentServiceV3.wsdl"],
+    ]
+    //stabilizeAndMergeObjectFactory = true
+}
+
+wsdl2javaExt {
+    cxfVersion = '3.3.4'
+    deleteGeneratedSourcesOnClean = true
 }
 
 task copyExternalDependencies(type: Copy) {
