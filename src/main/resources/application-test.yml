@@ -1,0 +1,24 @@
+server:
+  port: 8092
+
+springfox:
+  title: 'FINT SSE Adapter Skeleton'
+  version: '@version@'
+
+fint:
+  adapter:
+    endpoints:
+      sse: /sse/%s
+      status: /status
+      response: /response
+      providers:
+        arkiv: http://localhost:8081/provider
+    organizations: fintlabs.no
+
+  oauth:
+    enabled: false
+
+security:
+  basic:
+    enabled: false
+

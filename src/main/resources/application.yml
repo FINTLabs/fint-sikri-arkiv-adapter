@@ -1,0 +1,33 @@
+server:
+  port: 8091
+
+springfox:
+  title: 'FINT SSE Adapter Skeleton'
+  version: '@version@'
+
+fint:
+  documaster:
+    defaults:
+      casetype:
+        tilskudd-fartoy:
+          noekkelord:
+          klassifikasjon: Fartøy
+
+  adapter:
+    endpoints:
+      sse: /sse/%s
+      status: /status
+      response: /response
+
+  oauth:
+    enabled: true
+  #    username:
+  #    password:
+  #    client-id:
+  #    client-secret:
+  #    access-token-uri:
+  #    scope:
+
+security:
+  basic:
+    enabled: false

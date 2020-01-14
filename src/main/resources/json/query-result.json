@@ -1,0 +1,633 @@
+{
+  "hasMore": false,
+  "results": [
+    {
+      "type": "Mappe",
+      "id": "527",
+      "version": "5",
+      "fields": {
+        "uuid": "09a101d5-1f3e-4589-a49b-4b0b2e2af7f3",
+        "opprettetDato": "2019-12-27T11:58:19.974+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "mappeIdent": "527",
+        "tittel": "Plan for julekalender 2020",
+        "dokumentmedium": "E"
+      },
+      "links": {
+        "refPrimaerKlasse": 520,
+        "refArkivdel": 522
+      }
+    },
+    {
+      "type": "Saksmappe",
+      "id": "548",
+      "version": "8",
+      "fields": {
+        "uuid": "e0af9bfc-067f-425d-96e3-6df383a8e263",
+        "opprettetDato": "2019-12-27T13:36:41.552+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "mappeIdent": "2019/1",
+        "tittel": "Utvikling av FINT-adapter",
+        "offentligTittel": "Utvikling av ****-adapter",
+        "beskrivelse": "Dette er beskrivelsen",
+        "dokumentmedium": "E",
+        "virksomhetsspesifikkeMetadata": {
+          "fartoy": {
+            "fartoynavn": {
+              "type": "string",
+              "values": [
+                "Ternen"
+              ]
+            },
+            "kallesignal": {
+              "type": "string",
+              "values": [
+                "LNQB"
+              ]
+            }
+          },
+          "digisak": {
+            "kulturminneid": {
+              "type": "string",
+              "values": [
+                "234567-8"
+              ]
+            },
+            "soeknadsnummer": {
+              "type": "string",
+              "values": [
+                "123456"
+              ]
+            }
+          }
+        },
+        "saksaar": 2019,
+        "sakssekvensnummer": 1,
+        "saksdato": "2019-12-27",
+        "administrativEnhet": "SA",
+        "saksansvarlig": "Asgeir Fintlabs",
+        "saksansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "saksstatus": "B"
+      },
+      "links": {
+        "refPrimaerKlasse": 520,
+        "refArkivdel": 522
+      }
+    },
+    {
+      "type": "Saksmappe",
+      "id": "610",
+      "version": "8",
+      "fields": {
+        "uuid": "17dcf3d7-0f23-4fa8-99d6-5b423c0683e1",
+        "opprettetDato": "2019-12-30T16:35:05.899+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "mappeIdent": "2019/2",
+        "tittel": "Innføring til Documaster",
+        "dokumentmedium": "E",
+        "virksomhetsspesifikkeMetadata": {
+          "test": {
+            "balla": {
+              "type": "string",
+              "values": [
+                "knot"
+              ]
+            }
+          }
+        },
+        "saksaar": 2019,
+        "sakssekvensnummer": 2,
+        "saksdato": "2019-12-30",
+        "administrativEnhet": "SA",
+        "saksansvarlig": "Asgeir Fintlabs",
+        "saksansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "saksstatus": "B"
+      },
+      "links": {
+        "refPrimaerKlasse": 520,
+        "refArkivdel": 522
+      }
+    },
+    {
+      "type": "Saksmappe",
+      "id": "615",
+      "version": "9",
+      "fields": {
+        "uuid": "70f95d96-04a5-4bb7-8553-edad36bfd87e",
+        "opprettetDato": "2020-01-01T15:17:05.288+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "mappeIdent": "2020/1",
+        "tittel": "Test med nøkkelord",
+        "dokumentmedium": "E",
+        "mappetype": "F1",
+        "virksomhetsspesifikkeMetadata": {
+          "test": {
+            "balla": {
+              "type": "string",
+              "values": [
+                "skrot"
+              ]
+            },
+            "jalla": {
+              "type": "string",
+              "values": [
+                "Noe annet"
+              ]
+            }
+          }
+        },
+        "saksaar": 2020,
+        "sakssekvensnummer": 1,
+        "saksdato": "2020-01-01",
+        "administrativEnhet": "SA",
+        "saksansvarlig": "Asgeir Fintlabs",
+        "saksansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "saksstatus": "B"
+      },
+      "links": {
+        "refPrimaerKlasse": 520,
+        "refArkivdel": 522
+      }
+    },
+    {
+      "type": "Basisregistrering",
+      "id": "531",
+      "version": "4",
+      "fields": {
+        "uuid": "281ebfdb-69a6-40bf-b70f-d0c68d6ce7da",
+        "opprettetDato": "2019-12-27T12:00:03.726+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "registreringsIdent": "531",
+        "tittel": "Første desember",
+        "dokumentmedium": "E"
+      },
+      "links": {
+        "refMappe": 527
+      }
+    },
+    {
+      "type": "Basisregistrering",
+      "id": "539",
+      "version": "4",
+      "fields": {
+        "uuid": "16675109-5331-4b30-9fbe-7b7ea6893859",
+        "opprettetDato": "2019-12-27T12:04:17.019+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "registreringsIdent": "539",
+        "tittel": "Andre desember",
+        "dokumentmedium": "E"
+      },
+      "links": {
+        "refMappe": 527
+      }
+    },
+    {
+      "type": "Journalpost",
+      "id": "552",
+      "version": "8",
+      "fields": {
+        "uuid": "60772729-417c-4654-937b-a2931edc572c",
+        "opprettetDato": "2019-12-27T13:39:04.177+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "registreringsIdent": "2019/1",
+        "tittel": "Mottatt henvendelse",
+        "registreringsDato": "2019-12-27",
+        "dokumentmedium": "E",
+        "virksomhetsspesifikkeMetadata": {
+          "test": {
+            "balla": {
+              "type": "string",
+              "values": [
+                "knot"
+              ]
+            },
+            "jalla": {
+              "type": "string",
+              "values": [
+                "Hallo på do"
+              ]
+            }
+          },
+          "digisak": {
+            "kulturminneid": {
+              "type": "string",
+              "values": [
+                "223456-8"
+              ]
+            },
+            "soeknadsnummer": {
+              "type": "string",
+              "values": [
+                "1234567"
+              ]
+            }
+          }
+        },
+        "journalaar": 2019,
+        "journalsekvensnummer": 1,
+        "journalpostnummer": 1,
+        "journalansvarlig": "Asgeir Fintlabs",
+        "journalansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "journalposttype": "I",
+        "journalstatus": "J"
+      },
+      "links": {
+        "refMappe": 548
+      }
+    },
+    {
+      "type": "Journalpost",
+      "id": "625",
+      "version": "7",
+      "fields": {
+        "uuid": "8f591e0a-131d-4d85-847d-582a02b496a1",
+        "opprettetDato": "2020-01-01T15:25:55.852+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "registreringsIdent": "2020/1",
+        "tittel": "Opprinnelig henvendelse",
+        "registreringsDato": "2020-01-01",
+        "dokumentmedium": "E",
+        "journalaar": 2020,
+        "journalsekvensnummer": 1,
+        "journalpostnummer": 1,
+        "journalansvarlig": "Asgeir Fintlabs",
+        "journalansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "journalposttype": "I",
+        "journalstatus": "S"
+      },
+      "links": {
+        "refMappe": 615
+      }
+    },
+    {
+      "type": "Journalpost",
+      "id": "638",
+      "version": "7",
+      "fields": {
+        "uuid": "ee754d01-d8ca-4bdc-98d3-96ec548166ea",
+        "opprettetDato": "2020-01-01T15:29:27.552+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "registreringsIdent": "2020/2",
+        "tittel": "Avslag",
+        "registreringsDato": "2020-01-01",
+        "dokumentmedium": "E",
+        "journalaar": 2020,
+        "journalsekvensnummer": 2,
+        "journalpostnummer": 2,
+        "journalansvarlig": "Asgeir Fintlabs",
+        "journalansvarligBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "journalposttype": "U",
+        "journalstatus": "F"
+      },
+      "links": {
+        "refMappe": 615
+      }
+    },
+    {
+      "type": "Dokument",
+      "id": "532",
+      "version": "6",
+      "fields": {
+        "uuid": "912ce742-ce52-407b-9de7-35a772be9f0d",
+        "opprettetDato": "2019-12-27T12:00:03.768+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "dokumentstatus": "B",
+        "tittel": "veraPDF test suite 6-8-2-2-t01-pass-a.pdf",
+        "dokumentmedium": "E",
+        "tilknyttetRegistreringSom": "H",
+        "dokumentnummer": 1
+      },
+      "links": {
+        "refRegistrering": 531
+      }
+    },
+    {
+      "type": "Dokument",
+      "id": "540",
+      "version": "6",
+      "fields": {
+        "uuid": "c2f6cf95-e7be-4181-9582-03c1b6293a63",
+        "opprettetDato": "2019-12-27T12:04:17.037+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "dokumentstatus": "B",
+        "tittel": "dummy.pdf",
+        "dokumentmedium": "E",
+        "tilknyttetRegistreringSom": "H",
+        "dokumentnummer": 1
+      },
+      "links": {
+        "refRegistrering": 539
+      }
+    },
+    {
+      "type": "Dokument",
+      "id": "553",
+      "version": "7",
+      "fields": {
+        "uuid": "bb0a7a99-5796-441d-950a-287420801f80",
+        "opprettetDato": "2019-12-27T13:39:04.234+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "dokumenttype": "K1",
+        "dokumentstatus": "B",
+        "tittel": "veraPDF test suite 6-8-2-2-t01-pass-a.pdf",
+        "beskrivelse": "Jallalalala",
+        "dokumentmedium": "E",
+        "tilknyttetRegistreringSom": "H",
+        "dokumentnummer": 1
+      },
+      "links": {
+        "refRegistrering": 552
+      }
+    },
+    {
+      "type": "Dokumentversjon",
+      "id": "533",
+      "version": "5",
+      "fields": {
+        "uuid": "a34c73c9-202e-4c8c-99cd-c1297f98086e",
+        "opprettetDato": "2019-12-27T12:00:03.800+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "versjonsnummer": 1,
+        "variantformat": "P",
+        "format": "",
+        "sjekksum": "b5d194c0e6d91119f0f99354f3d1078877406b695cecf75fb0b5cb51b18c14fd",
+        "sjekksumAlgoritme": "SHA-256",
+        "filstoerrelse": 3447,
+        "referanseDokumentfil": "529",
+        "innholdstype": "application/pdf"
+      },
+      "links": {
+        "refDokument": 532
+      }
+    },
+    {
+      "type": "Dokumentversjon",
+      "id": "541",
+      "version": "5",
+      "fields": {
+        "uuid": "1d3922a9-c669-4956-abce-26af866becd4",
+        "opprettetDato": "2019-12-27T12:04:17.052+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "versjonsnummer": 1,
+        "variantformat": "P",
+        "format": "",
+        "sjekksum": "3df79d34abbca99308e79cb94461c1893582604d68329a41fd4bec1885e6adb4",
+        "sjekksumAlgoritme": "SHA-256",
+        "filstoerrelse": 13264,
+        "referanseDokumentfil": "537",
+        "innholdstype": "application/pdf"
+      },
+      "links": {
+        "refDokument": 540
+      }
+    },
+    {
+      "type": "Dokumentversjon",
+      "id": "554",
+      "version": "5",
+      "fields": {
+        "uuid": "2c8e73ae-c913-48c0-94c3-a392cc1b618f",
+        "opprettetDato": "2019-12-27T13:39:04.244+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "versjonsnummer": 1,
+        "variantformat": "P",
+        "format": "",
+        "sjekksum": "b5d194c0e6d91119f0f99354f3d1078877406b695cecf75fb0b5cb51b18c14fd",
+        "sjekksumAlgoritme": "SHA-256",
+        "filstoerrelse": 3447,
+        "referanseDokumentfil": "550",
+        "innholdstype": "application/pdf"
+      },
+      "links": {
+        "refDokument": 553
+      }
+    },
+    {
+      "type": "Korrespondansepart",
+      "id": "555",
+      "version": "4",
+      "fields": {
+        "uuid": "9d982b9f-9a32-4d09-94a0-96873f22b8cd",
+        "opprettetDato": "2019-12-27T13:39:04.232+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "korrespondanseparttype": "EA",
+        "korrespondansepartNavn": "Asgeir Nilsen",
+        "foedselsnummer": "111273*****",
+        "postadresse": "Henny Tanbergs vei 4",
+        "postnummer": "3038",
+        "poststed": "Drammen",
+        "epostadresse": "asgeir@fintlabs.no",
+        "administrativEnhet": "SA"
+      },
+      "links": {
+        "refRegistrering": 552
+      }
+    },
+    {
+      "type": "Sakspart",
+      "id": "606",
+      "version": "4",
+      "fields": {
+        "uuid": "a8e45359-6a14-4a17-b38b-8692f3e4ced5",
+        "opprettetDato": "2019-12-30T12:02:39.444+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "sakspartNavn": "Asgeir Nilsen",
+        "sakspartRolle": "Avsender",
+        "postadresse": "Henny Tanbergs vei 4",
+        "postnummer": "3038",
+        "poststed": "Drammen",
+        "epostadresse": "asgeir@fintlabs.no",
+        "telefonnummer": "48402217"
+      },
+      "links": {
+        "refMappe": 548
+      }
+    },
+    {
+      "type": "EksternId",
+      "id": "603",
+      "version": "2",
+      "fields": {
+        "uuid": "7813f1d9-5ded-409e-b734-fdeb06b435b3",
+        "opprettetDato": "2019-12-30T11:43:26.461+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "eksterntSystem": "Digisak",
+        "eksternID": "123456"
+      },
+      "links": {
+        "refMappe": 548
+      }
+    },
+    {
+      "type": "Klasse",
+      "id": "520",
+      "version": "3",
+      "fields": {
+        "uuid": "92fdfd5d-9444-4770-bcf3-df957d8432b8",
+        "opprettetDato": "2019-12-27T11:53:39.538+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "klasseIdent": "Alle",
+        "tittel": "Alle",
+        "beskrivelse": "Alle har samme klasse"
+      },
+      "links": {
+        "refKlassifikasjonssystem": 518
+      }
+    },
+    {
+      "type": "Klassifikasjonssystem",
+      "id": "518",
+      "version": "1",
+      "fields": {
+        "uuid": "cb524bd5-eee9-4f16-a976-4cfb745bfb59",
+        "opprettetDato": "2019-12-27T11:53:15.212+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "tittel": "Klasseløst",
+        "beskrivelse": "Det klasseløse samfunn"
+      },
+      "links": {}
+    },
+    {
+      "type": "Merknad",
+      "id": "570",
+      "version": "3",
+      "fields": {
+        "uuid": "7a054d57-b66e-43da-bf5b-aa41b1c4c8f0",
+        "opprettetDato": "2019-12-29T19:57:25.115+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "tekst": "Dette er bare tull og tøys.",
+        "merknadstype": "IMER"
+      },
+      "links": {
+        "refRegistrering": 552
+      }
+    },
+    {
+      "type": "Merknad",
+      "id": "611",
+      "version": "3",
+      "fields": {
+        "uuid": "dd0d65e3-d859-4e85-a6b3-417a2254be9b",
+        "opprettetDato": "2019-12-30T16:35:05.934+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "tekst": "Dette er en liten test, skal du se.",
+        "merknadstype": "IMER"
+      },
+      "links": {
+        "refMappe": 610
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "616",
+      "version": "2",
+      "fields": {
+        "uuid": "2fdcacc0-f18a-4539-81c6-b8de1b054940",
+        "opprettetDato": "2020-01-01T15:17:05.305+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "test"
+      },
+      "links": {
+        "refMappe": 615
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "617",
+      "version": "2",
+      "fields": {
+        "uuid": "240cbdf0-d0ea-4336-b52d-4b7025f5648b",
+        "opprettetDato": "2020-01-01T15:17:05.305+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "arkiv"
+      },
+      "links": {
+        "refMappe": 615
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "642",
+      "version": "2",
+      "fields": {
+        "uuid": "4f022ac5-18a2-4972-825c-bbf0b0ef571b",
+        "opprettetDato": "2020-01-01T15:29:27.601+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "arkiv"
+      },
+      "links": {
+        "refRegistrering": 638
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "643",
+      "version": "2",
+      "fields": {
+        "uuid": "e50a6062-8ac1-43a5-85a0-59873333cf9a",
+        "opprettetDato": "2020-01-01T15:29:27.601+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "test"
+      },
+      "links": {
+        "refRegistrering": 638
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "644",
+      "version": "2",
+      "fields": {
+        "uuid": "07121b17-514b-4b63-bbce-10fc3354ab32",
+        "opprettetDato": "2020-01-01T15:29:27.601+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "avslag"
+      },
+      "links": {
+        "refRegistrering": 638
+      }
+    },
+    {
+      "type": "Noekkelord",
+      "id": "645",
+      "version": "2",
+      "fields": {
+        "uuid": "34e05f12-e285-4fa3-ad80-58b735114d84",
+        "opprettetDato": "2020-01-01T15:29:27.601+0100",
+        "opprettetAv": "Asgeir Fintlabs",
+        "opprettetAvBrukerIdent": "c052e9c7-e51c-45d2-9b64-c10317a56757",
+        "verdi": "søknad"
+      },
+      "links": {
+        "refRegistrering": 638
+      }
+    }
+  ]
+}

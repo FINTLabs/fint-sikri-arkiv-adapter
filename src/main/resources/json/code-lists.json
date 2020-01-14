@@ -1,0 +1,532 @@
+{
+  "results": [
+    {
+      "type": "Arkiv",
+      "field": "arkivstatus",
+      "values": [
+        {
+          "code": "A",
+          "name": "Avsluttet"
+        },
+        {
+          "code": "O",
+          "name": "Opprettet"
+        }
+      ]
+    },
+    {
+      "type": "Arkiv",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Klasse",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "moeteregistreringstype",
+      "values": [
+        {
+          "code": "B",
+          "name": "Møtebok"
+        },
+        {
+          "code": "MP",
+          "name": "Møteprotokoll"
+        },
+        {
+          "code": "SF",
+          "name": "Saksframlegg"
+        },
+        {
+          "code": "D",
+          "name": "Vedtak i møtesak"
+        },
+        {
+          "code": "VL",
+          "name": "Vedlegg til møtesak"
+        },
+        {
+          "code": "SL",
+          "name": "Saksliste"
+        },
+        {
+          "code": "MI",
+          "name": "Møteinnkalling"
+        },
+        {
+          "code": "M",
+          "name": "Møtereferat"
+        },
+        {
+          "code": "SP",
+          "name": "Saksprotokoll"
+        },
+        {
+          "code": "N",
+          "name": "Notat til politisk utvalg"
+        },
+        {
+          "code": "O",
+          "name": "Oversikt over deltakere, representanter og medlemmer i utvalg, råd og møter"
+        }
+      ]
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "moetesakstype",
+      "values": [
+        {
+          "code": "RS",
+          "name": "Referatsak"
+        },
+        {
+          "code": "PS",
+          "name": "Politisk sak"
+        },
+        {
+          "code": "U",
+          "name": "Uregistrert sak"
+        },
+        {
+          "code": "FO",
+          "name": "Interpellasjon"
+        },
+        {
+          "code": "DS",
+          "name": "Delegert møtesak"
+        }
+      ]
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "moeteregistreringsstatus",
+      "values": []
+    },
+    {
+      "type": "Moeteregistrering",
+      "field": "administrativEnhet",
+      "values": []
+    },
+    {
+      "type": "Arkivdel",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Arkivdel",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Arkivdel",
+      "field": "arkivdelstatus",
+      "values": [
+        {
+          "code": "P",
+          "name": "Avsluttet periode"
+        },
+        {
+          "code": "A",
+          "name": "Aktiv periode"
+        },
+        {
+          "code": "U",
+          "name": "Uaktuelle mapper"
+        },
+        {
+          "code": "O",
+          "name": "Overlappingsperiode"
+        }
+      ]
+    },
+    {
+      "type": "Moetemappe",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Moetemappe",
+      "field": "mappetype",
+      "values": []
+    },
+    {
+      "type": "Moetemappe",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Dokumentflyt",
+      "field": "flytStatus",
+      "values": [
+        {
+          "code": "S",
+          "name": "Sendt tilbake til saksbehandler med kommentarer"
+        },
+        {
+          "code": "G",
+          "name": "Godkjent"
+        },
+        {
+          "code": "I",
+          "name": "Ikke godkjent"
+        }
+      ]
+    },
+    {
+      "type": "Avskrivning",
+      "field": "avskrivningsmaate",
+      "values": [
+        {
+          "code": "TE",
+          "name": "Tatt til etterretning"
+        },
+        {
+          "code": "BU",
+          "name": "Besvart med brev"
+        },
+        {
+          "code": "BE",
+          "name": "Besvart med e-post"
+        },
+        {
+          "code": "TO",
+          "name": "Tatt til orientering"
+        },
+        {
+          "code": "TLF",
+          "name": "Besvart på telefon"
+        }
+      ]
+    },
+    {
+      "type": "Saksmappe",
+      "field": "saksstatus",
+      "values": [
+        {
+          "code": "P",
+          "name": "Unntatt prosesstyring"
+        },
+        {
+          "code": "A",
+          "name": "Avsluttet"
+        },
+        {
+          "code": "B",
+          "name": "Under behandling"
+        },
+        {
+          "code": "R",
+          "name": "Opprettet av saksbehandler"
+        },
+        {
+          "code": "S",
+          "name": "Avsluttet av saksbehandler"
+        },
+        {
+          "code": "U",
+          "name": "Utgår"
+        },
+        {
+          "code": "F",
+          "name": "Ferdig fra saksbehandler"
+        }
+      ]
+    },
+    {
+      "type": "Saksmappe",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Saksmappe",
+      "field": "mappetype",
+      "values": []
+    },
+    {
+      "type": "Saksmappe",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Saksmappe",
+      "field": "administrativEnhet",
+      "values": []
+    },
+    {
+      "type": "Mappe",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Mappe",
+      "field": "mappetype",
+      "values": []
+    },
+    {
+      "type": "Mappe",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Basisregistrering",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Basisregistrering",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Journalpost",
+      "field": "journalstatus",
+      "values": [
+        {
+          "code": "A",
+          "name": "Arkivert"
+        },
+        {
+          "code": "R",
+          "name": "Reservert dokument"
+        },
+        {
+          "code": "S",
+          "name": "Saksbehandler har registrert innkommet dokument"
+        },
+        {
+          "code": "E",
+          "name": "Ekspedert"
+        },
+        {
+          "code": "U",
+          "name": "Utgår"
+        },
+        {
+          "code": "F",
+          "name": "Ferdigstilt fra saksbehandler"
+        },
+        {
+          "code": "G",
+          "name": "Godkjent av leder"
+        },
+        {
+          "code": "J",
+          "name": "Journalført"
+        },
+        {
+          "code": "M",
+          "name": "Midlertidig registrering av innkommet dokument"
+        }
+      ]
+    },
+    {
+      "type": "Journalpost",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Journalpost",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Journalpost",
+      "field": "journalposttype",
+      "values": [
+        {
+          "code": "S",
+          "name": "Saksframlegg"
+        },
+        {
+          "code": "U",
+          "name": "Utgående dokument"
+        },
+        {
+          "code": "X",
+          "name": "Organinternt dokument uten oppfølging"
+        },
+        {
+          "code": "I",
+          "name": "Inngående dokument"
+        },
+        {
+          "code": "N",
+          "name": "Organinternt dokument for oppfølging"
+        }
+      ]
+    },
+    {
+      "type": "Dokumentversjon",
+      "field": "variantformat",
+      "values": [
+        {
+          "code": "P",
+          "name": "Produksjonsformat"
+        },
+        {
+          "code": "A",
+          "name": "Arkivformat"
+        }
+      ]
+    },
+    {
+      "type": "Dokument",
+      "field": "dokumenttype",
+      "values": []
+    },
+    {
+      "type": "Dokument",
+      "field": "skjerming",
+      "values": []
+    },
+    {
+      "type": "Dokument",
+      "field": "tilknyttetRegistreringSom",
+      "values": [
+        {
+          "code": "V",
+          "name": "Vedlegg"
+        },
+        {
+          "code": "H",
+          "name": "Hoveddokument"
+        }
+      ]
+    },
+    {
+      "type": "Dokument",
+      "field": "dokumentmedium",
+      "values": [
+        {
+          "code": "E",
+          "name": "Elektronisk arkiv"
+        }
+      ]
+    },
+    {
+      "type": "Dokument",
+      "field": "dokumentstatus",
+      "values": [
+        {
+          "code": "B",
+          "name": "Dokumentet er under redigering"
+        },
+        {
+          "code": "F",
+          "name": "Dokumentet er ferdigstilt"
+        }
+      ]
+    },
+    {
+      "type": "Merknad",
+      "field": "merknadstype",
+      "values": [
+        {
+          "code": "IMER",
+          "name": "Intern merknad"
+        },
+        {
+          "code": "MER",
+          "name": "Merknad"
+        }
+      ]
+    },
+    {
+      "type": "Korrespondansepart",
+      "field": "korrespondanseparttype",
+      "values": [
+        {
+          "code": "IK",
+          "name": "Intern kopimottaker"
+        },
+        {
+          "code": "IM",
+          "name": "Intern mottaker"
+        },
+        {
+          "code": "EK",
+          "name": "Kopimottaker"
+        },
+        {
+          "code": "GM",
+          "name": "Gruppemottaker"
+        },
+        {
+          "code": "EM",
+          "name": "Mottaker"
+        },
+        {
+          "code": "IA",
+          "name": "Intern avsender"
+        },
+        {
+          "code": "EA",
+          "name": "Avsender"
+        }
+      ]
+    },
+    {
+      "type": "Korrespondansepart",
+      "field": "ekspederingskanal",
+      "values": []
+    },
+    {
+      "type": "Korrespondansepart",
+      "field": "administrativEnhet",
+      "values": []
+    }
+  ]
+}
