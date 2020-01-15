@@ -1,15 +1,10 @@
 package no.fint.sikri.data.utilities;
 
-import no.fint.arkiv.sikri.oms.CaseStatusType;
-import no.fint.arkiv.sikri.oms.DocumentCategoryType;
-import no.fint.arkiv.sikri.oms.DocumentStatusType;
-import no.fint.arkiv.sikri.oms.RegistryEntryTypeType;
-import no.fint.model.resource.administrasjon.arkiv.DokumentStatusResource;
-import no.fint.model.resource.administrasjon.arkiv.DokumentTypeResource;
-import no.fint.model.resource.administrasjon.arkiv.JournalpostTypeResource;
-import no.fint.model.resource.administrasjon.arkiv.SaksstatusResource;
+import no.fint.arkiv.sikri.oms.*;
+import no.fint.model.resource.administrasjon.arkiv.*;
 
 public class BegrepMapper {
+
 
     public static SaksstatusResource mapSaksstatus(CaseStatusType caseStatusType) {
         SaksstatusResource saksstatusResource = new SaksstatusResource();
@@ -53,4 +48,63 @@ public class BegrepMapper {
 
     }
 
+    public static JournalStatusResource mapJournalStatus(RecordsStatusType recordsStatusType) {
+        JournalStatusResource journalStatusResource = new JournalStatusResource();
+
+        journalStatusResource.setSystemId(FintUtils.createIdentifikator(recordsStatusType.getId().getValue()));
+        journalStatusResource.setKode(recordsStatusType.getId().getValue());
+        journalStatusResource.setNavn(recordsStatusType.getDescription().getValue());
+
+        return journalStatusResource;
+    }
+
+    public static TilknyttetRegistreringSomResource mapTilknyttetTegistreringSom(DocumentLinkTypeType documentLinkTypeType) {
+        TilknyttetRegistreringSomResource tilknyttetRegistreringSomResource = new TilknyttetRegistreringSomResource();
+
+        tilknyttetRegistreringSomResource.setSystemId(FintUtils.createIdentifikator(documentLinkTypeType.getId().getValue()));
+        tilknyttetRegistreringSomResource.setKode(documentLinkTypeType.getId().getValue());
+        tilknyttetRegistreringSomResource.setNavn(documentLinkTypeType.getDescription().getValue());
+
+        return tilknyttetRegistreringSomResource;
+    }
+
+    public static PartRolleResource mapPartRolle(CasePartyRoleType casePartyRoleType) {
+        PartRolleResource partRolleResource = new PartRolleResource();
+
+        partRolleResource.setSystemId(FintUtils.createIdentifikator(casePartyRoleType.getId().getValue()));
+        partRolleResource.setKode(casePartyRoleType.getId().getValue());
+        partRolleResource.setNavn(casePartyRoleType.getDescription().getValue());
+
+        return partRolleResource;
+    }
+
+    public static MerknadstypeResource mapMerkandstype(InformationTypeType informationTypeType) {
+        MerknadstypeResource merknadstypeResource = new MerknadstypeResource();
+
+        merknadstypeResource.setSystemId(FintUtils.createIdentifikator(informationTypeType.getId().getValue()));
+        merknadstypeResource.setKode(informationTypeType.getId().getValue());
+        merknadstypeResource.setNavn(informationTypeType.getDescription().getValue());
+
+        return merknadstypeResource;
+    }
+
+    public static TilgangsrestriksjonResource mapTilgangsrestriksjon(AccessCodeType accessCodeType) {
+        TilgangsrestriksjonResource tilgangsrestriksjonResource = new TilgangsrestriksjonResource();
+
+        tilgangsrestriksjonResource.setSystemId(FintUtils.createIdentifikator(accessCodeType.getId().getValue()));
+        tilgangsrestriksjonResource.setKode(accessCodeType.getId().getValue());
+        tilgangsrestriksjonResource.setNavn(accessCodeType.getDescription().getValue());
+
+        return tilgangsrestriksjonResource;
+    }
+
+    public static VariantformatResource mapVariantFormat(VariantFormatType variantFormatType) {
+        VariantformatResource variantformatResource = new VariantformatResource();
+
+        variantformatResource.setSystemId(FintUtils.createIdentifikator(variantFormatType.getId().getValue()));
+        variantformatResource.setKode(variantFormatType.getId().getValue());
+        variantformatResource.setNavn(variantFormatType.getDescription().getValue());
+
+        return variantformatResource;
+    }
 }

@@ -57,6 +57,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         setupEphorteIdentity();
     }
 
+
     public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, List<String> relatedObjects) {
         FilteredQueryArguments filteredQueryArguments = objectFactory.createFilteredQueryArguments();
 
@@ -77,6 +78,10 @@ public class SikriObjectModelService extends SikriAbstractService {
 
         return queryResult.getDataObjects().getValue().getDataObject();
 
+    }
+
+    public List<DataObject> getDataObjects(String dataObjectName) {
+        return getDataObjects(dataObjectName, null, 0, Collections.emptyList());
     }
 
     public CaseType getSakByCaseNumber(String caseNumber) throws CaseNotFound, IllegalCaseNumberFormat {

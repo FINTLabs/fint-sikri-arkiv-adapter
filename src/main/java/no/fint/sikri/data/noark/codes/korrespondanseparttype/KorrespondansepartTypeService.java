@@ -14,6 +14,8 @@ public class KorrespondansepartTypeService {
     private SikriObjectModelService sikriObjectModelService;
 
     public Stream<KorrespondansepartTypeResource> getKorrespondansepartType() {
+
+
         return null;
     }
 }

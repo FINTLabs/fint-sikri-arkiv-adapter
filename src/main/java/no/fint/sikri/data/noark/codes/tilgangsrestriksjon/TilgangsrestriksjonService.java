@@ -1,8 +1,11 @@
 package no.fint.sikri.data.noark.codes.tilgangsrestriksjon;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.sikri.oms.AccessCodeType;
 import no.fint.model.resource.administrasjon.arkiv.TilgangsrestriksjonResource;
+import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,10 @@ public class TilgangsrestriksjonService {
     private SikriObjectModelService sikriObjectModelService;
 
     public Stream<TilgangsrestriksjonResource> getAccessCodeTable() {
-        return null;
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.ACCESS_CODE)
+                .stream()
+                .map(AccessCodeType.class::cast)
+                .map(BegrepMapper::mapTilgangsrestriksjon);
     }
 
 }

@@ -107,13 +107,13 @@ public class KodeverkRepository {
         dokumentType = dokumenttypeService.getDocumenttypeTable().collect(Collectors.toList());
         journalpostType = journalpostTypeService.getDocumentCategoryTable().collect(Collectors.toList());
 //        korrespondansepartType = korrespondansepartTypeService.getKorrespondansepartType().collect(Collectors.toList());
-//        journalStatus = journalStatusService.getJournalStatusTable().collect(Collectors.toList());
-//        tilknyttetRegistreringSom = tilknyttetRegistreringSomService.getDocumentRelationTable().collect(Collectors.toList());
-//        partRolle = partRolleService.getPartRolle().collect(Collectors.toList());
-//        merknadstype = merknadstypeService.getMerknadstype().collect(Collectors.toList());
-//        tilgangsrestriksjon = tilgangsrestriksjonService.getAccessCodeTable().collect(Collectors.toList());
+        journalStatus = journalStatusService.getJournalStatusTable().collect(Collectors.toList());
+        tilknyttetRegistreringSom = tilknyttetRegistreringSomService.getDocumentRelationTable().collect(Collectors.toList());
+        partRolle = partRolleService.getPartRolle().collect(Collectors.toList());
+        merknadstype = merknadstypeService.getMerknadstype().collect(Collectors.toList());
+        tilgangsrestriksjon = tilgangsrestriksjonService.getAccessCodeTable().collect(Collectors.toList());
 //        skjermingshjemmel = skjermingshjemmelService.getLawTable().collect(Collectors.toList());
-//        variantformat = variantformatService.getVersionFormatTable().collect(Collectors.toList());
+        variantformat = variantformatService.getVariantFormatTable().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }
