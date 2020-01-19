@@ -13,6 +13,8 @@ import no.fint.sikri.data.utilities.NOARKUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static no.fint.sikri.data.utilities.FintUtils.optionalValue;
+
 @Service
 public class NoarkFactory {
 
@@ -48,8 +50,8 @@ public class NoarkFactory {
 
         resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
         resource.setPart(partService.queryForSaksmappe(resource));
-        // FIXME: 16/01/2020 Add remarks support
-//        resource.setMerknad(merknadService.queryForMappe(input.getId()));
+
+        resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
         // FIXME: 16/01/2020 Add keyword support
 //        resource.setNoekkelord(nokkelordService.queryForMappe(input.getId()));
 
@@ -58,7 +60,14 @@ public class NoarkFactory {
         resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", input.getCreatedByUserNameId().getValue().toString()));
         resource.addSaksansvarlig(Link.with(Arkivressurs.class, "systemid", input.getOfficerNameId().getValue().toString()));
         resource.addSaksstatus(Link.with(Saksstatus.class, "systemid", input.getCaseStatusId().getValue()));
-        resource.addKlasse(Link.with(Klasse.class, "systemid", String.valueOf(input.getPrimaryClassification().getValue().getClassId().getValue())));
+        optionalValue(input.getPrimaryClassification())
+                .ifPresent(c -> resource.addKlasse(
+                        Link.with(
+                                Klasse.class,
+                                "systemid",
+                                String.valueOf(input.getPrimaryClassification().getValue().getClassId().getValue()))
+                        )
+                );
 
         return resource;
     }

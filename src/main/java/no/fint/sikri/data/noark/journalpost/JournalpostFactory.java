@@ -75,7 +75,7 @@ public class JournalpostFactory {
 
         journalpost.setKorrespondansepart(korrespondanseService.queryForRegistrering(result.getId().toString()));
         // FIXME: 16/01/2020
-//        journalpost.setMerknad(merknadService.queryForRegistrering(result.getId()));
+        journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(result.getId().toString()));
 //        journalpost.setNokkelord(nokkelordService.queryForRegistrering(result.getId()));
 
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));

@@ -30,4 +30,5 @@ public enum SikriObjectTypes {
     public static final String FILE_FORMAT = "FileFormat";
     public static final String CLASSIFICATION_SYSTEM = "ClassificationSystem";
     public static final String CLASS = "Class";
+    public static final String REMARK = "Remark";
 }
