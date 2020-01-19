@@ -87,7 +87,11 @@ public class SikriObjectModelService extends SikriAbstractService {
     public CaseType getSakByCaseNumber(String caseNumber) throws CaseNotFound, IllegalCaseNumberFormat {
         String sequenceNumber = NOARKUtils.getCaseSequenceNumber(caseNumber);
         String caseYear = NOARKUtils.getCaseYear(caseNumber);
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.CASE, "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear, 0, Collections.emptyList());
+        List<DataObject> dataObjects = getDataObjects(
+                SikriObjectTypes.CASE,
+                "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
+                0,
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
 
         if (dataObjects.size() == 1) {
             return (CaseType) dataObjects.get(0);
@@ -97,7 +101,11 @@ public class SikriObjectModelService extends SikriAbstractService {
 
     public CaseType getSakBySystemId(String systemId) throws CaseNotFound, IllegalCaseNumberFormat {
 
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.CASE, "Id=" + systemId, 0, Collections.emptyList());
+        List<DataObject> dataObjects = getDataObjects(
+                SikriObjectTypes.CASE,
+                "Id=" + systemId,
+                0,
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
 
         if (dataObjects.size() == 1) {
             return (CaseType) dataObjects.get(0);
@@ -105,9 +113,14 @@ public class SikriObjectModelService extends SikriAbstractService {
         throw new CaseNotFound("Found " + dataObjects.size() + " cases. Should be 1.");
     }
 
-    public List<CaseType> getGetCasesQueryByTitle(Map<String, String> params) throws CaseNotFound, IllegalCaseNumberFormat {
+    public List<CaseType> getGetCasesQueryByTitle(Map<String, Object> params) throws CaseNotFound, IllegalCaseNumberFormat {
         String filter = String.format("Title=%s", params.get("title"));
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.CASE, filter, Integer.parseInt(params.getOrDefault("maxResult", "10")), Collections.emptyList());
+        List<DataObject> dataObjects = getDataObjects(
+                SikriObjectTypes.CASE,
+                filter,
+                Integer.parseInt((String) params.getOrDefault("maxResult", "10")),
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
+
         return dataObjects.stream().map(CaseType.class::cast).collect(Collectors.toList());
     }
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Set;
 
+/*
 @Slf4j
 @Service
 public class GetKlasseHandler implements Handler {
@@ -47,3 +48,5 @@ public class GetKlasseHandler implements Handler {
     }
 
 }
+
+ */

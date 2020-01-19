@@ -1,13 +1,15 @@
 package no.fint.sikri.handler.noark;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.handler.Handler;
-import no.fint.sikri.repository.KodeverkRepository;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.sikri.data.noark.klasse.KlasseService;
+import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
+import no.fint.sikri.handler.Handler;
+import no.fint.sikri.repository.KodeverkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ import static no.fint.model.administrasjon.arkiv.ArkivActions.*;
 @Slf4j
 public class KodeverkHandler implements Handler {
 
+    @Autowired
+    private KodeverkRepository kodeverkRepository;
+
     private final EnumMap<ArkivActions, Supplier<List<? extends FintLinks>>> actionsMap = new EnumMap<>(ArkivActions.class);
 
     @PostConstruct
@@ -33,18 +38,19 @@ public class KodeverkHandler implements Handler {
         actionsMap.put(GET_ALL_DOKUMENTTYPE, kodeverkRepository::getDokumentType);
         actionsMap.put(GET_ALL_JOURNALPOSTTYPE, kodeverkRepository::getJournalpostType);
         actionsMap.put(GET_ALL_JOURNALSTATUS, kodeverkRepository::getJournalStatus);
-        actionsMap.put(GET_ALL_KORRESPONDANSEPARTTYPE, kodeverkRepository::getKorrespondansepartType);
+        //actionsMap.put(GET_ALL_KORRESPONDANSEPARTTYPE, kodeverkRepository::getKorrespondansepartType);
         actionsMap.put(GET_ALL_MERKNADSTYPE, kodeverkRepository::getMerknadstype);
         actionsMap.put(GET_ALL_PARTROLLE, kodeverkRepository::getPartRolle);
         actionsMap.put(GET_ALL_SAKSSTATUS, kodeverkRepository::getSaksstatus);
-        actionsMap.put(GET_ALL_SKJERMINGSHJEMMEL, kodeverkRepository::getSkjermingshjemmel);
+        //actionsMap.put(GET_ALL_SKJERMINGSHJEMMEL, kodeverkRepository::getSkjermingshjemmel);
         actionsMap.put(GET_ALL_TILGANGSRESTRIKSJON, kodeverkRepository::getTilgangsrestriksjon);
         actionsMap.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, kodeverkRepository::getTilknyttetRegistreringSom);
         actionsMap.put(GET_ALL_VARIANTFORMAT, kodeverkRepository::getVariantformat);
+
+        actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
+        actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);
     }
 
-    @Autowired
-    private KodeverkRepository kodeverkRepository;
 
     @Override
     public void accept(Event<FintLinks> response) {

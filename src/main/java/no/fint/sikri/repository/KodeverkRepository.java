@@ -15,6 +15,8 @@ import no.fint.sikri.data.noark.codes.tilgangsrestriksjon.TilgangsrestriksjonSer
 import no.fint.sikri.data.noark.codes.tilknyttetregistreringsom.TilknyttetRegistreringSomService;
 import no.fint.sikri.data.noark.codes.variantformat.VariantformatService;
 import no.fint.model.resource.administrasjon.arkiv.*;
+import no.fint.sikri.data.noark.klasse.KlasseService;
+import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,12 @@ public class KodeverkRepository {
     @Autowired
     private VariantformatService variantformatService;
 
+    @Autowired
+    private KlasseService klasseService;
+
+    @Autowired
+    private KlassifikasjonssystemService klassifikasjonssystemService;
+
     @Getter
     private List<SaksstatusResource> saksstatus;
 
@@ -98,10 +106,17 @@ public class KodeverkRepository {
     @Getter
     private List<VariantformatResource> variantformat;
 
+    @Getter
+    private List<KlasseResource> klasse;
+
+    @Getter
+    private List<KlassifikasjonssystemResource> klassifikasjonssystem;
+
     private transient boolean healthy = false;
 
     @Scheduled(initialDelay = 10000, fixedDelayString = "${fint.kodeverk.refresh-interval:1500000}")
     public void refresh() {
+        klasseService.refresh();
         saksstatus = saksStatusService.getCaseStatusTable().collect(Collectors.toList());
         dokumentStatus = dokumentstatusService.getDocumentStatusTable().collect(Collectors.toList());
         dokumentType = dokumenttypeService.getDocumenttypeTable().collect(Collectors.toList());
@@ -114,6 +129,8 @@ public class KodeverkRepository {
         tilgangsrestriksjon = tilgangsrestriksjonService.getAccessCodeTable().collect(Collectors.toList());
 //        skjermingshjemmel = skjermingshjemmelService.getLawTable().collect(Collectors.toList());
         variantformat = variantformatService.getVariantFormatTable().collect(Collectors.toList());
+        klasse = klasseService.getKlasser().collect(Collectors.toList());
+        klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }

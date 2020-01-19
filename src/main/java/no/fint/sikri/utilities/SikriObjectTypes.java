@@ -4,7 +4,7 @@ public enum SikriObjectTypes {
 
     ;
 
-    public static final String CASE = "case";
+    public static final String CASE = "Case";
     public static final String REGISTRY_ENTRY = "RegistryEntry";
     public static final String REGISTRY_ENTRY_TYPES = "RegistryEntryTypes";
     public static final String ACCESS_CODE = "AccessCode";
@@ -21,5 +21,13 @@ public enum SikriObjectTypes {
     public static final String DOCUMENT_LINK_TYPE = "DocumentLinkType";
     public static final String CASE_PARTY_ROLE = "CasePartyRole";
     public static final String INFORMATION_TYPE = "InformationType";
-    public static final String VARIANT_FORMAT =  "VariantFormat";
+    public static final String VARIANT_FORMAT = "VariantFormat";
+    public static final String PRIMARY_CLASSIFICATION = "PrimaryClassification";
+    public static final String OFFICER_NAME = "OfficerName";
+
+    public static final String DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY = DOCUMENT_DESCRIPTION + "." + DOCUMENT_CATEGORY;
+
+    public static final String FILE_FORMAT = "FileFormat";
+    public static final String CLASSIFICATION_SYSTEM = "ClassificationSystem";
+    public static final String CLASS = "Class";
 }

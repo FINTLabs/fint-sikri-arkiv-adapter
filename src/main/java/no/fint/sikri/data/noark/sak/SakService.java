@@ -1,8 +1,16 @@
 package no.fint.sikri.data.noark.sak;
 
+import no.fint.model.resource.administrasjon.arkiv.SakResource;
+import no.fint.sikri.data.exception.CaseNotFound;
+import no.fint.sikri.data.exception.GetCaseException;
+import no.fint.sikri.data.exception.GetDocumentException;
+import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SakService {
@@ -13,18 +21,18 @@ public class SakService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-//    public List<SakResource> searchSakByQueryParams(Map<String, Object> query) throws GetDocumentException, IllegalCaseNumberFormat, GetCaseException {
-//        return sakFactory.toFintResourceList(noark5WebService.query(sakFactory.getQueryInputFromQueryParams(query)));
-//    }
-//
-//    public SakResource getSakByCaseNumber(String caseNumber) throws GetDocumentException, IllegalCaseNumberFormat, CaseNotFound, GetCaseException {
-//        return sakFactory.toFintResourceList(noark5WebService.query(sakFactory.getQueryInputFromMappeId(caseNumber)))
-//                .stream().findAny().orElseThrow(() -> new CaseNotFound(caseNumber));
-//    }
-//
-//    public SakResource getSakBySystemId(String systemId) throws GetDocumentException, IllegalCaseNumberFormat, CaseNotFound, GetCaseException {
-//        return sakFactory.toFintResourceList(noark5WebService.query(sakFactory.getQueryInputFromSystemId(systemId)))
-//                .stream().findAny().orElseThrow(() -> new CaseNotFound(systemId));
-//    }
+    public List<SakResource> searchSakByQueryParams(Map<String, Object> query) throws GetDocumentException, IllegalCaseNumberFormat, GetCaseException, CaseNotFound {
+        return sakFactory.toFintResourceList(sikriObjectModelService.getGetCasesQueryByTitle(query));
+
+    }
+
+    public SakResource getSakByCaseNumber(String caseNumber) throws GetDocumentException, IllegalCaseNumberFormat, CaseNotFound, GetCaseException, CaseNotFound {
+        return sakFactory.toFintResource(sikriObjectModelService.getSakByCaseNumber(caseNumber));
+
+    }
+
+    public SakResource getSakBySystemId(String systemId) throws GetDocumentException, IllegalCaseNumberFormat, CaseNotFound, GetCaseException {
+        return sakFactory.toFintResource(sikriObjectModelService.getSakBySystemId(systemId));
+    }
 
 }

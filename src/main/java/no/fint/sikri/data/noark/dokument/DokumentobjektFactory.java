@@ -1,27 +1,33 @@
 package no.fint.sikri.data.noark.dokument;
 
+import no.fint.arkiv.sikri.oms.DocumentObjectType;
+import no.fint.model.administrasjon.arkiv.Arkivressurs;
+import no.fint.model.administrasjon.arkiv.Dokumentfil;
+import no.fint.model.administrasjon.arkiv.Variantformat;
+import no.fint.model.resource.Link;
+import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DokumentobjektFactory {
-//    public QueryInput createQueryInput(String id) {
+    //    public QueryInput createQueryInput(String id) {
 //        return QueryUtils.createQueryInput("Dokumentversjon", "refDokument.id", id);
 //    }
 //
-//    public DokumentobjektResource toFintResource(Result__1 result) {
-//        DokumentobjektResource resource = new DokumentobjektResource();
-//
-//        resource.setFilstorrelse(String.valueOf(result.getFields().getFilstoerrelse()));
-//        resource.setFormat(result.getFields().getInnholdstype());
-//        resource.setFormatDetaljer(result.getFields().getFormat());
-//        resource.setSjekksum(result.getFields().getSjekksum());
-//        resource.setSjekksumAlgoritme(result.getFields().getSjekksumAlgoritme());
-//        resource.setVersjonsummer(Long.valueOf(result.getFields().getVersjonsnummer()));
-//
-//        resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", result.getFields().getReferanseDokumentfil()));
-//        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", result.getFields().getVariantformat()));
-//        resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getFields().getOpprettetAvBrukerIdent()));
-//
-//        return resource;
-//    }
+    public DokumentobjektResource toFintResource(DocumentObjectType result) {
+        DokumentobjektResource resource = new DokumentobjektResource();
+
+        resource.setFilstorrelse(String.valueOf(result.getFileSize().getValue()));
+        resource.setFormat(result.getContentType().getValue());
+        resource.setFormatDetaljer(result.getFileFormat().getValue().getFileExtension().getValue());
+        resource.setSjekksum(result.getChecksum().getValue());
+        resource.setSjekksumAlgoritme(result.getCheckSumAlgorithm().getValue());
+        resource.setVersjonsummer(resource.getVersjonsummer());
+
+        resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", String.valueOf(result.getDocumentDescriptionId())));
+        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", result.getVariantFormatId().getValue()));
+        resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", String.valueOf(result.getCreatedByUserNameId().getValue())));
+
+        return resource;
+    }
 }

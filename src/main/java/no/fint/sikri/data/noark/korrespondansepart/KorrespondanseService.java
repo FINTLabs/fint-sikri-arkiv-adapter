@@ -1,11 +1,15 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
+import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.resource.administrasjon.arkiv.KorrespondanseResource;
 import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class KorrespondanseService {
@@ -19,13 +23,12 @@ public class KorrespondanseService {
     private SikriObjectModelService sikriObjectModelService;
 
     public List<KorrespondanseResource> queryForRegistrering(String refRegistrering) {
-//        QueryInput queryInput = korrespondansepartFactory.createQueryInput("refRegistrering.id", refRegistrering);
-//        return noark5WebService.query(queryInput)
-//                .getResults()
-//                .stream()
-//                .map(korrespondanseFactory::toFintResource)
-//                .collect(Collectors.toList());
-        return null;
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.SENDER_RECIPIENT, "RegistryEntryId=" + refRegistrering, 0, Collections.emptyList())
+                .stream()
+                .map(SenderRecipientType.class::cast)
+                .map(korrespondanseFactory::toFintResource)
+                .collect(Collectors.toList());
+
     }
 
 }

@@ -1,6 +1,7 @@
 package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.sikri.oms.RegistryEntryType;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondanseService;
@@ -45,18 +46,18 @@ public class JournalpostFactory {
 
     @Autowired
     private NokkelordService nokkelordService;
-/*
-    public JournalpostResource toFintResource(Result__1 result) {
+
+    public JournalpostResource toFintResource(RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
-        journalpost.setTittel(result.getFields().getTittel());
-        journalpost.setOffentligTittel(result.getFields().getOffentligTittel());
-        journalpost.setOpprettetDato(FintUtils.parseIsoDate(result.getFields().getOpprettetDato()));
-        journalpost.setJournalDato(FintUtils.parseDate(result.getFields().getRegistreringsDato()));
-        journalpost.setJournalAr(String.valueOf(result.getFields().getJournalaar()));
-        journalpost.setJournalPostnummer(Long.valueOf(result.getFields().getJournalpostnummer()));
-        journalpost.setJournalSekvensnummer(Long.valueOf(result.getFields().getJournalsekvensnummer()));
-        journalpost.setBeskrivelse(result.getFields().getBeskrivelse());
+        journalpost.setTittel(result.getTitleRestricted().getValue());
+        journalpost.setOffentligTittel(result.getTitle().getValue());
+        journalpost.setOpprettetDato(FintUtils.parseGregorianCalender(result.getCreatedDate().getValue().toGregorianCalendar()));
+        journalpost.setJournalDato(FintUtils.parseGregorianCalender(result.getRegistryDate().getValue().toGregorianCalendar()));
+        journalpost.setJournalAr(String.valueOf(result.getRegisterYear().getValue()));
+        journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber().getValue()));
+        journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber().getValue()));
+//        journalpost.setBeskrivelse(result.getFields().getBeskrivelse());
 
 
 
@@ -66,26 +67,29 @@ public class JournalpostFactory {
         // TODO: 2019-05-08 Check noark if this is correct
         journalpost.setForfatter(
                 Stream.<String>builder()
-                        .add(result.getFields().getOpprettetAv())
-                        .add(result.getFields().getJournalansvarlig())
+                        .add(result.getCreatedByUserNameId().getValue().toString())
+                        .add(result.getOfficerName().getValue().getName().getValue())
                         .build()
                         .distinct()
                         .collect(Collectors.toList()));
 
-        journalpost.setKorrespondansepart(korrespondanseService.queryForRegistrering(result.getId()));
-        journalpost.setMerknad(merknadService.queryForRegistrering(result.getId()));
-        journalpost.setNokkelord(nokkelordService.queryForRegistrering(result.getId()));
-        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId()));
+        journalpost.setKorrespondansepart(korrespondanseService.queryForRegistrering(result.getId().toString()));
+        // FIXME: 16/01/2020
+//        journalpost.setMerknad(merknadService.queryForRegistrering(result.getId()));
+//        journalpost.setNokkelord(nokkelordService.queryForRegistrering(result.getId()));
+
+        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
 
 
-        journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getFields().getJournalansvarligBrukerIdent()));
-        journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getFields().getOpprettetAvBrukerIdent()));
-        journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getFields().getJournalposttype()));
-        journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getFields().getJournalstatus()));
+
+        journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getOfficerNameId().getValue().toString()));
+        journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getCreatedByUserNameId().getValue().toString()));
+        journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getRegistryEntryTypeId().getValue()));
+        journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getRecordStatusId().getValue()));
 
         return journalpost;
     }
-
+/*
     public QueryInput createQueryInput(SaksmappeResource saksmappe) {
         if (saksmappe == null)
             return null;

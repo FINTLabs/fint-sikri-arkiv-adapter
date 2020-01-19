@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.sak;
 
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.utilities.QueryUtils;
 import no.fint.model.resource.administrasjon.arkiv.SakResource;
@@ -21,18 +22,21 @@ public class SakFactory {
     @Autowired
     private NoarkFactory noarkFactory;
 
-    /*
-    public SakResource toFintResource(Result__1 result) {
+    public SakResource toFintResource(CaseType result) {
         return noarkFactory.applyValuesForSaksmappe(result, new SakResource());
     }
 
-    public List<SakResource> toFintResourceList(QueryResult caseResults) {
-        List<SakResource> result = new ArrayList<>(caseResults.getResults().size());
-        for (Result__1 item : caseResults.getResults()) {
-            result.add(toFintResource(item));
-        }
-        return result;
+    public List<SakResource> toFintResourceList(List<CaseType> cases) {
+
+        return cases.stream().map(this::toFintResource).collect(Collectors.toList());
+
+//        List<SakResource> result = new ArrayList<>(cases.size());
+//        for (CaseType caseResult : cases) {
+//            result.add(toFintResource(caseResult));
+//        }
+//        return result;
     }
+    /*
 
     public QueryInput getQueryInputFromQueryParams(Map<String, Object> params) {
         QueryInput queryInput = new QueryInput();

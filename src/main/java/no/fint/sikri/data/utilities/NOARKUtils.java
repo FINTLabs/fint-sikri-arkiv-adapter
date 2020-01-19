@@ -6,6 +6,9 @@ import no.fint.sikri.data.exception.IllegalDocumentNumberFormat;
 public enum NOARKUtils {
     ;
 
+    public static String getMappeId(String caseSequenceNumber, String caseYear) {
+        return String.format("%s/%s", caseSequenceNumber, caseYear);
+    }
     public static String getCaseYear(String caseNumber) throws IllegalCaseNumberFormat {
         String[] split = caseNumber.split("/");
         if (split.length != 2) {
