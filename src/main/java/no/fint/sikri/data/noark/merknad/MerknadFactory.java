@@ -20,14 +20,4 @@ public class MerknadFactory {
         result.addMerknadstype(Link.with(Merknadstype.class, "systemid", input.getRemarkTypeId().getValue()));
         return result;
     }
-
-    /*
-    public List<MerknadResource> toFintResourceList(List<Result__1> input) {
-        return input.stream()
-                .map(this::toFintResource)
-                .collect(Collectors.toList());
-    }
-
-     */
-
 }

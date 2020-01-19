@@ -6,7 +6,6 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
-import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
@@ -27,8 +26,6 @@ public class NoarkFactory {
     @Autowired
     private MerknadService merknadService;
 
-    @Autowired
-    private NokkelordService nokkelordService;
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
@@ -38,7 +35,6 @@ public class NoarkFactory {
         Integer caseYear = input.getCaseYear().getValue();
         Integer sequenceNumber = input.getSequenceNumber().getValue();
 
-//        resource.setBeskrivelse(input.getFields().getBeskrivelse());
         resource.setMappeId(FintUtils.createIdentifikator(caseNumber));
         resource.setSystemId(FintUtils.createIdentifikator(input.getId().toString()));
         resource.setSakssekvensnummer(String.valueOf(sequenceNumber));
@@ -52,8 +48,6 @@ public class NoarkFactory {
         resource.setPart(partService.queryForSaksmappe(resource));
 
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
-        // FIXME: 16/01/2020 Add keyword support
-//        resource.setNoekkelord(nokkelordService.queryForMappe(input.getId()));
 
         resource.addAdministrativEnhet(Link.with(AdministrativEnhet.class, "systemid", input.getAdministrativeUnitId().getValue().toString()));
         resource.addArkivdel(Link.with(Arkivdel.class, "systemid", String.valueOf(input.getRegistryManagementUnitId().getValue())));

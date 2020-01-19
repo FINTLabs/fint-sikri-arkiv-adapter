@@ -3,9 +3,6 @@ package no.fint.sikri.service;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.sikri.AdapterProps;
-import no.fint.sikri.data.exception.CaseNotFound;
-import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
-import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import no.fint.sikri.utilities.SikriUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +16,8 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.soap.AddressingFeature;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -33,7 +27,6 @@ public class SikriObjectModelService extends SikriAbstractService {
 
     @Value("${fint.sikri.wsdl-location:./src/main/resources/wsdl}/ObjectModelServiceV3En.wsdl")
     private String wsdlLocation;
-
 
     @Autowired
     private AdapterProps props;
@@ -84,93 +77,13 @@ public class SikriObjectModelService extends SikriAbstractService {
         return getDataObjects(dataObjectName, null, 0, Collections.emptyList());
     }
 
-    public CaseType getSakByCaseNumber(String caseNumber) throws CaseNotFound, IllegalCaseNumberFormat {
-        String sequenceNumber = NOARKUtils.getCaseSequenceNumber(caseNumber);
-        String caseYear = NOARKUtils.getCaseYear(caseNumber);
-        List<DataObject> dataObjects = getDataObjects(
-                SikriObjectTypes.CASE,
-                "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
-                0,
-                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
-
-        if (dataObjects.size() == 1) {
-            return (CaseType) dataObjects.get(0);
-        }
-        throw new CaseNotFound("Found " + dataObjects.size() + " cases. Should be 1.");
+    public List<DataObject> getDataObjects(String dataObjectName, String filter) {
+        return getDataObjects(dataObjectName, filter, 0, Collections.emptyList());
     }
 
-    public CaseType getSakBySystemId(String systemId) throws CaseNotFound, IllegalCaseNumberFormat {
-
-        List<DataObject> dataObjects = getDataObjects(
-                SikriObjectTypes.CASE,
-                "Id=" + systemId,
-                0,
-                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
-
-        if (dataObjects.size() == 1) {
-            return (CaseType) dataObjects.get(0);
-        }
-        throw new CaseNotFound("Found " + dataObjects.size() + " cases. Should be 1.");
+    public List<DataObject> getDataObjects(String dataObjectName, String filter, List<String> relatedObjects) {
+        return getDataObjects(dataObjectName, filter, 0, relatedObjects);
     }
-
-    public List<CaseType> getGetCasesQueryByTitle(Map<String, Object> params) throws CaseNotFound, IllegalCaseNumberFormat {
-        String filter = String.format("Title=%s", params.get("title"));
-        List<DataObject> dataObjects = getDataObjects(
-                SikriObjectTypes.CASE,
-                filter,
-                Integer.parseInt((String) params.getOrDefault("maxResult", "10")),
-                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION));
-
-        return dataObjects.stream().map(CaseType.class::cast).collect(Collectors.toList());
-    }
-
-    public List<RegistryEntryType> getRegistryEntries(String caseId) {
-
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.REGISTRY_ENTRY, "CaseId=" + caseId, 0, Collections.emptyList());
-
-        return dataObjects.stream().map(RegistryEntryType.class::cast).collect(Collectors.toList());
-    }
-
-    public List<RegistryEntryDocumentType> getRegistryEntryDocuments(String registryEntryId) {
-
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT, "RegistryEntryId=" + registryEntryId, 0, Collections.emptyList());
-
-        return dataObjects.stream().map(RegistryEntryDocumentType.class::cast).collect(Collectors.toList());
-    }
-
-    public List<RegistryEntryTypeType> getRegistryEntryTypes(String id) {
-
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.REGISTRY_ENTRY_TYPES, "Id=" + id, 0, Arrays.asList(SikriObjectTypes.DOCUMENT_DESCRIPTION));
-
-        return dataObjects.stream().map(RegistryEntryTypeType.class::cast).collect(Collectors.toList());
-    }
-
-    /*
-    public DocumentDescriptionType getDocumentDescription(String id)  {
-
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.DOCUMENT_DESCRIPTION, "Id=" + id, 0, Collections.emptyList());
-
-        if (dataObjects.size() == 1) {
-            return (DocumentDescriptionType) dataObjects.get(0);
-        }
-
-        throw new GetDocumentDescriptionNotFoundException((dataObjects.size() == 0) ? "No objects found" : "More than one object found");
-    }
-     */
-
-    public List<DocumentObjectType> getDocumentObject(String documentDescriptionId)  {
-
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.DOCUMENT_OBJECT, "DocumentDescriptionId=" + documentDescriptionId, 0, Arrays.asList("FileFormat"));
-
-        return dataObjects.stream().map(DocumentObjectType.class::cast).collect(Collectors.toList());
-    }
-
-    public List<SenderRecipientType> getSenderRecipents(String registryEntryId) {
-        List<DataObject> dataObjects = getDataObjects(SikriObjectTypes.SENDER_RECIPIENT, "RegistryEntryId=" + registryEntryId, 0, Collections.emptyList());
-
-        return dataObjects.stream().map(SenderRecipientType.class::cast).collect(Collectors.toList());
-    }
-
 
     public boolean isHealty() {
         List<DataObject> accessCode = getDataObjects(SikriObjectTypes.ACCESS_CODE, null, 1, Collections.emptyList());

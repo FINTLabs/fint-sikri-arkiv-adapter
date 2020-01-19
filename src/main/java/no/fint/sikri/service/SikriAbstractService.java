@@ -19,7 +19,6 @@ public abstract class SikriAbstractService {
 
     void setup(Object port, String service) {
         BindingProvider bp = (BindingProvider) port;
-        //requestUtilities.addAuthentication(bp.getRequestContext());
         requestUtilities.setEndpointAddress(bp.getRequestContext(), service);
     }
 }

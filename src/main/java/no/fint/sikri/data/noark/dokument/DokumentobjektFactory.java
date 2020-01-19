@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DokumentobjektFactory {
-    //    public QueryInput createQueryInput(String id) {
-//        return QueryUtils.createQueryInput("Dokumentversjon", "refDokument.id", id);
-//    }
-//
+
     public DokumentobjektResource toFintResource(DocumentObjectType result) {
         DokumentobjektResource resource = new DokumentobjektResource();
 

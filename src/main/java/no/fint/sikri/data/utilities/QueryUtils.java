@@ -20,30 +20,4 @@ public enum QueryUtils {
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         Unchecked.function(e -> URLDecoder.decode(e.getValue(), "UTF-8"))));
     }
-
-//    public static QueryInput createQueryInput(String type, Map<String, Object> criteria) {
-//        QueryInput queryInput = new QueryInput();
-//        queryInput.setType(type);
-//        queryInput.setOffset(0);
-//        queryInput.setLimit(100);
-//
-//        Parameters parameters = new Parameters();
-//        Stream.Builder<String> query = Stream.builder();
-//        AtomicInteger p = new AtomicInteger();
-//
-//        criteria.forEach((field, value) -> {
-//            String k = String.format("@parm%d", p.incrementAndGet());
-//            query.add(field + " = " + k);
-//            parameters.setAdditionalProperty(k, value);
-//        });
-//
-//        queryInput.setQuery(query.build().collect(Collectors.joining(" && ")));
-//        queryInput.setParameters(parameters);
-//
-//        return queryInput;
-//    }
-//
-//    public static QueryInput createQueryInput(String type, String field, Object value) {
-//        return createQueryInput(type, Collections.singletonMap(field, value));
-//    }
 }

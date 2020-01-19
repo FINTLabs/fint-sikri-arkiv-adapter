@@ -25,7 +25,6 @@ public class KlasseService {
     @Getter
     private List<ClassType> classTypes;
 
-    //@Scheduled(initialDelay = 10000, fixedDelayString = "${fint.kodeverk.refresh-interval:1500000}")
     public void refresh() {
         classTypes = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS)
                 .stream()

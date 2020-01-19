@@ -25,7 +25,6 @@ public class DokumentbeskrivelseFactory {
 
         resource.setTittel(result.getDocumentDescription().getValue().getDocumentTitle().getValue());
         resource.setDokumentnummer(Long.valueOf(result.getSortOrder()));
-        //resource.setBeskrivelse(result.getFields().getBeskrivelse());
         resource.setOpprettetDato(result.getCreatedDate().getValue().toGregorianCalendar().getTime());
         resource.setForfatter(Collections.singletonList(result.getDocumentDescription().getValue().getCreatedByUserNameId().getValue().toString()));
 
@@ -38,10 +37,4 @@ public class DokumentbeskrivelseFactory {
 
         return resource;
     }
-/*
-    public QueryInput createQueryInput(String id) {
-        return QueryUtils.createQueryInput("Dokument", "refRegistrering.id", id);
-    }
-
-     */
 }

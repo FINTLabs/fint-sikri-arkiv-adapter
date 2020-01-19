@@ -17,16 +17,4 @@ public class NokkelordService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<String> queryForMappe(String id) {
-        //QueryInput queryInput = nokkelordFactory.createQueryInput("refMappe.id", id);
-        return null; //nokkelordFactory.toFintResourceList(noark5WebService.query(queryInput)
-        //.getResults());
-    }
-
-    public List<String> queryForRegistrering(String id) {
-        //QueryInput queryInput = nokkelordFactory.createQueryInput("refRegistrering.id", id);
-        return null; //nokkelordFactory.toFintResourceList(noark5WebService.query(queryInput)
-        // .getResults());
-    }
-
 }

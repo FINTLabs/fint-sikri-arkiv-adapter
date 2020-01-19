@@ -52,12 +52,11 @@ public class JournalpostFactory {
 
         journalpost.setTittel(result.getTitleRestricted().getValue());
         journalpost.setOffentligTittel(result.getTitle().getValue());
-        journalpost.setOpprettetDato(FintUtils.parseGregorianCalender(result.getCreatedDate().getValue().toGregorianCalendar()));
-        journalpost.setJournalDato(FintUtils.parseGregorianCalender(result.getRegistryDate().getValue().toGregorianCalendar()));
+        journalpost.setOpprettetDato(result.getCreatedDate().getValue().toGregorianCalendar().getTime());
+        journalpost.setJournalDato(result.getRegistryDate().getValue().toGregorianCalendar().getTime());
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear().getValue()));
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber().getValue()));
         journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber().getValue()));
-//        journalpost.setBeskrivelse(result.getFields().getBeskrivelse());
 
 
 
@@ -74,9 +73,7 @@ public class JournalpostFactory {
                         .collect(Collectors.toList()));
 
         journalpost.setKorrespondansepart(korrespondanseService.queryForRegistrering(result.getId().toString()));
-        // FIXME: 16/01/2020
         journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(result.getId().toString()));
-//        journalpost.setNokkelord(nokkelordService.queryForRegistrering(result.getId()));
 
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
 
@@ -89,18 +86,5 @@ public class JournalpostFactory {
 
         return journalpost;
     }
-/*
-    public QueryInput createQueryInput(SaksmappeResource saksmappe) {
-        if (saksmappe == null)
-            return null;
 
-        if (validIdentifikator(saksmappe.getMappeId())) {
-            return QueryUtils.createQueryInput("Journalpost", "refMappe.mappeIdent", saksmappe.getMappeId().getIdentifikatorverdi());
-        } else if (validIdentifikator(saksmappe.getSystemId())) {
-            return QueryUtils.createQueryInput("Journalpost", "refMappe.id", saksmappe.getSystemId().getIdentifikatorverdi());
-        }
-        throw new IllegalArgumentException("Illegal arguments: " + saksmappe);
-    }
-
- */
 }

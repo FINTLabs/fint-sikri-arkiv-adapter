@@ -1,16 +1,14 @@
 package no.fint.sikri.handler.noark;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.exception.CaseNotFound;
-import no.fint.sikri.data.exception.GetCaseException;
-import no.fint.sikri.data.exception.GetDocumentException;
-import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
-import no.fint.sikri.data.noark.sak.SakService;
-import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.sikri.data.exception.CaseNotFound;
+import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
+import no.fint.sikri.data.noark.sak.SakService;
+import no.fint.sikri.handler.Handler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +43,7 @@ public class GetSakHandler implements Handler {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setStatusCode("NOT_FOUND");
             response.setMessage(e.getMessage());
-        } catch (GetCaseException | GetDocumentException | IllegalCaseNumberFormat e) {
+        } catch (IllegalCaseNumberFormat e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
         }
