@@ -25,12 +25,13 @@ public class GetKorrespondansepartHandler implements Handler {
 
     @Override
     public void accept(Event<FintLinks> response) {
-//        String query = response.getQuery();
-//        try {
-//            if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-//                response.addData(
-//                        korrespondansepartService.getKorrespondansepartBySystemId(
-//                                StringUtils.removeStartIgnoreCase(query, "systemid/")));
+        String query = response.getQuery();
+        try {
+            if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
+                response.addData(
+                        korrespondansepartService.getKorrespondansepartBySystemId(
+                                StringUtils.removeStartIgnoreCase(query, "systemid/")));
+                // FIXME: 20/01/2020 Check if we can get korrpart from orgnr and fnr
 //            } else if (StringUtils.startsWith(query, "organisasjonsnummer/")) {
 //                response.addData(
 //                        korrespondansepartService.getKorrespondansepartByOrganisasjonsnummer(
@@ -45,13 +46,14 @@ public class GetKorrespondansepartHandler implements Handler {
 //                korrespondansepartService.search(getQueryParams(query)).forEach(response::addData);
 //            } else {
 //                throw new IllegalArgumentException("Invalid query: " + query);
-//            }
-//            response.setResponseStatus(ResponseStatus.ACCEPTED);
-//        } catch (KorrespondansepartNotFound e) {
-//            response.setResponseStatus(ResponseStatus.REJECTED);
-//            response.setStatusCode("NOT_FOUND");
-//            response.setMessage(e.getMessage());
-//        }
+            }
+
+            response.setResponseStatus(ResponseStatus.ACCEPTED);
+        } catch (KorrespondansepartNotFound e) {
+            response.setResponseStatus(ResponseStatus.REJECTED);
+            response.setStatusCode("NOT_FOUND");
+            response.setMessage(e.getMessage());
+        }
 
     }
 
