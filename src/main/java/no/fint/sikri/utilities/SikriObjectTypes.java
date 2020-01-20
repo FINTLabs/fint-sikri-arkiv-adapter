@@ -6,7 +6,6 @@ public enum SikriObjectTypes {
 
     public static final String CASE = "Case";
     public static final String REGISTRY_ENTRY = "RegistryEntry";
-    public static final String REGISTRY_ENTRY_TYPES = "RegistryEntryTypes";
     public static final String ACCESS_CODE = "AccessCode";
     public static final String SENDER_RECIPIENT = "SenderRecipient";
     public static final String REGISTRY_ENTRY_DOCUMENT = "RegistryEntryDocument";
@@ -31,4 +30,5 @@ public enum SikriObjectTypes {
     public static final String CLASSIFICATION_SYSTEM = "ClassificationSystem";
     public static final String CLASS = "Class";
     public static final String REMARK = "Remark";
+    public static final String CASE_PARTY = "CaseParty";
 }
