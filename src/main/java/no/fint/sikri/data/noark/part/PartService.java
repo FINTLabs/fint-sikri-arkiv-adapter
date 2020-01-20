@@ -27,9 +27,12 @@ public class PartService {
     private SikriObjectModelService sikriObjectModelService;
 
     public PartResource getPartByPartId(String id) throws PartNotFound {
-        //QueryInput queryInput = partFactory.createQueryInput("id", id);
-        return null; //partFactory.toFintResourceList(noark5WebService.query(queryInput))
-        // .stream().findAny().orElseThrow(() -> new PartNotFound(id));
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE_PARTY, "Id=" + id)
+                .stream()
+                .map(CasePartyType.class::cast)
+                .map(partFactory::toFintResource)
+                .findAny()
+                .orElseThrow(() -> new PartNotFound("PartId " + id + " not found"));
     }
 
     public List<PartsinformasjonResource> queryForSaksmappe(SaksmappeResource saksmappe) {
