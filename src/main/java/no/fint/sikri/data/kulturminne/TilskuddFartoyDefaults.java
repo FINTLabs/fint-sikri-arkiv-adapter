@@ -1,6 +1,8 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.sikri.oms.CaseType;
+import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.sikri.CaseDefaults;
 import no.fint.sikri.data.CaseProperties;
 import no.fint.model.administrasjon.arkiv.*;
@@ -18,12 +20,15 @@ public class TilskuddFartoyDefaults {
     private CaseDefaults caseDefaults;
 
     private CaseProperties properties;
+    private ObjectFactory objectFactory;
+
 
     @PostConstruct
     public void init() {
         log.info("Case Defaults: {}", caseDefaults);
         properties = caseDefaults.getCasetype().get("tilskudd-fartoy");
         log.info("Defaults for TilskuddFartoy: {}", properties);
+        objectFactory = new ObjectFactory();
     }
 
     public void applyDefaultsForCreation(TilskuddFartoyResource tilskuddFartoy) {
@@ -39,6 +44,13 @@ public class TilskuddFartoyDefaults {
                     Arkivdel.class,
                     "systemid",
                     properties.getArkivdel()
+            ));
+        }
+        if (tilskuddFartoy.getAdministrativEnhet().isEmpty()) {
+            tilskuddFartoy.addAdministrativEnhet(Link.with(
+                    Arkivdel.class,
+                    "systemid",
+                    properties.getAdministrativEnhet()
             ));
         }
         applyDefaultsForUpdate(tilskuddFartoy);
@@ -114,6 +126,12 @@ public class TilskuddFartoyDefaults {
                 ));
             }
         });
+
     }
 
+    public void applyDefaultsToCaseType(TilskuddFartoyResource tilskuddFartoy, CaseType caseType) {
+
+        caseType.setIsPhysical(objectFactory.createBoolean(false));
+
+    }
 }

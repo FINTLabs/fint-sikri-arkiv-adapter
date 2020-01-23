@@ -10,8 +10,24 @@ fint:
     defaults:
       casetype:
         tilskudd-fartoy:
-          noekkelord:
           klassifikasjon: Fartøy
+          administrativEnhet: 9
+          arkivdel: RFK
+          noekkelord:
+          saksstatus: B
+          korrespondansepartType: 5
+          journalpostType: 110
+          journalstatus: 3
+          dokumentstatus: 1
+          dokumentType: 1
+          tilknyttetRegistreringSom: 1
+    customAttributes:
+      casetype:
+        tilskudd-fartoy:
+          kallesignal: customAttribute1
+          fartoynavn: customAttribute2
+          soknadsnummer: customAttribute3
+          kulturminneid: customAttribute4
 
   adapter:
     endpoints:

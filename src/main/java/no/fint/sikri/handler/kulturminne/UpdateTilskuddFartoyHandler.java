@@ -1,6 +1,7 @@
 package no.fint.sikri.handler.kulturminne;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -95,10 +97,10 @@ public class UpdateTilskuddFartoyHandler implements Handler {
                 log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
                 return;
             }
-            //TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
-            //response.setData(ImmutableList.of(tilskuddFartoy));
+            TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
+            response.setData(ImmutableList.of(tilskuddFartoy));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
-        } catch (NotTilskuddfartoyException e) {
+        } catch (NotTilskuddfartoyException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
         }

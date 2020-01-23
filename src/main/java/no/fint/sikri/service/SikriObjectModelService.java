@@ -85,6 +85,17 @@ public class SikriObjectModelService extends SikriAbstractService {
         return getDataObjects(dataObjectName, filter, 0, relatedObjects);
     }
 
+    public DataObject createDataObject(DataObject toSikri) {
+        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        arrayOfDataObject.getDataObject().add(toSikri);
+        ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
+        log.info("Created {} objects", insert.getDataObject().size());
+        if (insert.getDataObject().size() == 1) {
+            return insert.getDataObject().get(0);
+        }
+        return null;
+    }
+
     public boolean isHealty() {
         List<DataObject> accessCode = getDataObjects(SikriObjectTypes.ACCESS_CODE, null, 1, Collections.emptyList());
         return accessCode.size() == 1;
@@ -97,4 +108,5 @@ public class SikriObjectModelService extends SikriAbstractService {
         ephorteIdentity.setUserName(objectFactory.createEphorteIdentityUserName(props.getUser()));
         ephorteIdentity.setPassword(objectFactory.createEphorteIdentityPassword(props.getPassword()));
     }
+
 }
