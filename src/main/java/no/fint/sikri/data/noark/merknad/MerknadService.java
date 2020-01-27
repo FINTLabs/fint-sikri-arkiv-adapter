@@ -25,10 +25,10 @@ public class MerknadService {
     public List<MerknadResource> getRemarkForCase(String id) {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.REMARK,
-                "CaseId=" + id +" AND RegistryentryId=@",
+                "CaseId=" + id + " AND RegistryentryId=@",
                 0,
                 Collections.emptyList()
-                )
+        )
                 .stream()
                 .map(RemarkType.class::cast)
                 .map(merknadFactory::toFintResource)
@@ -47,7 +47,6 @@ public class MerknadService {
                 .map(merknadFactory::toFintResource)
                 .collect(Collectors.toList());
     }
-
 
 
 }

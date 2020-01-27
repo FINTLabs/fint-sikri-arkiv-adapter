@@ -21,7 +21,7 @@ public class RequestUtilities {
 
     public void setEndpointAddress(Map<String, Object> map, String service) {
         map.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                String.format("%s/nCore-intrfk/Services/ObjectModel/V3/En/%s.svc", appProps.getEndpointBaseUrl(), service));
+                String.format("%s/Services/ObjectModel/V3/En/%s.svc", appProps.getEndpointBaseUrl(), service));
         //map.put("http://www.w3.org/2005/08/addressing", "Action");
     }
 }

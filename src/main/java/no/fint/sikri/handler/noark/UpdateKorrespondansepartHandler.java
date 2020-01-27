@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+// TODO: 27/01/2020 Create korrespondansepart
+/*
 @Service
 @Slf4j
 public class UpdateKorrespondansepartHandler implements Handler {
@@ -61,3 +63,4 @@ public class UpdateKorrespondansepartHandler implements Handler {
         return Collections.singleton(ArkivActions.UPDATE_KORRESPONDANSEPART.name());
     }
 }
+ */
