@@ -8,7 +8,6 @@ import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.GetPersonalmappeNotFoundException;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;
-import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -30,20 +29,20 @@ public class PersonalmappeService {
     private PersonalmappeFactory personalmappeFactory;
 
     @Autowired
-    private SakFactory sakFactory;
-
-    @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
     @Value("${fint.sikri.defaults.casetype.peronalmappe.saksstatus-avsluttet-id:A}")
     String saksstatusAvsluttetId;
+
+    @Value("${fint.sikri.defaults.casetype.peronalmappe.saksmappetype:P}")
+    String saksmappeType;
 
     public PersonalmappeResource getPersonalmappeCaseByMappeId(String mappeId) throws IllegalCaseNumberFormat, GetPersonalmappeNotFoundException {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
-                        + " AND FileTypeId=P")
+                        + " AND FileTypeId=" + saksmappeType)
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
@@ -87,11 +86,10 @@ public class PersonalmappeService {
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
                         + " AND CaseStatusId<>" + saksstatusAvsluttetId
-                        + " AND FileTypeId=P")
+                        + " AND FileTypeId=" + saksmappeType)
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
                 .findAny();
-
     }
 }
