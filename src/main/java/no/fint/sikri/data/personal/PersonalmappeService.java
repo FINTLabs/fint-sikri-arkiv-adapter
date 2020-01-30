@@ -5,8 +5,11 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.sikri.data.exception.GetPersonalmappeNotFoundException;
+import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import no.fint.sikri.data.noark.sak.SakFactory;
+import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,31 +38,29 @@ public class PersonalmappeService {
     @Value("${fint.sikri.defaults.casetype.peronalmappe.saksstatus-avsluttet-id:A}")
     String saksstatusAvsluttetId;
 
-    /*
-    public TilskuddFartoyResource getTilskuddFartoyCaseByMappeId(String mappeId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromMappeId(mappeId);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(mappeId));
+    public PersonalmappeResource getPersonalmappeCaseByMappeId(String mappeId) throws IllegalCaseNumberFormat, GetPersonalmappeNotFoundException {
+        return sikriObjectModelService.getDataObjects(
+                SikriObjectTypes.CASE,
+                "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
+                        + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
+                        + " AND FileTypeId=P")
+                .stream()
+                .map(CaseType.class::cast)
+                .map(personalmappeFactory::toFintResource)
+                .findAny()
+                .orElseThrow(() -> new GetPersonalmappeNotFoundException(mappeId));
     }
 
-    public TilskuddFartoyResource getTilskuddFartoyCaseBySoknadsnummer(String soknadsnummer) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.createQueryInput("refEksternId.eksternID", soknadsnummer);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(soknadsnummer));
+    public PersonalmappeResource getTilskuddFartoyCaseBySystemId(String systemId) throws GetPersonalmappeNotFoundException {
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE, "Id=" + systemId)
+                .stream()
+                .map(CaseType.class::cast)
+                .map(personalmappeFactory::toFintResource)
+                .findAny()
+                .orElseThrow(() -> new GetPersonalmappeNotFoundException(systemId));
+
     }
 
-    public TilskuddFartoyResource getTilskuddFartoyCaseBySystemId(String systemId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromSystemId(systemId);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(systemId));
-    }
-
-    public List<TilskuddFartoyResource> searchTilskuddFartoyCaseByQueryParams(Map<String, Object> query) throws GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromQueryParams(query);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput));
-    }
-
-     */
     public PersonalmappeResource updateTilskuddFartoyCase(String caseNumber, PersonalmappeResource personalmappeResource) {
         throw new NotImplementedException();
     }
