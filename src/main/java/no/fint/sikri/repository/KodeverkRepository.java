@@ -2,6 +2,7 @@ package no.fint.sikri.repository;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
 import no.fint.sikri.data.noark.codes.dokumentstatus.DokumentstatusService;
 import no.fint.sikri.data.noark.codes.dokumenttype.DokumenttypeService;
 import no.fint.sikri.data.noark.codes.journalposttype.JournalpostTypeService;
@@ -70,6 +71,9 @@ public class KodeverkRepository {
     @Autowired
     private KlassifikasjonssystemService klassifikasjonssystemService;
 
+    @Autowired
+    private AdministrativEnhetService administrativEnhetService;
+
     @Getter
     private List<SaksstatusResource> saksstatus;
 
@@ -112,6 +116,9 @@ public class KodeverkRepository {
     @Getter
     private List<KlassifikasjonssystemResource> klassifikasjonssystem;
 
+    @Getter
+    private List<AdministrativEnhetResource> administrativEnhet;
+
     private transient boolean healthy = false;
 
     @Scheduled(initialDelay = 10000, fixedDelayString = "${fint.kodeverk.refresh-interval:1500000}")
@@ -131,6 +138,7 @@ public class KodeverkRepository {
         variantformat = variantformatService.getVariantFormatTable().collect(Collectors.toList());
         klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
+        administrativEnhet = administrativEnhetService.getAdministrativeEnheter().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }

@@ -30,4 +30,5 @@ public class KlassifikasjonssystemService {
                 .map(ClassificationSystemType.class::cast)
                 .map(klassifikasjonssystemFactory::toFintResource);
     }
+
 }

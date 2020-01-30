@@ -5,12 +5,16 @@ import no.fint.arkiv.sikri.oms.CasePartyType;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.fint.model.felles.kompleksedatatyper.Personnavn;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.JAXBElement;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public final class FintUtils {
@@ -73,6 +77,15 @@ public final class FintUtils {
         optionalValue(phoneNumber).ifPresent(kontaktinformasjon::setTelefonnummer);
 
         return kontaktinformasjon;
+    }
+
+    public static String getFullnameFromPersonnavn(Personnavn personnavn) {
+        return Stream.<String>builder()
+                .add(personnavn.getEtternavn())
+                .add(personnavn.getFornavn())
+                .add(personnavn.getMellomnavn())
+                .build()
+                .filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
 
 

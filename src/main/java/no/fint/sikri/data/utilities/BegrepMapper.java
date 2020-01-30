@@ -1,6 +1,8 @@
 package no.fint.sikri.data.utilities;
 
 import no.fint.arkiv.sikri.oms.*;
+import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
+import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.*;
 
 public class BegrepMapper {
@@ -24,6 +26,16 @@ public class BegrepMapper {
         dokumentStatusResource.setNavn(documentStatusType.getDescription().getValue());
 
         return dokumentStatusResource;
+    }
+
+    public static AdministrativEnhetResource mapAdministrativEnhet(AdministrativeUnitType administrativeUnitType) {
+        AdministrativEnhetResource administrativEnhetResource = new AdministrativEnhetResource();
+
+        administrativEnhetResource.setNavn(administrativeUnitType.getDescription().getValue());
+        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(administrativeUnitType.getId().toString()));
+        administrativEnhetResource.addOrganisasjonselement(Link.with(Organisasjonselement.class, "organisasjonsKode ", administrativeUnitType.getShortCode().getValue()));
+
+        return administrativEnhetResource;
     }
 
     public static DokumentTypeResource mapDokumentType(DocumentCategoryType documentCategoryType) {

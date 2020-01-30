@@ -64,6 +64,8 @@ public class TilskuddFartoyFactory {
 
         caseType.setTitle(objectFactory.createCaseTypeTitle(tilskuddFartoy.getTittel()));
 
+        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId("TS"));
+
         PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, createValue(kallesignalAttribute, tilskuddFartoy.getKallesignal()));
         PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, createValue(fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn()));
         PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, createValue(soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));

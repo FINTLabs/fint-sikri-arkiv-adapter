@@ -36,6 +36,7 @@ fint:
       response: /response
       providers:
         arkiv: https://beta.felleskomponent.no/administrasjon/arkiv/provider
+        personal: https://alpha.felleskomponent.no/administrasjon/personal/provider
         kulturminne: https://beta.felleskomponent.no/kultur/kulturminnevern/provider
     organizations: a.arkitektum.no
 

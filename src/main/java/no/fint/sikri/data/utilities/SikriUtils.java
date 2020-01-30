@@ -1,12 +1,9 @@
 package no.fint.sikri.data.utilities;
 
-import no.fint.arkiv.sikri.oms.ArrayOfstring;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.Link;
+import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.xml.bind.JAXBElement;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -57,6 +54,16 @@ public enum SikriUtils {
 //
 //        return objectFactory.createCaseParameterBaseArchiveCodes(arrayOfClassCodeParameter);
 //    }
+
+    public static String getIdFromLink(List<Link> links) throws UnableToGetIdFromLink {
+        return links
+                .stream()
+                .map(Link::getHref)
+                .filter(StringUtils::isNotBlank)
+                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .findAny()
+                .orElseThrow(() -> new UnableToGetIdFromLink("Unable to get ID from link."));
+    }
 
     public static <T> void applyParameterFromLink(List<Link> links, Function<String, T> mapper, Consumer<T> consumer) {
         links.stream()

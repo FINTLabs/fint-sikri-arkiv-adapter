@@ -96,6 +96,16 @@ public class SikriObjectModelService extends SikriAbstractService {
         return null;
     }
 
+    public List<DataObject> createDataObject(DataObject... objects) {
+        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        for (DataObject object : objects) {
+            arrayOfDataObject.getDataObject().add(object);
+        }
+        ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
+        log.info("Created {} objects", insert.getDataObject().size());
+        return insert.getDataObject();
+    }
+
     public boolean isHealty() {
         List<DataObject> accessCode = getDataObjects(SikriObjectTypes.ACCESS_CODE, null, 1, Collections.emptyList());
         return accessCode.size() == 1;

@@ -9,7 +9,7 @@ import no.fint.sikri.data.noark.nokkelord.NokkelordService
 import no.fint.sikri.data.noark.part.PartService
 import spock.lang.Specification
 
-class TilskuddFartoyFactorySpec extends Specification {
+class PersonalmappeFactorySpec extends Specification {
 
     private TilskuddFartoyFactory tilskuddFartoyFactory
     private JournalpostService journalpostService

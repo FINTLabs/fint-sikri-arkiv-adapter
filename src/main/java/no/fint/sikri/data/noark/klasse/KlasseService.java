@@ -26,7 +26,7 @@ public class KlasseService {
     private List<ClassType> classTypes;
 
     public void refresh() {
-        classTypes = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS)
+        classTypes = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "Id=")
                 .stream()
                 .map(ClassType.class::cast)
                 .collect(Collectors.toList());
@@ -38,6 +38,12 @@ public class KlasseService {
     public Stream<KlasseResource> getKlasserByEmneId(String id) {
         return classTypes.stream()
                 .filter(c -> optionalValue(c.getClassificationSystemId()).map(id::equals).orElse(false))
+                .map(klasseFactory::toFintResource);
+    }
+
+    public Stream<KlasseResource> getKlasserById(String id) {
+        return classTypes.stream()
+                .filter(c -> optionalValue(c.getId()).map(id::equals).orElse(false))
                 .map(klasseFactory::toFintResource);
     }
 
