@@ -7,7 +7,7 @@ import no.fint.event.model.*;
 import no.fint.model.administrasjon.personal.PersonalActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
-import no.fint.sikri.data.exception.UnableToGetIdFromLink;
+import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.personal.PersonalmappeDefaults;
 import no.fint.sikri.data.personal.PersonalmappeService;
 import no.fint.sikri.handler.Handler;
@@ -51,7 +51,9 @@ public class UpdatePersonalmappeHandler implements Handler {
         if (operation == Operation.CREATE) {
             createCase(response, personalmappeResource);
         } else if (operation == Operation.UPDATE) {
+
             updateCase(response, response.getQuery(), personalmappeResource);
+
         } else {
             throw new IllegalArgumentException("Invalid operation: " + operation);
         }
@@ -60,15 +62,25 @@ public class UpdatePersonalmappeHandler implements Handler {
 
     private void updateCase(Event<FintLinks> response, String query, PersonalmappeResource personalmappeResource) {
         if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-            String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
-            PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(caseNumber, personalmappeResource);
-            response.setData(ImmutableList.of(result));
-            response.setResponseStatus(ResponseStatus.ACCEPTED);
+            try {
+                String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
+                PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(caseNumber, personalmappeResource);
+                response.setData(ImmutableList.of(result));
+                response.setResponseStatus(ResponseStatus.ACCEPTED);
+            } catch (IllegalCaseNumberFormat | GetPersonalmappeNotFoundException | UnableToGetIdFromLink | ClassificationNotFound | ClassificationIsNotPartOfPersonalFile e) {
+                response.setResponseStatus(ResponseStatus.REJECTED);
+                response.setMessage(e.getMessage());
+            }
         } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-            String systemid = StringUtils.removeStartIgnoreCase(query, "systemid/");
-            PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(systemid, personalmappeResource);
-            response.setData(ImmutableList.of(result));
-            response.setResponseStatus(ResponseStatus.ACCEPTED);
+            try {
+                String systemid = StringUtils.removeStartIgnoreCase(query, "systemid/");
+                PersonalmappeResource result = personalmappeService.updatePersonalmappeBySystemId(systemid, personalmappeResource);
+                response.setData(ImmutableList.of(result));
+                response.setResponseStatus(ResponseStatus.ACCEPTED);
+            } catch (GetPersonalmappeNotFoundException | UnableToGetIdFromLink | ClassificationNotFound | ClassificationIsNotPartOfPersonalFile e) {
+                response.setResponseStatus(ResponseStatus.REJECTED);
+                response.setMessage(e.getMessage());
+            }
         } else {
             throw new IllegalArgumentException("Invalid query: " + query);
         }

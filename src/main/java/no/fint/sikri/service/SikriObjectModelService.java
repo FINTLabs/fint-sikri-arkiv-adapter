@@ -85,9 +85,9 @@ public class SikriObjectModelService extends SikriAbstractService {
         return getDataObjects(dataObjectName, filter, 0, relatedObjects);
     }
 
-    public DataObject createDataObject(DataObject toSikri) {
+    public DataObject createDataObject(DataObject dataObject) {
         ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
-        arrayOfDataObject.getDataObject().add(toSikri);
+        arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
         log.info("Created {} objects", insert.getDataObject().size());
         if (insert.getDataObject().size() == 1) {
@@ -104,6 +104,17 @@ public class SikriObjectModelService extends SikriAbstractService {
         ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
         log.info("Created {} objects", insert.getDataObject().size());
         return insert.getDataObject();
+    }
+
+    public DataObject updateDataObject(DataObject dataObject) {
+        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        arrayOfDataObject.getDataObject().add(dataObject);
+        ArrayOfDataObject update = objectModelService.update(ephorteIdentity, arrayOfDataObject);
+        log.info("Updated {} objects", update.getDataObject().size());
+        if (update.getDataObject().size() == 1) {
+            return update.getDataObject().get(0);
+        }
+        return null;
     }
 
     public boolean isHealty() {

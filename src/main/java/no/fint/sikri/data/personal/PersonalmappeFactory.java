@@ -26,8 +26,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 
 
 @Slf4j
@@ -84,7 +84,31 @@ public class PersonalmappeFactory {
         return caseType;
     }
 
-    private Integer getAdministrativeUnitTypeIdFromArbeidssted(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound {
+    public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) {
+        String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
+
+        caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
+
+        try {
+            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
+            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
+        } catch (AdministrativeUnitNotFound | OfficerNotFound | UnableToGetIdFromLink e) {
+            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
+            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
+        }
+
+        return caseType;
+    }
+
+    public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
+        String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
+
+        classificationType.setDescription(objectFactory.createClassificationTypeDescription(fullName));
+
+        return classificationType;
+    }
+
+    public Integer getAdministrativeUnitTypeIdFromArbeidssted(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound {
         return getAdministrativeUnitTypeId(getIdFromLink(personalmappeResource.getArbeidssted()));
     }
 
@@ -101,7 +125,7 @@ public class PersonalmappeFactory {
         return ((AdministrativeUnitType) dataObjects.get(0)).getId();
     }
 
-    private Integer getOfficerId(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound {
+    public Integer getOfficerId(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound {
         String officerUserId = getIdFromLink(personalmappeResource.getLeder());
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.USER,

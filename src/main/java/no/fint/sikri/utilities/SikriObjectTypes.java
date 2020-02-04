@@ -33,4 +33,5 @@ public enum SikriObjectTypes {
     public static final String CASE_PARTY = "CaseParty";
     public static final String ADMINISTRATIVE_UNIT = "AdministrativeUnit";
     public static final String USER = "User";
+    public static final String CLASSIFICATION = "Classification";
 }
