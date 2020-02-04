@@ -10,17 +10,27 @@ fint:
     defaults:
       casetype:
         tilskudd-fartoy:
-          klassifikasjon: Fartøy
-          administrativEnhet: 9
-          arkivdel: RFK
+          klassifikasjon:
+          administrativEnhet:
+          arkivdel:
           noekkelord:
           saksstatus: B
-          korrespondansepartType: 5
-          journalpostType: 110
-          journalstatus: 3
-          dokumentstatus: 1
-          dokumentType: 1
-          tilknyttetRegistreringSom: 1
+          korrespondansepartType:
+          journalpostType:
+          journalstatus:
+          dokumentstatus:
+          dokumentType:
+          tilknyttetRegistreringSom:
+        personalmappe:
+          arkivdel: PERS
+          saksstatus: B
+          saksmappeType: P
+          ufordeltAdministrativEnhet: 29
+          ufordeltSaksbehandler: 0
+          tilgangskode: P
+          journalenhet: VFRÅD
+          saksStatusAvsluttetId: A
+
     customAttributes:
       casetype:
         tilskudd-fartoy:
@@ -38,7 +48,7 @@ fint:
         arkiv: https://beta.felleskomponent.no/administrasjon/arkiv/provider
         personal: https://alpha.felleskomponent.no/administrasjon/personal/provider
         kulturminne: https://beta.felleskomponent.no/kultur/kulturminnevern/provider
-    organizations: a.arkitektum.no
+    organizations: viken.no
 
   oauth:
     enabled: true

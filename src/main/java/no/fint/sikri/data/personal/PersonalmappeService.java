@@ -5,6 +5,8 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.sikri.CaseDefaults;
+import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.GetPersonalmappeNotFoundException;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;
@@ -12,14 +14,14 @@ import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
-import static no.fint.sikri.data.utilities.SikriUtils.getIdFromLink;
+import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
 
 @Slf4j
 @Service
@@ -31,18 +33,24 @@ public class PersonalmappeService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.saksstatus-avsluttet-id:A}")
-    String saksstatusAvsluttetId;
+    @Autowired
+    private CaseDefaults caseDefaults;
 
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.saksmappetype:P}")
-    String saksmappeType;
+    private CaseProperties properties;
+
+
+    @PostConstruct
+    public void init() {
+        properties = caseDefaults.getCasetype().get("personalmappe");
+    }
 
     public PersonalmappeResource getPersonalmappeCaseByMappeId(String mappeId) throws IllegalCaseNumberFormat, GetPersonalmappeNotFoundException {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
-                        + " AND FileTypeId=" + saksmappeType)
+                        + " AND FileTypeId=" + properties.getSaksmappeType()
+                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId())
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
@@ -50,8 +58,11 @@ public class PersonalmappeService {
                 .orElseThrow(() -> new GetPersonalmappeNotFoundException(mappeId));
     }
 
-    public PersonalmappeResource getTilskuddFartoyCaseBySystemId(String systemId) throws GetPersonalmappeNotFoundException {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE, "Id=" + systemId)
+    public PersonalmappeResource getPersonalmappeCaseBySystemId(String systemId) throws GetPersonalmappeNotFoundException {
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
+                "Id=" + systemId
+                        + " AND FileTypeId=" + properties.getSaksmappeType()
+                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId())
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
@@ -60,7 +71,11 @@ public class PersonalmappeService {
 
     }
 
-    public PersonalmappeResource updateTilskuddFartoyCase(String caseNumber, PersonalmappeResource personalmappeResource) {
+    public PersonalmappeResource updatePersonalmappeByCaseNumber(String caseNumber, PersonalmappeResource personalmappeResource) {
+        throw new NotImplementedException();
+    }
+
+    public PersonalmappeResource updatePersonalmappeBySystemId(String systemId, PersonalmappeResource personalmappeResource) {
         throw new NotImplementedException();
     }
 
@@ -85,8 +100,8 @@ public class PersonalmappeService {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
-                        + " AND CaseStatusId<>" + saksstatusAvsluttetId
-                        + " AND FileTypeId=" + saksmappeType)
+                        + " AND FileTypeId=" + properties.getSaksmappeType()
+                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId())
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)

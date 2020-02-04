@@ -6,11 +6,16 @@ import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.felles.kompleksedatatyper.Personnavn;
+import no.fint.model.resource.Link;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.JAXBElement;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,4 +94,20 @@ public final class FintUtils {
     }
 
 
+    public static URL getURL(String location) throws MalformedURLException {
+        if (StringUtils.startsWithAny(location, "file:", "http:", "https:")) {
+            return new URL(location);
+        }
+        return new URL("file:" + location);
+    }
+
+    public static String getIdFromLink(List<Link> links) throws UnableToGetIdFromLink {
+        return links
+                .stream()
+                .map(Link::getHref)
+                .filter(StringUtils::isNotBlank)
+                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .findAny()
+                .orElseThrow(() -> new UnableToGetIdFromLink("Unable to get ID from link."));
+    }
 }

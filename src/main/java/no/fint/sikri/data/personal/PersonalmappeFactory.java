@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.sikri.CaseDefaults;
+import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;
 import no.fint.sikri.data.exception.OfficerNotFound;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;
@@ -15,16 +17,17 @@ import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBElement;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import static no.fint.sikri.data.utilities.SikriUtils.getIdFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
 
 
 @Slf4j
@@ -35,38 +38,21 @@ public class PersonalmappeFactory {
     @Autowired
     private NoarkFactory noarkFactory;
 
-
     @Autowired
     private PersonalmappeDefaults personalmappeDefaults;
-
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    @Value("${fint.sikri.defaults.casetype.personalmappe.tilgangskode:P}")
-    String tilgangKode;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.saksmappetype:P}")
-    String sakmappeType;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.saks-status:B}")
-    String saksStatus;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.arkivdel:PERS}")
-    String arkivDel;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.journalenhet:VFRÅD}")
-    String journalenhet;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.administrativenhet:28}")
-    Integer ufordeltAdministrativEnhet;
-
-    @Value("${fint.sikri.defaults.casetype.peronalmappe.saksbehandler:0}")
-    Integer ufordeltSaksbehanlder;
+    @Autowired
+    private CaseDefaults caseDefaults;
 
     private ObjectFactory objectFactory;
+    private CaseProperties properties;
 
-    public PersonalmappeFactory() {
+    @PostConstruct
+    public void init() {
+        properties = caseDefaults.getCasetype().get("personalmappe");
         objectFactory = new ObjectFactory();
     }
 
@@ -77,18 +63,22 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
-        caseType.setAccessCodeId(objectFactory.createCaseTypeAccessCodeId(tilgangKode));
-        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId(sakmappeType));
-        caseType.setCaseStatusId(objectFactory.createCaseTypeCaseStatusId(saksStatus));
-        caseType.setSeriesId(objectFactory.createCaseTypeSeriesId(arkivDel));
-        caseType.setRegistryManagementUnitId(objectFactory.createCaseTypeRegistryManagementUnitId(journalenhet));
+        caseType.setAccessCodeId(objectFactory.createCaseTypeAccessCodeId(properties.getTilgangskode()));
+        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId(properties.getSaksmappeType()));
+        caseType.setSeriesId(objectFactory.createCaseTypeSeriesId(properties.getArkivdel()));
+        caseType.setRegistryManagementUnitId(objectFactory.createCaseTypeRegistryManagementUnitId(properties.getJournalenhet()));
+        applyParameterFromLink(
+                personalmappeResource.getSaksstatus(),
+                s -> objectFactory.createCaseTypeCaseStatusId(s),
+                caseType::setCaseStatusId
+        );
 
         try {
             caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
             caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
         } catch (AdministrativeUnitNotFound | OfficerNotFound e) {
-            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(ufordeltAdministrativEnhet));
-            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(ufordeltSaksbehanlder));
+            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
+            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
         }
 
         return caseType;

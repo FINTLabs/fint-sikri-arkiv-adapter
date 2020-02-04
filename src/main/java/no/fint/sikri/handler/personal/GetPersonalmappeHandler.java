@@ -30,7 +30,7 @@ public class GetPersonalmappeHandler implements Handler {
             if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
                 response.addData(personalmappeService.getPersonalmappeCaseByMappeId(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
             } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-                response.addData(personalmappeService.getTilskuddFartoyCaseBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
+                response.addData(personalmappeService.getPersonalmappeCaseBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
             } else {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }

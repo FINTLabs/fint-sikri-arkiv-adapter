@@ -59,27 +59,19 @@ public class UpdatePersonalmappeHandler implements Handler {
     }
 
     private void updateCase(Event<FintLinks> response, String query, PersonalmappeResource personalmappeResource) {
-        if (!StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
+        if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
+            String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
+            PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(caseNumber, personalmappeResource);
+            response.setData(ImmutableList.of(result));
+            response.setResponseStatus(ResponseStatus.ACCEPTED);
+        } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
+            String systemid = StringUtils.removeStartIgnoreCase(query, "systemid/");
+            PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(systemid, personalmappeResource);
+            response.setData(ImmutableList.of(result));
+            response.setResponseStatus(ResponseStatus.ACCEPTED);
+        } else {
             throw new IllegalArgumentException("Invalid query: " + query);
         }
-        if (personalmappeResource.getJournalpost() == null ||
-                personalmappeResource.getJournalpost().isEmpty()) {
-            throw new IllegalArgumentException("Update must contain at least one Journalpost");
-        }
-        personalmappeDefaults.applyDefaultsForUpdate(personalmappeResource);
-        log.info("Complete document for update: {}", personalmappeResource);
-        List<Problem> problems = validationService.getProblems(personalmappeResource.getJournalpost());
-        if (!problems.isEmpty()) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage("Payload fails validation!");
-            response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", personalmappeResource, problems);
-            return;
-        }
-        String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
-        PersonalmappeResource result = personalmappeService.updateTilskuddFartoyCase(caseNumber, personalmappeResource);
-        response.setData(ImmutableList.of(result));
-        response.setResponseStatus(ResponseStatus.ACCEPTED);
     }
 
     private void createCase(Event<FintLinks> response, PersonalmappeResource personalmappeResource) {
