@@ -8,5 +8,6 @@ FROM gcr.io/distroless/java:8
 ENV JAVA_TOOL_OPTIONS -XX:+ExitOnOutOfMemoryError
 COPY --from=builder /home/gradle/build/deps/external/*.jar /data/
 COPY --from=builder /home/gradle/build/deps/fint/*.jar /data/
+COPY --from=builder /home/gradle/src/main/resources/wsdl/*.wsdl /data/
 COPY --from=builder /home/gradle/build/libs/fint-sikri-arkiv-adapter-*.jar /data/fint-sikri-arkiv-adapter.jar
 CMD ["/data/fint-sikri-arkiv-adapter.jar"]
