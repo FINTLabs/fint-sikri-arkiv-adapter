@@ -1,7 +1,6 @@
 package no.fint.sikri.data.noark.sak;
 
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.administrasjon.arkiv.SakResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
@@ -26,7 +25,7 @@ public class SakService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<SakResource> searchSakByQueryParams(Map<String, Object> query)  {
+    public List<SakResource> searchSakByQueryParams(Map<String, Object> query) {
 
         String filter = String.format("Title=%s", query.get("title"));
 

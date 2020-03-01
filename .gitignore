@@ -12,3 +12,4 @@ generated-sources
 /file-cache/
 /internal-files/
 /adapter.log*
+application-*.yml

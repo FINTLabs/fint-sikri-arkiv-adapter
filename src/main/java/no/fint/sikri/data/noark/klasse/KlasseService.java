@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static no.fint.sikri.data.utilities.FintUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Slf4j
 @Service

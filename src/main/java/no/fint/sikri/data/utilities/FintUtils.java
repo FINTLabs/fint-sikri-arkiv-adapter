@@ -12,18 +12,14 @@ import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.JAXBElement;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
 public final class FintUtils {
-
 
     public static Identifikator createIdentifikator(String value) {
         Identifikator identifikator = new Identifikator();
@@ -31,15 +27,8 @@ public final class FintUtils {
         return identifikator;
     }
 
-    public static boolean validIdentifikator(Identifikator input) {
-        return Objects.nonNull(input) && StringUtils.isNotBlank(input.getIdentifikatorverdi());
-    }
-
-    public static <T> Optional<T> optionalValue(JAXBElement<T> element) {
-        if (!element.isNil()) {
-            return Optional.of(element.getValue());
-        }
-        return Optional.empty();
+    public static boolean validIdentifikator(Identifikator identifikator) {
+        return Objects.nonNull(identifikator) && StringUtils.isNotBlank(identifikator.getIdentifikatorverdi());
     }
 
     public static AdresseResource createAdresse(CasePartyType caseParty) {
@@ -78,8 +67,8 @@ public final class FintUtils {
         }
 
         Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
-        optionalValue(email).ifPresent(kontaktinformasjon::setEpostadresse);
-        optionalValue(phoneNumber).ifPresent(kontaktinformasjon::setTelefonnummer);
+        SikriUtils.optionalValue(email).ifPresent(kontaktinformasjon::setEpostadresse);
+        SikriUtils.optionalValue(phoneNumber).ifPresent(kontaktinformasjon::setTelefonnummer);
 
         return kontaktinformasjon;
     }
@@ -93,13 +82,6 @@ public final class FintUtils {
                 .filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
 
-
-    public static URL getURL(String location) throws MalformedURLException {
-        if (StringUtils.startsWithAny(location, "file:", "http:", "https:")) {
-            return new URL(location);
-        }
-        return new URL("file:" + location);
-    }
 
     public static String getIdFromLink(List<Link> links) throws UnableToGetIdFromLink {
         return links

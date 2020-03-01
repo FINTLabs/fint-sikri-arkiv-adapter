@@ -12,7 +12,7 @@ import no.fint.sikri.data.utilities.NOARKUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static no.fint.sikri.data.utilities.FintUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class NoarkFactory {

@@ -6,14 +6,13 @@ import no.fint.model.administrasjon.arkiv.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.KlasseResource;
 import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.repository.KodeverkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.GregorianCalendar;
 
-import static no.fint.sikri.data.utilities.FintUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class KlasseFactory {
