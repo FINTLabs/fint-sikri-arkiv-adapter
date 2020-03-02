@@ -127,7 +127,7 @@ public class PersonalmappeFactory {
                 Collections.singletonList("CurrentUserName")
         );
         if (dataObjects.size() != 1) {
-            throw new OfficerNotFound(officerUserId);
+            throw new OfficerNotFound("Finner ikke leder (saksbehandler) med brukernavn " + officerUserId);
         }
         return ((UserType) dataObjects.get(0)).getCurrentUserName().getValue().getId();
 
