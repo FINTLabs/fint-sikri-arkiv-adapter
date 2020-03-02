@@ -21,7 +21,7 @@ spec:
           emptyDir: {}
       containers:
         - name: adapter-sikri-arkiv-viken-no-viken-no
-          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.20
+          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.22
           resources:
             limits:
               memory: "2Gi"
@@ -83,4 +83,5 @@ spec:
             - {name: fint.sikri.password, valueFrom: {secretKeyRef: {name: viken-arkiv-adapter-prod, key: sikri-password}}}
             - {name: fint.sikri.endpoint-base-url, valueFrom: {secretKeyRef: {name: viken-arkiv-adapter-prod, key: sikri-endpoint-base-url}}}
             - {name: fint.sikri.wsdl-location, value: '/data'}
+            - {name: server.port, value: '8091'}
 

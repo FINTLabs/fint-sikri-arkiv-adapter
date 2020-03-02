@@ -15,7 +15,6 @@ public class CaseProperties {
     private String dokumentstatus;
     private String dokumentType;
     private String tilknyttetRegistreringSom;
-    private String saksstatusAvsluttetId;
     private String saksmappeType;
     private String tilgangskode;
     private String journalenhet;

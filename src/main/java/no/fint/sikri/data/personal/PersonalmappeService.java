@@ -50,7 +50,7 @@ public class PersonalmappeService {
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId(),
+                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
                 Collections.singletonList(SikriObjectTypes.PRIMARY_CLASSIFICATION))
                 .stream()
                 .map(CaseType.class::cast)
@@ -61,7 +61,7 @@ public class PersonalmappeService {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
                 "Id=" + systemId
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId(),
+                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
                 Collections.singletonList(SikriObjectTypes.PRIMARY_CLASSIFICATION))
                 .stream()
                 .map(CaseType.class::cast)
@@ -157,7 +157,7 @@ public class PersonalmappeService {
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksstatusAvsluttetId())
+                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId())
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
