@@ -56,7 +56,7 @@ public class PersonalmappeFactory {
         objectFactory = new ObjectFactory();
     }
 
-    public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink {
+    public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         CaseType caseType = objectFactory.createCaseType();
         personalmappeDefaults.applyDefaultsToCaseType(personalmappeResource, caseType);
 
@@ -72,14 +72,8 @@ public class PersonalmappeFactory {
                 s -> objectFactory.createCaseTypeCaseStatusId(s),
                 caseType::setCaseStatusId
         );
-
-        try {
-            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
-            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
-        } catch (AdministrativeUnitNotFound | OfficerNotFound e) {
-            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
-            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
-        }
+        caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
+        caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
 
         return caseType;
     }
