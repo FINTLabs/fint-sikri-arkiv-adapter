@@ -135,7 +135,7 @@ public class PersonalmappeService {
     }
 
 
-    public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink {
+    public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound, AdministrativeUnitNotFound {
         log.info("Create personalmappe");
 
 
