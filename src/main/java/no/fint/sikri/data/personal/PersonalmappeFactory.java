@@ -114,7 +114,7 @@ public class PersonalmappeFactory {
         );
 
         if (dataObjects.size() != 1) {
-            throw new AdministrativeUnitNotFound(shortCodeThisLevel);
+            throw new AdministrativeUnitNotFound("Finner ikke administrativ enhet med kode " + shortCodeThisLevel);
         }
         return ((AdministrativeUnitType) dataObjects.get(0)).getId();
     }
