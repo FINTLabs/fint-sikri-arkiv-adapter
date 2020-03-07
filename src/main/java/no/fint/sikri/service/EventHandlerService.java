@@ -71,7 +71,7 @@ public class EventHandlerService {
         } catch (Exception e) {
             log.error("Error handling event {}", response, e);
             response.setResponseStatus(ResponseStatus.ERROR);
-            response.setMessage(ExceptionUtils.getStackTrace(e));
+            response.setMessage(e.getMessage());
         } finally {
             if (response.getData() != null) {
                 log.info("{}: Response for {}: {}, {} items", component, response.getAction(), response.getResponseStatus(), response.getData().size());

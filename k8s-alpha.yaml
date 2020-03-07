@@ -21,7 +21,7 @@ spec:
           emptyDir: {}
       containers:
         - name: adapter-sikri-arkiv-viken-no-viken-no
-          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.23
+          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.24
           resources:
             limits:
               memory: "2Gi"
@@ -47,11 +47,6 @@ spec:
                 -Xmx1G -verbose:gc
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=100000
             - {name: springfox.title, value: "Sikri Adapter for Viken FK"}
             - {name: springfox.version, value: "1.0.0"}
             - {name: security.basic.enabled, value: "false"}
