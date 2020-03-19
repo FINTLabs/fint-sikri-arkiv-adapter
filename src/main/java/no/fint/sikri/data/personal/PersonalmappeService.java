@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,16 +114,12 @@ public class PersonalmappeService {
         ClassificationType classificationType = getClassificationBySystemId(nin).orElseThrow(() -> new ClassificationNotFound(caseType.getId().toString()));
 
         if (needsUpdate(caseType, personalmappeResource)) {
-            DataObject dataObject = sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(caseType, personalmappeResource));
+            sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(caseType, personalmappeResource));
             sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(classificationType, personalmappeResource));
             return personalmappeFactory.toFintResource(
-                    getCaseBySystemId(
-                            personalmappeResource
-                                    .getSystemId()
-                                    .getIdentifikatorverdi()
-                    ).orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
+                    getCaseBySystemId(caseType.getId().toString())
+                            .orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
             );
-            //return personalmappeFactory.toFintResource((CaseType) dataObject);
         }
 
         return personalmappeFactory.toFintResource(caseType);
