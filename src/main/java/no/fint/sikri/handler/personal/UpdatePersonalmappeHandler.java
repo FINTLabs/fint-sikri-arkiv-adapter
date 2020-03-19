@@ -109,7 +109,7 @@ public class UpdatePersonalmappeHandler implements Handler {
             PersonalmappeResource personalmappe = personalmappeService.createPersonalmappe(personalmappeResource);
             response.setData(ImmutableList.of(personalmappe));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
-        } catch (UnableToGetIdFromLink | AdministrativeUnitNotFound | OfficerNotFound e) {
+        } catch (UnableToGetIdFromLink | AdministrativeUnitNotFound | OfficerNotFound | GetPersonalmappeNotFoundException e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
         }
