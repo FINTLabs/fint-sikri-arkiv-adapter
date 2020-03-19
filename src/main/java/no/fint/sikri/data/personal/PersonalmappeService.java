@@ -142,7 +142,7 @@ public class PersonalmappeService {
     }
 
 
-    public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound, AdministrativeUnitNotFound {
+    public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound, AdministrativeUnitNotFound, GetPersonalmappeNotFoundException {
         log.info("Create personalmappe");
 
 
@@ -153,9 +153,10 @@ public class PersonalmappeService {
         ClassificationType classificationType = personalmappeFactory.createClassificationType(personalmappeResource, caseId);
         sikriObjectModelService.createDataObject(classificationType);
 
-        List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE, "Id=" + caseId);
-
-        return personalmappeFactory.toFintResource((CaseType) dataObjects.get(0));
+        return personalmappeFactory.toFintResource(
+                getCaseBySystemId(caseType.getId().toString())
+                        .orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
+        );
 
     }
 
