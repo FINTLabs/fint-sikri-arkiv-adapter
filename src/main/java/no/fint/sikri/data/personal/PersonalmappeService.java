@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,9 @@ public class PersonalmappeService {
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
                         + " AND FileTypeId=" + properties.getSaksmappeType()
                         + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
-                Collections.singletonList(SikriObjectTypes.PRIMARY_CLASSIFICATION))
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
+                        SikriObjectTypes.ADMINISTRATIVE_UNIT,
+                        SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
                 .findAny();

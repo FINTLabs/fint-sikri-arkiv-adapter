@@ -2,6 +2,10 @@ package no.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
+import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
+import no.fint.model.administrasjon.personal.Personalressurs;
+import no.fint.model.felles.Person;
+import no.fint.model.felles.kompleksedatatyper.Personnavn;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
 import no.fint.sikri.CaseDefaults;
@@ -155,11 +159,48 @@ public class PersonalmappeFactory {
         return (JAXBElement<String>) method.invoke(objectFactory, value);
     }
 
+    private Personnavn getPersonnavnFromTitle(String title) {
+        String name = StringUtils.substringAfter(title, "-").trim();
+        String firstName = StringUtils.substringAfter(name, " ");
+        String lastName = StringUtils.substringBefore(name, " ");
+        Personnavn personnavn = new Personnavn();
+        personnavn.setFornavn(firstName);
+        personnavn.setEtternavn(lastName);
+        return personnavn;
+    }
     public PersonalmappeResource toFintResource(CaseType input) {
 
 
         PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(input, new PersonalmappeResource());
 
+        personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle().getValue()));
+
+        personalmappe.addArbeidssted(Link.with(
+                Organisasjonselement.class,
+                "systemid",
+                input.getAdministrativeUnit()
+                        .getValue()
+                        .getShortCodeThisLevel()
+                        .getValue()
+        ));
+
+        personalmappe.addLeder(Link.with(
+                Personalressurs.class,
+                "brukernavn",
+                input.getOfficerName()
+                        .getValue()
+                        .getInitials()
+                        .getValue()
+        ));
+
+        personalmappe.addPerson(Link.with(
+                Person.class,
+                "fodselsnummer",
+                input.getPrimaryClassification()
+                        .getValue()
+                        .getClassId()
+                        .getValue()
+        ));
         personalmappe.addSelf(
                 Link.with(
                         PersonalmappeResource.class,
