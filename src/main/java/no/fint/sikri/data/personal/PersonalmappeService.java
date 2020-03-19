@@ -154,7 +154,7 @@ public class PersonalmappeService {
         sikriObjectModelService.createDataObject(classificationType);
 
         return personalmappeFactory.toFintResource(
-                getCaseBySystemId(caseType.getId().toString())
+                getCaseBySystemId(caseId.toString())
                         .orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
         );
 
