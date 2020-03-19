@@ -65,7 +65,9 @@ public class PersonalmappeService {
                 "Id=" + systemId
                         + " AND FileTypeId=" + properties.getSaksmappeType()
                         + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
-                Collections.singletonList(SikriObjectTypes.PRIMARY_CLASSIFICATION))
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
+                        SikriObjectTypes.ADMINISTRATIVE_UNIT,
+                        SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
                 .findAny();
@@ -105,7 +107,7 @@ public class PersonalmappeService {
         return updatePersonalmappe(caseType, personalmappeResource);
     }
 
-    private PersonalmappeResource updatePersonalmappe(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile {
+    private PersonalmappeResource updatePersonalmappe(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile, GetPersonalmappeNotFoundException {
         String nin = getIdFromLink(personalmappeResource.getPerson());
         if (!nin.equals(caseType.getPrimaryClassification().getValue().getClassId().getValue())) {
             throw new ClassificationIsNotPartOfPersonalFile(nin + " classId is not part of this personal file");
@@ -115,7 +117,14 @@ public class PersonalmappeService {
         if (needsUpdate(caseType, personalmappeResource)) {
             DataObject dataObject = sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(caseType, personalmappeResource));
             sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(classificationType, personalmappeResource));
-            return personalmappeFactory.toFintResource((CaseType) dataObject);
+            return personalmappeFactory.toFintResource(
+                    getCaseBySystemId(
+                            personalmappeResource
+                                    .getSystemId()
+                                    .getIdentifikatorverdi()
+                    ).orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
+            );
+            //return personalmappeFactory.toFintResource((CaseType) dataObject);
         }
 
         return personalmappeFactory.toFintResource(caseType);
