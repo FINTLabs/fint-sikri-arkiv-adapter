@@ -67,7 +67,13 @@ public class UpdatePersonalmappeHandler implements Handler {
                 PersonalmappeResource result = personalmappeService.updatePersonalmappeByCaseNumber(caseNumber, personalmappeResource);
                 response.setData(ImmutableList.of(result));
                 response.setResponseStatus(ResponseStatus.ACCEPTED);
-            } catch (IllegalCaseNumberFormat | GetPersonalmappeNotFoundException | UnableToGetIdFromLink | ClassificationNotFound | ClassificationIsNotPartOfPersonalFile e) {
+            } catch (IllegalCaseNumberFormat
+                    | GetPersonalmappeNotFoundException
+                    | UnableToGetIdFromLink
+                    | ClassificationNotFound
+                    | ClassificationIsNotPartOfPersonalFile
+                    | OfficerNotFound
+                    | AdministrativeUnitNotFound e) {
                 response.setResponseStatus(ResponseStatus.REJECTED);
                 response.setMessage(e.getMessage());
             }
@@ -77,7 +83,12 @@ public class UpdatePersonalmappeHandler implements Handler {
                 PersonalmappeResource result = personalmappeService.updatePersonalmappeBySystemId(systemid, personalmappeResource);
                 response.setData(ImmutableList.of(result));
                 response.setResponseStatus(ResponseStatus.ACCEPTED);
-            } catch (GetPersonalmappeNotFoundException | UnableToGetIdFromLink | ClassificationNotFound | ClassificationIsNotPartOfPersonalFile e) {
+            } catch (GetPersonalmappeNotFoundException
+                    | UnableToGetIdFromLink
+                    | ClassificationNotFound
+                    | ClassificationIsNotPartOfPersonalFile
+                    | OfficerNotFound
+                    | AdministrativeUnitNotFound e) {
                 response.setResponseStatus(ResponseStatus.REJECTED);
                 response.setMessage(e.getMessage());
             }

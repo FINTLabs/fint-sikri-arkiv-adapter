@@ -82,18 +82,18 @@ public class PersonalmappeFactory {
         return caseType;
     }
 
-    public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) {
+    public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
 
-        try {
+        //try {
             caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
             caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
-        } catch (AdministrativeUnitNotFound | OfficerNotFound | UnableToGetIdFromLink e) {
-            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
-            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
-        }
+        //} catch (AdministrativeUnitNotFound | OfficerNotFound | UnableToGetIdFromLink e) {
+        //    caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
+        //    caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
+        //}
 
         return caseType;
     }

@@ -94,19 +94,19 @@ public class PersonalmappeService {
                 .orElseThrow(() -> new GetPersonalmappeNotFoundException(systemId));
     }
 
-    public PersonalmappeResource updatePersonalmappeByCaseNumber(String caseNumber, PersonalmappeResource personalmappeResource) throws IllegalCaseNumberFormat, UnableToGetIdFromLink, ClassificationNotFound, GetPersonalmappeNotFoundException, ClassificationIsNotPartOfPersonalFile {
+    public PersonalmappeResource updatePersonalmappeByCaseNumber(String caseNumber, PersonalmappeResource personalmappeResource) throws IllegalCaseNumberFormat, UnableToGetIdFromLink, ClassificationNotFound, GetPersonalmappeNotFoundException, ClassificationIsNotPartOfPersonalFile, OfficerNotFound, AdministrativeUnitNotFound {
         CaseType caseType = getCaseByMappeId(caseNumber).orElseThrow(() -> new GetPersonalmappeNotFoundException(caseNumber));
 
         return updatePersonalmappe(caseType, personalmappeResource);
     }
 
-    public PersonalmappeResource updatePersonalmappeBySystemId(String systemId, PersonalmappeResource personalmappeResource) throws GetPersonalmappeNotFoundException, UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile {
+    public PersonalmappeResource updatePersonalmappeBySystemId(String systemId, PersonalmappeResource personalmappeResource) throws GetPersonalmappeNotFoundException, UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile, OfficerNotFound, AdministrativeUnitNotFound {
         CaseType caseType = getCaseBySystemId(systemId).orElseThrow(() -> new GetPersonalmappeNotFoundException(systemId));
 
         return updatePersonalmappe(caseType, personalmappeResource);
     }
 
-    private PersonalmappeResource updatePersonalmappe(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile, GetPersonalmappeNotFoundException {
+    private PersonalmappeResource updatePersonalmappe(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile, GetPersonalmappeNotFoundException, OfficerNotFound, AdministrativeUnitNotFound {
         String nin = getIdFromLink(personalmappeResource.getPerson());
         if (!nin.equals(caseType.getPrimaryClassification().getValue().getClassId().getValue())) {
             throw new ClassificationIsNotPartOfPersonalFile(nin + " classId is not part of this personal file");
