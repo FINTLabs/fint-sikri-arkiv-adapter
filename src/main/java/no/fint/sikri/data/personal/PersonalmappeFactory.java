@@ -115,11 +115,16 @@ public class PersonalmappeFactory {
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.ADMINISTRATIVE_UNIT,
                 "ShortCodeThisLevel=" + shortCodeThisLevel
+                + " AND ClosedDate=@"
         );
 
-        if (dataObjects.size() != 1) {
+        if (dataObjects.size() > 1) {
+            throw new AdministrativeUnitNotFound( shortCodeThisLevel + " har flere administrative enheter.");
+        }
+        if (dataObjects.size() == 0) {
             throw new AdministrativeUnitNotFound("Finner ikke administrativ enhet med kode " + shortCodeThisLevel);
         }
+
         return ((AdministrativeUnitType) dataObjects.get(0)).getId();
     }
 

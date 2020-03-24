@@ -49,7 +49,16 @@ public class NoarkFactory {
 
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
 
-        resource.addAdministrativEnhet(Link.with(AdministrativEnhet.class, "systemid", input.getAdministrativeUnitId().getValue().toString()));
+        resource.addAdministrativEnhet(
+                Link.with(
+                        AdministrativEnhet.class,
+                        "systemid",
+                        input.getAdministrativeUnit()
+                                .getValue()
+                                .getShortCodeThisLevel()
+                                .getValue()
+                )
+        );
         resource.addArkivdel(Link.with(Arkivdel.class, "systemid", String.valueOf(input.getRegistryManagementUnitId().getValue())));
         resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", input.getCreatedByUserNameId().getValue().toString()));
         resource.addSaksansvarlig(Link.with(Arkivressurs.class, "systemid", input.getOfficerNameId().getValue().toString()));

@@ -21,7 +21,7 @@ spec:
           emptyDir: {}
       containers:
         - name: adapter-sikri-arkiv-viken-no-viken-no
-          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.35
+          image: fintlabs.azurecr.io/sikri-arkiv-adapter:build.37
           resources:
             limits:
               memory: "2Gi"
