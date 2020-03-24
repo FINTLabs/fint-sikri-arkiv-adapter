@@ -59,10 +59,32 @@ public class NoarkFactory {
                                 .getValue()
                 )
         );
-        resource.addArkivdel(Link.with(Arkivdel.class, "systemid", String.valueOf(input.getRegistryManagementUnitId().getValue())));
-        resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", input.getCreatedByUserNameId().getValue().toString()));
-        resource.addSaksansvarlig(Link.with(Arkivressurs.class, "systemid", input.getOfficerNameId().getValue().toString()));
-        resource.addSaksstatus(Link.with(Saksstatus.class, "systemid", input.getCaseStatusId().getValue()));
+        resource.addArkivdel(
+                Link.with(Arkivdel.class,
+                        "systemid",
+                        String.valueOf(input.getRegistryManagementUnitId().getValue())
+                )
+        );
+        resource.addOpprettetAv(
+                Link.with(
+                        Arkivressurs.class,
+                        "systemid",
+                        input.getCreatedByUserNameId().getValue().toString()
+                )
+        );
+        resource.addSaksansvarlig(
+                Link.with(Arkivressurs.class,
+                        "systemid",
+                        input.getOfficerNameId().getValue().toString()
+                )
+        );
+        resource.addSaksstatus(
+                Link.with(
+                        Saksstatus.class,
+                        "systemid",
+                        input.getCaseStatusId().getValue()
+                )
+        );
         optionalValue(input.getPrimaryClassification())
                 .ifPresent(c -> resource.addKlasse(
                         Link.with(
