@@ -165,7 +165,10 @@ public class PersonalmappeService {
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId())
+                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
+                Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
+                        SikriObjectTypes.ADMINISTRATIVE_UNIT,
+                        SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
                 .map(personalmappeFactory::toFintResource)
