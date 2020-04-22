@@ -2,12 +2,14 @@ package no.fint.sikri.handler.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.sikri.data.exception.*;
+import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
 import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.kultur.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.sikri.service.CaseQueryService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,37 +23,34 @@ import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 @Slf4j
 public class GetTilskuddFartoyHandler implements Handler {
     @Autowired
-    private TilskuddFartoyService tilskuddfartoyService;
+    private TilskuddFartoyFactory tilskuddFartoyFactory;
+
+    @Autowired
+    private CaseQueryService caseQueryService;
 
     @Override
     public void accept(Event<FintLinks> response) {
-//        String query = response.getQuery();
-//        try {
-//            response.getData().clear();
-//            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseByMappeId(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
-//            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
-//            } else if (StringUtils.startsWithIgnoreCase(query, "soknadsnummer/")) {
-//                response.addData(tilskuddfartoyService.getTilskuddFartoyCaseBySoknadsnummer(StringUtils.removeStartIgnoreCase(query, "soknadsnummer/")));
-//            } else if (StringUtils.startsWith(query, "?")) {
-//                tilskuddfartoyService.searchTilskuddFartoyCaseByQueryParams(getQueryParams(query)).forEach(response::addData);
-//            } else {
-//                throw new IllegalArgumentException("Invalid query: " + query);
-//            }
-//            response.setResponseStatus(ResponseStatus.ACCEPTED);
-//        } catch (GetTilskuddFartoyNotFoundException e) {
-//            response.setResponseStatus(ResponseStatus.REJECTED);
-//            response.setStatusCode("NOT_FOUND");
-//            response.setMessage(e.getMessage());
-//        } catch (NotTilskuddfartoyException e) {
-//            response.setResponseStatus(ResponseStatus.REJECTED);
-//            response.setStatusCode("NOT_A_TILSKUDDFARTOY_SAK");
-//            response.setMessage(e.getMessage());
-//        } catch (GetTilskuddFartoyException | GetDocumentException | IllegalCaseNumberFormat e) {
-//            response.setResponseStatus(ResponseStatus.REJECTED);
-//            response.setMessage(e.getMessage());
-//        }
+        String query = response.getQuery();
+        try {
+            response.getData().clear();
+            if (!caseQueryService.isValidQuery(query)) {
+                throw new IllegalArgumentException("Invalid query: " + query);
+            }
+            caseQueryService
+                    .query(query)
+                    .map(tilskuddFartoyFactory::toFintResource)
+                    .forEach(response::addData);
+            response.setResponseStatus(ResponseStatus.ACCEPTED);
+            if (response.getData().isEmpty()) {
+                response.setResponseStatus(ResponseStatus.REJECTED);
+                response.setStatusCode("NOT_FOUND");
+                response.setMessage("No case found for query: " + query);
+            }
+        } catch (NotTilskuddfartoyException e) {
+            response.setResponseStatus(ResponseStatus.REJECTED);
+            response.setStatusCode("NOT_A_TILSKUDDFARTOY_SAK");
+            response.setMessage(e.getMessage());
+        }
 
     }
 

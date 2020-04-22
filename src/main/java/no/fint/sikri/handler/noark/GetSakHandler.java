@@ -7,8 +7,9 @@ import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
-import no.fint.sikri.data.noark.sak.SakService;
+import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.handler.Handler;
+import no.fint.sikri.service.CaseQueryService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,33 +22,35 @@ import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 @Slf4j
 @Service
 public class GetSakHandler implements Handler {
+
     @Autowired
-    private SakService sakService;
+    private CaseQueryService caseQueryService;
+
+    @Autowired
+    private SakFactory sakFactory;
 
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
         try {
             response.getData().clear();
-            if (StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-                response.addData(sakService.getSakByCaseNumber(StringUtils.removeStartIgnoreCase(query, "mappeid/")));
-            } else if (StringUtils.startsWithIgnoreCase(query, "systemid/")) {
-                response.addData(sakService.getSakBySystemId(StringUtils.removeStartIgnoreCase(query, "systemid/")));
-            } else if (StringUtils.startsWith(query, "?")) {
-                sakService.searchSakByQueryParams(getQueryParams(query)).forEach(response::addData);
-            } else {
+            if (!caseQueryService.isValidQuery(query)) {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }
+            caseQueryService
+                    .query(query)
+                    .map(sakFactory::toFintResource)
+                    .forEach(response::addData);
             response.setResponseStatus(ResponseStatus.ACCEPTED);
-        } catch (CaseNotFound e) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setStatusCode("NOT_FOUND");
-            response.setMessage(e.getMessage());
+            if (response.getData().isEmpty()) {
+                response.setResponseStatus(ResponseStatus.REJECTED);
+                response.setStatusCode("NOT_FOUND");
+                response.setMessage("No case found for query: " + query);
+            }
         } catch (IllegalCaseNumberFormat e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
         }
-
     }
 
     @Override

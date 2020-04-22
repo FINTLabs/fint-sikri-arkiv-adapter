@@ -1,5 +1,6 @@
 package no.fint.sikri.data.noark.common;
 
+import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
@@ -9,6 +10,7 @@ import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
+import no.fint.sikri.data.utilities.SikriUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,42 +51,31 @@ public class NoarkFactory {
 
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
 
-        resource.addAdministrativEnhet(
-                Link.with(
-                        AdministrativEnhet.class,
-                        "systemid",
-                        input.getAdministrativeUnit()
-                                .getValue()
-                                .getShortCodeThisLevel()
-                                .getValue()
-                )
-        );
-        resource.addArkivdel(
-                Link.with(Arkivdel.class,
-                        "systemid",
-                        String.valueOf(input.getRegistryManagementUnitId().getValue())
-                )
-        );
-        resource.addOpprettetAv(
-                Link.with(
-                        Arkivressurs.class,
-                        "systemid",
-                        input.getCreatedByUserNameId().getValue().toString()
-                )
-        );
-        resource.addSaksansvarlig(
-                Link.with(Arkivressurs.class,
-                        "systemid",
-                        input.getOfficerNameId().getValue().toString()
-                )
-        );
-        resource.addSaksstatus(
-                Link.with(
-                        Saksstatus.class,
-                        "systemid",
-                        input.getCaseStatusId().getValue()
-                )
-        );
+        optionalValue(input.getAdministrativeUnit())
+                .map(AdministrativeUnitType::getShortCodeThisLevel)
+                .flatMap(SikriUtils::optionalValue)
+                .map(Link.apply(AdministrativEnhet.class, "systemid"))
+                .ifPresent(resource::addAdministrativEnhet);
+
+        optionalValue(input.getRegistryManagementUnitId())
+                .map(Link.apply(Arkivdel.class, "systemid"))
+                .ifPresent(resource::addArkivdel);
+
+        optionalValue(input.getCreatedByUserNameId())
+                .map(String::valueOf)
+                .map(Link.apply(Arkivressurs.class, "systemid"))
+                .ifPresent(resource::addOpprettetAv);
+
+        optionalValue(input.getOfficerNameId())
+                .map(String::valueOf)
+                .map(Link.apply(Arkivressurs.class, "systemid"))
+                .ifPresent(resource::addSaksansvarlig);
+
+        optionalValue(input.getCaseStatusId())
+                .map(String::valueOf)
+                .map(Link.apply(Saksstatus.class, "systemid"))
+                .ifPresent(resource::addSaksstatus);
+
         optionalValue(input.getPrimaryClassification())
                 .ifPresent(c -> resource.addKlasse(
                         Link.with(
