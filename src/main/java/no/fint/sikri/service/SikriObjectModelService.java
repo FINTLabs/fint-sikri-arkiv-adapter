@@ -50,6 +50,16 @@ public class SikriObjectModelService extends SikriAbstractService {
         super.setup(objectModelService, "/Services/ObjectModel/V3/En/ObjectModelService.svc");
         objectFactory = new ObjectFactory();
         setupEphorteIdentity();
+
+        final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");
+        if (externalSystems.isEmpty()) {
+            log.info("Creating ExternalSystem FINT ...");
+            ExternalSystemType externalSystem = objectFactory.createExternalSystemType();
+            externalSystem.setExternalSystemName(objectFactory.createExternalSystemTypeExternalSystemName("FINT"));
+            externalSystem.setIsActive(true);
+            final ExternalSystemType result = createDataObject(externalSystem);
+            log.info("Result: {}", result);
+        }
     }
 
     public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, String... relatedObjects) {
@@ -90,18 +100,18 @@ public class SikriObjectModelService extends SikriAbstractService {
         return getDataObjects(dataObjectName, filter, 0, relatedObjects);
     }
 
-    public DataObject createDataObject(DataObject dataObject) {
+    public <T extends DataObject> T createDataObject(T dataObject) {
         ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
         log.info("Created {} objects", insert.getDataObject().size());
         if (insert.getDataObject().size() == 1) {
-            return insert.getDataObject().get(0);
+            return (T) insert.getDataObject().get(0);
         }
         return null;
     }
 
-    public List<DataObject> createDataObject(DataObject... objects) {
+    public List<DataObject> createDataObjects(DataObject... objects) {
         ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
         for (DataObject object : objects) {
             arrayOfDataObject.getDataObject().add(object);

@@ -2,6 +2,7 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
+import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
@@ -46,16 +47,16 @@ public class TilskuddFartoyFactory {
     @Autowired
     private TilskuddFartoyDefaults tilskuddFartoyDefaults;
 
-    @Value("${fint.sikri.customAttribues.casetype.tilskudd-fartoy.kallesignal:customAttribute1}")
+    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kallesignal:customAttribute1}")
     String kallesignalAttribute;
 
-    @Value("${fint.sikri.customAttribues.casetype.tilskudd-fartoy.fartoynavn:customAttribute2}")
+    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.fartoynavn:customAttribute2}")
     String fartoyNavnAttribute;
 
-    @Value("${fint.sikri.customAttribues.casetype.tilskudd-fartoy.soknadsnummer:customAttribute3}")
+    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.soknadsnummer:customAttribute3}")
     String soknadsnummerAttribute;
 
-    @Value("${fint.sikri.customAttribues.casetype.tilskudd-fartoy.kulturminneid:customAttribute4}")
+    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kulturminneid:customAttribute4}")
     String kulturminneIdAttribute;
 
     private ObjectFactory objectFactory;
@@ -64,7 +65,7 @@ public class TilskuddFartoyFactory {
         objectFactory = new ObjectFactory();
     }
 
-    public CaseType toSikri(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         CaseType caseType = objectFactory.createCaseType();
         tilskuddFartoyDefaults.applyDefaultsToCaseType(tilskuddFartoy, caseType);
 
@@ -94,7 +95,17 @@ public class TilskuddFartoyFactory {
                 objectFactory::createCaseTypeCaseStatusId,
                 caseType::setCaseStatusId
         );
+
         return caseType;
+    }
+
+    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = objectFactory.createExternalSystemLinkCaseType();
+        externalSystemLinkCaseType.setCaseId(caseId);
+        externalSystemLinkCaseType.setExternalKey(objectFactory.createExternalSystemLinkTypeExternalKey(externalKey));
+        externalSystemLinkCaseType.setExternalSystemCode(4);
+
+        return externalSystemLinkCaseType;
     }
 
     @SuppressWarnings("unchecked")
