@@ -48,7 +48,7 @@ public class SakService {
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
                 0,
-                Collections.singletonList(SikriObjectTypes.PRIMARY_CLASSIFICATION))
+                SikriObjectTypes.PRIMARY_CLASSIFICATION, SikriObjectTypes.ADMINISTRATIVE_UNIT)
                 .stream()
                 .map(CaseType.class::cast)
                 .findAny()

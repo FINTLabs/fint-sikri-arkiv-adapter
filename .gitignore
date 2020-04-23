@@ -13,3 +13,4 @@ generated-sources
 /internal-files/
 /adapter.log*
 application-*.yml
+application-*.properties

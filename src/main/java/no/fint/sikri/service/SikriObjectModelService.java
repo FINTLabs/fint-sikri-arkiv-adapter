@@ -16,6 +16,8 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.soap.AddressingFeature;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,13 +47,16 @@ public class SikriObjectModelService extends SikriAbstractService {
         URL wsdlLocationUrl = SikriUtils.getURL(wsdlLocation);
         ObjectModelService_Service ss = new ObjectModelService_Service(wsdlLocationUrl, SERVICE_NAME);
         objectModelService = ss.getWsHttpsBindingTextObjectModelService(new AddressingFeature());
-        super.setup(objectModelService, "ObjectModelService");
+        super.setup(objectModelService, "/Services/ObjectModel/V3/En/ObjectModelService.svc");
         objectFactory = new ObjectFactory();
         setupEphorteIdentity();
     }
 
+    public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, String... relatedObjects) {
+        return getDataObjects(dataObjectName, filter, count, Arrays.asList(relatedObjects));
+    }
 
-    public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, List<String> relatedObjects) {
+    public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, Collection<String> relatedObjects) {
         FilteredQueryArguments filteredQueryArguments = objectFactory.createFilteredQueryArguments();
 
         if (count > 0) {
