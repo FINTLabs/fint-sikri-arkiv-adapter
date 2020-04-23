@@ -1,10 +1,8 @@
 package no.fint.sikri.service;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.ds.DocumentService;
-import no.fint.arkiv.sikri.ds.DocumentService_Service;
-import no.fint.arkiv.sikri.ds.EphorteIdentity;
-import no.fint.arkiv.sikri.ds.ObjectFactory;
+import no.fint.arkiv.sikri.ds.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.utilities.SikriUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.xml.namespace.QName;
+import javax.xml.ws.Holder;
 import javax.xml.ws.soap.AddressingFeature;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,12 +42,28 @@ public class SikriDocumentService extends SikriAbstractService {
         URL wsdlLocationUrl = SikriUtils.getURL(wsdlLocation);
         DocumentService_Service ss = new DocumentService_Service(wsdlLocationUrl, SERVICE_NAME);
         documentService = ss.getBasicHttpsBindingMtomStreamedDocumentService(new AddressingFeature());
-        super.setup(documentService, "DocumentService");
+        super.setup(documentService, "/Services/Documents/V3/DocumentService.svc");
         objectFactory = new ObjectFactory();
         setupEphorteIdentity();
     }
 
-/*
+    public SikriDocument getDocumentContentByDocumentId(int documentId, String variant, int version) {
+        Holder<String> contentType = new Holder<>();
+        Holder<String> fileName = new Holder<>();
+        GetDocumentContentMessage parameters = objectFactory.createGetDocumentContentMessage();
+        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentBase(parameters, documentId, ephorteIdentity, variant, version, contentType, fileName);
+        return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
+    }
+
+    public SikriDocument getDocumentContentByJournalPostId(int journalpostId) {
+        Holder<String> contentType = new Holder<>();
+        Holder<String> fileName = new Holder<>();
+        GetJournalpostDocumentContentMessage parameters = objectFactory.createGetJournalpostDocumentContentMessage();
+        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentByJournalPostId(parameters, ephorteIdentity, journalpostId, contentType, fileName);
+        return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
+    }
+
+    /*
     public ResponseEntity<byte[]> download(String docId) {
         GetDocumentContentMessage param = objectFactory.();
         //param.
@@ -83,4 +98,10 @@ public class SikriDocumentService extends SikriAbstractService {
         ephorteIdentity.setPassword(objectFactory.createEphorteIdentityPassword(props.getPassword()));
     }
 
+    @Data
+    public static class SikriDocument {
+        private final byte[] content;
+        private final String filename;
+        private final String contentType;
+    }
 }

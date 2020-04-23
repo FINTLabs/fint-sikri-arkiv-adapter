@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.administrasjon.arkiv.DokumentfilResource;
 import no.fint.sikri.data.utilities.ContentDisposition;
 import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.sikri.service.SikriDocumentService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,20 +19,33 @@ import java.util.Base64;
 @Slf4j
 public class DokumentfilService {
 
-    /*
     @Autowired
-    private Noark5WebService noark5WebService;
+    private SikriDocumentService sikriDocumentService;
+
+    private String getContentType(String filename) {
+        Tika tika = new Tika();
+        return tika.detect(filename);
+    }
 
     public DokumentfilResource getDokumentfil(String systemId) {
-        ResponseEntity<byte[]> responseEntity = noark5WebService.download(systemId);
+        final String[] strings = StringUtils.split(systemId, '_');
+        int docId = Integer.parseInt(strings[0]);
+        int version = Integer.parseInt(strings[1]);
+        String variant = strings[2];
+        final SikriDocumentService.SikriDocument sikriDocument = sikriDocumentService.getDocumentContentByDocumentId(docId, variant, version);
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
-        resource.setFormat(responseEntity.getHeaders().getContentType().toString());
-        resource.setFilnavn(ContentDisposition.parse(responseEntity.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION)).getFilename());
-        resource.setData(Base64.getEncoder().encodeToString(responseEntity.getBody()));
+        if (StringUtils.isNotBlank(sikriDocument.getContentType())) {
+            resource.setFormat(sikriDocument.getContentType());
+        } else {
+            resource.setFormat(getContentType(sikriDocument.getFilename()));
+        }
+        resource.setFilnavn(sikriDocument.getFilename());
+        resource.setData(Base64.getEncoder().encodeToString(sikriDocument.getContent()));
         return resource;
     }
 
+    /*
     public DokumentfilResource createDokumentfil(DokumentfilResource resource) {
         String docid = noark5WebService.upload(resource.getFilnavn(),
                 MediaType.valueOf(resource.getFormat()),
@@ -37,6 +53,7 @@ public class DokumentfilService {
         resource.setSystemId(FintUtils.createIdentifikator(docid));
         return resource;
     }
+
      */
 
 }

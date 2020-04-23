@@ -19,9 +19,14 @@ public class DokumentobjektFactory {
         resource.setFormatDetaljer(result.getFileFormat().getValue().getFileExtension().getValue());
         resource.setSjekksum(result.getChecksum().getValue());
         resource.setSjekksumAlgoritme(result.getCheckSumAlgorithm().getValue());
-        resource.setVersjonsummer(resource.getVersjonsummer());
+        resource.setVersjonsummer(Long.valueOf(result.getVersionNumber()));
 
-        resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", String.valueOf(result.getDocumentDescriptionId())));
+        resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid",
+                String.format("%d_%d_%s",
+                        result.getDocumentDescriptionId(),
+                        result.getVersionNumber(),
+                        result.getVariantFormatId().getValue()
+                )));
         resource.addVariantFormat(Link.with(Variantformat.class, "systemid", result.getVariantFormatId().getValue()));
         resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", String.valueOf(result.getCreatedByUserNameId().getValue())));
 

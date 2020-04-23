@@ -104,8 +104,8 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     @Override
     public Path load(String docId) throws Exception {
         log.info("Loading {} ...", docId);
-        //DokumentfilResource resource = dokumentfilService.getDokumentfil(docId);
-        return null; //return saveFile(resource);
+        DokumentfilResource resource = dokumentfilService.getDokumentfil(docId);
+        return saveFile(resource);
     }
 
 }
