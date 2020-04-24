@@ -1,6 +1,7 @@
 package no.fint.sikri.service;
 
 import no.fint.arkiv.sikri.oms.CaseType;
+import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -54,5 +55,16 @@ public class CaseService {
                 SikriObjectTypes.PRIMARY_CLASSIFICATION)
                 .stream()
                 .map(CaseType.class::cast);
+    }
+
+    public Stream<CaseType> getCaseByExternalKey(String externalKey) {
+        return objectModelService.getDataObjects("ExternalSystemLinkCase",
+                "ExternalSystem.ExternalSystemName=FINT and ExternalKey=" + externalKey)
+                .stream()
+                .map(ExternalSystemLinkCaseType.class::cast)
+                .map(ExternalSystemLinkCaseType::getCaseId)
+                .filter(i -> i > 0)
+                .map(String::valueOf)
+                .flatMap(this::getCaseBySystemId);
     }
 }
