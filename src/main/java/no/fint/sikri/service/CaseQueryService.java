@@ -17,6 +17,7 @@ public class CaseQueryService {
         queryMap = new ImmutableMap.Builder<String, Function<String, Stream<CaseType>>>()
                 .put("mappeid/", caseService::getCaseByCaseNumber)
                 .put("systemid/", caseService::getCaseBySystemId)
+                .put("soknadsnummer/", caseService::getCaseByExternalKey)
                 .put("?", caseService::getCaseByFilter)
                 .build();
         validQueries = queryMap.keySet().toArray(new String[0]);

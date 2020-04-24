@@ -2,17 +2,13 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.sikri.data.exception.*;
-import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.service.SikriObjectModelService;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -58,7 +54,9 @@ public class TilskuddFartoyService {
 
     public TilskuddFartoyResource createTilskuddFartoyCase(TilskuddFartoyResource tilskuddFartoyResource) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         log.info("Create tilskudd fartøy");
-        return tilskuddFartoyFactory.toFintResource((CaseType) sikriObjectModelService.createDataObject(tilskuddFartoyFactory.toSikri(tilskuddFartoyResource)));
+        final CaseType caseType = sikriObjectModelService.createDataObject(tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource));
+        sikriObjectModelService.createDataObject(tilskuddFartoyFactory.externalSystemLink(caseType.getId(), tilskuddFartoyResource.getSoknadsnummer().getIdentifikatorverdi()));
+        return tilskuddFartoyFactory.toFintResource(caseType);
 
     }
 }
