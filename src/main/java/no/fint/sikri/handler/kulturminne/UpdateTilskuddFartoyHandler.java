@@ -10,12 +10,12 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.kultur.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;
 import no.fint.sikri.data.exception.NotTilskuddfartoyException;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyDefaults;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.ValidationService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +62,6 @@ public class UpdateTilskuddFartoyHandler implements Handler {
     }
 
     private void updateCase(Event<FintLinks> response, String query, TilskuddFartoyResource tilskuddFartoyResource) {
-        if (!StringUtils.startsWithIgnoreCase(query, "mappeid/")) {
-            throw new IllegalArgumentException("Invalid query: " + query);
-        }
         if (tilskuddFartoyResource.getJournalpost() == null ||
                 tilskuddFartoyResource.getJournalpost().isEmpty()) {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
@@ -79,10 +76,14 @@ public class UpdateTilskuddFartoyHandler implements Handler {
             log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
             return;
         }
-        String caseNumber = StringUtils.removeStartIgnoreCase(query, "mappeid/");
-        //TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(caseNumber, tilskuddFartoyResource);
-        //response.setData(ImmutableList.of(result));
-        response.setResponseStatus(ResponseStatus.ACCEPTED);
+        try {
+            TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(query, tilskuddFartoyResource);
+            response.setData(ImmutableList.of(result));
+            response.setResponseStatus(ResponseStatus.ACCEPTED);
+        } catch (GetTilskuddFartoyNotFoundException e) {
+            response.setResponseStatus(ResponseStatus.REJECTED);
+            response.setMessage(e.getMessage());
+        }
     }
 
     private void createCase(Event<FintLinks> response, TilskuddFartoyResource tilskuddFartoyResource) {

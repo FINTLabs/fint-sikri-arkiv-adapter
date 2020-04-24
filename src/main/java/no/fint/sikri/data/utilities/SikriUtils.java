@@ -13,6 +13,16 @@ import java.util.function.Predicate;
 public enum SikriUtils {
     ;
 
+    public static <T> void applyParameter(T value, Function<T, JAXBElement<T>> wrapper, Consumer<JAXBElement<T>> consumer) {
+        applyParameter(value, wrapper, consumer, Function.identity());
+    }
+
+    public static <T, U> void applyParameter(T value, Function<U, JAXBElement<U>> wrapper, Consumer<JAXBElement<U>> consumer, Function<T, U> mapper) {
+        if (value != null) {
+            consumer.accept(wrapper.apply(mapper.apply(value)));
+        }
+    }
+
     public static <T> void applyParameterFromLink(List<Link> links, Function<String, T> mapper, Consumer<T> consumer) {
         links.stream()
                 .map(Link::getHref)
