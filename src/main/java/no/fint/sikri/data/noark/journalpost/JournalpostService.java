@@ -29,7 +29,7 @@ public class JournalpostService {
                 SikriObjectTypes.REGISTRY_ENTRY,
                 "CaseId=" + saksmappe.getSystemId().getIdentifikatorverdi(),
                 0,
-                Arrays.asList(SikriObjectTypes.OFFICER_NAME))
+                SikriObjectTypes.OFFICER_NAME)
                 .stream()
                 .map(RegistryEntryType.class::cast)
                 .map(journalpostFactory::toFintResource)
