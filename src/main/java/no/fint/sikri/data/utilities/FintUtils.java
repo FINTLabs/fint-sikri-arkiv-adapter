@@ -8,13 +8,14 @@ import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.felles.kompleksedatatyper.Personnavn;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
-import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.JAXBElement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -82,14 +83,22 @@ public final class FintUtils {
                 .filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
 
-
-    public static String getIdFromLink(List<Link> links) throws UnableToGetIdFromLink {
-        return links
-                .stream()
+    public static void applyIdFromLink(List<Link> links, Consumer<String> consumer) {
+        links.stream()
+                .filter(Objects::nonNull)
                 .map(Link::getHref)
                 .filter(StringUtils::isNotBlank)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))
-                .findAny()
-                .orElseThrow(() -> new UnableToGetIdFromLink("Unable to get ID from link."));
+                .forEach(consumer);
+    }
+
+    public static Optional<String> getIdFromLink(List<Link> links){
+        return links
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Link::getHref)
+                .filter(StringUtils::isNotBlank)
+                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .findFirst();
     }
 }
