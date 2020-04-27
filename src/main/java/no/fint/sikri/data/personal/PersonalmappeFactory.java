@@ -106,8 +106,8 @@ public class PersonalmappeFactory {
         return classificationType;
     }
 
-    public Integer getAdministrativeUnitTypeIdFromArbeidssted(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound {
-        return getAdministrativeUnitTypeId(getIdFromLink(personalmappeResource.getArbeidssted()));
+    public Integer getAdministrativeUnitTypeIdFromArbeidssted(PersonalmappeResource personalmappeResource) throws AdministrativeUnitNotFound {
+        return getIdFromLink(personalmappeResource.getArbeidssted()).map(this::getAdministrativeUnitTypeId).orElseThrow(() -> new AdministrativeUnitNotFound("Finner ikke arbeidssted for " + personalmappeResource.getTittel()));
     }
 
     private Integer getAdministrativeUnitTypeId(String shortCodeThisLevel) throws AdministrativeUnitNotFound {
@@ -129,7 +129,7 @@ public class PersonalmappeFactory {
     }
 
     public Integer getOfficerId(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound {
-        String officerUserId = getIdFromLink(personalmappeResource.getLeder());
+        String officerUserId = getIdFromLink(personalmappeResource.getLeder()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke leder fra " + personalmappeResource.getTittel()));
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.USER,
                 "UserId=" + officerUserId,
@@ -146,7 +146,8 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         ClassificationType classificationType = objectFactory.createClassificationType();
-        classificationType.setClassId(objectFactory.createClassificationTypeClassId(getIdFromLink(personalmappeResource.getPerson())));
+        getIdFromLink(personalmappeResource.getPerson()).map(objectFactory::createClassificationTypeClassId).ifPresent(classificationType::setClassId);
+        classificationType.setClassId(objectFactory.createClassificationTypeClassId(getIdFromLink(personalmappeResource.getPerson()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke person fra " + personalmappeResource.getTittel()))));
         classificationType.setClassificationSystemId(objectFactory.createClassificationTypeClassificationSystemId("FNRP"));
         classificationType.setDescription(objectFactory.createClassificationTypeDescription(fullName));
         classificationType.setCaseId(caseId);
