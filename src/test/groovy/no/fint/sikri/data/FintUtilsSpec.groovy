@@ -34,6 +34,6 @@ class FintUtilsSpec extends Specification {
         def id = FintUtils.getIdFromLink(Collections.singletonList(Link.with(Person.class, "test", "id")))
 
         then:
-        id == "id"
+        id.get() == "id"
     }
 }
