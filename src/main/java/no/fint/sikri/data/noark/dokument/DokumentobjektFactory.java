@@ -6,7 +6,14 @@ import no.fint.model.administrasjon.arkiv.Dokumentfil;
 import no.fint.model.administrasjon.arkiv.Variantformat;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static no.fint.sikri.data.utilities.FintUtils.applyIdFromLink;
 
 @Service
 public class DokumentobjektFactory {
@@ -31,5 +38,22 @@ public class DokumentobjektFactory {
         resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", String.valueOf(result.getCreatedByUserNameId().getValue())));
 
         return resource;
+    }
+
+    public Stream<CheckinDocument> toCheckinDocument(DokumentobjektResource dokumentobjektResource) {
+        return dokumentobjektResource
+                .getReferanseDokumentfil()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(Link::getHref)
+                .filter(StringUtils::isNotBlank)
+                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .map(guid -> {
+                    CheckinDocument document = new CheckinDocument();
+                    applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
+                    document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsummer()).map(Math::toIntExact).orElse(1));
+                    document.setGuid(guid);
+                    return document;
+                });
     }
 }

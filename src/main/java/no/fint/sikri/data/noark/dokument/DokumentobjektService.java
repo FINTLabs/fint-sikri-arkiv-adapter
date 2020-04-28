@@ -3,6 +3,7 @@ package no.fint.sikri.data.noark.dokument;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
+import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class DokumentobjektService {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
+    private SikriDocumentService sikriDocumentService;
+
+    @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
 
     public List<DokumentobjektResource> queryDokumentobjekt(String id) {
@@ -33,5 +37,9 @@ public class DokumentobjektService {
                 .map(DocumentObjectType.class::cast)
                 .map(dokumentobjektFactory::toFintResource)
                 .collect(Collectors.toList());
+    }
+
+    public void checkinDocument(CheckinDocument checkinDocument) {
+        sikriDocumentService.checkin(checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getGuid());
     }
 }

@@ -27,11 +27,12 @@ public class DokumentbeskrivelseService {
                 SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                 "RegistryEntryId=" + id,
                 0,
-                Arrays.asList(
-                        SikriObjectTypes.DOCUMENT_DESCRIPTION,
-                        SikriObjectTypes.DOCUMENT_LINK_TYPE,
-                        SikriObjectTypes.DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY
-                )
+                SikriObjectTypes.DOCUMENT_DESCRIPTION,
+                SikriObjectTypes.DOCUMENT_DESCRIPTION + ".CurrentVersion",
+                SikriObjectTypes.DOCUMENT_DESCRIPTION + ".CurrentVersion." + SikriObjectTypes.FILE_FORMAT,
+                SikriObjectTypes.DOCUMENT_DESCRIPTION + ".CurrentVersion." + SikriObjectTypes.VARIANT_FORMAT,
+                SikriObjectTypes.DOCUMENT_LINK_TYPE,
+                SikriObjectTypes.DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY
         ).stream()
                 .map(RegistryEntryDocumentType.class::cast)
                 .map(dokumentbeskrivelseFactory::toFintResource)
