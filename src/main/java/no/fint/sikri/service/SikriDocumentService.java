@@ -70,25 +70,29 @@ public class SikriDocumentService extends SikriAbstractService {
         UploadMessage parameters = objectFactory.createUploadMessage();
         parameters.setContent(content);
         documentService.uploadFile(parameters, contentType, ephorteIdentity, fileNameHolder, null, identifier);
-        log.info("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
+        log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return identifier.value;
     }
 
     public void checkin(Integer docId, String variant, Integer version, String identifier) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
-        log.info("Try fetch document {} ...", identifier);
+        log.debug("Try fetch document {} ...", identifier);
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
+        log.debug("Fetch result: {}", documentReturnMessage);
         CheckinMessage checkinMessage = objectFactory.createCheckinMessage();
-        byte[] content = new byte[documentReturnMessage.getContent().length];
-        System.arraycopy(documentReturnMessage.getContent(), 0, content, 0, content.length);
+        final byte[] messageContent = documentReturnMessage.getContent();
+        log.debug("Content length: {}", messageContent.length);
+        if (messageContent.length == 0) throw new ArrayIndexOutOfBoundsException("No data for document " + identifier);
+        byte[] content = new byte[messageContent.length];
+        System.arraycopy(messageContent, 0, content, 0, content.length);
         checkinMessage.setContent(content);
         DocumentCriteria documentCriteria = objectFactory.createDocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(objectFactory.createDocumentCriteriaEphorteIdentity(ephorteIdentity));
         documentCriteria.setVariant(objectFactory.createDocumentCriteriaVariant(variant));
         documentCriteria.setVersion(version);
-        log.info("Checkin {} ...", documentCriteria);
+        log.debug("Checkin {} ...", documentCriteria);
         documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
     }
 

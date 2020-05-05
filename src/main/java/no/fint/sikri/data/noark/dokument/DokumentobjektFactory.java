@@ -1,11 +1,14 @@
 package no.fint.sikri.data.noark.dokument;
 
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
+import no.fint.arkiv.sikri.oms.FileFormatType;
 import no.fint.model.administrasjon.arkiv.Arkivressurs;
 import no.fint.model.administrasjon.arkiv.Dokumentfil;
 import no.fint.model.administrasjon.arkiv.Variantformat;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
+import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.sikri.data.utilities.SikriUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.FintUtils.applyIdFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValueFn;
 
 @Service
 public class DokumentobjektFactory {
@@ -21,11 +26,23 @@ public class DokumentobjektFactory {
     public DokumentobjektResource toFintResource(DocumentObjectType result) {
         DokumentobjektResource resource = new DokumentobjektResource();
 
-        resource.setFilstorrelse(String.valueOf(result.getFileSize().getValue()));
-        resource.setFormat(result.getContentType().getValue());
-        resource.setFormatDetaljer(result.getFileFormat().getValue().getFileExtension().getValue());
-        resource.setSjekksum(result.getChecksum().getValue());
-        resource.setSjekksumAlgoritme(result.getCheckSumAlgorithm().getValue());
+        optionalValue(result.getFileSize())
+                .map(String::valueOf)
+                .ifPresent(resource::setFilstorrelse);
+
+        optionalValue(result.getContentType())
+                .ifPresent(resource::setFormat);
+
+        optionalValue(result.getFileFormat())
+                .flatMap(optionalValueFn(FileFormatType::getFileExtension))
+                .ifPresent(resource::setFormatDetaljer);
+
+        optionalValue(result.getChecksum())
+                .ifPresent(resource::setSjekksum);
+
+        optionalValue(result.getCheckSumAlgorithm())
+                .ifPresent(resource::setSjekksumAlgoritme);
+
         resource.setVersjonsummer(Long.valueOf(result.getVersionNumber()));
 
         resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid",
@@ -34,8 +51,15 @@ public class DokumentobjektFactory {
                         result.getVersionNumber(),
                         result.getVariantFormatId().getValue()
                 )));
-        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", result.getVariantFormatId().getValue()));
-        resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", String.valueOf(result.getCreatedByUserNameId().getValue())));
+
+        optionalValue(result.getVariantFormatId())
+                .map(Link.apply(Variantformat.class, "systemid"))
+                .ifPresent(resource::addVariantFormat);
+
+        optionalValue(result.getCreatedByUserNameId())
+                .map(String::valueOf)
+                .map(Link.apply(Arkivressurs.class, "systemid"))
+                .ifPresent(resource::addOpprettetAv);
 
         return resource;
     }

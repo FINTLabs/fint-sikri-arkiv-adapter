@@ -106,6 +106,9 @@ public class TilskuddFartoyService {
                                         .getCheckinDocuments()
                                         .stream()
                                         .peek(checkinDocument -> checkinDocument.setDocumentId(documentDescription.getId()))
+                                        .peek(checkinDocument -> sikriObjectModelService.createDataObject(
+                                                dokumentobjektService.createDocumentObject(checkinDocument)
+                                        ))
                                         .forEach(dokumentobjektService::checkinDocument);
                                 return dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), it.getLeft(), documentDescription.getId());
                             });
@@ -115,6 +118,6 @@ public class TilskuddFartoyService {
                 .query(query)
                 .map(tilskuddFartoyFactory::toFintResource)
                 .findFirst()
-                .orElseThrow(() -> new GetTilskuddFartoyNotFoundException("Unable to find updated case for query "+ query));
+                .orElseThrow(() -> new GetTilskuddFartoyNotFoundException("Unable to find updated case for query " + query));
     }
 }

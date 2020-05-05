@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
+import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
 import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -27,6 +28,8 @@ public class DokumentobjektService {
     @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
 
+    private ObjectFactory objectFactory = new ObjectFactory();
+
     public List<DokumentobjektResource> queryDokumentobjekt(String id) {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.DOCUMENT_OBJECT,
@@ -41,5 +44,15 @@ public class DokumentobjektService {
 
     public void checkinDocument(CheckinDocument checkinDocument) {
         sikriDocumentService.checkin(checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getGuid());
+    }
+
+    public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument) {
+        DocumentObjectType documentObject = objectFactory.createDocumentObjectType();
+        documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
+        documentObject.setVersionNumber(checkinDocument.getVersion());
+        documentObject.setVariantFormatId(objectFactory.createDocumentObjectTypeVariantFormatId(checkinDocument.getVariant()));
+        // FIXME Lookup from code registry based on content..
+        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId("RA-PDF"));
+        return documentObject;
     }
 }
