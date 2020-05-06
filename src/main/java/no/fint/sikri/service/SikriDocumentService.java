@@ -81,12 +81,7 @@ public class SikriDocumentService extends SikriAbstractService {
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
         log.debug("Fetch result: {}", documentReturnMessage);
         CheckinMessage checkinMessage = objectFactory.createCheckinMessage();
-        final byte[] messageContent = documentReturnMessage.getContent();
-        log.debug("Content length: {}", messageContent.length);
-        if (messageContent.length == 0) throw new ArrayIndexOutOfBoundsException("No data for document " + identifier);
-        byte[] content = new byte[messageContent.length];
-        System.arraycopy(messageContent, 0, content, 0, content.length);
-        checkinMessage.setContent(content);
+        checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = objectFactory.createDocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(objectFactory.createDocumentCriteriaEphorteIdentity(ephorteIdentity));

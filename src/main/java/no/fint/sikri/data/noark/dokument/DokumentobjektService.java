@@ -51,8 +51,7 @@ public class DokumentobjektService {
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
         documentObject.setVariantFormatId(objectFactory.createDocumentObjectTypeVariantFormatId(checkinDocument.getVariant()));
-        // FIXME Lookup from code registry based on content..
-        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId("RA-PDF"));
+        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId(checkinDocument.getContentType()));
         return documentObject;
     }
 }

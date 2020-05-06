@@ -8,4 +8,6 @@ public class CheckinDocument {
     private int version;
     private int documentId;
     private String guid;
+    private String contentType;
+    private String format;
 }

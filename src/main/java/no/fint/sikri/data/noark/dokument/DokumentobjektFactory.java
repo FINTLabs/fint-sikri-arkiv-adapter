@@ -7,8 +7,6 @@ import no.fint.model.administrasjon.arkiv.Dokumentfil;
 import no.fint.model.administrasjon.arkiv.Variantformat;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
-import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.data.utilities.SikriUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +28,11 @@ public class DokumentobjektFactory {
                 .map(String::valueOf)
                 .ifPresent(resource::setFilstorrelse);
 
-        optionalValue(result.getContentType())
+        optionalValue(result.getFileformatId())
                 .ifPresent(resource::setFormat);
 
         optionalValue(result.getFileFormat())
-                .flatMap(optionalValueFn(FileFormatType::getFileExtension))
+                .flatMap(optionalValueFn(FileFormatType::getDescription))
                 .ifPresent(resource::setFormatDetaljer);
 
         optionalValue(result.getChecksum())
@@ -77,6 +75,8 @@ public class DokumentobjektFactory {
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
                     document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsummer()).map(Math::toIntExact).orElse(1));
                     document.setGuid(guid);
+                    document.setContentType(dokumentobjektResource.getFormat());
+                    document.setFormat(dokumentobjektResource.getFormatDetaljer());
                     return document;
                 });
     }

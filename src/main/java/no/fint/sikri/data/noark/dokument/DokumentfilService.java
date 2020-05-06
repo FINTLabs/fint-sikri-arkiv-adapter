@@ -19,8 +19,11 @@ public class DokumentfilService {
     private SikriDocumentService sikriDocumentService;
 
     private String getContentType(String filename) {
-        Tika tika = new Tika();
-        return tika.detect(filename);
+        return new Tika().detect(filename);
+    }
+
+    private String getContentType(byte[] content) {
+        return new Tika().detect(content);
     }
 
     public DokumentfilResource getDokumentfil(String systemId) {
@@ -33,13 +36,16 @@ public class DokumentfilService {
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
         if (StringUtils.isNotBlank(sikriDocument.getContentType())) {
             resource.setFormat(sikriDocument.getContentType());
-        } else {
+        } else if (StringUtils.isNotBlank(sikriDocument.getFilename())) {
             resource.setFormat(getContentType(sikriDocument.getFilename()));
+        } else {
+            resource.setFormat(getContentType(sikriDocument.getContent()));
         }
         resource.setFilnavn(sikriDocument.getFilename());
         resource.setData(Base64.getEncoder().encodeToString(sikriDocument.getContent()));
         return resource;
     }
+
 
     public DokumentfilResource createDokumentfil(DokumentfilResource resource) {
         final String docid = sikriDocumentService.uploadFile(Base64.getDecoder().decode(resource.getData()), resource.getFormat(), resource.getFilnavn());
