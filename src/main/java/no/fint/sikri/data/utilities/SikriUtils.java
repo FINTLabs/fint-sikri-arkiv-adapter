@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public enum SikriUtils {
     ;
@@ -38,6 +39,10 @@ public enum SikriUtils {
             return Optional.of(element.getValue());
         }
         return Optional.empty();
+    }
+
+    public static <T, U> Function<U, Optional<T>> optionalValueFn(Function<U, JAXBElement<T>> function) {
+        return f -> optionalValue(function.apply(f));
     }
 
     public static boolean notNil(JAXBElement<?> e) {

@@ -52,8 +52,7 @@ public class CreateDokumentfilHandler implements Handler {
 
         log.info("Format: {}, data: {}...", dokumentfilResource.getFormat(), StringUtils.substring(dokumentfilResource.getData(), 0, 25));
 
-        response.getData().clear();
-        //response.addData(dokumentfilService.createDokumentfil(dokumentfilResource));
+        response.setData(Collections.singletonList(dokumentfilService.createDokumentfil(dokumentfilResource)));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
 
     }

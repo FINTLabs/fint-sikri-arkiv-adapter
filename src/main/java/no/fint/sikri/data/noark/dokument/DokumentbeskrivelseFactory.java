@@ -10,21 +10,27 @@ import no.fint.model.administrasjon.arkiv.DokumentType;
 import no.fint.model.administrasjon.arkiv.TilknyttetRegistreringSom;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource;
+import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.utilities.XmlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameter;
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.*;
 
 @Slf4j
 @Service
 public class DokumentbeskrivelseFactory {
+    @Autowired
+    private DokumentobjektFactory dokumentobjektFactory;
+
     @Autowired
     private DokumentobjektService dokumentobjektService;
 
@@ -36,54 +42,68 @@ public class DokumentbeskrivelseFactory {
     public DokumentbeskrivelseResource toFintResource(RegistryEntryDocumentType result) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
-        resource.setTittel(result.getDocumentDescription().getValue().getDocumentTitle().getValue());
+        optionalValue(result.getDocumentDescription()).ifPresent(
+                documentDescription -> {
+                    optionalValue(documentDescription.getDocumentTitle()).ifPresent(resource::setTittel);
+                    optionalValue(documentDescription.getCreatedByUserNameId()).map(String::valueOf).map(Collections::singletonList).ifPresent(resource::setForfatter);
+                    optionalValue(documentDescription.getCreatedByUserNameId()).map(String::valueOf).map(Link.apply(Arkivressurs.class, "systemid")).ifPresent(resource::addOpprettetAv);
+                    optionalValue(documentDescription.getDocumentStatusId()).map(Link.apply(DokumentStatus.class, "systemid")).ifPresent(resource::addDokumentstatus);
+                    optionalValue(documentDescription.getDocumentCategoryId()).map(Link.apply(DokumentType.class, "systemid")).ifPresent(resource::addDokumentType);
+
+                    optionalValue(documentDescription.getCurrentVersion()).map(dokumentobjektFactory::toFintResource).map(Collections::singletonList).ifPresent(resource::setDokumentobjekt);
+                }
+        );
+
         resource.setDokumentnummer(Long.valueOf(result.getSortOrder()));
-        resource.setOpprettetDato(result.getCreatedDate().getValue().toGregorianCalendar().getTime());
-        resource.setForfatter(Collections.singletonList(result.getDocumentDescription().getValue().getCreatedByUserNameId().getValue().toString()));
 
-        resource.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getDocumentDescription().getValue().getCreatedByUserNameId().getValue().toString()));
-        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", result.getDocumentDescription().getValue().getDocumentStatusId().getValue()));
-        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", result.getDocumentLinkTypeId().getValue()));
-        resource.addDokumentType(Link.with(DokumentType.class, "systemid", result.getDocumentDescription().getValue().getDocumentCategoryId().getValue()));
-
-        resource.setDokumentobjekt(dokumentobjektService.queryDokumentobjekt(result.getDocumentDescriptionId().toString()));
+        optionalValue(result.getCreatedDate()).map(XMLGregorianCalendar::toGregorianCalendar).map(GregorianCalendar::getTime).ifPresent(resource::setOpprettetDato);
+        optionalValue(result.getDocumentLinkTypeId()).map(Link.apply(TilknyttetRegistreringSom.class, "systemid")).ifPresent(resource::addTilknyttetRegistreringSom);
 
         return resource;
     }
 
-    public Pair<String, DocumentDescriptionType> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
-        DocumentDescriptionType result = objectFactory.createDocumentDescriptionType();
+    public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
+        DocumentDescriptionType documentDescriptionType = objectFactory.createDocumentDescriptionType();
 
         applyParameter(
                 dokumentbeskrivelseResource.getTittel(),
                 objectFactory::createDocumentDescriptionTypeDocumentTitle,
-                result::setDocumentTitle
+                documentDescriptionType::setDocumentTitle
         );
 
         applyParameter(
                 dokumentbeskrivelseResource.getOpprettetDato(),
                 objectFactory::createDocumentDescriptionTypeCreatedDate,
-                result::setCreatedDate,
+                documentDescriptionType::setCreatedDate,
                 xmlUtils::xmlDate
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getOpprettetAv(),
                 v -> objectFactory.createDocumentDescriptionTypeCreatedByUserNameId(Integer.valueOf(v)),
-                result::setCreatedByUserNameId
+                documentDescriptionType::setCreatedByUserNameId
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getDokumentstatus(),
                 objectFactory::createDocumentDescriptionTypeDocumentStatusId,
-                result::setDocumentStatusId
+                documentDescriptionType::setDocumentStatusId
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getDokumentType(),
                 objectFactory::createDocumentDescriptionTypeDocumentCategoryId,
-                result::setDocumentCategoryId
+                documentDescriptionType::setDocumentCategoryId
         );
+
+        RegistryEntryDocuments.Document document = new RegistryEntryDocuments.Document();
+        document.setDocumentDescription(documentDescriptionType);
+        document.setCheckinDocuments(
+                dokumentbeskrivelseResource
+                        .getDokumentobjekt()
+                        .stream()
+                        .flatMap(dokumentobjektFactory::toCheckinDocument)
+                        .collect(Collectors.toList()));
 
         final String linkType = dokumentbeskrivelseResource
                 .getTilknyttetRegistreringSom()
@@ -95,7 +115,7 @@ public class DokumentbeskrivelseFactory {
                 .findFirst()
                 .orElse(null);
 
-        return Pair.of(linkType, result);
+        return Pair.of(linkType, document);
     }
 
     public RegistryEntryDocumentType toRegistryEntryDocument(Integer registryEntryId, String linkType, Integer documentDescriptionId) {

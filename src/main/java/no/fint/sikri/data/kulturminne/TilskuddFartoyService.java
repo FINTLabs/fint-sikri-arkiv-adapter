@@ -8,9 +8,11 @@ import no.fint.arkiv.sikri.oms.RegistryEntryType;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
+import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class TilskuddFartoyService {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
+
+    @Autowired
+    private DokumentobjektService dokumentobjektService;
 
     @Autowired
     private JournalpostFactory journalpostFactory;
@@ -96,7 +101,15 @@ public class TilskuddFartoyService {
                         .flatMap(d -> {
                             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(d.getRegistryEntry());
                             return d.getDocuments().stream().map(it -> {
-                                final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(it.getRight());
+                                final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(it.getRight().getDocumentDescription());
+                                it.getRight()
+                                        .getCheckinDocuments()
+                                        .stream()
+                                        .peek(checkinDocument -> checkinDocument.setDocumentId(documentDescription.getId()))
+                                        .peek(checkinDocument -> sikriObjectModelService.createDataObject(
+                                                dokumentobjektService.createDocumentObject(checkinDocument)
+                                        ))
+                                        .forEach(dokumentobjektService::checkinDocument);
                                 return dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), it.getLeft(), documentDescription.getId());
                             });
                         })
@@ -105,6 +118,6 @@ public class TilskuddFartoyService {
                 .query(query)
                 .map(tilskuddFartoyFactory::toFintResource)
                 .findFirst()
-                .orElseThrow(() -> new GetTilskuddFartoyNotFoundException("Unable to find updated case for query "+ query));
+                .orElseThrow(() -> new GetTilskuddFartoyNotFoundException("Unable to find updated case for query " + query));
     }
 }

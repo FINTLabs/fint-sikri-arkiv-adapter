@@ -63,6 +63,34 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
+    public String uploadFile(byte[] content, String contentType, String fileName) {
+        Holder<String> identifier = new Holder<>();
+        Holder<String> fileNameHolder = new Holder<>();
+        fileNameHolder.value = fileName;
+        UploadMessage parameters = objectFactory.createUploadMessage();
+        parameters.setContent(content);
+        documentService.uploadFile(parameters, contentType, ephorteIdentity, fileNameHolder, null, identifier);
+        log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
+        return identifier.value;
+    }
+
+    public void checkin(Integer docId, String variant, Integer version, String identifier) {
+        Holder<String> contentType = new Holder<>();
+        Holder<String> fileName = new Holder<>();
+        log.debug("Try fetch document {} ...", identifier);
+        final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
+        log.debug("Fetch result: {}", documentReturnMessage);
+        CheckinMessage checkinMessage = objectFactory.createCheckinMessage();
+        checkinMessage.setContent(documentReturnMessage.getContent());
+        DocumentCriteria documentCriteria = objectFactory.createDocumentCriteria();
+        documentCriteria.setDocumentId(docId);
+        documentCriteria.setEphorteIdentity(objectFactory.createDocumentCriteriaEphorteIdentity(ephorteIdentity));
+        documentCriteria.setVariant(objectFactory.createDocumentCriteriaVariant(variant));
+        documentCriteria.setVersion(version);
+        log.debug("Checkin {} ...", documentCriteria);
+        documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
+    }
+
     /*
     public ResponseEntity<byte[]> download(String docId) {
         GetDocumentContentMessage param = objectFactory.();
