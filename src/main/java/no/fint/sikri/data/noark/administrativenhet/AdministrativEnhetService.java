@@ -23,7 +23,7 @@ public class AdministrativEnhetService {
                 .stream()
                 .map(AdministrativeUnitType.class::cast)
                 .filter(administrativeUnitType -> StringUtils.isNotBlank(administrativeUnitType.getShortCodeThisLevel()))
-                .filter(administrativeUnitType -> administrativeUnitType.getClosedDate() != null)
+                .filter(administrativeUnitType -> administrativeUnitType.getClosedDate() == null)
                 .map(BegrepMapper::mapAdministrativEnhet);
     }
 }

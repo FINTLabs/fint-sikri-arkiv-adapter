@@ -50,6 +50,7 @@ public class KodeverkHandler implements Handler {
         actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
         actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);
         actionsMap.put(GET_ALL_ADMINISTRATIVENHET, kodeverkRepository::getAdministrativEnhet);
+        actionsMap.put(GET_ALL_ARKIVDEL, kodeverkRepository::getArkivdel);
     }
 
 
