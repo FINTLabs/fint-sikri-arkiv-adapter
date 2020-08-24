@@ -84,8 +84,8 @@ public class SikriDocumentService extends SikriAbstractService {
         checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = objectFactory.createDocumentCriteria();
         documentCriteria.setDocumentId(docId);
-        documentCriteria.setEphorteIdentity(objectFactory.createDocumentCriteriaEphorteIdentity(ephorteIdentity));
-        documentCriteria.setVariant(objectFactory.createDocumentCriteriaVariant(variant));
+        documentCriteria.setEphorteIdentity(ephorteIdentity);
+        documentCriteria.setVariant(variant);
         documentCriteria.setVersion(version);
         log.debug("Checkin {} ...", documentCriteria);
         documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
@@ -120,10 +120,10 @@ public class SikriDocumentService extends SikriAbstractService {
 
     private void setupEphorteIdentity() {
         ephorteIdentity = objectFactory.createEphorteIdentity();
-        ephorteIdentity.setDatabase(objectFactory.createEphorteIdentityDatabase(props.getDatabase()));
-        ephorteIdentity.setExternalSystemName(objectFactory.createEphorteIdentityExternalSystemName(props.getExternalSystemName()));
-        ephorteIdentity.setUserName(objectFactory.createEphorteIdentityUserName(props.getUser()));
-        ephorteIdentity.setPassword(objectFactory.createEphorteIdentityPassword(props.getPassword()));
+        ephorteIdentity.setDatabase(props.getDatabase());
+        ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
+        ephorteIdentity.setUserName(props.getUser());
+        ephorteIdentity.setPassword(props.getPassword());
     }
 
     @Data

@@ -26,7 +26,7 @@ public class KorrespondansepartFactory {
         KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
         korrespondansepartResource.setAdresse(FintUtils.createAdresse(result));
         korrespondansepartResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
-        korrespondansepartResource.setKorrespondansepartNavn(result.getName().getValue());
+        korrespondansepartResource.setKorrespondansepartNavn(result.getName());
         korrespondansepartResource.setSystemId(createIdentifikator(result.getId().toString()));
 
 //        Optional.ofNullable(result.getFields().getFoedselsnummer())

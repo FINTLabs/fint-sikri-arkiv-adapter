@@ -31,20 +31,20 @@ public class NoarkFactory {
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
-                input.getCaseYear().getValue().toString(),
-                input.getSequenceNumber().getValue().toString()
+                input.getCaseYear().toString(),
+                input.getSequenceNumber().toString()
         );
-        Integer caseYear = input.getCaseYear().getValue();
-        Integer sequenceNumber = input.getSequenceNumber().getValue();
+        Integer caseYear = input.getCaseYear();
+        Integer sequenceNumber = input.getSequenceNumber();
 
         resource.setMappeId(FintUtils.createIdentifikator(caseNumber));
         resource.setSystemId(FintUtils.createIdentifikator(input.getId().toString()));
         resource.setSakssekvensnummer(String.valueOf(sequenceNumber));
         resource.setSaksaar(String.valueOf(caseYear));
-        resource.setSaksdato(input.getCaseDate().getValue().toGregorianCalendar().getTime());
-        resource.setOpprettetDato(input.getCreatedDate().getValue().toGregorianCalendar().getTime());
-        resource.setTittel(input.getTitle().getValue());
-        resource.setOffentligTittel(input.getPublicTitle().getValue());
+        resource.setSaksdato(input.getCaseDate().toGregorianCalendar().getTime());
+        resource.setOpprettetDato(input.getCreatedDate().toGregorianCalendar().getTime());
+        resource.setTittel(input.getTitle());
+        resource.setOffentligTittel(input.getPublicTitle());
 
         resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
         resource.setPart(partService.queryForSaksmappe(resource));
@@ -81,7 +81,7 @@ public class NoarkFactory {
                         Link.with(
                                 Klasse.class,
                                 "systemid",
-                                String.valueOf(input.getPrimaryClassification().getValue().getClassId().getValue()))
+                                String.valueOf(input.getPrimaryClassification().getClassId()))
                         )
                 );
 

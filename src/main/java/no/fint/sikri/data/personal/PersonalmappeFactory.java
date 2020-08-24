@@ -67,18 +67,17 @@ public class PersonalmappeFactory {
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
-        caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
-        caseType.setAccessCodeId(objectFactory.createCaseTypeAccessCodeId(properties.getTilgangsrestriksjon()));
-        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId(properties.getSaksmappeType()));
-        caseType.setSeriesId(objectFactory.createCaseTypeSeriesId(properties.getArkivdel()));
-        caseType.setRegistryManagementUnitId(objectFactory.createCaseTypeRegistryManagementUnitId(properties.getJournalenhet()));
+        caseType.setTitle("Personalmappe - " + fullName);
+        caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
+        caseType.setFileTypeId(properties.getSaksmappeType());
+        caseType.setSeriesId(properties.getArkivdel());
+        caseType.setRegistryManagementUnitId(properties.getJournalenhet());
         applyParameterFromLink(
                 personalmappeResource.getSaksstatus(),
-                s -> objectFactory.createCaseTypeCaseStatusId(s),
                 caseType::setCaseStatusId
         );
-        caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
-        caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
+        caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
+        caseType.setOfficerNameId(getOfficerId(personalmappeResource));
 
         return caseType;
     }
@@ -86,11 +85,11 @@ public class PersonalmappeFactory {
     public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
-        caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
+        caseType.setTitle("Personalmappe - " + fullName);
 
         //try {
-            caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource)));
-            caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(getOfficerId(personalmappeResource)));
+        caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
+        caseType.setOfficerNameId(getOfficerId(personalmappeResource));
         //} catch (AdministrativeUnitNotFound | OfficerNotFound | UnableToGetIdFromLink e) {
         //    caseType.setAdministrativeUnitId(objectFactory.createCaseTypeAdministrativeUnitId(properties.getUfordeltAdministrativEnhet()));
         //    caseType.setOfficerNameId(objectFactory.createCaseTypeOfficerNameId(properties.getUfordeltSaksbehandler()));
@@ -102,7 +101,7 @@ public class PersonalmappeFactory {
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
-        classificationType.setDescription(objectFactory.createClassificationTypeDescription(fullName));
+        classificationType.setDescription(fullName);
 
         return classificationType;
     }
@@ -116,11 +115,11 @@ public class PersonalmappeFactory {
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.ADMINISTRATIVE_UNIT,
                 "ShortCodeThisLevel=" + shortCodeThisLevel
-                + " AND ClosedDate=@"
+                        + " AND ClosedDate=@"
         );
 
         if (dataObjects.size() > 1) {
-            throw new AdministrativeUnitNotFound( shortCodeThisLevel + " har flere administrative enheter.");
+            throw new AdministrativeUnitNotFound(shortCodeThisLevel + " har flere administrative enheter.");
         }
         if (dataObjects.size() == 0) {
             throw new AdministrativeUnitNotFound("Finner ikke administrativ enhet med kode " + shortCodeThisLevel);
@@ -139,7 +138,7 @@ public class PersonalmappeFactory {
         if (dataObjects.size() != 1) {
             throw new OfficerNotFound("Finner ikke leder (saksbehandler) med brukernavn " + officerUserId);
         }
-        return ((UserType) dataObjects.get(0)).getCurrentUserName().getValue().getId();
+        return ((UserType) dataObjects.get(0)).getCurrentUserName().getId();
 
     }
 
@@ -147,13 +146,13 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         ClassificationType classificationType = objectFactory.createClassificationType();
-        getIdFromLink(personalmappeResource.getPerson()).map(objectFactory::createClassificationTypeClassId).ifPresent(classificationType::setClassId);
-        classificationType.setClassId(objectFactory.createClassificationTypeClassId(getIdFromLink(personalmappeResource.getPerson()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke person fra " + personalmappeResource.getTittel()))));
-        classificationType.setClassificationSystemId(objectFactory.createClassificationTypeClassificationSystemId("FNRP"));
-        classificationType.setDescription(objectFactory.createClassificationTypeDescription(fullName));
+        getIdFromLink(personalmappeResource.getPerson()).ifPresent(classificationType::setClassId);
+        classificationType.setClassId(getIdFromLink(personalmappeResource.getPerson()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke person fra " + personalmappeResource.getTittel())));
+        classificationType.setClassificationSystemId("FNRP");
+        classificationType.setDescription(fullName);
         classificationType.setCaseId(caseId);
-        classificationType.setIsRestricted(objectFactory.createClassificationTypeIsRestricted(true));
-        classificationType.setSortOrder(objectFactory.createClassificationTypeSortOrder("1"));
+        classificationType.setIsRestricted(true);
+        classificationType.setSortOrder("1");
 
         return classificationType;
     }
@@ -175,46 +174,41 @@ public class PersonalmappeFactory {
         personnavn.setEtternavn(lastName);
         return personnavn;
     }
+
     public PersonalmappeResource toFintResource(CaseType input) {
 
 
         PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(input, new PersonalmappeResource());
 
-        personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle().getValue()));
+        personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle()));
 
         personalmappe.addArbeidssted(Link.with(
                 Organisasjonselement.class,
                 "systemid",
                 input.getAdministrativeUnit()
-                        .getValue()
                         .getShortCodeThisLevel()
-                        .getValue()
         ));
 
         personalmappe.addLeder(Link.with(
                 Personalressurs.class,
                 "brukernavn",
                 input.getOfficerName()
-                        .getValue()
                         .getInitials()
-                        .getValue()
         ));
 
         personalmappe.addPerson(Link.with(
                 Person.class,
                 "fodselsnummer",
                 input.getPrimaryClassification()
-                        .getValue()
                         .getClassId()
-                        .getValue()
         ));
         personalmappe.addSelf(
                 Link.with(
                         PersonalmappeResource.class,
                         "mappeid",
                         NOARKUtils.getMappeId(
-                                input.getCaseYear().getValue().toString(),
-                                input.getSequenceNumber().getValue().toString()
+                                input.getCaseYear().toString(),
+                                input.getSequenceNumber().toString()
                         )
                 )
         );

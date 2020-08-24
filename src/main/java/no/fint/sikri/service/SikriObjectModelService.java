@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.ws.soap.AddressingFeature;
 import java.net.MalformedURLException;
@@ -55,7 +54,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         if (externalSystems.isEmpty()) {
             log.info("Creating ExternalSystem FINT ...");
             ExternalSystemType externalSystem = objectFactory.createExternalSystemType();
-            externalSystem.setExternalSystemName(objectFactory.createExternalSystemTypeExternalSystemName("FINT"));
+            externalSystem.setExternalSystemName("FINT");
             externalSystem.setIsActive(true);
             final ExternalSystemType result = createDataObject(externalSystem);
             log.info("Result: {}", result);
@@ -70,21 +69,21 @@ public class SikriObjectModelService extends SikriAbstractService {
         FilteredQueryArguments filteredQueryArguments = objectFactory.createFilteredQueryArguments();
 
         if (count > 0) {
-            filteredQueryArguments.setTakeCount(objectFactory.createFilteredQueryArgumentsTakeCount(count));
+            filteredQueryArguments.setTakeCount(count);
         }
         filteredQueryArguments.setDataObjectName(dataObjectName);
 
         if (StringUtils.isNotEmpty(filter)) {
-            filteredQueryArguments.setFilterExpression(objectFactory.createFilteredQueryArgumentsFilterExpression(filter));
+            filteredQueryArguments.setFilterExpression(filter);
         }
 
-        JAXBElement<ArrayOfstring> related = objectFactory.createFilteredQueryArgumentsRelatedObjects(objectFactory.createArrayOfstring());
-        relatedObjects.forEach(o -> related.getValue().getString().add(o));
+        ArrayOfstring related = objectFactory.createArrayOfstring();
+        relatedObjects.forEach(o -> related.getString().add(o));
         filteredQueryArguments.setRelatedObjects(related);
 
         QueryResult queryResult = objectModelService.filteredQuery(ephorteIdentity, filteredQueryArguments);
 
-        return queryResult.getDataObjects().getValue().getDataObject();
+        return queryResult.getDataObjects().getDataObject();
 
     }
 
@@ -139,10 +138,10 @@ public class SikriObjectModelService extends SikriAbstractService {
 
     private void setupEphorteIdentity() {
         ephorteIdentity = objectFactory.createEphorteIdentity();
-        ephorteIdentity.setDatabase(objectFactory.createEphorteIdentityDatabase(props.getDatabase()));
-        ephorteIdentity.setExternalSystemName(objectFactory.createEphorteIdentityExternalSystemName(props.getExternalSystemName()));
-        ephorteIdentity.setUserName(objectFactory.createEphorteIdentityUserName(props.getUser()));
-        ephorteIdentity.setPassword(objectFactory.createEphorteIdentityPassword(props.getPassword()));
+        ephorteIdentity.setDatabase(props.getDatabase());
+        ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
+        ephorteIdentity.setUserName(props.getUser());
+        ephorteIdentity.setPassword(props.getPassword());
     }
 
 }

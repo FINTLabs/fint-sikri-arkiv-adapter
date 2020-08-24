@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.FintUtils.applyIdFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
-import static no.fint.sikri.data.utilities.SikriUtils.optionalValueFn;
 
 @Service
 public class DokumentobjektFactory {
@@ -32,7 +31,7 @@ public class DokumentobjektFactory {
                 .ifPresent(resource::setFormat);
 
         optionalValue(result.getFileFormat())
-                .flatMap(optionalValueFn(FileFormatType::getDescription))
+                .map(FileFormatType::getDescription)
                 .ifPresent(resource::setFormatDetaljer);
 
         optionalValue(result.getChecksum())
@@ -47,7 +46,7 @@ public class DokumentobjektFactory {
                 String.format("%d_%d_%s",
                         result.getDocumentDescriptionId(),
                         result.getVersionNumber(),
-                        result.getVariantFormatId().getValue()
+                        result.getVariantFormatId()
                 )));
 
         optionalValue(result.getVariantFormatId())

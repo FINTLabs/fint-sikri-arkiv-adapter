@@ -50,8 +50,8 @@ public class DokumentobjektService {
         DocumentObjectType documentObject = objectFactory.createDocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
-        documentObject.setVariantFormatId(objectFactory.createDocumentObjectTypeVariantFormatId(checkinDocument.getVariant()));
-        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId(checkinDocument.getContentType()));
+        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        documentObject.setFileformatId(checkinDocument.getContentType());
         return documentObject;
     }
 }

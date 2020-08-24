@@ -12,7 +12,7 @@ public class KorrespondanseFactory {
     public KorrespondanseResource toFintResource(SenderRecipientType result) {
         KorrespondanseResource resource = new KorrespondanseResource();
         resource.addKorrespondansepart(Link.with(Korrespondansepart.class, "systemid", result.getId().toString()));
-        if (result.getIsRecipient().getValue()) {
+        if (result.isIsRecipient()) {
             resource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "mottaker"));
         } else {
             resource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "avsender"));

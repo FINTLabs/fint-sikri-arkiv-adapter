@@ -1,6 +1,8 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.AdditionalFieldService;
+import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
@@ -62,58 +64,62 @@ public class TilskuddFartoyFactory {
 
     private ObjectFactory objectFactory;
 
+    @Autowired
+    private TitleService titleService;
+
+    @Autowired
+    private AdditionalFieldService additionalFieldService;
+
     public TilskuddFartoyFactory() {
         objectFactory = new ObjectFactory();
     }
 
-    public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
         CaseType caseType = objectFactory.createCaseType();
         caseDefaultsService.applyDefaultsToCaseType(tilskuddFartoy, caseType);
 
-        caseType.setTitle(objectFactory.createCaseTypeTitle(tilskuddFartoy.getTittel()));
+        caseType.setTitle(titleService.getTitle(tilskuddFartoy));
 
-        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId("TS"));
+        caseType.setFileTypeId("TS");
 
-        PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, createValue(kallesignalAttribute, tilskuddFartoy.getKallesignal()));
-        PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, createValue(fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn()));
-        PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, createValue(soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
-        PropertyUtils.setSimpleProperty(caseType, kulturminneIdAttribute, createValue(kulturminneIdAttribute, tilskuddFartoy.getKulturminneId()));
+        additionalFieldService.getFieldsForResource(tilskuddFartoy)
+                .forEach(field ->
+                        setProperty(caseType, field));
 
         applyParameterFromLink(
                 tilskuddFartoy.getAdministrativEnhet(),
-                s -> objectFactory.createCaseTypeAdministrativeUnitId(Integer.valueOf(s)),
+                Integer::valueOf,
                 caseType::setAdministrativeUnitId
         );
 
         applyParameterFromLink(
                 tilskuddFartoy.getArkivdel(),
-                objectFactory::createCaseTypeRegistryManagementUnitId,
                 caseType::setRegistryManagementUnitId
         );
 
         applyParameterFromLink(
                 tilskuddFartoy.getSaksstatus(),
-                objectFactory::createCaseTypeCaseStatusId,
                 caseType::setCaseStatusId
         );
 
         return caseType;
     }
 
+    private void setProperty(CaseType caseType, AdditionalFieldService.Field field) {
+        try {
+            PropertyUtils.setSimpleProperty(caseType, field.getName(), BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(field.getName())).invoke(objectFactory, field.getValue()));
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
         ExternalSystemLinkCaseType externalSystemLinkCaseType = objectFactory.createExternalSystemLinkCaseType();
         externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(objectFactory.createExternalSystemLinkTypeExternalKey(externalKey));
+        externalSystemLinkCaseType.setExternalKey(externalKey);
         externalSystemLinkCaseType.setExternalSystemCode(4);
 
         return externalSystemLinkCaseType;
-    }
-
-    @SuppressWarnings("unchecked")
-    private JAXBElement<String> createValue(String attribute, String value) throws InvocationTargetException, IllegalAccessException {
-        Method method = BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(attribute));
-
-        return (JAXBElement<String>) method.invoke(objectFactory, value);
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {
