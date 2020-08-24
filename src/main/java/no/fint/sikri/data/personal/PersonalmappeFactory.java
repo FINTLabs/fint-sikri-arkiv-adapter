@@ -1,6 +1,8 @@
 package no.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
 import no.fint.model.administrasjon.personal.Personalressurs;
@@ -8,14 +10,13 @@ import no.fint.model.felles.Person;
 import no.fint.model.felles.kompleksedatatyper.Personnavn;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
-import no.fint.sikri.CaseDefaults;
-import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;
 import no.fint.sikri.data.exception.OfficerNotFound;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
+import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +44,7 @@ public class PersonalmappeFactory {
     private NoarkFactory noarkFactory;
 
     @Autowired
-    private PersonalmappeDefaults personalmappeDefaults;
+    private SikriCaseDefaultsService caseDefaultsService;
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
@@ -56,18 +57,18 @@ public class PersonalmappeFactory {
 
     @PostConstruct
     public void init() {
-        properties = caseDefaults.getCasetype().get("personalmappe");
+        properties = caseDefaults.getPersonalmappe();
         objectFactory = new ObjectFactory();
     }
 
     public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         CaseType caseType = objectFactory.createCaseType();
-        personalmappeDefaults.applyDefaultsToCaseType(personalmappeResource, caseType);
+        caseDefaultsService.applyDefaultsToCaseType(personalmappeResource, caseType);
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle(objectFactory.createCaseTypeTitle("Personalmappe - " + fullName));
-        caseType.setAccessCodeId(objectFactory.createCaseTypeAccessCodeId(properties.getTilgangskode()));
+        caseType.setAccessCodeId(objectFactory.createCaseTypeAccessCodeId(properties.getTilgangsrestriksjon()));
         caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId(properties.getSaksmappeType()));
         caseType.setSeriesId(objectFactory.createCaseTypeSeriesId(properties.getArkivdel()));
         caseType.setRegistryManagementUnitId(objectFactory.createCaseTypeRegistryManagementUnitId(properties.getJournalenhet()));

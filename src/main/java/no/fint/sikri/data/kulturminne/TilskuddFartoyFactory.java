@@ -11,6 +11,7 @@ import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.repository.KodeverkRepository;
+import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +46,7 @@ public class TilskuddFartoyFactory {
     private JournalpostFactory journalpostFactory;
 
     @Autowired
-    private TilskuddFartoyDefaults tilskuddFartoyDefaults;
+    private SikriCaseDefaultsService caseDefaultsService;
 
     @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kallesignal:customAttribute1}")
     String kallesignalAttribute;
@@ -67,7 +68,7 @@ public class TilskuddFartoyFactory {
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         CaseType caseType = objectFactory.createCaseType();
-        tilskuddFartoyDefaults.applyDefaultsToCaseType(tilskuddFartoy, caseType);
+        caseDefaultsService.applyDefaultsToCaseType(tilskuddFartoy, caseType);
 
         caseType.setTitle(objectFactory.createCaseTypeTitle(tilskuddFartoy.getTittel()));
 
