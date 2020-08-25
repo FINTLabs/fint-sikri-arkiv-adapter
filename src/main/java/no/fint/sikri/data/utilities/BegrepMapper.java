@@ -32,8 +32,9 @@ public class BegrepMapper {
     public static AdministrativEnhetResource mapAdministrativEnhet(AdministrativeUnitType administrativeUnitType) {
         AdministrativEnhetResource administrativEnhetResource = new AdministrativEnhetResource();
 
+        //administrativEnhetResource.setKode(administrativeUnitType.getShortCode());
         administrativEnhetResource.setNavn(administrativeUnitType.getDescription());
-        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(administrativeUnitType.getShortCodeThisLevel()));
+        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(String.valueOf(administrativeUnitType.getId())));
         administrativEnhetResource.addOrganisasjonselement(Link.with(Organisasjonselement.class, "organisasjonsId", administrativeUnitType.getShortCodeThisLevel()));
 
         return administrativEnhetResource;
