@@ -10,24 +10,14 @@ import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
-import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.repository.KodeverkRepository;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.JAXBElement;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 
@@ -41,76 +31,14 @@ public class TilskuddFartoyFactory {
     @Autowired
     private NoarkFactory noarkFactory;
 
-    @Autowired
-    private KorrespondansepartFactory korrespondansepartFactory;
-
-    @Autowired
-    private JournalpostFactory journalpostFactory;
-
-    @Autowired
-    private SikriCaseDefaultsService caseDefaultsService;
-
-    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kallesignal:customAttribute1}")
-    String kallesignalAttribute;
-
-    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.fartoynavn:customAttribute2}")
-    String fartoyNavnAttribute;
-
-    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.soknadsnummer:customAttribute3}")
-    String soknadsnummerAttribute;
-
-    @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kulturminneid:customAttribute4}")
-    String kulturminneIdAttribute;
-
     private ObjectFactory objectFactory;
-
-    @Autowired
-    private TitleService titleService;
-
-    @Autowired
-    private AdditionalFieldService additionalFieldService;
 
     public TilskuddFartoyFactory() {
         objectFactory = new ObjectFactory();
     }
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
-        CaseType caseType = objectFactory.createCaseType();
-        caseDefaultsService.applyDefaultsToCaseType(tilskuddFartoy, caseType);
-
-        caseType.setTitle(titleService.getTitle(tilskuddFartoy));
-
-        caseType.setFileTypeId("TS");
-
-        additionalFieldService.getFieldsForResource(tilskuddFartoy)
-                .forEach(field ->
-                        setProperty(caseType, field));
-
-        applyParameterFromLink(
-                tilskuddFartoy.getAdministrativEnhet(),
-                Integer::valueOf,
-                caseType::setAdministrativeUnitId
-        );
-
-        applyParameterFromLink(
-                tilskuddFartoy.getArkivdel(),
-                caseType::setRegistryManagementUnitId
-        );
-
-        applyParameterFromLink(
-                tilskuddFartoy.getSaksstatus(),
-                caseType::setCaseStatusId
-        );
-
-        return caseType;
-    }
-
-    private void setProperty(CaseType caseType, AdditionalFieldService.Field field) {
-        try {
-            PropertyUtils.setSimpleProperty(caseType, field.getName(), BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(field.getName())).invoke(objectFactory, field.getValue()));
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        return noarkFactory.toCaseType(tilskuddFartoy);
     }
 
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
@@ -132,10 +60,6 @@ public class TilskuddFartoyFactory {
 //        }
 
         TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(input, new TilskuddFartoyResource());
-        applyParameter(input, kallesignalAttribute, tilskuddFartoy::setKallesignal);
-        applyParameter(input, fartoyNavnAttribute, tilskuddFartoy::setFartoyNavn);
-        applyParameter(input, kulturminneIdAttribute, tilskuddFartoy::setKulturminneId);
-        applyParameter(input, soknadsnummerAttribute, tilskuddFartoy::setSoknadsnummer, FintUtils::createIdentifikator);
 
 //        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().getValues().get(0));
 //        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().getValues().get(0));
@@ -147,27 +71,6 @@ public class TilskuddFartoyFactory {
 //        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "systemid", input.getId()));
 
         return tilskuddFartoy;
-    }
-
-    public void applyParameter(CaseType input, String attribute, Consumer<String> consumer) {
-        applyParameter(input, attribute, consumer, Function.identity());
-    }
-
-    public <T> void applyParameter(CaseType input, String attribute, Consumer<T> consumer, Function<String, T> mapper) {
-        try {
-            Stream.of(PropertyUtils.getProperty(input, attribute))
-                    .filter(Objects::nonNull)
-                    .filter(JAXBElement.class::isInstance)
-                    .map(JAXBElement.class::cast)
-                    .filter(SikriUtils::notNil)
-                    .map(JAXBElement::getValue)
-                    .map(String::valueOf)
-                    .filter(StringUtils::isNotBlank)
-                    .map(mapper)
-                    .forEach(consumer);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            log.trace("Error when retrieving property {} from {}", attribute, input, e);
-        }
     }
 
 
