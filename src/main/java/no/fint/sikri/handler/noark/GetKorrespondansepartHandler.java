@@ -6,7 +6,7 @@ import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartService;
 import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.administrasjon.arkiv.ArkivActions;
+import no.fint.model.arkiv.noark.ArkivActions;
 import no.fint.model.resource.FintLinks;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

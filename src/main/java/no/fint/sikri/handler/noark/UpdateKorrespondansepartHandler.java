@@ -9,7 +9,7 @@ import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.administrasjon.arkiv.ArkivActions;
+import no.fint.model.arkiv.noark.ArkivActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import org.springframework.beans.factory.annotation.Autowired;

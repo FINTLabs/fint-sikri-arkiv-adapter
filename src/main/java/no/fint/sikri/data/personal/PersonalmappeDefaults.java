@@ -3,7 +3,7 @@ package no.fint.sikri.data.personal;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.model.administrasjon.arkiv.Saksstatus;
+import no.fint.model.arkiv.noark.Saksstatus;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
 import no.fint.sikri.CaseDefaults;

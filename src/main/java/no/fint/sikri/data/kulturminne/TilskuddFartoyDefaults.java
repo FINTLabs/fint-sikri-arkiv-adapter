@@ -5,7 +5,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.sikri.CaseDefaults;
 import no.fint.sikri.data.CaseProperties;
-import no.fint.model.administrasjon.arkiv.*;
+import no.fint.model.arkiv.noark.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import org.apache.commons.lang3.StringUtils;

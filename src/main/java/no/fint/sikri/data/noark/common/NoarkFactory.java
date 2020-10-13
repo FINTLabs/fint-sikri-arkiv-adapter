@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.common;
 
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.model.administrasjon.arkiv.*;
+import no.fint.model.arkiv.noark.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
