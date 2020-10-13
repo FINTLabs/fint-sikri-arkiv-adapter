@@ -7,7 +7,7 @@ import no.fint.model.administrasjon.personal.Personalressurs;
 import no.fint.model.felles.Person;
 import no.fint.model.felles.kompleksedatatyper.Personnavn;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.CaseDefaults;
 import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;

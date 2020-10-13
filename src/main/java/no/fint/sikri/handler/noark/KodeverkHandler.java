@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
-import no.fint.model.arkiv.noark.ArkivActions;
+import no.fint.model.arkiv.kodeverk.KodeverkActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static no.fint.model.administrasjon.arkiv.ArkivActions.*;
+import static no.fint.model.arkiv.kodeverk.KodeverkActions.*;
 
 @Service
 @Slf4j
@@ -30,7 +30,7 @@ public class KodeverkHandler implements Handler {
     @Autowired
     private KodeverkRepository kodeverkRepository;
 
-    private final EnumMap<ArkivActions, Supplier<List<? extends FintLinks>>> actionsMap = new EnumMap<>(ArkivActions.class);
+    private final EnumMap<KodeverkActions, Supplier<List<? extends FintLinks>>> actionsMap = new EnumMap<>(KodeverkActions.class);
 
     @PostConstruct
     public void init() {
@@ -47,9 +47,9 @@ public class KodeverkHandler implements Handler {
         actionsMap.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, kodeverkRepository::getTilknyttetRegistreringSom);
         actionsMap.put(GET_ALL_VARIANTFORMAT, kodeverkRepository::getVariantformat);
 
-        actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
-        actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);
-        actionsMap.put(GET_ALL_ADMINISTRATIVENHET, kodeverkRepository::getAdministrativEnhet);
+        // TODO actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
+        // TODO actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);
+        // TODO actionsMap.put(GET_ALL_ADMINISTRATIVENHET, kodeverkRepository::getAdministrativEnhet);
     }
 
 
@@ -61,7 +61,7 @@ public class KodeverkHandler implements Handler {
             return;
         }
         response.setResponseStatus(ResponseStatus.ACCEPTED);
-        actionsMap.getOrDefault(ArkivActions.valueOf(response.getAction()), Collections::emptyList)
+        actionsMap.getOrDefault(KodeverkActions.valueOf(response.getAction()), Collections::emptyList)
                 .get()
                 .forEach(response::addData);
     }

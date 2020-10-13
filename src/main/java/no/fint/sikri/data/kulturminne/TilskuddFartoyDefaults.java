@@ -3,12 +3,13 @@ package no.fint.sikri.data.kulturminne;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.sikri.CaseDefaults;
-import no.fint.sikri.data.CaseProperties;
-import no.fint.model.arkiv.noark.*;
+import no.fint.model.arkiv.kodeverk.*;
+import no.fint.model.arkiv.noark.AdministrativEnhet;
+import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
-import org.apache.commons.lang3.StringUtils;
+import no.fint.sikri.CaseDefaults;
+import no.fint.sikri.data.CaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

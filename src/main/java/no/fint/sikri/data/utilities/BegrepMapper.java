@@ -3,7 +3,8 @@ package no.fint.sikri.data.utilities;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.*;
+import no.fint.model.resource.arkiv.kodeverk.*;
+import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
 
 public class BegrepMapper {
 

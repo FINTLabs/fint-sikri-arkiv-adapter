@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
-import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.CaseDefaults;
 import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.*;

@@ -27,7 +27,7 @@ public class KorrespondansepartFactory {
         korrespondansepartResource.setAdresse(FintUtils.createAdresse(result));
         korrespondansepartResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
         korrespondansepartResource.setKorrespondansepartNavn(result.getName().getValue());
-        korrespondansepartResource.setSystemId(createIdentifikator(result.getId().toString()));
+        // TODO korrespondansepartResource.setSystemId(createIdentifikator(result.getId().toString()));
 
 //        Optional.ofNullable(result.getFields().getFoedselsnummer())
 //                .filter(StringUtils::isNotBlank)

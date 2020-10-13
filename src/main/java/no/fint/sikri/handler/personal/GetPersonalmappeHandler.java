@@ -3,7 +3,7 @@ package no.fint.sikri.handler.personal;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.administrasjon.personal.PersonalActions;
+import no.fint.model.arkiv.personal.PersonalActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.data.exception.GetPersonalmappeNotFoundException;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;

@@ -2,7 +2,11 @@ package no.fint.sikri.data.noark.common;
 
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.model.arkiv.noark.*;
+import no.fint.model.arkiv.kodeverk.Saksstatus;
+import no.fint.model.arkiv.noark.AdministrativEnhet;
+import no.fint.model.arkiv.noark.Arkivdel;
+import no.fint.model.arkiv.noark.Arkivressurs;
+import no.fint.model.arkiv.noark.Klasse;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
@@ -76,14 +80,14 @@ public class NoarkFactory {
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
 
-        optionalValue(input.getPrimaryClassification())
+        /* TODO optionalValue(input.getPrimaryClassification())
                 .ifPresent(c -> resource.addKlasse(
                         Link.with(
                                 Klasse.class,
                                 "systemid",
                                 String.valueOf(input.getPrimaryClassification().getValue().getClassId().getValue()))
                         )
-                );
+                ); */
 
         return resource;
     }

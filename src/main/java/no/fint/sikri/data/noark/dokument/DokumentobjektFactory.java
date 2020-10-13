@@ -4,7 +4,7 @@ import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.arkiv.sikri.oms.FileFormatType;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Dokumentfil;
-import no.fint.model.arkiv.noark.Variantformat;
+import no.fint.model.arkiv.kodeverk.Variantformat;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ public class DokumentobjektFactory {
         optionalValue(result.getCheckSumAlgorithm())
                 .ifPresent(resource::setSjekksumAlgoritme);
 
-        resource.setVersjonsummer(Long.valueOf(result.getVersionNumber()));
+        resource.setVersjonsnummer(Long.valueOf(result.getVersionNumber()));
 
         resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid",
                 String.format("%d_%d_%s",
@@ -73,7 +73,7 @@ public class DokumentobjektFactory {
                 .map(guid -> {
                     CheckinDocument document = new CheckinDocument();
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
-                    document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsummer()).map(Math::toIntExact).orElse(1));
+                    document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsnummer()).map(Math::toIntExact).orElse(1));
                     document.setGuid(guid);
                     document.setContentType(dokumentobjektResource.getFormat());
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());

@@ -23,7 +23,7 @@ public class PartFactory {
         partResource.setAdresse(FintUtils.createAdresse(result));
         partResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
         partResource.setPartNavn(result.getName().getValue());
-        partResource.setPartId(FintUtils.createIdentifikator(result.getId().getValue().toString()));
+        // TODO partResource.setPartId(FintUtils.createIdentifikator(result.getId().getValue().toString()));
 
         return partResource;
     }

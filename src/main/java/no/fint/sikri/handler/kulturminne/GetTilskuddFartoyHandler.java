@@ -1,23 +1,19 @@
 package no.fint.sikri.handler.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.exception.*;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
-import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.kultur.kulturminnevern.KulturminnevernActions;
+import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.sikri.data.exception.NotTilskuddfartoyException;
+import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory;
+import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Set;
-
-import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 
 @Service
 @Slf4j

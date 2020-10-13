@@ -7,7 +7,7 @@ import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.kultur.kulturminnevern.KulturminnevernActions;
+import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;

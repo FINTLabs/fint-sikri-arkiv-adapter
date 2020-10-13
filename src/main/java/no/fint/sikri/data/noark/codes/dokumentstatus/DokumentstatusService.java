@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.codes.dokumentstatus;
 
 import no.fint.arkiv.sikri.oms.DocumentStatusType;
-import no.fint.model.resource.arkiv.noark.DokumentStatusResource;
+import no.fint.model.resource.arkiv.kodeverk.DokumentStatusResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

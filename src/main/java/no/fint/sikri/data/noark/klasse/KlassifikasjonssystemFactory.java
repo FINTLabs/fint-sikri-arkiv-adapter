@@ -21,8 +21,8 @@ public class KlassifikasjonssystemFactory {
         result.setTittel(input.getCaption().getValue());
         result.setBeskrivelse(input.getDescription().getValue());
 
-        klasseService.getKlasserByEmneId(input.getId().getValue())
-                .forEach(c -> result.addKlasse(Link.with(Klasse.class, "systemid", c.getKlasseId().getIdentifikatorverdi())));
+        /* TODO klasseService.getKlasserByEmneId(input.getId().getValue())
+                .forEach(c -> result.addKlasse(Link.with(Klasse.class, "systemid", c.getKlasseId().getIdentifikatorverdi()))); */
         return result;
     }
 }
