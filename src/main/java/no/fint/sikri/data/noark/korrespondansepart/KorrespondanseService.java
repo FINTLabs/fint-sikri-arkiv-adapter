@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondanseResource;
+import no.fint.model.resource.arkiv.noark.KorrespondanseResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;

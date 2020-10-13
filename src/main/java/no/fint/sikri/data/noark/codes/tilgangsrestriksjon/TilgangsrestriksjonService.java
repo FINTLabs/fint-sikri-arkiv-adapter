@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.codes.tilgangsrestriksjon;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.AccessCodeType;
-import no.fint.model.resource.administrasjon.arkiv.TilgangsrestriksjonResource;
+import no.fint.model.resource.arkiv.noark.TilgangsrestriksjonResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

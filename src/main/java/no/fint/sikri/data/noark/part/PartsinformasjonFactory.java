@@ -2,9 +2,9 @@ package no.fint.sikri.data.noark.part;
 
 import no.fint.arkiv.sikri.oms.CasePartyType;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.PartResource;
-import no.fint.model.resource.administrasjon.arkiv.PartRolleResource;
-import no.fint.model.resource.administrasjon.arkiv.PartsinformasjonResource;
+import no.fint.model.resource.arkiv.noark.PartResource;
+import no.fint.model.resource.arkiv.noark.PartRolleResource;
+import no.fint.model.resource.arkiv.noark.PartsinformasjonResource;
 import org.springframework.stereotype.Service;
 
 @Service

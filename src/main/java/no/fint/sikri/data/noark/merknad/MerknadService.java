@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.merknad;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.RemarkType;
-import no.fint.model.resource.administrasjon.arkiv.MerknadResource;
+import no.fint.model.resource.arkiv.noark.MerknadResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import no.fint.arkiv.sikri.oms.RemarkType;
 import no.fint.model.administrasjon.arkiv.Arkivressurs;
 import no.fint.model.administrasjon.arkiv.Merknadstype;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.MerknadResource;
+import no.fint.model.resource.arkiv.noark.MerknadResource;
 import no.fint.sikri.data.utilities.FintUtils;
 import org.springframework.stereotype.Service;
 

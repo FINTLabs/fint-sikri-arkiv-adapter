@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.codes.dokumenttype;
 
 import no.fint.arkiv.sikri.oms.DocumentCategoryType;
-import no.fint.model.resource.administrasjon.arkiv.DokumentTypeResource;
+import no.fint.model.resource.arkiv.noark.DokumentTypeResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

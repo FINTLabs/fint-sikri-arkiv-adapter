@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource;
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;

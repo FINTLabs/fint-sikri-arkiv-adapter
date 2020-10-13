@@ -7,7 +7,7 @@ import no.fint.model.administrasjon.arkiv.Arkivressurs;
 import no.fint.model.administrasjon.arkiv.JournalStatus;
 import no.fint.model.administrasjon.arkiv.JournalpostType;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondanseService;

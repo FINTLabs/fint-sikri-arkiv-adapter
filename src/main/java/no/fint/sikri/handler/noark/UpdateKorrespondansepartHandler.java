@@ -11,7 +11,7 @@ import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondansepartResource;
+import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

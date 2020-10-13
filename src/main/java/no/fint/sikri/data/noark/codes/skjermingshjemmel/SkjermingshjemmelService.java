@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.codes.skjermingshjemmel;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.administrasjon.arkiv.SkjermingshjemmelResource;
+import no.fint.model.resource.arkiv.noark.SkjermingshjemmelResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

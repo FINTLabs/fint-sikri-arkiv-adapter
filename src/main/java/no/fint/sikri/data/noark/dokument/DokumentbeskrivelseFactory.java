@@ -9,7 +9,7 @@ import no.fint.model.administrasjon.arkiv.DokumentStatus;
 import no.fint.model.administrasjon.arkiv.DokumentType;
 import no.fint.model.administrasjon.arkiv.TilknyttetRegistreringSom;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.DokumentbeskrivelseResource;
+import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.utilities.XmlUtils;
 import org.apache.commons.lang3.StringUtils;

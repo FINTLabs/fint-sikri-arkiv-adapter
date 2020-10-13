@@ -2,8 +2,8 @@ package no.fint.sikri.data.utilities;
 
 import no.fint.sikri.data.exception.NoSuchTitleDimension;
 import no.fint.sikri.data.exception.UnableToParseTitle;
-import no.fint.model.resource.kultur.kulturminnevern.DispensasjonAutomatiskFredaKulturminneResource;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.resource.arkiv.kulturminnevern.DispensasjonAutomatiskFredaKulturminneResource;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 
 import java.util.Arrays;
 import java.util.Map;

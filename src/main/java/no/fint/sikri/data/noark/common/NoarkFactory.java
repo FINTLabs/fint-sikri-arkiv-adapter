@@ -4,7 +4,7 @@ import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;

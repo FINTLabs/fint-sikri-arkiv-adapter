@@ -5,7 +5,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentobjektService;

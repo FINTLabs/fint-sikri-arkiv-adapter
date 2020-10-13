@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.QueryUtils;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondansepartResource;
+import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

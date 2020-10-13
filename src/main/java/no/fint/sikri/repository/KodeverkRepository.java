@@ -15,7 +15,7 @@ import no.fint.sikri.data.noark.codes.skjermingshjemmel.SkjermingshjemmelService
 import no.fint.sikri.data.noark.codes.tilgangsrestriksjon.TilgangsrestriksjonService;
 import no.fint.sikri.data.noark.codes.tilknyttetregistreringsom.TilknyttetRegistreringSomService;
 import no.fint.sikri.data.noark.codes.variantformat.VariantformatService;
-import no.fint.model.resource.administrasjon.arkiv.*;
+import no.fint.model.resource.arkiv.noark.*;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
 import org.springframework.beans.factory.annotation.Autowired;

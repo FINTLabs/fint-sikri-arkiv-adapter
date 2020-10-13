@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.korrespondansepart;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondansepartResource;
+import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import no.fint.sikri.data.exception.KorrespondansepartNotFound;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

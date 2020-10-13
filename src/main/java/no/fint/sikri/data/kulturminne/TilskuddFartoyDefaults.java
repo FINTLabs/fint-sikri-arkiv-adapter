@@ -7,7 +7,7 @@ import no.fint.sikri.CaseDefaults;
 import no.fint.sikri.data.CaseProperties;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

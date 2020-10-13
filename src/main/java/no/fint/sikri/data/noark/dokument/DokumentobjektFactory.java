@@ -6,7 +6,7 @@ import no.fint.model.administrasjon.arkiv.Arkivressurs;
 import no.fint.model.administrasjon.arkiv.Dokumentfil;
 import no.fint.model.administrasjon.arkiv.Variantformat;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
+import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

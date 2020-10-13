@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.klasse;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassificationSystemType;
-import no.fint.model.resource.administrasjon.arkiv.KlassifikasjonssystemResource;
+import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.NotImplementedException;

@@ -8,7 +8,7 @@ import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.administrasjon.arkiv.DokumentfilResource;
+import no.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.data.noark.dokument.DokumentfilService;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.ValidationService;

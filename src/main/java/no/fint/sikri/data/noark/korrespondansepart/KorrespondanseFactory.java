@@ -4,7 +4,7 @@ import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.administrasjon.arkiv.Korrespondansepart;
 import no.fint.model.administrasjon.arkiv.KorrespondansepartType;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondanseResource;
+import no.fint.model.resource.arkiv.noark.KorrespondanseResource;
 import org.springframework.stereotype.Service;
 
 @Service

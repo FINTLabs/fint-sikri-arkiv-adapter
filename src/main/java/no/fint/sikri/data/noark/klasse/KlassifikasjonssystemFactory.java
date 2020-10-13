@@ -4,7 +4,7 @@ import no.fint.arkiv.sikri.oms.ClassificationSystemType;
 import no.fint.model.administrasjon.arkiv.Klasse;
 import no.fint.model.administrasjon.arkiv.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.KlassifikasjonssystemResource;
+import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.data.utilities.FintUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

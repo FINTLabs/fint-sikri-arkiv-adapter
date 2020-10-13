@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.part;
 
 import no.fint.arkiv.sikri.oms.CasePartyType;
-import no.fint.model.resource.administrasjon.arkiv.PartResource;
+import no.fint.model.resource.arkiv.noark.PartResource;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.repository.KodeverkRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
