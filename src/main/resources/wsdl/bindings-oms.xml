@@ -5,17 +5,20 @@
                 xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" version="2.1"
                 xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                >
+>
 
-
-    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en']">
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en']">
+        <jaxb:globalBindings generateElementProperty="false"/>
         <jaxb:schemaBindings>
             <jaxb:nameXmlTransform>
                 <jaxb:elementName suffix="Element"/>
             </jaxb:nameXmlTransform>
         </jaxb:schemaBindings>
     </jaxws:bindings>
-    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en/dataobjects']">
+    <jaxws:bindings
+            node="wsdl:definitions/wsdl:types/xs:schema[@targetNamespace='http://www.gecko.no/ephorte/services/objectmodel/v3/en/dataobjects']">
+        <jaxb:globalBindings generateElementProperty="false"/>
         <jaxb:schemaBindings>
             <jaxb:nameXmlTransform>
                 <jaxb:typeName suffix="Type"/>
@@ -25,7 +28,7 @@
 
     <jaxws:bindings
             node="wsdl:definitions/wsdl:types/xs:schema/xs:complexType[@name='DataObject']/xs:attribute[@ref='ser:Id']">
-        <jaxb:property name="DataObjectId" />
+        <jaxb:property name="DataObjectId"/>
     </jaxws:bindings>
 </jaxws:bindings>
 
