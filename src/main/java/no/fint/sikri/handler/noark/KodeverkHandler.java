@@ -6,8 +6,6 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
 import no.fint.model.arkiv.kodeverk.KodeverkActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.sikri.data.noark.klasse.KlasseService;
-import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.repository.KodeverkRepository;
 import org.springframework.beans.factory.annotation.Autowired;

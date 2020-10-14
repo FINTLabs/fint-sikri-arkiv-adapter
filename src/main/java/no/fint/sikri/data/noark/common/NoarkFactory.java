@@ -10,6 +10,8 @@ import no.fint.model.arkiv.noark.Klasse;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
+import no.fint.sikri.data.noark.klasse.KlasseFactory;
+import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemFactory;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.utilities.FintUtils;
@@ -31,6 +33,9 @@ public class NoarkFactory {
 
     @Autowired
     private MerknadService merknadService;
+
+    @Autowired
+    private KlasseFactory klasseFactory;
 
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
@@ -80,14 +85,9 @@ public class NoarkFactory {
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
 
-        /* TODO optionalValue(input.getPrimaryClassification())
-                .ifPresent(c -> resource.addKlasse(
-                        Link.with(
-                                Klasse.class,
-                                "systemid",
-                                String.valueOf(input.getPrimaryClassification().getValue().getClassId().getValue()))
-                        )
-                ); */
+         optionalValue(input.getPrimaryClassification())
+                .map(klasseFactory::toFintResource)
+                .ifPresent(resource::setKlasse);
 
         return resource;
     }

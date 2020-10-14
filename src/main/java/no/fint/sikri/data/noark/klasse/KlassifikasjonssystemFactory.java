@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class KlassifikasjonssystemFactory {
 
-    @Autowired
-    private KlasseService klasseService;
-
     public KlassifikasjonssystemResource toFintResource(ClassificationSystemType input) {
         KlassifikasjonssystemResource result = new KlassifikasjonssystemResource();
         result.setSystemId(FintUtils.createIdentifikator(input.getId().getValue()));
