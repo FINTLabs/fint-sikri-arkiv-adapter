@@ -2,9 +2,9 @@ package no.fint.sikri.data.noark.dokument;
 
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.arkiv.sikri.oms.FileFormatType;
+import no.fint.model.arkiv.kodeverk.Variantformat;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Dokumentfil;
-import no.fint.model.arkiv.kodeverk.Variantformat;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import org.apache.commons.lang3.StringUtils;

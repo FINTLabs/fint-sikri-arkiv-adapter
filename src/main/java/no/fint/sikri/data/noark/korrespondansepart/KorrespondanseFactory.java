@@ -1,7 +1,6 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
-import no.fint.model.arkiv.noark.Korrespondansepart;
 import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.arkiv.kodeverk.*;
 import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
+import no.fint.model.resource.arkiv.noark.ArkivdelResource;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
@@ -144,7 +145,7 @@ public class KodeverkRepository {
         //klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
         administrativEnhet = administrativEnhetService.getAdministrativeEnheter().collect(Collectors.toList());
-        arkivdel = arkivdelService.getArkivdeler().collect(Collectors.toList());
+        // arkivdel = arkivdelService.getArkivdeler().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }

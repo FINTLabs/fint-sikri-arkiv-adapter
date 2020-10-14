@@ -5,17 +5,14 @@ import no.fint.arkiv.AdditionalFieldService;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.arkiv.noark.Arkivressurs;
-import no.fint.model.arkiv.noark.Klasse;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.klasse.KlasseFactory;
-import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemFactory;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.utilities.FintUtils;
@@ -26,7 +23,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -142,7 +138,7 @@ public class NoarkFactory {
     }
 
     public <T extends SaksmappeResource> CaseType toCaseType(T resource) {
-        CaseType caseType = objectFactory.createCaseType();
+        CaseType caseType = new CaseType();
         caseDefaultsService.applyDefaultsToCaseType(resource, caseType);
 
         caseType.setTitle(titleService.getTitle(resource));
