@@ -3,24 +3,18 @@ package no.fint.sikri.data.kulturminne;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
-import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
-import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.repository.KodeverkRepository;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBElement;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -33,16 +27,7 @@ import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 public class TilskuddFartoyFactory {
 
     @Autowired
-    private KodeverkRepository kodeverkRepository;
-
-    @Autowired
     private NoarkFactory noarkFactory;
-
-    @Autowired
-    private KorrespondansepartFactory korrespondansepartFactory;
-
-    @Autowired
-    private JournalpostFactory journalpostFactory;
 
     @Autowired
     private TilskuddFartoyDefaults tilskuddFartoyDefaults;
@@ -59,12 +44,6 @@ public class TilskuddFartoyFactory {
     @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kulturminneid:customAttribute4}")
     String kulturminneIdAttribute;
 
-    private ObjectFactory objectFactory;
-
-    public TilskuddFartoyFactory() {
-        objectFactory = new ObjectFactory();
-    }
-
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         CaseType caseType = new CaseType();
         tilskuddFartoyDefaults.applyDefaultsToCaseType(tilskuddFartoy, caseType);
@@ -73,14 +52,14 @@ public class TilskuddFartoyFactory {
 
         caseType.setFileTypeId("TS");
 
-        PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, createValue(kallesignalAttribute, tilskuddFartoy.getKallesignal()));
-        PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, createValue(fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn()));
-        PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, createValue(soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
-        PropertyUtils.setSimpleProperty(caseType, kulturminneIdAttribute, createValue(kulturminneIdAttribute, tilskuddFartoy.getKulturminneId()));
+        PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, tilskuddFartoy.getKallesignal());
+        PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn());
+        PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi());
+        PropertyUtils.setSimpleProperty(caseType, kulturminneIdAttribute, tilskuddFartoy.getKulturminneId());
 
         applyParameterFromLink(
                 tilskuddFartoy.getAdministrativEnhet(),
-                s -> Integer.valueOf(s),
+                Integer::valueOf,
                 caseType::setAdministrativeUnitId
         );
 
@@ -104,13 +83,6 @@ public class TilskuddFartoyFactory {
         externalSystemLinkCaseType.setExternalSystemCode(4);
 
         return externalSystemLinkCaseType;
-    }
-
-    @SuppressWarnings("unchecked")
-    private String createValue(String attribute, String value) throws InvocationTargetException, IllegalAccessException {
-        Method method = BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(attribute));
-
-        return (String) method.invoke(objectFactory, value);
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {
