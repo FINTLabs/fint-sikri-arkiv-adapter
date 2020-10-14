@@ -22,8 +22,8 @@ public class PartFactory {
         PartResource partResource = new PartResource();
         partResource.setAdresse(FintUtils.createAdresse(result));
         partResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
-        partResource.setPartNavn(result.getName().getValue());
-        // TODO partResource.setPartId(FintUtils.createIdentifikator(result.getId().getValue().toString()));
+        partResource.setPartNavn(result.getName());
+        // TODO partResource.setPartId(FintUtils.createIdentifikator(result.getId().toString()));
 
         return partResource;
     }

@@ -34,4 +34,5 @@ public enum SikriObjectTypes {
     public static final String ADMINISTRATIVE_UNIT = "AdministrativeUnit";
     public static final String USER = "User";
     public static final String CLASSIFICATION = "Classification";
+    public static final String SERIES = "Series";
 }

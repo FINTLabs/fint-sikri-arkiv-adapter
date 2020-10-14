@@ -7,6 +7,7 @@ import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
+import no.fint.sikri.data.noark.arkivdel.ArkivdelService;
 import no.fint.sikri.data.noark.codes.dokumentstatus.DokumentstatusService;
 import no.fint.sikri.data.noark.codes.dokumenttype.DokumenttypeService;
 import no.fint.sikri.data.noark.codes.journalposttype.JournalpostTypeService;
@@ -73,6 +74,9 @@ public class KodeverkRepository {
     @Autowired
     private AdministrativEnhetService administrativEnhetService;
 
+    @Autowired
+    private ArkivdelService arkivdelService;
+
     @Getter
     private List<SaksstatusResource> saksstatus;
 
@@ -118,6 +122,9 @@ public class KodeverkRepository {
     @Getter
     private List<AdministrativEnhetResource> administrativEnhet;
 
+    @Getter
+    private List<ArkivdelResource> arkivdel;
+
     private transient boolean healthy = false;
 
     @Scheduled(initialDelay = 10000, fixedDelayString = "${fint.kodeverk.refresh-interval:1500000}")
@@ -137,6 +144,7 @@ public class KodeverkRepository {
         //klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
         administrativEnhet = administrativEnhetService.getAdministrativeEnheter().collect(Collectors.toList());
+        arkivdel = arkivdelService.getArkivdeler().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }

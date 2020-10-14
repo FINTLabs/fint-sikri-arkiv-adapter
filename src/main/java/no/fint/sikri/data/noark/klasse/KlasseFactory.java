@@ -14,19 +14,19 @@ public class KlasseFactory {
     public KlasseResource toFintResource(ClassificationType input) {
         KlasseResource result = new KlasseResource();
 
-        // TODO result.setSystemId(FintUtils.createIdentifikator(input.getId().getValue()));
-        // TODO result.setKlasseId(FintUtils.createIdentifikator(input.getId().getValue()));
+        // TODO result.setSystemId(FintUtils.createIdentifikator(input.getId()));
+        // TODO result.setKlasseId(FintUtils.createIdentifikator(input.getId()));
         //result.setOpprettetAv(input.getFields().getOpprettetAv());
         /* TODO optionalValue(input.getCreatedDate())
                 .map(XMLGregorianCalendar::toGregorianCalendar)
                 .map(GregorianCalendar::getTime)
                 .ifPresent(result::setOpprettetDato); */
-        result.setTittel(input.getDescription().getValue());
-        // TODO result.setBeskrivelse(input.getDescription().getValue());
+        result.setTittel(input.getDescription());
+        // TODO result.setBeskrivelse(input.getDescription());
 
-        result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId().getValue()));
+        result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId()));
 
-        /* TODO klasseService.getUnderKlasser(input.getId().getValue())
+        /* TODO klasseService.getUnderKlasser(input.getId())
                 .forEach(c -> result.addUnderklasse(Link.with(Klasse.class, "systemid", c.getSystemId().getIdentifikatorverdi()))); */
 
         return result;

@@ -1,6 +1,7 @@
 package no.fint.sikri.handler.noark;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.NoarkMetadataService;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
@@ -18,32 +19,35 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.fint.model.arkiv.kodeverk.KodeverkActions.*;
 
 @Service
 @Slf4j
 public class KodeverkHandler implements Handler {
+    @Autowired
+    private NoarkMetadataService noarkMetadataService;
 
     @Autowired
     private KodeverkRepository kodeverkRepository;
 
-    private final EnumMap<KodeverkActions, Supplier<List<? extends FintLinks>>> actionsMap = new EnumMap<>(KodeverkActions.class);
+    private final EnumMap<KodeverkActions, Supplier<List<? extends FintLinks>>> suppliers = new EnumMap<>(KodeverkActions.class);
 
     @PostConstruct
     public void init() {
-        actionsMap.put(GET_ALL_DOKUMENTSTATUS, kodeverkRepository::getDokumentStatus);
-        actionsMap.put(GET_ALL_DOKUMENTTYPE, kodeverkRepository::getDokumentType);
-        actionsMap.put(GET_ALL_JOURNALPOSTTYPE, kodeverkRepository::getJournalpostType);
-        actionsMap.put(GET_ALL_JOURNALSTATUS, kodeverkRepository::getJournalStatus);
-        //actionsMap.put(GET_ALL_KORRESPONDANSEPARTTYPE, kodeverkRepository::getKorrespondansepartType);
-        actionsMap.put(GET_ALL_MERKNADSTYPE, kodeverkRepository::getMerknadstype);
-        actionsMap.put(GET_ALL_PARTROLLE, kodeverkRepository::getPartRolle);
-        actionsMap.put(GET_ALL_SAKSSTATUS, kodeverkRepository::getSaksstatus);
+        suppliers.put(GET_ALL_DOKUMENTSTATUS, merge(noarkMetadataService::getDokumentStatus, kodeverkRepository::getDokumentStatus));
+        suppliers.put(GET_ALL_DOKUMENTTYPE, merge(noarkMetadataService::getDokumentType, kodeverkRepository::getDokumentType));
+        suppliers.put(GET_ALL_JOURNALPOSTTYPE, merge(noarkMetadataService::getJournalpostType, kodeverkRepository::getJournalpostType));
+        suppliers.put(GET_ALL_JOURNALSTATUS, merge(noarkMetadataService::getJournalStatus, kodeverkRepository::getJournalStatus));
+        suppliers.put(GET_ALL_KORRESPONDANSEPARTTYPE, merge(noarkMetadataService::getKorrespondansepartType, kodeverkRepository::getKorrespondansepartType));
+        suppliers.put(GET_ALL_MERKNADSTYPE, kodeverkRepository::getMerknadstype);
+        suppliers.put(GET_ALL_PARTROLLE, merge(noarkMetadataService::getPartRolle, kodeverkRepository::getPartRolle));
+        suppliers.put(GET_ALL_SAKSSTATUS, merge(noarkMetadataService::getSaksStatus, kodeverkRepository::getSaksstatus));
         //actionsMap.put(GET_ALL_SKJERMINGSHJEMMEL, kodeverkRepository::getSkjermingshjemmel);
-        actionsMap.put(GET_ALL_TILGANGSRESTRIKSJON, kodeverkRepository::getTilgangsrestriksjon);
-        actionsMap.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, kodeverkRepository::getTilknyttetRegistreringSom);
-        actionsMap.put(GET_ALL_VARIANTFORMAT, kodeverkRepository::getVariantformat);
+        suppliers.put(GET_ALL_TILGANGSRESTRIKSJON, kodeverkRepository::getTilgangsrestriksjon);
+        suppliers.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, merge(noarkMetadataService::getTilknyttetRegistreringSom, kodeverkRepository::getTilknyttetRegistreringSom));
+        suppliers.put(GET_ALL_VARIANTFORMAT, merge(noarkMetadataService::getVariantformat, kodeverkRepository::getVariantformat));
 
         // TODO actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
         // TODO actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);
@@ -59,19 +63,23 @@ public class KodeverkHandler implements Handler {
             return;
         }
         response.setResponseStatus(ResponseStatus.ACCEPTED);
-        actionsMap.getOrDefault(KodeverkActions.valueOf(response.getAction()), Collections::emptyList)
+        suppliers.getOrDefault(KodeverkActions.valueOf(response.getAction()), Collections::emptyList)
                 .get()
                 .forEach(response::addData);
     }
 
     @Override
     public Set<String> actions() {
-        return actionsMap.keySet().stream().map(Enum::name).collect(Collectors.toSet());
+        return suppliers.keySet().stream().map(Enum::name).collect(Collectors.toSet());
     }
 
     @Override
     public boolean health() {
         return kodeverkRepository.health();
+    }
+
+    private Supplier<List<? extends FintLinks>> merge(Supplier<Stream<? extends FintLinks>> common, Supplier<List<? extends FintLinks>> local) {
+        return () -> Stream.concat(common.get(), local.get().stream()).collect(Collectors.toList());
     }
 
 }

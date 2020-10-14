@@ -16,8 +16,8 @@ public class PartsinformasjonFactory {
         }
 
         PartResource resource = new PartResource();
-        // TODO resource.addPart(Link.with(PartResource.class, "partid", result.getId().getValue().toString()));
-        resource.addPartRolle(Link.with(PartRolleResource.class, "systemid", result.getCasePartyRoleId().getValue()));
+        // TODO resource.addPart(Link.with(PartResource.class, "partid", result.getId().toString()));
+        resource.addPartRolle(Link.with(PartRolleResource.class, "systemid", result.getCasePartyRoleId()));
         return resource;
     }
     /*

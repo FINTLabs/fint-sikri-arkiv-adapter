@@ -3,6 +3,7 @@ package no.fint.sikri.handler.kulturminne;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.Problem;
@@ -12,9 +13,9 @@ import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;
 import no.fint.sikri.data.exception.NotTilskuddfartoyException;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyDefaults;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
 import no.fint.sikri.handler.Handler;
+import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,10 @@ public class UpdateTilskuddFartoyHandler implements Handler {
     private ValidationService validationService;
 
     @Autowired
-    private TilskuddFartoyDefaults tilskuddFartoyDefaults;
+    private SikriCaseDefaultsService caseDefaultsService;
+
+    @Autowired
+    private CaseDefaults caseDefaults;
 
     @Autowired
     private TilskuddFartoyService tilskuddfartoyService;
@@ -66,7 +70,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
                 tilskuddFartoyResource.getJournalpost().isEmpty()) {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
-        tilskuddFartoyDefaults.applyDefaultsForUpdate(tilskuddFartoyResource);
+        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
         log.info("Complete document for update: {}", tilskuddFartoyResource);
         List<Problem> problems = validationService.getProblems(tilskuddFartoyResource.getJournalpost());
         if (!problems.isEmpty()) {
@@ -88,7 +92,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
 
     private void createCase(Event<FintLinks> response, TilskuddFartoyResource tilskuddFartoyResource) {
         try {
-            tilskuddFartoyDefaults.applyDefaultsForCreation(tilskuddFartoyResource);
+            caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
             log.info("Complete document for creation: {}", tilskuddFartoyResource);
             List<Problem> problems = validationService.getProblems(tilskuddFartoyResource);
             if (!problems.isEmpty()) {

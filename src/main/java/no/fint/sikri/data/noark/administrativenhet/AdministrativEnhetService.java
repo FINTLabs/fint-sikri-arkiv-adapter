@@ -6,6 +6,7 @@ import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,8 @@ public class AdministrativEnhetService {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.ADMINISTRATIVE_UNIT)
                 .stream()
                 .map(AdministrativeUnitType.class::cast)
-                .filter(administrativeUnitType -> !administrativeUnitType.getShortCodeThisLevel().isNil())
-                .filter(administrativeUnitType -> administrativeUnitType.getClosedDate().isNil())
+                .filter(administrativeUnitType -> !StringUtils.isBlank(administrativeUnitType.getShortCodeThisLevel()))
+                // TODO .filter(administrativeUnitType -> StringUtils.isBlank(administrativeUnitType.getClosedDate()))
                 .map(BegrepMapper::mapAdministrativEnhet);
     }
 }

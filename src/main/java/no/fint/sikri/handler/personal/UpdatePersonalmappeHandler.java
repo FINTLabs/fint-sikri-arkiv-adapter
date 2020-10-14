@@ -3,14 +3,15 @@ package no.fint.sikri.handler.personal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
 import no.fint.event.model.*;
 import no.fint.model.arkiv.personal.PersonalActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
-import no.fint.sikri.data.personal.PersonalmappeDefaults;
 import no.fint.sikri.data.personal.PersonalmappeService;
 import no.fint.sikri.handler.Handler;
+import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,10 @@ public class UpdatePersonalmappeHandler implements Handler {
     private ValidationService validationService;
 
     @Autowired
-    private PersonalmappeDefaults personalmappeDefaults;
+    private SikriCaseDefaultsService caseDefaultsService;
+
+    @Autowired
+    private CaseDefaults caseDefaults;
 
     @Autowired
     private PersonalmappeService personalmappeService;
@@ -99,7 +103,7 @@ public class UpdatePersonalmappeHandler implements Handler {
 
     private void createCase(Event<FintLinks> response, PersonalmappeResource personalmappeResource) {
         try {
-            personalmappeDefaults.applyDefaultsForCreation(personalmappeResource);
+            caseDefaultsService.applyDefaultsForCreation(caseDefaults.getPersonalmappe(), personalmappeResource);
             log.info("Complete document for creation: {}", personalmappeResource);
             List<Problem> problems = validationService.getProblems(personalmappeResource);
             if (!problems.isEmpty()) {

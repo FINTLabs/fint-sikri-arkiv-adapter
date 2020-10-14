@@ -1,9 +1,9 @@
 package no.fint.adapter.event
 
 import no.fint.adapter.FintAdapterEndpoints
-import no.fint.sikri.SupportedActions
 import no.fint.event.model.DefaultActions
 import no.fint.event.model.Event
+import no.fint.sikri.SupportedActions
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity

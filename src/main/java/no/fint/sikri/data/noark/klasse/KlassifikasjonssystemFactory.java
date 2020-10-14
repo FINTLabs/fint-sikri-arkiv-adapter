@@ -14,11 +14,11 @@ public class KlassifikasjonssystemFactory {
 
     public KlassifikasjonssystemResource toFintResource(ClassificationSystemType input) {
         KlassifikasjonssystemResource result = new KlassifikasjonssystemResource();
-        result.setSystemId(FintUtils.createIdentifikator(input.getId().getValue()));
-        result.setTittel(input.getCaption().getValue());
-        result.setBeskrivelse(input.getDescription().getValue());
+        result.setSystemId(FintUtils.createIdentifikator(input.getId()));
+        result.setTittel(input.getCaption());
+        result.setBeskrivelse(input.getDescription());
 
-        /* TODO klasseService.getKlasserByEmneId(input.getId().getValue())
+        /* TODO klasseService.getKlasserByEmneId(input.getId())
                 .forEach(c -> result.addKlasse(Link.with(Klasse.class, "systemid", c.getKlasseId().getIdentifikatorverdi()))); */
         return result;
     }

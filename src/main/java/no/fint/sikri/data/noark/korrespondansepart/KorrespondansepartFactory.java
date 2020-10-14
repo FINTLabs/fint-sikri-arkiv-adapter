@@ -8,9 +8,6 @@ import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Optional;
-
 import static no.fint.sikri.data.utilities.FintUtils.createIdentifikator;
 
 @Service
@@ -26,7 +23,7 @@ public class KorrespondansepartFactory {
         KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
         korrespondansepartResource.setAdresse(FintUtils.createAdresse(result));
         korrespondansepartResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
-        korrespondansepartResource.setKorrespondansepartNavn(result.getName().getValue());
+        korrespondansepartResource.setKorrespondansepartNavn(result.getName());
         // TODO korrespondansepartResource.setSystemId(createIdentifikator(result.getId().toString()));
 
 //        Optional.ofNullable(result.getFields().getFoedselsnummer())

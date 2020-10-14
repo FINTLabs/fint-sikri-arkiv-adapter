@@ -55,13 +55,13 @@ public class JournalpostFactory {
     public JournalpostResource toFintResource(RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
-        journalpost.setTittel(result.getTitleRestricted().getValue());
-        journalpost.setOffentligTittel(result.getTitle().getValue());
-        journalpost.setOpprettetDato(result.getCreatedDate().getValue().toGregorianCalendar().getTime());
-        journalpost.setJournalDato(result.getRegistryDate().getValue().toGregorianCalendar().getTime());
-        journalpost.setJournalAr(String.valueOf(result.getRegisterYear().getValue()));
-        journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber().getValue()));
-        journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber().getValue()));
+        journalpost.setTittel(result.getTitleRestricted());
+        journalpost.setOffentligTittel(result.getTitle());
+        journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
+        journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
+        journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
+        journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
+        journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
 
 
         // FIXME: 2019-05-08 check for empty
@@ -70,8 +70,8 @@ public class JournalpostFactory {
         // TODO: 2019-05-08 Check noark if this is correct
         journalpost.setForfatter(
                 Stream.<String>builder()
-                        .add(result.getCreatedByUserNameId().getValue().toString())
-                        .add(result.getOfficerName().getValue().getName().getValue())
+                        .add(result.getCreatedByUserNameId().toString())
+                        .add(result.getOfficerName().getName())
                         .build()
                         .distinct()
                         .collect(Collectors.toList()));
@@ -82,57 +82,53 @@ public class JournalpostFactory {
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
 
 
-        journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getOfficerNameId().getValue().toString()));
-        journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getCreatedByUserNameId().getValue().toString()));
-        journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getRegistryEntryTypeId().getValue()));
-        journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getRecordStatusId().getValue()));
+        journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getOfficerNameId().toString()));
+        journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getCreatedByUserNameId().toString()));
+        journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getRegistryEntryTypeId()));
+        journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getRecordStatusId()));
 
         return journalpost;
     }
 
     public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
-        RegistryEntryType registryEntry = objectFactory.createRegistryEntryType();
+        RegistryEntryType registryEntry = new RegistryEntryType();
 
-        registryEntry.setCaseId(objectFactory.createRemarkTypeCaseId(caseId));
-        registryEntry.setTitle(objectFactory.createRegistryEntryTypeTitle(journalpostResource.getTittel()));
-        registryEntry.setTitleRestricted(objectFactory.createRegistryEntryTypeTitleRestricted(journalpostResource.getOffentligTittel()));
+        registryEntry.setCaseId(caseId);
+        registryEntry.setTitle(journalpostResource.getTittel());
+        registryEntry.setTitleRestricted(journalpostResource.getOffentligTittel());
 
         applyParameter(
                 journalpostResource.getOpprettetDato(),
-                objectFactory::createRegistryEntryTypeCreatedDate,
                 registryEntry::setCreatedDate,
                 xmlUtils::xmlDate
         );
 
         applyParameter(
                 journalpostResource.getJournalDato(),
-                objectFactory::createRegistryEntryTypeRegistryDate,
                 registryEntry::setRegistryDate,
                 xmlUtils::xmlDate
         );
 
         applyParameterFromLink(
                 journalpostResource.getJournalposttype(),
-                objectFactory::createRegistryEntryTypeRegistryEntryTypeId,
                 registryEntry::setRegistryEntryTypeId
         );
 
         applyParameterFromLink(
                 journalpostResource.getJournalstatus(),
-                objectFactory::createRegistryEntryTypeRecordStatusId,
                 registryEntry::setRecordStatusId
         );
 
 
         applyParameterFromLink(
                 journalpostResource.getSaksbehandler(),
-                v -> objectFactory.createRegistryEntryTypeOfficerNameId(Integer.parseInt(v)),
+                Integer::parseInt,
                 registryEntry::setOfficerNameId
         );
 
         applyParameterFromLink(
                 journalpostResource.getOpprettetAv(),
-                v -> objectFactory.createRegistryEntryTypeCreatedByUserNameId(Integer.parseInt(v)),
+                Integer::parseInt,
                 registryEntry::setCreatedByUserNameId
         );
 
