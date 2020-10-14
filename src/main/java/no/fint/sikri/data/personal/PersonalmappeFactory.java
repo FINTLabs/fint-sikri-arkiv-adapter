@@ -20,14 +20,10 @@ import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBElement;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,17 +48,15 @@ public class PersonalmappeFactory {
     @Autowired
     private CaseDefaults caseDefaults;
 
-    private ObjectFactory objectFactory;
     private CaseProperties properties;
 
     @PostConstruct
     public void init() {
         properties = caseDefaults.getPersonalmappe();
-        objectFactory = new ObjectFactory();
     }
 
     public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
-        CaseType caseType = objectFactory.createCaseType();
+        CaseType caseType = new CaseType();
         caseDefaultsService.applyDefaultsToCaseType(personalmappeResource, caseType);
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
@@ -145,7 +139,7 @@ public class PersonalmappeFactory {
     public ClassificationType createClassificationType(PersonalmappeResource personalmappeResource, Integer caseId) throws UnableToGetIdFromLink {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
-        ClassificationType classificationType = objectFactory.createClassificationType();
+        ClassificationType classificationType = new ClassificationType();
         getIdFromLink(personalmappeResource.getPerson()).ifPresent(classificationType::setClassId);
         classificationType.setClassId(getIdFromLink(personalmappeResource.getPerson()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke person fra " + personalmappeResource.getTittel())));
         classificationType.setClassificationSystemId("FNRP");
@@ -157,13 +151,6 @@ public class PersonalmappeFactory {
         return classificationType;
     }
 
-
-    @SuppressWarnings("unchecked")
-    private JAXBElement<String> createValue(String attribute, String value) throws InvocationTargetException, IllegalAccessException {
-        Method method = BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(attribute));
-
-        return (JAXBElement<String>) method.invoke(objectFactory, value);
-    }
 
     private Personnavn getPersonnavnFromTitle(String title) {
         String name = StringUtils.substringAfter(title, "-").trim();
@@ -186,21 +173,27 @@ public class PersonalmappeFactory {
                 Organisasjonselement.class,
                 "systemid",
                 input.getAdministrativeUnit()
+
                         .getShortCodeThisLevel()
+
         ));
 
         personalmappe.addLeder(Link.with(
                 Personalressurs.class,
                 "brukernavn",
                 input.getOfficerName()
+
                         .getInitials()
+
         ));
 
         personalmappe.addPerson(Link.with(
                 Person.class,
                 "fodselsnummer",
                 input.getPrimaryClassification()
+
                         .getClassId()
+
         ));
         personalmappe.addSelf(
                 Link.with(

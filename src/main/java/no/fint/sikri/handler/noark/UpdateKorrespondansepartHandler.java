@@ -1,24 +1,5 @@
 package no.fint.sikri.handler.noark;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartService;
-import no.fint.sikri.handler.Handler;
-import no.fint.sikri.service.ValidationService;
-import no.fint.event.model.Event;
-import no.fint.event.model.Operation;
-import no.fint.event.model.Problem;
-import no.fint.event.model.ResponseStatus;
-import no.fint.model.administrasjon.arkiv.ArkivActions;
-import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.administrasjon.arkiv.KorrespondansepartResource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 // TODO: 27/01/2020 Create korrespondansepart
 /*
 @Service

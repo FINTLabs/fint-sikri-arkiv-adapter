@@ -91,7 +91,7 @@ public class JournalpostFactory {
     }
 
     public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
-        RegistryEntryType registryEntry = objectFactory.createRegistryEntryType();
+        RegistryEntryType registryEntry = new RegistryEntryType();
 
         registryEntry.setCaseId(caseId);
         registryEntry.setTitle(journalpostResource.getTittel());

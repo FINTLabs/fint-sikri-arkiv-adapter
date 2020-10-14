@@ -53,7 +53,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");
         if (externalSystems.isEmpty()) {
             log.info("Creating ExternalSystem FINT ...");
-            ExternalSystemType externalSystem = objectFactory.createExternalSystemType();
+            ExternalSystemType externalSystem = new ExternalSystemType();
             externalSystem.setExternalSystemName("FINT");
             externalSystem.setIsActive(true);
             final ExternalSystemType result = createDataObject(externalSystem);
@@ -66,7 +66,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, Collection<String> relatedObjects) {
-        FilteredQueryArguments filteredQueryArguments = objectFactory.createFilteredQueryArguments();
+        FilteredQueryArguments filteredQueryArguments = new FilteredQueryArguments();
 
         if (count > 0) {
             filteredQueryArguments.setTakeCount(count);
@@ -77,8 +77,8 @@ public class SikriObjectModelService extends SikriAbstractService {
             filteredQueryArguments.setFilterExpression(filter);
         }
 
-        ArrayOfstring related = objectFactory.createArrayOfstring();
-        relatedObjects.forEach(o -> related.getString().add(o));
+        ArrayOfstring related = new ArrayOfstring();
+        relatedObjects.forEach(related.getString()::add);
         filteredQueryArguments.setRelatedObjects(related);
 
         QueryResult queryResult = objectModelService.filteredQuery(ephorteIdentity, filteredQueryArguments);
@@ -100,7 +100,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     public <T extends DataObject> T createDataObject(T dataObject) {
-        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject insert = objectModelService.insert(ephorteIdentity, arrayOfDataObject);
         log.info("Created {} objects", insert.getDataObject().size());
@@ -111,7 +111,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     public List<DataObject> createDataObjects(DataObject... objects) {
-        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         for (DataObject object : objects) {
             arrayOfDataObject.getDataObject().add(object);
         }
@@ -121,7 +121,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     public DataObject updateDataObject(DataObject dataObject) {
-        ArrayOfDataObject arrayOfDataObject = objectFactory.createArrayOfDataObject();
+        ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject update = objectModelService.update(ephorteIdentity, arrayOfDataObject);
         log.info("Updated {} objects", update.getDataObject().size());
@@ -137,7 +137,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     private void setupEphorteIdentity() {
-        ephorteIdentity = objectFactory.createEphorteIdentity();
+        ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setDatabase(props.getDatabase());
         ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
         ephorteIdentity.setUserName(props.getUser());

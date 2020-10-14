@@ -17,7 +17,9 @@ public enum SikriUtils {
     }
 
     public static <T, U> void applyParameter(T value, Consumer<U> consumer, Function<T, U> mapper) {
-        if (value != null) consumer.accept((mapper.apply(value)));
+        if (value != null) {
+            consumer.accept(mapper.apply(value));
+        }
     }
 
     public static <T> void applyParameterFromLink(List<Link> links, Function<String, T> mapper, Consumer<T> consumer) {
@@ -39,8 +41,12 @@ public enum SikriUtils {
                 .ifPresent(consumer);
     }
 
-    public static <T> Optional<T> optionalValue(T value) {
-        return Optional.ofNullable(value);
+    public static <T> Optional<T> optionalValue(T object) {
+        return Optional.ofNullable(object);
+    }
+
+    public static <T, U> Function<U, Optional<T>> optionalValueFn(Function<U, T> function) {
+        return f -> optionalValue(function.apply(f));
     }
 
     public static boolean notNil(JAXBElement<?> e) {

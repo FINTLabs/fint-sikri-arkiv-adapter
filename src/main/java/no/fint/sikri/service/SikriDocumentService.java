@@ -29,7 +29,6 @@ public class SikriDocumentService extends SikriAbstractService {
     private AdapterProps props;
 
     private DocumentService documentService;
-    private ObjectFactory objectFactory;
     private EphorteIdentity ephorteIdentity;
 
     public SikriDocumentService() {
@@ -43,14 +42,13 @@ public class SikriDocumentService extends SikriAbstractService {
         DocumentService_Service ss = new DocumentService_Service(wsdlLocationUrl, SERVICE_NAME);
         documentService = ss.getBasicHttpsBindingMtomStreamedDocumentService(new AddressingFeature());
         super.setup(documentService, "/Services/Documents/V3/DocumentService.svc");
-        objectFactory = new ObjectFactory();
         setupEphorteIdentity();
     }
 
     public SikriDocument getDocumentContentByDocumentId(int documentId, String variant, int version) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
-        GetDocumentContentMessage parameters = objectFactory.createGetDocumentContentMessage();
+        GetDocumentContentMessage parameters = new GetDocumentContentMessage();
         final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentBase(parameters, documentId, ephorteIdentity, variant, version, contentType, fileName);
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
@@ -58,7 +56,7 @@ public class SikriDocumentService extends SikriAbstractService {
     public SikriDocument getDocumentContentByJournalPostId(int journalpostId) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
-        GetJournalpostDocumentContentMessage parameters = objectFactory.createGetJournalpostDocumentContentMessage();
+        GetJournalpostDocumentContentMessage parameters = new GetJournalpostDocumentContentMessage();
         final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentByJournalPostId(parameters, ephorteIdentity, journalpostId, contentType, fileName);
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
@@ -67,7 +65,7 @@ public class SikriDocumentService extends SikriAbstractService {
         Holder<String> identifier = new Holder<>();
         Holder<String> fileNameHolder = new Holder<>();
         fileNameHolder.value = fileName;
-        UploadMessage parameters = objectFactory.createUploadMessage();
+        UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
         documentService.uploadFile(parameters, contentType, ephorteIdentity, fileNameHolder, null, identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
@@ -80,9 +78,9 @@ public class SikriDocumentService extends SikriAbstractService {
         log.debug("Try fetch document {} ...", identifier);
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
         log.debug("Fetch result: {}", documentReturnMessage);
-        CheckinMessage checkinMessage = objectFactory.createCheckinMessage();
+        CheckinMessage checkinMessage = new CheckinMessage();
         checkinMessage.setContent(documentReturnMessage.getContent());
-        DocumentCriteria documentCriteria = objectFactory.createDocumentCriteria();
+        DocumentCriteria documentCriteria = new DocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(ephorteIdentity);
         documentCriteria.setVariant(variant);
@@ -119,7 +117,7 @@ public class SikriDocumentService extends SikriAbstractService {
     }
 
     private void setupEphorteIdentity() {
-        ephorteIdentity = objectFactory.createEphorteIdentity();
+        ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setDatabase(props.getDatabase());
         ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
         ephorteIdentity.setUserName(props.getUser());

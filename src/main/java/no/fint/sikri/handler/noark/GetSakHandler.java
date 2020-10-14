@@ -5,19 +5,15 @@ import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.administrasjon.arkiv.ArkivActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Set;
-
-import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 
 @Slf4j
 @Service

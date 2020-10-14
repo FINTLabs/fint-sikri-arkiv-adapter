@@ -62,7 +62,7 @@ public final class FintUtils {
     }
 
     private static Kontaktinformasjon getKontaktinformasjon(String email, String phoneNumber) {
-        if (email == null && phoneNumber == null) {
+        if (StringUtils.isBlank(email) && StringUtils.isBlank(phoneNumber)) {
             return null;
         }
 

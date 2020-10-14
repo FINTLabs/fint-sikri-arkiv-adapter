@@ -5,7 +5,6 @@ import no.fint.arkiv.AdditionalFieldService;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
@@ -26,9 +25,6 @@ import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 public class TilskuddFartoyFactory {
 
     @Autowired
-    private KodeverkRepository kodeverkRepository;
-
-    @Autowired
     private NoarkFactory noarkFactory;
 
     private ObjectFactory objectFactory;
@@ -42,7 +38,7 @@ public class TilskuddFartoyFactory {
     }
 
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = objectFactory.createExternalSystemLinkCaseType();
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
         externalSystemLinkCaseType.setCaseId(caseId);
         externalSystemLinkCaseType.setExternalKey(externalKey);
         externalSystemLinkCaseType.setExternalSystemCode(4);
@@ -61,10 +57,10 @@ public class TilskuddFartoyFactory {
 
         TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(input, new TilskuddFartoyResource());
 
-//        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().getValues().get(0));
-//        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().getValues().get(0));
-//        tilskuddFartoy.setSoknadsnummer(createIdentifikator(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getSoeknadsnummer().getValues().get(0)));
-//        tilskuddFartoy.setKulturminneId(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid().getValues().get(0));
+//        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
+//        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));
+//        tilskuddFartoy.setSoknadsnummer(createIdentifikator(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getSoeknadsnummer().().get(0)));
+//        tilskuddFartoy.setKulturminneId(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid().().get(0));
 
 //        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "soknadsnummer", tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
 //        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "mappeid", input.getFields().getMappeIdent()));

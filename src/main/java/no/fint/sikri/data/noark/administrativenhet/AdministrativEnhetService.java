@@ -1,7 +1,6 @@
 package no.fint.sikri.data.noark.administrativenhet;
 
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
-import no.fint.model.administrasjon.arkiv.AdministrativEnhet;
 import no.fint.model.resource.administrasjon.arkiv.AdministrativEnhetResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -22,8 +21,8 @@ public class AdministrativEnhetService {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.ADMINISTRATIVE_UNIT)
                 .stream()
                 .map(AdministrativeUnitType.class::cast)
-                .filter(administrativeUnitType -> StringUtils.isNotBlank(administrativeUnitType.getShortCodeThisLevel()))
-                .filter(administrativeUnitType -> administrativeUnitType.getClosedDate() == null)
+                .filter(administrativeUnitType -> !StringUtils.isBlank(administrativeUnitType.getShortCodeThisLevel()))
+                // TODO .filter(administrativeUnitType -> StringUtils.isBlank(administrativeUnitType.getClosedDate()))
                 .map(BegrepMapper::mapAdministrativEnhet);
     }
 }

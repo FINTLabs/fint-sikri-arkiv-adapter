@@ -63,7 +63,7 @@ public class DokumentbeskrivelseFactory {
     }
 
     public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
-        DocumentDescriptionType documentDescriptionType = objectFactory.createDocumentDescriptionType();
+        DocumentDescriptionType documentDescriptionType = new DocumentDescriptionType();
 
         applyParameter(
                 dokumentbeskrivelseResource.getTittel(),
@@ -115,7 +115,7 @@ public class DokumentbeskrivelseFactory {
     }
 
     public RegistryEntryDocumentType toRegistryEntryDocument(Integer registryEntryId, String linkType, Integer documentDescriptionId) {
-        RegistryEntryDocumentType result = objectFactory.createRegistryEntryDocumentType();
+        RegistryEntryDocumentType result = new RegistryEntryDocumentType();
         result.setRegistryEntryId(registryEntryId);
         result.setDocumentLinkTypeId(linkType);
         result.setDocumentDescriptionId(documentDescriptionId);

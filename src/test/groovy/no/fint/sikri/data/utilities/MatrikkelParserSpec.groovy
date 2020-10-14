@@ -1,9 +1,9 @@
 package no.fint.sikri.data.utilities
 
-import no.fint.sikri.data.exception.UnableToParseMatrikkel
 import no.fint.model.felles.kodeverk.Kommune
 import no.fint.model.resource.Link
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource
+import no.fint.sikri.data.exception.UnableToParseMatrikkel
 import spock.lang.Specification
 
 class MatrikkelParserSpec extends Specification {
