@@ -1,7 +1,6 @@
 package no.fint.sikri.data.noark.administrativenhet;
 
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
-import no.fint.model.administrasjon.arkiv.AdministrativEnhet;
 import no.fint.model.resource.administrasjon.arkiv.AdministrativEnhetResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriObjectModelService;

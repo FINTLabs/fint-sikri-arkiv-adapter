@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.adapter.event.EventResponseService;
 import no.fint.adapter.event.EventStatusService;
-import no.fint.sikri.SupportedActions;
-import no.fint.sikri.handler.Handler;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
 import no.fint.event.model.health.Health;
 import no.fint.event.model.health.HealthStatus;
 import no.fint.model.resource.FintLinks;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import no.fint.sikri.SupportedActions;
+import no.fint.sikri.handler.Handler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

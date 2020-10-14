@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public class DokumentobjektService {
     @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
 
-    private ObjectFactory objectFactory = new ObjectFactory();
+    private final ObjectFactory objectFactory = new ObjectFactory();
 
     public List<DokumentobjektResource> queryDokumentobjekt(String id) {
         return sikriObjectModelService.getDataObjects(
