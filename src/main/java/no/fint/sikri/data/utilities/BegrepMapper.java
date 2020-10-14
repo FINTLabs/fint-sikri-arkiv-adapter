@@ -11,9 +11,9 @@ public class BegrepMapper {
     public static SaksstatusResource mapSaksstatus(CaseStatusType caseStatusType) {
         SaksstatusResource saksstatusResource = new SaksstatusResource();
 
-        saksstatusResource.setSystemId(FintUtils.createIdentifikator(caseStatusType.getId().getValue()));
-        saksstatusResource.setKode(caseStatusType.getId().getValue());
-        saksstatusResource.setNavn(caseStatusType.getDescription().getValue());
+        saksstatusResource.setSystemId(FintUtils.createIdentifikator(caseStatusType.getId()));
+        saksstatusResource.setKode(caseStatusType.getId());
+        saksstatusResource.setNavn(caseStatusType.getDescription());
 
         return saksstatusResource;
     }
@@ -21,9 +21,9 @@ public class BegrepMapper {
     public static DokumentStatusResource mapDokumentStatus(DocumentStatusType documentStatusType) {
         DokumentStatusResource dokumentStatusResource = new DokumentStatusResource();
 
-        dokumentStatusResource.setSystemId(FintUtils.createIdentifikator(documentStatusType.getId().getValue()));
-        dokumentStatusResource.setKode(documentStatusType.getId().getValue());
-        dokumentStatusResource.setNavn(documentStatusType.getDescription().getValue());
+        dokumentStatusResource.setSystemId(FintUtils.createIdentifikator(documentStatusType.getId()));
+        dokumentStatusResource.setKode(documentStatusType.getId());
+        dokumentStatusResource.setNavn(documentStatusType.getDescription());
 
         return dokumentStatusResource;
     }
@@ -31,9 +31,9 @@ public class BegrepMapper {
     public static AdministrativEnhetResource mapAdministrativEnhet(AdministrativeUnitType administrativeUnitType) {
         AdministrativEnhetResource administrativEnhetResource = new AdministrativEnhetResource();
 
-        administrativEnhetResource.setNavn(administrativeUnitType.getDescription().getValue());
-        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(administrativeUnitType.getShortCodeThisLevel().getValue()));
-        administrativEnhetResource.addOrganisasjonselement(Link.with(Organisasjonselement.class, "organisasjonsId", administrativeUnitType.getShortCodeThisLevel().getValue()));
+        administrativEnhetResource.setNavn(administrativeUnitType.getDescription());
+        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(administrativeUnitType.getShortCodeThisLevel()));
+        administrativEnhetResource.addOrganisasjonselement(Link.with(Organisasjonselement.class, "organisasjonsId", administrativeUnitType.getShortCodeThisLevel()));
 
         return administrativEnhetResource;
     }
@@ -41,9 +41,9 @@ public class BegrepMapper {
     public static DokumentTypeResource mapDokumentType(DocumentCategoryType documentCategoryType) {
         DokumentTypeResource dokumentTypeResource = new DokumentTypeResource();
 
-        dokumentTypeResource.setSystemId(FintUtils.createIdentifikator(documentCategoryType.getId().getValue()));
-        dokumentTypeResource.setKode(documentCategoryType.getId().getValue());
-        dokumentTypeResource.setNavn(documentCategoryType.getDescription().getValue());
+        dokumentTypeResource.setSystemId(FintUtils.createIdentifikator(documentCategoryType.getId()));
+        dokumentTypeResource.setKode(documentCategoryType.getId());
+        dokumentTypeResource.setNavn(documentCategoryType.getDescription());
 
         return dokumentTypeResource;
     }
@@ -52,9 +52,9 @@ public class BegrepMapper {
 
         JournalpostTypeResource journalpostTypeResource = new JournalpostTypeResource();
 
-        journalpostTypeResource.setSystemId(FintUtils.createIdentifikator(registryEntryTypeType.getId().getValue()));
-        journalpostTypeResource.setKode(registryEntryTypeType.getId().getValue());
-        journalpostTypeResource.setNavn(registryEntryTypeType.getDescription().getValue());
+        journalpostTypeResource.setSystemId(FintUtils.createIdentifikator(registryEntryTypeType.getId()));
+        journalpostTypeResource.setKode(registryEntryTypeType.getId());
+        journalpostTypeResource.setNavn(registryEntryTypeType.getDescription());
 
         return journalpostTypeResource;
 
@@ -63,9 +63,9 @@ public class BegrepMapper {
     public static JournalStatusResource mapJournalStatus(RecordsStatusType recordsStatusType) {
         JournalStatusResource journalStatusResource = new JournalStatusResource();
 
-        journalStatusResource.setSystemId(FintUtils.createIdentifikator(recordsStatusType.getId().getValue()));
-        journalStatusResource.setKode(recordsStatusType.getId().getValue());
-        journalStatusResource.setNavn(recordsStatusType.getDescription().getValue());
+        journalStatusResource.setSystemId(FintUtils.createIdentifikator(recordsStatusType.getId()));
+        journalStatusResource.setKode(recordsStatusType.getId());
+        journalStatusResource.setNavn(recordsStatusType.getDescription());
 
         return journalStatusResource;
     }
@@ -73,9 +73,9 @@ public class BegrepMapper {
     public static TilknyttetRegistreringSomResource mapTilknyttetTegistreringSom(DocumentLinkTypeType documentLinkTypeType) {
         TilknyttetRegistreringSomResource tilknyttetRegistreringSomResource = new TilknyttetRegistreringSomResource();
 
-        tilknyttetRegistreringSomResource.setSystemId(FintUtils.createIdentifikator(documentLinkTypeType.getId().getValue()));
-        tilknyttetRegistreringSomResource.setKode(documentLinkTypeType.getId().getValue());
-        tilknyttetRegistreringSomResource.setNavn(documentLinkTypeType.getDescription().getValue());
+        tilknyttetRegistreringSomResource.setSystemId(FintUtils.createIdentifikator(documentLinkTypeType.getId()));
+        tilknyttetRegistreringSomResource.setKode(documentLinkTypeType.getId());
+        tilknyttetRegistreringSomResource.setNavn(documentLinkTypeType.getDescription());
 
         return tilknyttetRegistreringSomResource;
     }
@@ -83,9 +83,9 @@ public class BegrepMapper {
     public static PartRolleResource mapPartRolle(CasePartyRoleType casePartyRoleType) {
         PartRolleResource partRolleResource = new PartRolleResource();
 
-        partRolleResource.setSystemId(FintUtils.createIdentifikator(casePartyRoleType.getId().getValue()));
-        partRolleResource.setKode(casePartyRoleType.getId().getValue());
-        partRolleResource.setNavn(casePartyRoleType.getDescription().getValue());
+        partRolleResource.setSystemId(FintUtils.createIdentifikator(casePartyRoleType.getId()));
+        partRolleResource.setKode(casePartyRoleType.getId());
+        partRolleResource.setNavn(casePartyRoleType.getDescription());
 
         return partRolleResource;
     }
@@ -93,9 +93,9 @@ public class BegrepMapper {
     public static MerknadstypeResource mapMerkandstype(InformationTypeType informationTypeType) {
         MerknadstypeResource merknadstypeResource = new MerknadstypeResource();
 
-        merknadstypeResource.setSystemId(FintUtils.createIdentifikator(informationTypeType.getId().getValue()));
-        merknadstypeResource.setKode(informationTypeType.getId().getValue());
-        merknadstypeResource.setNavn(informationTypeType.getDescription().getValue());
+        merknadstypeResource.setSystemId(FintUtils.createIdentifikator(informationTypeType.getId()));
+        merknadstypeResource.setKode(informationTypeType.getId());
+        merknadstypeResource.setNavn(informationTypeType.getDescription());
 
         return merknadstypeResource;
     }
@@ -103,9 +103,9 @@ public class BegrepMapper {
     public static TilgangsrestriksjonResource mapTilgangsrestriksjon(AccessCodeType accessCodeType) {
         TilgangsrestriksjonResource tilgangsrestriksjonResource = new TilgangsrestriksjonResource();
 
-        tilgangsrestriksjonResource.setSystemId(FintUtils.createIdentifikator(accessCodeType.getId().getValue()));
-        tilgangsrestriksjonResource.setKode(accessCodeType.getId().getValue());
-        tilgangsrestriksjonResource.setNavn(accessCodeType.getDescription().getValue());
+        tilgangsrestriksjonResource.setSystemId(FintUtils.createIdentifikator(accessCodeType.getId()));
+        tilgangsrestriksjonResource.setKode(accessCodeType.getId());
+        tilgangsrestriksjonResource.setNavn(accessCodeType.getDescription());
 
         return tilgangsrestriksjonResource;
     }
@@ -113,9 +113,9 @@ public class BegrepMapper {
     public static VariantformatResource mapVariantFormat(VariantFormatType variantFormatType) {
         VariantformatResource variantformatResource = new VariantformatResource();
 
-        variantformatResource.setSystemId(FintUtils.createIdentifikator(variantFormatType.getId().getValue()));
-        variantformatResource.setKode(variantFormatType.getId().getValue());
-        variantformatResource.setNavn(variantFormatType.getDescription().getValue());
+        variantformatResource.setSystemId(FintUtils.createIdentifikator(variantFormatType.getId()));
+        variantformatResource.setKode(variantFormatType.getId());
+        variantformatResource.setNavn(variantFormatType.getDescription());
 
         return variantformatResource;
     }

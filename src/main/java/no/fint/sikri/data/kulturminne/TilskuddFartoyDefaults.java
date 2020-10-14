@@ -138,7 +138,7 @@ public class TilskuddFartoyDefaults {
 
     public void applyDefaultsToCaseType(TilskuddFartoyResource tilskuddFartoy, CaseType caseType) {
 
-        caseType.setIsPhysical(objectFactory.createBoolean(false));
+        caseType.setIsPhysical(false);
 
     }
 }

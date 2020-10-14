@@ -47,11 +47,11 @@ public class DokumentobjektService {
     }
 
     public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument) {
-        DocumentObjectType documentObject = objectFactory.createDocumentObjectType();
+        DocumentObjectType documentObject = new DocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
-        documentObject.setVariantFormatId(objectFactory.createDocumentObjectTypeVariantFormatId(checkinDocument.getVariant()));
-        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId(checkinDocument.getContentType()));
+        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        documentObject.setFileformatId(checkinDocument.getContentType());
         return documentObject;
     }
 }

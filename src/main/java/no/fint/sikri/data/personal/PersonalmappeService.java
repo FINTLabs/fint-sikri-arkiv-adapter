@@ -107,7 +107,7 @@ public class PersonalmappeService {
 
     private PersonalmappeResource updatePersonalmappe(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, ClassificationNotFound, ClassificationIsNotPartOfPersonalFile, GetPersonalmappeNotFoundException, OfficerNotFound, AdministrativeUnitNotFound {
         String nin = getIdFromLink(personalmappeResource.getPerson()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke person fra " + personalmappeResource.getTittel()));
-        if (!nin.equals(caseType.getPrimaryClassification().getValue().getClassId().getValue())) {
+        if (!nin.equals(caseType.getPrimaryClassification().getClassId())) {
             throw new ClassificationIsNotPartOfPersonalFile(nin + " classId is not part of this personal file");
         }
         ClassificationType classificationType = getClassificationBySystemId(nin).orElseThrow(() -> new ClassificationNotFound(caseType.getId().toString()));
@@ -129,11 +129,11 @@ public class PersonalmappeService {
 
         try {
 
-            return !caseType.getOfficerNameId().getValue()
+            return !caseType.getOfficerNameId()
                     .equals(personalmappeFactory.getOfficerId(personalmappeResource))
-                    || !caseType.getAdministrativeUnitId().getValue()
+                    || !caseType.getAdministrativeUnitId()
                     .equals(personalmappeFactory.getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource))
-                    || !caseType.getTitle().getValue().contains(fullName);
+                    || !caseType.getTitle().contains(fullName);
 
         } catch (OfficerNotFound | AdministrativeUnitNotFound e) {
             return true;

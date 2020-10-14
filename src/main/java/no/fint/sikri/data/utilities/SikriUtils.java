@@ -14,13 +14,13 @@ import java.util.function.Supplier;
 public enum SikriUtils {
     ;
 
-    public static <T> void applyParameter(T value, Function<T, JAXBElement<T>> wrapper, Consumer<JAXBElement<T>> consumer) {
-        applyParameter(value, wrapper, consumer, Function.identity());
+    public static <T> void applyParameter(T value, Consumer<T> consumer) {
+        applyParameter(value, consumer, Function.identity());
     }
 
-    public static <T, U> void applyParameter(T value, Function<U, JAXBElement<U>> wrapper, Consumer<JAXBElement<U>> consumer, Function<T, U> mapper) {
+    public static <T, U> void applyParameter(T value, Consumer<U> consumer, Function<T, U> mapper) {
         if (value != null) {
-            consumer.accept(wrapper.apply(mapper.apply(value)));
+            consumer.accept(mapper.apply(value));
         }
     }
 
@@ -34,14 +34,20 @@ public enum SikriUtils {
                 .ifPresent(consumer);
     }
 
-    public static <T> Optional<T> optionalValue(JAXBElement<T> element) {
-        if (!element.isNil()) {
-            return Optional.of(element.getValue());
-        }
-        return Optional.empty();
+    public static void applyParameterFromLink(List<Link> links, Consumer<String> consumer) {
+        links.stream()
+                .map(Link::getHref)
+                .filter(StringUtils::isNotBlank)
+                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .findFirst()
+                .ifPresent(consumer);
     }
 
-    public static <T, U> Function<U, Optional<T>> optionalValueFn(Function<U, JAXBElement<T>> function) {
+    public static <T> Optional<T> optionalValue(T object) {
+        return Optional.ofNullable(object);
+    }
+
+    public static <T, U> Function<U, Optional<T>> optionalValueFn(Function<U, T> function) {
         return f -> optionalValue(function.apply(f));
     }
 

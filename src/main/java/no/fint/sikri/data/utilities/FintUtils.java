@@ -36,9 +36,9 @@ public final class FintUtils {
         AdresseResource adresseResource = new AdresseResource();
 
 
-        adresseResource.setAdresselinje(Collections.singletonList(caseParty.getPostalAddress().getValue()));
-        adresseResource.setPostnummer(caseParty.getPostalCode().getValue());
-        adresseResource.setPoststed(caseParty.getCity().getValue());
+        adresseResource.setAdresselinje(Collections.singletonList(caseParty.getPostalAddress()));
+        adresseResource.setPostnummer(caseParty.getPostalCode());
+        adresseResource.setPoststed(caseParty.getCity());
 
         return adresseResource;
     }
@@ -47,9 +47,9 @@ public final class FintUtils {
         AdresseResource adresseResource = new AdresseResource();
 
 
-        adresseResource.setAdresselinje(Collections.singletonList(senderRecipient.getPostalAddress().getValue()));
-        adresseResource.setPostnummer(senderRecipient.getPostalCode().getValue());
-        adresseResource.setPoststed(senderRecipient.getCity().getValue());
+        adresseResource.setAdresselinje(Collections.singletonList(senderRecipient.getPostalAddress()));
+        adresseResource.setPostnummer(senderRecipient.getPostalCode());
+        adresseResource.setPoststed(senderRecipient.getCity());
 
         return adresseResource;
     }
@@ -62,8 +62,8 @@ public final class FintUtils {
         return getKontaktinformasjon(result.getEmail(), result.getTelephone());
     }
 
-    private static Kontaktinformasjon getKontaktinformasjon(JAXBElement<String> email, JAXBElement<String> phoneNumber) {
-        if (email.isNil() && phoneNumber.isNil()) {
+    private static Kontaktinformasjon getKontaktinformasjon(String email, String phoneNumber) {
+        if (StringUtils.isBlank(email) && StringUtils.isBlank(phoneNumber)) {
             return null;
         }
 

@@ -63,36 +63,32 @@ public class DokumentbeskrivelseFactory {
     }
 
     public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
-        DocumentDescriptionType documentDescriptionType = objectFactory.createDocumentDescriptionType();
+        DocumentDescriptionType documentDescriptionType = new DocumentDescriptionType();
 
         applyParameter(
                 dokumentbeskrivelseResource.getTittel(),
-                objectFactory::createDocumentDescriptionTypeDocumentTitle,
                 documentDescriptionType::setDocumentTitle
         );
 
         applyParameter(
                 dokumentbeskrivelseResource.getOpprettetDato(),
-                objectFactory::createDocumentDescriptionTypeCreatedDate,
                 documentDescriptionType::setCreatedDate,
                 xmlUtils::xmlDate
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getOpprettetAv(),
-                v -> objectFactory.createDocumentDescriptionTypeCreatedByUserNameId(Integer.valueOf(v)),
+                Integer::valueOf,
                 documentDescriptionType::setCreatedByUserNameId
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getDokumentstatus(),
-                objectFactory::createDocumentDescriptionTypeDocumentStatusId,
                 documentDescriptionType::setDocumentStatusId
         );
 
         applyParameterFromLink(
                 dokumentbeskrivelseResource.getDokumentType(),
-                objectFactory::createDocumentDescriptionTypeDocumentCategoryId,
                 documentDescriptionType::setDocumentCategoryId
         );
 
@@ -119,9 +115,9 @@ public class DokumentbeskrivelseFactory {
     }
 
     public RegistryEntryDocumentType toRegistryEntryDocument(Integer registryEntryId, String linkType, Integer documentDescriptionId) {
-        RegistryEntryDocumentType result = objectFactory.createRegistryEntryDocumentType();
+        RegistryEntryDocumentType result = new RegistryEntryDocumentType();
         result.setRegistryEntryId(registryEntryId);
-        result.setDocumentLinkTypeId(objectFactory.createRegistryEntryDocumentTypeDocumentLinkTypeId(linkType));
+        result.setDocumentLinkTypeId(linkType);
         result.setDocumentDescriptionId(documentDescriptionId);
         return result;
     }
