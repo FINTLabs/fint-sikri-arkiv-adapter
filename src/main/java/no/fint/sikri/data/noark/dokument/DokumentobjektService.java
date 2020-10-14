@@ -2,7 +2,6 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
 import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -26,8 +25,6 @@ public class DokumentobjektService {
 
     @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
-
-    private final ObjectFactory objectFactory = new ObjectFactory();
 
     public List<DokumentobjektResource> queryDokumentobjekt(String id) {
         return sikriObjectModelService.getDataObjects(
