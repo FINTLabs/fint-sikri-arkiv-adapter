@@ -1,6 +1,7 @@
 package no.fint.sikri.data.utilities;
 
 import no.fint.arkiv.sikri.oms.*;
+import no.fint.model.administrasjon.arkiv.Klassifikasjonssystem;
 import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.administrasjon.arkiv.*;
@@ -31,8 +32,9 @@ public class BegrepMapper {
     public static AdministrativEnhetResource mapAdministrativEnhet(AdministrativeUnitType administrativeUnitType) {
         AdministrativEnhetResource administrativEnhetResource = new AdministrativEnhetResource();
 
+        //administrativEnhetResource.setKode(administrativeUnitType.getShortCode());
         administrativEnhetResource.setNavn(administrativeUnitType.getDescription());
-        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(administrativeUnitType.getShortCodeThisLevel()));
+        administrativEnhetResource.setSystemId(FintUtils.createIdentifikator(String.valueOf(administrativeUnitType.getId())));
         administrativEnhetResource.addOrganisasjonselement(Link.with(Organisasjonselement.class, "organisasjonsId", administrativeUnitType.getShortCodeThisLevel()));
 
         return administrativEnhetResource;
@@ -118,5 +120,13 @@ public class BegrepMapper {
         variantformatResource.setNavn(variantFormatType.getDescription());
 
         return variantformatResource;
+    }
+
+    public static ArkivdelResource mapArkivdel(SeriesType seriesType) {
+        ArkivdelResource resource = new ArkivdelResource();
+        resource.setSystemId(FintUtils.createIdentifikator(seriesType.getId()));
+        resource.setTittel(seriesType.getDescription());
+        resource.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", seriesType.getPrimaryClassificationSystemId()));
+        return resource;
     }
 }

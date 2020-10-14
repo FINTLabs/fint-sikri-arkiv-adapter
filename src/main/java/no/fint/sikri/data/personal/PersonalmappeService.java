@@ -1,12 +1,12 @@
 package no.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
-import no.fint.sikri.CaseDefaults;
-import no.fint.sikri.data.CaseProperties;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -39,7 +39,7 @@ public class PersonalmappeService {
 
     @PostConstruct
     public void init() {
-        properties = caseDefaults.getCasetype().get("personalmappe");
+        properties = caseDefaults.getPersonalmappe();
     }
 
 
@@ -49,7 +49,7 @@ public class PersonalmappeService {
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
+                        + " AND CaseStatusId<>" + "A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -62,7 +62,7 @@ public class PersonalmappeService {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
                 "Id=" + systemId
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
+                        + " AND CaseStatusId<>" + "A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -164,7 +164,7 @@ public class PersonalmappeService {
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + properties.getSaksStatusAvsluttetId(),
+                        + " AND CaseStatusId<>" + "A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
