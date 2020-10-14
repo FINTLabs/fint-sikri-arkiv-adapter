@@ -1,10 +1,10 @@
 package no.fint.sikri.data.utilities;
 
 import com.google.common.base.Strings;
-import no.fint.sikri.data.exception.UnableToParseMatrikkel;
 import no.fint.model.felles.kodeverk.Kommune;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource;
+import no.fint.sikri.data.exception.UnableToParseMatrikkel;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;

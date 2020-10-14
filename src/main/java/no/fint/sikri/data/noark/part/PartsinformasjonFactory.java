@@ -17,8 +17,8 @@ public class PartsinformasjonFactory {
         }
 
         PartsinformasjonResource resource = new PartsinformasjonResource();
-        resource.addPart(Link.with(PartResource.class, "partid", result.getId().getValue().toString()));
-        resource.addPartRolle(Link.with(PartRolleResource.class, "systemid", result.getCasePartyRoleId().getValue()));
+        resource.addPart(Link.with(PartResource.class, "partid", result.getId().toString()));
+        resource.addPartRolle(Link.with(PartRolleResource.class, "systemid", result.getCasePartyRoleId()));
         return resource;
     }
     /*

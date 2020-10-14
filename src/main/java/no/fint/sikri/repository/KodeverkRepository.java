@@ -2,6 +2,7 @@ package no.fint.sikri.repository;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.model.resource.administrasjon.arkiv.*;
 import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
 import no.fint.sikri.data.noark.codes.dokumentstatus.DokumentstatusService;
 import no.fint.sikri.data.noark.codes.dokumenttype.DokumenttypeService;
@@ -15,7 +16,6 @@ import no.fint.sikri.data.noark.codes.skjermingshjemmel.SkjermingshjemmelService
 import no.fint.sikri.data.noark.codes.tilgangsrestriksjon.TilgangsrestriksjonService;
 import no.fint.sikri.data.noark.codes.tilknyttetregistreringsom.TilknyttetRegistreringSomService;
 import no.fint.sikri.data.noark.codes.variantformat.VariantformatService;
-import no.fint.model.resource.administrasjon.arkiv.*;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.klasse.KlassifikasjonssystemService;
 import org.springframework.beans.factory.annotation.Autowired;

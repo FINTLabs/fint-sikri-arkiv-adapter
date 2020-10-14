@@ -3,12 +3,11 @@ package no.fint.sikri.data.kulturminne;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.sikri.CaseDefaults;
-import no.fint.sikri.data.CaseProperties;
 import no.fint.model.administrasjon.arkiv.*;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
-import org.apache.commons.lang3.StringUtils;
+import no.fint.sikri.CaseDefaults;
+import no.fint.sikri.data.CaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -138,7 +137,7 @@ public class TilskuddFartoyDefaults {
 
     public void applyDefaultsToCaseType(TilskuddFartoyResource tilskuddFartoy, CaseType caseType) {
 
-        caseType.setIsPhysical(objectFactory.createBoolean(false));
+        caseType.setIsPhysical(false);
 
     }
 }

@@ -3,24 +3,18 @@ package no.fint.sikri.data.kulturminne;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
-import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
-import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.repository.KodeverkRepository;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.JAXBElement;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -33,16 +27,7 @@ import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 public class TilskuddFartoyFactory {
 
     @Autowired
-    private KodeverkRepository kodeverkRepository;
-
-    @Autowired
     private NoarkFactory noarkFactory;
-
-    @Autowired
-    private KorrespondansepartFactory korrespondansepartFactory;
-
-    @Autowired
-    private JournalpostFactory journalpostFactory;
 
     @Autowired
     private TilskuddFartoyDefaults tilskuddFartoyDefaults;
@@ -59,40 +44,32 @@ public class TilskuddFartoyFactory {
     @Value("${fint.sikri.custom-attributes.casetype.tilskudd-fartoy.kulturminneid:customAttribute4}")
     String kulturminneIdAttribute;
 
-    private ObjectFactory objectFactory;
-
-    public TilskuddFartoyFactory() {
-        objectFactory = new ObjectFactory();
-    }
-
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        CaseType caseType = objectFactory.createCaseType();
+        CaseType caseType = new CaseType();
         tilskuddFartoyDefaults.applyDefaultsToCaseType(tilskuddFartoy, caseType);
 
-        caseType.setTitle(objectFactory.createCaseTypeTitle(tilskuddFartoy.getTittel()));
+        caseType.setTitle(tilskuddFartoy.getTittel());
 
-        caseType.setFileTypeId(objectFactory.createCaseTypeFileTypeId("TS"));
+        caseType.setFileTypeId("TS");
 
-        PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, createValue(kallesignalAttribute, tilskuddFartoy.getKallesignal()));
-        PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, createValue(fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn()));
-        PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, createValue(soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
-        PropertyUtils.setSimpleProperty(caseType, kulturminneIdAttribute, createValue(kulturminneIdAttribute, tilskuddFartoy.getKulturminneId()));
+        PropertyUtils.setSimpleProperty(caseType, kallesignalAttribute, tilskuddFartoy.getKallesignal());
+        PropertyUtils.setSimpleProperty(caseType, fartoyNavnAttribute, tilskuddFartoy.getFartoyNavn());
+        PropertyUtils.setSimpleProperty(caseType, soknadsnummerAttribute, tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi());
+        PropertyUtils.setSimpleProperty(caseType, kulturminneIdAttribute, tilskuddFartoy.getKulturminneId());
 
         applyParameterFromLink(
                 tilskuddFartoy.getAdministrativEnhet(),
-                s -> objectFactory.createCaseTypeAdministrativeUnitId(Integer.valueOf(s)),
+                Integer::valueOf,
                 caseType::setAdministrativeUnitId
         );
 
         applyParameterFromLink(
                 tilskuddFartoy.getArkivdel(),
-                objectFactory::createCaseTypeRegistryManagementUnitId,
                 caseType::setRegistryManagementUnitId
         );
 
         applyParameterFromLink(
                 tilskuddFartoy.getSaksstatus(),
-                objectFactory::createCaseTypeCaseStatusId,
                 caseType::setCaseStatusId
         );
 
@@ -100,19 +77,12 @@ public class TilskuddFartoyFactory {
     }
 
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = objectFactory.createExternalSystemLinkCaseType();
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
         externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(objectFactory.createExternalSystemLinkTypeExternalKey(externalKey));
+        externalSystemLinkCaseType.setExternalKey(externalKey);
         externalSystemLinkCaseType.setExternalSystemCode(4);
 
         return externalSystemLinkCaseType;
-    }
-
-    @SuppressWarnings("unchecked")
-    private JAXBElement<String> createValue(String attribute, String value) throws InvocationTargetException, IllegalAccessException {
-        Method method = BeanUtils.findMethodWithMinimalParameters(objectFactory.getClass(), "createCaseType" + StringUtils.capitalize(attribute));
-
-        return (JAXBElement<String>) method.invoke(objectFactory, value);
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {
@@ -130,10 +100,10 @@ public class TilskuddFartoyFactory {
         applyParameter(input, kulturminneIdAttribute, tilskuddFartoy::setKulturminneId);
         applyParameter(input, soknadsnummerAttribute, tilskuddFartoy::setSoknadsnummer, FintUtils::createIdentifikator);
 
-//        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().getValues().get(0));
-//        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().getValues().get(0));
-//        tilskuddFartoy.setSoknadsnummer(createIdentifikator(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getSoeknadsnummer().getValues().get(0)));
-//        tilskuddFartoy.setKulturminneId(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid().getValues().get(0));
+//        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
+//        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));
+//        tilskuddFartoy.setSoknadsnummer(createIdentifikator(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getSoeknadsnummer().().get(0)));
+//        tilskuddFartoy.setKulturminneId(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid().().get(0));
 
 //        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "soknadsnummer", tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
 //        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "mappeid", input.getFields().getMappeIdent()));
@@ -153,7 +123,6 @@ public class TilskuddFartoyFactory {
                     .filter(JAXBElement.class::isInstance)
                     .map(JAXBElement.class::cast)
                     .filter(SikriUtils::notNil)
-                    .map(JAXBElement::getValue)
                     .map(String::valueOf)
                     .filter(StringUtils::isNotBlank)
                     .map(mapper)

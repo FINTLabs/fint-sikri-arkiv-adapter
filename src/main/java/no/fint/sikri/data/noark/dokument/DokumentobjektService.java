@@ -2,7 +2,6 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
 import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +25,6 @@ public class DokumentobjektService {
 
     @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
-
-    private ObjectFactory objectFactory = new ObjectFactory();
 
     public List<DokumentobjektResource> queryDokumentobjekt(String id) {
         return sikriObjectModelService.getDataObjects(
@@ -47,11 +43,11 @@ public class DokumentobjektService {
     }
 
     public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument) {
-        DocumentObjectType documentObject = objectFactory.createDocumentObjectType();
+        DocumentObjectType documentObject = new DocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
-        documentObject.setVariantFormatId(objectFactory.createDocumentObjectTypeVariantFormatId(checkinDocument.getVariant()));
-        documentObject.setFileformatId(objectFactory.createDocumentObjectTypeFileformatId(checkinDocument.getContentType()));
+        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        documentObject.setFileformatId(checkinDocument.getContentType());
         return documentObject;
     }
 }

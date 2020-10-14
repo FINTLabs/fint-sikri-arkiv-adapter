@@ -23,19 +23,19 @@ public class KlasseFactory {
     public KlasseResource toFintResource(ClassType input) {
         KlasseResource result = new KlasseResource();
 
-        result.setSystemId(FintUtils.createIdentifikator(input.getId().getValue()));
-        result.setKlasseId(FintUtils.createIdentifikator(input.getId().getValue()));
+        result.setSystemId(FintUtils.createIdentifikator(input.getId()));
+        result.setKlasseId(FintUtils.createIdentifikator(input.getId()));
         //result.setOpprettetAv(input.getFields().getOpprettetAv());
         optionalValue(input.getCreatedDate())
                 .map(XMLGregorianCalendar::toGregorianCalendar)
                 .map(GregorianCalendar::getTime)
                 .ifPresent(result::setOpprettetDato);
-        result.setTittel(input.getDescription().getValue());
-        result.setBeskrivelse(input.getDescription().getValue());
+        result.setTittel(input.getDescription());
+        result.setBeskrivelse(input.getDescription());
 
-        result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId().getValue()));
+        result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId()));
 
-        klasseService.getUnderKlasser(input.getId().getValue())
+        klasseService.getUnderKlasser(input.getId())
                 .forEach(c -> result.addUnderklasse(Link.with(Klasse.class, "systemid", c.getSystemId().getIdentifikatorverdi())));
 
         return result;

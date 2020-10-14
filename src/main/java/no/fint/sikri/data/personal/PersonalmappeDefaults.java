@@ -45,7 +45,7 @@ public class PersonalmappeDefaults {
 
     public void applyDefaultsToCaseType(PersonalmappeResource personalmappeResource, CaseType caseType) {
 
-        caseType.setIsPhysical(objectFactory.createCaseTypeIsPhysical(false));
+        caseType.setIsPhysical(false);
 
     }
 }

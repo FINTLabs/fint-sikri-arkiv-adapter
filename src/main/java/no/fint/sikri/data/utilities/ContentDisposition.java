@@ -17,6 +17,10 @@ package no.fint.sikri.data.utilities;
 
 //package org.springframework.http;
 
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
+
+import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -24,11 +28,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
-
-import javax.annotation.Nullable;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -557,7 +556,7 @@ public final class ContentDisposition {
 
     private static class BuilderImpl implements Builder {
 
-        private String type;
+        private final String type;
 
         @Nullable
         private String name;

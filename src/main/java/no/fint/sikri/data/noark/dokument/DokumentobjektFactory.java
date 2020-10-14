@@ -47,8 +47,8 @@ public class DokumentobjektFactory {
                 String.format("%d_%d_%s",
                         result.getDocumentDescriptionId(),
                         result.getVersionNumber(),
-                        result.getVariantFormatId().getValue()
-                )));
+                        result.getVariantFormatId())
+                ));
 
         optionalValue(result.getVariantFormatId())
                 .map(Link.apply(Variantformat.class, "systemid"))
