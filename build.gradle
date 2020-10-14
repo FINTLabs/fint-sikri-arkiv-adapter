@@ -98,8 +98,8 @@ wsdl2java {
     wsdlDir = file("$projectDir/src/main/resources/wsdl")
     locale = Locale.ENGLISH
     wsdlsToGenerate = [
-            ['-xjc-XtoString', '-client', '-b', "$projectDir/src/main/resources/wsdl/bindings.xjb", '-b', "$projectDir/src/main/resources/wsdl/bindings-oms.xml", '-p', 'no.fint.arkiv.sikri.oms', '-autoNameResolution', "$projectDir/src/main/resources/wsdl/ObjectModelServiceV3En.wsdl"],
-            ['-xjc-XtoString', '-client', '-exsh', 'true', '-b', "$projectDir/src/main/resources/wsdl/bindings.xjb", '-b', "$projectDir/src/main/resources/wsdl/bindings-ds.xml", '-p', 'no.fint.arkiv.sikri.ds', "$projectDir/src/main/resources/wsdl/DocumentServiceV3.wsdl"],
+            ['-xjc-XtoString', '-client', '-b', "$projectDir/src/main/resources/wsdl/bindings-oms.xml", '-p', 'no.fint.arkiv.sikri.oms', '-autoNameResolution', "$projectDir/src/main/resources/wsdl/ObjectModelServiceV3En.wsdl"],
+            ['-xjc-XtoString', '-client', '-exsh', 'true', '-b', "$projectDir/src/main/resources/wsdl/bindings-ds.xml", '-p', 'no.fint.arkiv.sikri.ds', "$projectDir/src/main/resources/wsdl/DocumentServiceV3.wsdl"],
     ]
     //stabilizeAndMergeObjectFactory = true
 }

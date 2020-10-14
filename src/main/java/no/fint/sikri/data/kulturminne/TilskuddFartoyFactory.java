@@ -1,24 +1,12 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.AdditionalFieldService;
-import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
-import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
-import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
-import no.fint.sikri.repository.KodeverkRepository;
-import no.fint.sikri.service.SikriCaseDefaultsService;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
-
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 
 @Slf4j
 @Service
@@ -26,12 +14,6 @@ public class TilskuddFartoyFactory {
 
     @Autowired
     private NoarkFactory noarkFactory;
-
-    private ObjectFactory objectFactory;
-
-    public TilskuddFartoyFactory() {
-        objectFactory = new ObjectFactory();
-    }
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
         return noarkFactory.toCaseType(tilskuddFartoy);

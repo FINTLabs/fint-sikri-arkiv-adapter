@@ -1,4 +1,0 @@
-<jaxb:bindings version="2.1"
-               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
-    <jaxb:globalBindings generateElementProperty="false"/>
-</jaxb:bindings>
