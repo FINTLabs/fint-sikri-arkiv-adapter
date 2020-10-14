@@ -19,14 +19,10 @@ import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBElement;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,13 +47,11 @@ public class PersonalmappeFactory {
     @Autowired
     private CaseDefaults caseDefaults;
 
-    private ObjectFactory objectFactory;
     private CaseProperties properties;
 
     @PostConstruct
     public void init() {
         properties = caseDefaults.getCasetype().get("personalmappe");
-        objectFactory = new ObjectFactory();
     }
 
     public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
@@ -73,7 +67,6 @@ public class PersonalmappeFactory {
         caseType.setRegistryManagementUnitId(properties.getJournalenhet());
         applyParameterFromLink(
                 personalmappeResource.getSaksstatus(),
-                s -> s,
                 caseType::setCaseStatusId
         );
         caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
