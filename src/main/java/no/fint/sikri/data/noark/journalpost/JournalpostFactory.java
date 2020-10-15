@@ -9,6 +9,7 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
+import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
@@ -42,6 +43,9 @@ public class JournalpostFactory {
 
     @Autowired
     private KorrespondansepartService korrespondansepartService;
+
+    @Autowired
+    private KorrespondansepartFactory korrespondansepartFactory;
 
     @Autowired
     private MerknadService merknadService;
@@ -88,6 +92,7 @@ public class JournalpostFactory {
     }
 
     public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
+
         RegistryEntryType registryEntry = new RegistryEntryType();
 
         registryEntry.setCaseId(caseId);
@@ -135,6 +140,13 @@ public class JournalpostFactory {
                 .stream()
                 .map(dokumentbeskrivelseFactory::toDocumentDescription)
                 .forEach(result::addDocument);
+
+        if (journalpostResource.getKorrespondansepart() != null) {
+            journalpostResource.getKorrespondansepart()
+                    .stream()
+                    .map(korrespondansepartFactory::createSenderRecipient)
+                    .forEach(result::addSenderRecipient);
+        }
 
         return result;
     }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -99,18 +100,21 @@ public class TilskuddFartoyService {
                         .map(r -> journalpostFactory.toRegistryEntryDocuments(caseType.getId(), r))
                         .flatMap(d -> {
                             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(d.getRegistryEntry());
-                            return d.getDocuments().stream().map(it -> {
-                                final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(it.getRight().getDocumentDescription());
-                                it.getRight()
-                                        .getCheckinDocuments()
-                                        .stream()
-                                        .peek(checkinDocument -> checkinDocument.setDocumentId(documentDescription.getId()))
-                                        .peek(checkinDocument -> sikriObjectModelService.createDataObject(
-                                                dokumentobjektService.createDocumentObject(checkinDocument)
-                                        ))
-                                        .forEach(dokumentobjektService::checkinDocument);
-                                return dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), it.getLeft(), documentDescription.getId());
-                            });
+                            return Stream.concat(
+                                    d.getSenderRecipients().stream().peek(it -> it.setRegistryEntryId(registryEntry.getId()))
+                                    ,
+                                    d.getDocuments().stream().map(it -> {
+                                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(it.getRight().getDocumentDescription());
+                                        it.getRight()
+                                                .getCheckinDocuments()
+                                                .stream()
+                                                .peek(checkinDocument -> checkinDocument.setDocumentId(documentDescription.getId()))
+                                                .peek(checkinDocument -> sikriObjectModelService.createDataObject(
+                                                        dokumentobjektService.createDocumentObject(checkinDocument)
+                                                ))
+                                                .forEach(dokumentobjektService::checkinDocument);
+                                        return dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), it.getLeft(), documentDescription.getId());
+                                    }));
                         })
                         .toArray(DataObject[]::new));
         return caseQueryService
