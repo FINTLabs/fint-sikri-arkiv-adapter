@@ -21,4 +21,8 @@ public class XmlUtils {
         gc.setTimeInMillis(input.getTime());
         return datatypeFactory.newXMLGregorianCalendar(gc);
     }
+
+    public static Date javaDate(XMLGregorianCalendar input) {
+        return input.toGregorianCalendar().getTime();
+    }
 }
