@@ -1,30 +1,50 @@
 package no.fint.sikri.data.noark.part;
 
 import no.fint.arkiv.sikri.oms.CasePartyType;
+import no.fint.model.felles.kodeverk.iso.Landkode;
+import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.fint.model.resource.Link;
+import no.fint.model.resource.arkiv.kodeverk.PartRolleResource;
 import no.fint.model.resource.arkiv.noark.PartResource;
-import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.repository.KodeverkRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class PartFactory {
 
-    @Autowired
-    KodeverkRepository kodeverkRepository;
+    public PartResource toFintResource(CasePartyType input) {
 
-    public PartResource toFintResource(CasePartyType result) {
-
-        if (result == null) {
+        if (input == null) {
             return null;
         }
 
-        PartResource partResource = new PartResource();
-        partResource.setAdresse(FintUtils.createAdresse(result));
-        partResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
-        partResource.setPartNavn(result.getName());
-        // TODO partResource.setPartId(FintUtils.createIdentifikator(result.getId().toString()));
+        PartResource output = new PartResource();
 
-        return partResource;
+        optionalValue(input.getName()).ifPresent(output::setPartNavn);
+        optionalValue(input.getAttention()).ifPresent(output::setKontaktperson);
+
+        Kontaktinformasjon kontakt = new Kontaktinformasjon();
+        optionalValue(input.getTelephone()).ifPresent(kontakt::setTelefonnummer);
+        optionalValue(input.getEmail()).ifPresent(kontakt::setEpostadresse);
+        if (!kontakt.equals(new Kontaktinformasjon())) {
+            output.setKontaktinformasjon(kontakt);
+        }
+
+        AdresseResource adresse = new AdresseResource();
+        optionalValue(input.getTwoLetterCountryCode()).map(Link.apply(Landkode.class, "systemid")).ifPresent(adresse::addLand);
+        optionalValue(input.getPostalAddress()).map(Collections::singletonList).ifPresent(adresse::setAdresselinje);
+        optionalValue(input.getPostalCode()).ifPresent(adresse::setPostnummer);
+        optionalValue(input.getCity()).ifPresent(adresse::setPoststed);
+        if (!adresse.equals(new AdresseResource())) {
+            output.setAdresse(adresse);
+        }
+
+
+        output.addPartRolle(Link.with(PartRolleResource.class, "systemid", input.getCasePartyRoleId()));
+        return output;
     }
 }
