@@ -107,16 +107,14 @@ public class NoarkFactory {
                 .map(klasseFactory::toFintResource)
                 .ifPresent(resource::setKlasse);
 
-         /* TODO
-        optionalValue(input.getSecondaryClassification())
+         /* TODO optionalValue(input.getSecondaryClassification())
                 .ifPresent(c -> resource.addKlasse(
                         Link.with(
                                 Klasse.class,
                                 "systemid",
                                 String.valueOf(input.getSecondaryClassification().getClassId()))
                         )
-                );
-                */
+                );  */
 
 
         titleService.parseTitle(resource, input.getTitle());
