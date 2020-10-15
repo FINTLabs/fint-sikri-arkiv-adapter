@@ -7,10 +7,10 @@ import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.GetTilskuddFartoyNotFoundException;
+import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
-import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class TilskuddFartoyService {
     private TilskuddFartoyFactory tilskuddFartoyFactory;
 
     @Autowired
-    private SakFactory sakFactory;
+    private NoarkService noarkService;
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
@@ -78,6 +78,7 @@ public class TilskuddFartoyService {
         log.info("Create tilskudd fartøy");
         final CaseType caseType = sikriObjectModelService.createDataObject(tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource));
         sikriObjectModelService.createDataObject(tilskuddFartoyFactory.externalSystemLink(caseType.getId(), tilskuddFartoyResource.getSoknadsnummer().getIdentifikatorverdi()));
+        noarkService.createRelatedObjectsForNewCase(caseType, tilskuddFartoyResource);
         return tilskuddFartoyFactory.toFintResource(caseType);
 
     }

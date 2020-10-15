@@ -41,6 +41,13 @@ public enum SikriUtils {
                 .ifPresent(consumer);
     }
 
+    public static Optional<String> optionalValue(String string) {
+        if (StringUtils.isBlank(string)) {
+            return Optional.empty();
+        }
+        return Optional.of(string);
+    }
+
     public static <T> Optional<T> optionalValue(T object) {
         return Optional.ofNullable(object);
     }

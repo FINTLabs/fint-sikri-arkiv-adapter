@@ -7,9 +7,12 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kodeverk.PartRolleResource;
 import no.fint.model.resource.arkiv.noark.PartResource;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
@@ -45,6 +48,31 @@ public class PartFactory {
 
 
         output.addPartRolle(Link.with(PartRolleResource.class, "systemid", input.getCasePartyRoleId()));
+        return output;
+    }
+
+    public CasePartyType createCaseParty(Integer caseId, PartResource input) {
+        CasePartyType output = new CasePartyType();
+
+        output.setCaseId(caseId);
+        optionalValue(input.getPartNavn()).ifPresent(output::setName);
+        optionalValue(input.getKontaktperson()).ifPresent(output::setAttention);
+
+        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse).ifPresent(output::setEmail);
+        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer).ifPresent(output::setTelephone);
+
+        optionalValue(input.getAdresse()).map(AdresseResource::getPostnummer).ifPresent(output::setPostalCode);
+        optionalValue(input.getAdresse()).map(AdresseResource::getPoststed).ifPresent(output::setCity);
+        optionalValue(input.getAdresse()).map(AdresseResource::getAdresselinje).map(i -> String.join("\n")).ifPresent(output::setPostalAddress);
+        optionalValue(input.getAdresse())
+                .map(AdresseResource::getLand)
+                .map(List::stream)
+                .orElseGet(Stream::empty)
+                .map(Link::getHref)
+                .map(i -> StringUtils.substringAfterLast(i, "/"))
+                .findFirst()
+                .ifPresent(output::setTwoLetterCountryCode);
+
         return output;
     }
 }
