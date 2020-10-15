@@ -1,32 +1,49 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
-import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
+import no.fint.model.felles.kodeverk.iso.Landkode;
+import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
-import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
+import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
+
 @Service
-@Slf4j
 public class KorrespondansepartFactory {
+    public KorrespondansepartResource toFintResource(SenderRecipientType input) {
+        KorrespondansepartResource output = new KorrespondansepartResource();
 
-    public KorrespondansepartResource toFintResource(SenderRecipientType result) {
+        optionalValue(input.getName()).ifPresent(output::setKorrespondansepartNavn);
+        optionalValue(input.getEncryptedSsn()).ifPresent(output::setFodselsnummer);
+        optionalValue(input.getAttention()).ifPresent(output::setKontaktperson);
 
-        if (result == null) {
-            return null;
+        Kontaktinformasjon kontakt = new Kontaktinformasjon();
+        optionalValue(input.getTelephone()).ifPresent(kontakt::setTelefonnummer);
+        optionalValue(input.getEmail()).ifPresent(kontakt::setEpostadresse);
+        if (!kontakt.equals(new Kontaktinformasjon())) {
+            output.setKontaktinformasjon(kontakt);
         }
 
-        KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
-        korrespondansepartResource.setAdresse(FintUtils.createAdresse(result));
-        korrespondansepartResource.setKontaktinformasjon(FintUtils.createKontaktinformasjon(result));
-        korrespondansepartResource.setKorrespondansepartNavn(result.getName());
-        // TODO korrespondansepartResource.setSystemId(createIdentifikator(result.getId().toString()));
+        AdresseResource adresse = new AdresseResource();
+        optionalValue(input.getTwoLetterCountryCode()).map(Link.apply(Landkode.class, "systemid")).ifPresent(adresse::addLand);
+        optionalValue(input.getPostalAddress()).map(Collections::singletonList).ifPresent(adresse::setAdresselinje);
+        optionalValue(input.getPostalCode()).ifPresent(adresse::setPostnummer);
+        optionalValue(input.getCity()).ifPresent(adresse::setPoststed);
+        if (!adresse.equals(new AdresseResource())) {
+            output.setAdresse(adresse);
+        }
 
-//        Optional.ofNullable(result.getFields().getFoedselsnummer())
-//                .filter(StringUtils::isNotBlank)
-//                .map(FintUtils::createIdentifikator)
-//                .ifPresent(korrespondansepartResource::setFodselsnummer);
+        if (input.isIsRecipient()) {
+            output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EM"));
+        } else {
+            output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
+        }
 
-        return korrespondansepartResource;
+        return output;
     }
 }
