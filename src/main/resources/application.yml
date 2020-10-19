@@ -11,8 +11,6 @@ fint:
       sse: /sse/%s
       status: /status
       response: /response
-      providers:
-    organizations: fintlabs.no
 
   oauth:
     enabled: true
