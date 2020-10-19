@@ -77,9 +77,10 @@ public class TilskuddFartoyService {
 
     public TilskuddFartoyResource createTilskuddFartoyCase(TilskuddFartoyResource tilskuddFartoyResource) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         log.info("Create tilskudd fartøy");
-        final CaseType caseType = sikriObjectModelService.createDataObject(tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource));
+        final CaseType caseType = noarkService.createCase(
+                tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource),
+                tilskuddFartoyResource);
         sikriObjectModelService.createDataObject(tilskuddFartoyFactory.externalSystemLink(caseType.getId(), tilskuddFartoyResource.getSoknadsnummer().getIdentifikatorverdi()));
-        noarkService.createRelatedObjectsForNewCase(caseType, tilskuddFartoyResource);
         return tilskuddFartoyFactory.toFintResource(caseType);
 
     }
