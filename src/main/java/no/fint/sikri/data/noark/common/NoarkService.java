@@ -30,6 +30,9 @@ public class NoarkService {
             );
         }
 
+        // TODO if (saksmappeResource.getArkivnotat() != null) {}
+        // TODO if (saksmappeResource.getNoekkelord() != null) {}
+
     }
 
 
