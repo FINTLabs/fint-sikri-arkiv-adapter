@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Set;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class GetSakHandler implements Handler {
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
         try {
-            response.getData().clear();
+            response.setData(new LinkedList<>());
             if (!caseQueryService.isValidQuery(query)) {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }

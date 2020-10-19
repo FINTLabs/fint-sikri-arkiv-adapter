@@ -16,7 +16,8 @@ public class SkjermingshjemmelService {
     private SikriObjectModelService sikriObjectModelService;
 
     public Stream<SkjermingshjemmelResource> getLawTable() {
-        return null;
+        // TODO Does Skjermingshjemmel exist in Elements?
+        return Stream.empty();
     }
 
 }
