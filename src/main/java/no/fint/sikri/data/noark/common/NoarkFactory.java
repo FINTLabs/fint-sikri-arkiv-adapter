@@ -5,6 +5,7 @@ import no.fint.arkiv.AdditionalFieldService;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
+import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -157,6 +159,21 @@ public class NoarkFactory {
                 resource.getSaksstatus(),
                 caseType::setCaseStatusId
         );
+
+        if (resource.getKlasse() != null) {
+            resource.getKlasse()
+                    .stream()
+                    .map(klasseFactory::toClassificationType)
+                    .sorted(Comparator.comparing(ClassificationType::getSortOrder))
+                    .forEachOrdered(cls ->
+                            {
+                                if (caseType.getPrimaryClassification() == null)
+                                    caseType.setPrimaryClassification(cls);
+                                else if (caseType.getSecondaryClassification() == null)
+                                    caseType.setSecondaryClassification(cls);
+                            }
+                    );
+        }
 
         return caseType;
     }
