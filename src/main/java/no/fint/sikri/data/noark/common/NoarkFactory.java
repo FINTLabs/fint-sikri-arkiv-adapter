@@ -25,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
@@ -103,19 +105,11 @@ public class NoarkFactory {
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
 
-         optionalValue(input.getPrimaryClassification())
-                .map(klasseFactory::toFintResource)
-                .ifPresent(resource::setKlasse);
-
-         /* TODO optionalValue(input.getSecondaryClassification())
-                .ifPresent(c -> resource.addKlasse(
-                        Link.with(
-                                Klasse.class,
-                                "systemid",
-                                String.valueOf(input.getSecondaryClassification().getClassId()))
-                        )
-                );  */
-
+        resource.setKlasse(
+                Stream.of(input.getPrimaryClassification(), input.getSecondaryClassification())
+                        .filter(Objects::nonNull)
+                        .map(klasseFactory::toFintResource)
+                        .collect(Collectors.toList()));
 
         titleService.parseTitle(resource, input.getTitle());
         additionalFieldService.setFieldsForResource(resource,
