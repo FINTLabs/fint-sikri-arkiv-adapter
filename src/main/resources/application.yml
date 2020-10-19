@@ -1,0 +1,28 @@
+server:
+  port: 8091
+
+springfox:
+  title: 'FINT SSE Adapter Skeleton'
+  version: '@version@'
+
+fint:
+  adapter:
+    endpoints:
+      sse: /sse/%s
+      status: /status
+      response: /response
+      providers:
+    organizations: fintlabs.no
+
+  oauth:
+    enabled: true
+  #    username:
+  #    password:
+  #    client-id:
+  #    client-secret:
+  #    access-token-uri:
+  #    scope:
+
+security:
+  basic:
+    enabled: false
