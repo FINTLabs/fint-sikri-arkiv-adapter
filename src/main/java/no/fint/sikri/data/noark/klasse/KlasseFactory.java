@@ -35,7 +35,6 @@ public class KlasseFactory {
     public ClassificationType toClassificationType(KlasseResource input) {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
-        output.setDescription(input.getTittel());
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
         applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
         return output;
