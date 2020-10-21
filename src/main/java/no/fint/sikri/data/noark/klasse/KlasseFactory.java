@@ -7,7 +7,6 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,16 +42,16 @@ public class KlasseFactory {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
-        if (StringUtils.isNotBlank(input.getTittel())) {
-            output.setDescription(input.getTittel());
-        } else {
-            // TODO Possible to detect which classes reject description modifications?
-            sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
-                    .stream()
-                    .map(ClassType.class::cast)
-                    .map(ClassType::getDescription)
-                    .forEach(output::setDescription);
+        /* TODO if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setRemark(input.getTittel());
         }
+        */
+        // TODO Possible to detect which classes reject description modifications?
+        sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
+                .stream()
+                .map(ClassType.class::cast)
+                .map(ClassType::getDescription)
+                .forEach(output::setDescription);
         applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
         return output;
     }
