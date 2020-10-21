@@ -5,6 +5,7 @@ import no.fint.arkiv.AdditionalFieldService;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
+import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
@@ -57,6 +58,14 @@ public class NoarkFactory {
     @Autowired
     private AdditionalFieldService additionalFieldService;
 
+    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
+        externalSystemLinkCaseType.setCaseId(caseId);
+        externalSystemLinkCaseType.setExternalKey(externalKey);
+        externalSystemLinkCaseType.setExternalSystemCode(4);
+
+        return externalSystemLinkCaseType;
+    }
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(

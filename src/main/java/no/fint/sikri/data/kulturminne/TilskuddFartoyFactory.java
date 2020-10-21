@@ -2,7 +2,6 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
@@ -18,15 +17,6 @@ public class TilskuddFartoyFactory {
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
         return noarkFactory.toCaseType(tilskuddFartoy);
-    }
-
-    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
-        externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(externalKey);
-        externalSystemLinkCaseType.setExternalSystemCode(4);
-
-        return externalSystemLinkCaseType;
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {

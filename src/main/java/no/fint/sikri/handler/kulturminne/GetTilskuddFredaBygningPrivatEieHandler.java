@@ -5,7 +5,7 @@ import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory;
+import no.fint.sikri.data.kulturminne.TilskuddFredaBygningPrivatEieFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class GetTilskuddFartoyHandler implements Handler {
+public class GetTilskuddFredaBygningPrivatEieHandler implements Handler {
     @Autowired
-    private TilskuddFartoyFactory tilskuddFartoyFactory;
+    private TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory;
 
     @Autowired
     private CaseQueryService caseQueryService;
@@ -32,7 +32,7 @@ public class GetTilskuddFartoyHandler implements Handler {
         }
         caseQueryService
                 .query(query)
-                .map(tilskuddFartoyFactory::toFintResource)
+                .map(tilskuddFredaBygningPrivatEieFactory::toFintResource)
                 .forEach(response::addData);
         response.setResponseStatus(ResponseStatus.ACCEPTED);
         if (response.getData().isEmpty()) {
@@ -45,7 +45,7 @@ public class GetTilskuddFartoyHandler implements Handler {
 
     @Override
     public Set<String> actions() {
-        return Collections.singleton(KulturminnevernActions.GET_TILSKUDDFARTOY.name());
+        return Collections.singleton(KulturminnevernActions.GET_TILSKUDDFREDABYGNINGPRIVATEIE.name());
     }
 
 }

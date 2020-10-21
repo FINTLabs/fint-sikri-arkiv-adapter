@@ -10,9 +10,9 @@ import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.fint.sikri.data.exception.CaseNotFound;
-import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
+import no.fint.sikri.data.kulturminne.TilskuddFredaBygningPrivatEieService;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.ValidationService;
@@ -25,7 +25,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class UpdateTilskuddFartoyHandler implements Handler {
+public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -39,7 +39,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
     private CaseDefaults caseDefaults;
 
     @Autowired
-    private TilskuddFartoyService tilskuddfartoyService;
+    private TilskuddFredaBygningPrivatEieService tilskuddFredaBygningPrivatEieService;
 
     @Override
     public void accept(Event<FintLinks> response) {
@@ -51,35 +51,35 @@ public class UpdateTilskuddFartoyHandler implements Handler {
 
         Operation operation = response.getOperation();
 
-        TilskuddFartoyResource tilskuddFartoyResource = objectMapper.convertValue(response.getData().get(0), TilskuddFartoyResource.class);
+        TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource = objectMapper.convertValue(response.getData().get(0), TilskuddFredaBygningPrivatEieResource.class);
 
         if (operation == Operation.CREATE) {
-            createCase(response, tilskuddFartoyResource);
+            createCase(response, tilskuddFredaBygningPrivatEieResource);
         } else if (operation == Operation.UPDATE) {
-            updateCase(response, response.getQuery(), tilskuddFartoyResource);
+            updateCase(response, response.getQuery(), tilskuddFredaBygningPrivatEieResource);
         } else {
             throw new IllegalArgumentException("Invalid operation: " + operation);
         }
 
     }
 
-    private void updateCase(Event<FintLinks> response, String query, TilskuddFartoyResource tilskuddFartoyResource) {
-        if (tilskuddFartoyResource.getJournalpost() == null ||
-                tilskuddFartoyResource.getJournalpost().isEmpty()) {
+    private void updateCase(Event<FintLinks> response, String query, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
+        if (tilskuddFredaBygningPrivatEieResource.getJournalpost() == null ||
+                tilskuddFredaBygningPrivatEieResource.getJournalpost().isEmpty()) {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
-        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
-        log.info("Complete document for update: {}", tilskuddFartoyResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource.getJournalpost());
+        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
+        log.info("Complete document for update: {}", tilskuddFredaBygningPrivatEieResource);
+        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource.getJournalpost());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
+            log.info("Validation problems!\n{}\n{}\n", tilskuddFredaBygningPrivatEieResource, problems);
             return;
         }
         try {
-            TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(query, tilskuddFartoyResource);
+            TilskuddFredaBygningPrivatEieResource result = tilskuddFredaBygningPrivatEieService.updateTilskuddFredaBygningPrivatEieCase(query, tilskuddFredaBygningPrivatEieResource);
             response.setData(ImmutableList.of(result));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound e) {
@@ -88,24 +88,24 @@ public class UpdateTilskuddFartoyHandler implements Handler {
         }
     }
 
-    private void createCase(Event<FintLinks> response, TilskuddFartoyResource tilskuddFartoyResource) {
-        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
-        log.info("Complete document for creation: {}", tilskuddFartoyResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource);
+    private void createCase(Event<FintLinks> response, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
+        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
+        log.info("Complete document for creation: {}", tilskuddFredaBygningPrivatEieResource);
+        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource);
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
+            log.info("Validation problems!\n{}\n{}\n", tilskuddFredaBygningPrivatEieResource, problems);
             return;
         }
-        TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
-        response.setData(ImmutableList.of(tilskuddFartoy));
+        TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEie = tilskuddFredaBygningPrivatEieService.createTilskuddFredaBygningPrivatEieCase(tilskuddFredaBygningPrivatEieResource);
+        response.setData(ImmutableList.of(tilskuddFredaBygningPrivatEie));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
     }
 
     @Override
     public Set<String> actions() {
-        return Collections.singleton(KulturminnevernActions.UPDATE_TILSKUDDFARTOY.name());
+        return Collections.singleton(KulturminnevernActions.UPDATE_TILSKUDDFREDABYGNINGPRIVATEIE.name());
     }
 }
