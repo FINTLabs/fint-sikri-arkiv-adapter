@@ -44,7 +44,7 @@ public class KodeverkHandler implements Handler {
         suppliers.put(GET_ALL_MERKNADSTYPE, kodeverkRepository::getMerknadstype);
         suppliers.put(GET_ALL_PARTROLLE, merge(noarkMetadataService::getPartRolle, kodeverkRepository::getPartRolle));
         suppliers.put(GET_ALL_SAKSSTATUS, merge(noarkMetadataService::getSaksStatus, kodeverkRepository::getSaksstatus));
-        //actionsMap.put(GET_ALL_SKJERMINGSHJEMMEL, kodeverkRepository::getSkjermingshjemmel);
+        suppliers.put(GET_ALL_SKJERMINGSHJEMMEL, kodeverkRepository::getSkjermingshjemmel);
         suppliers.put(GET_ALL_TILGANGSRESTRIKSJON, kodeverkRepository::getTilgangsrestriksjon);
         suppliers.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, merge(noarkMetadataService::getTilknyttetRegistreringSom, kodeverkRepository::getTilknyttetRegistreringSom));
         suppliers.put(GET_ALL_VARIANTFORMAT, merge(noarkMetadataService::getVariantformat, kodeverkRepository::getVariantformat));
