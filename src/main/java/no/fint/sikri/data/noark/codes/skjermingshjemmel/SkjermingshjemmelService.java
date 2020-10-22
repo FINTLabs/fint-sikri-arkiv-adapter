@@ -5,14 +5,16 @@ import com.google.common.collect.Multimaps;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.StatutoryAutorityType;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
+import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Slf4j
 @Service
@@ -32,11 +34,13 @@ public class SkjermingshjemmelService {
                 .flatMap(e -> {
                     String code = e.getKey();
                     String[] values = e.getValue().toArray(new String[0]);
-                    int prefix = StringUtils.indexOfDifference(values);
+                    int prefix = indexOfDifference(values);
                     return Arrays.stream(values)
                             .map(it -> {
                                 SkjermingshjemmelResource r = new SkjermingshjemmelResource();
-                                r.setKode(code + ":" + it.substring(prefix + 1));
+                                final String name = stripAccents(deleteWhitespace(it.substring(0, prefix + 1)));
+                                r.setSystemId(FintUtils.createIdentifikator(String.format("%s:%s", code, name)));
+                                r.setKode(name);
                                 r.setNavn(it);
                                 return r;
                             });
