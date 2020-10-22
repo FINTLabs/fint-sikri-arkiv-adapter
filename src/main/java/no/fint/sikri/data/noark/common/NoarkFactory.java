@@ -144,9 +144,6 @@ public class NoarkFactory {
 
         caseType.setTitle(titleService.getTitle(resource));
 
-        //TODO -> CaseDefaultsService
-        caseType.setFileTypeId("TS");
-
         additionalFieldService.getFieldsForResource(resource)
                 .forEach(field ->
                         setProperty(caseType, field));
