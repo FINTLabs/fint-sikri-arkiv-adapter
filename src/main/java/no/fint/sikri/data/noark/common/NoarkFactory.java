@@ -16,6 +16,7 @@ import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
+import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
@@ -58,6 +59,9 @@ public class NoarkFactory {
     @Autowired
     private AdditionalFieldService additionalFieldService;
 
+    @Autowired
+    private SkjermingService skjermingService;
+
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
         ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
         externalSystemLinkCaseType.setCaseId(caseId);
@@ -88,6 +92,9 @@ public class NoarkFactory {
         resource.setPart(partService.queryForSaksmappe(resource));
 
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
+
+        optionalValue(skjermingService.getSkjermingResource(input::getAccessCodeId, input::getPursuant))
+                .ifPresent(resource::setSkjerming);
 
         optionalValue(input.getAdministrativeUnit())
                 .map(AdministrativeUnitType::getShortCodeThisLevel)
@@ -147,6 +154,8 @@ public class NoarkFactory {
         additionalFieldService.getFieldsForResource(resource)
                 .forEach(field ->
                         setProperty(caseType, field));
+
+        skjermingService.applyAccessCodeAndPursuant(resource.getSkjerming(), caseType::setAccessCodeId, caseType::setPursuant);
 
         applyParameterFromLink(
                 resource.getAdministrativEnhet(),
