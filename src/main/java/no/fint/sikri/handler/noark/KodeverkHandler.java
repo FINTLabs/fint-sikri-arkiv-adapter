@@ -68,6 +68,10 @@ public class KodeverkHandler implements Handler {
                 .forEach(response::addData);
     }
 
+    public List<? extends FintLinks> getCodes(KodeverkActions name) {
+        return suppliers.get(name).get();
+    }
+
     @Override
     public Set<String> actions() {
         return suppliers.keySet().stream().map(Enum::name).collect(Collectors.toSet());

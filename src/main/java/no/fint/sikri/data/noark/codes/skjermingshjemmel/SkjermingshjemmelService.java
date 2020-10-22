@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.*;
@@ -33,18 +34,35 @@ public class SkjermingshjemmelService {
                 .stream()
                 .flatMap(e -> {
                     String code = e.getKey();
-                    String[] values = e.getValue().toArray(new String[0]);
-                    int prefix = indexOfDifference(values);
-                    return Arrays.stream(values)
-                            .map(it -> {
+                    String[] names = e.getValue().toArray(new String[0]);
+                    String[] keys = Arrays.stream(names).map(this::removeChars).toArray(String[]::new);
+                    log.info("Names: {}", Arrays.toString(keys));
+                    int prefix = indexOfDifferences(keys).peek(i -> log.info("Pos: {}", i)).max().orElse(0);
+                    return IntStream.range(0, keys.length)
+                            .mapToObj(it -> {
                                 SkjermingshjemmelResource r = new SkjermingshjemmelResource();
-                                final String name = stripAccents(deleteWhitespace(it.substring(0, prefix + 2)));
+                                final String name = substring(keys[it], 0, prefix + 1);
                                 r.setSystemId(FintUtils.createIdentifikator(String.format("%s:%s", code, name)));
                                 r.setKode(name);
-                                r.setNavn(it);
+                                r.setNavn(names[it]);
                                 return r;
                             });
                 });
+    }
+
+    public String removeChars(String str) {
+        return replaceChars(str, " &$+.,/:;=?@#()<>[]{}|\\^%", "");
+    }
+
+    public IntStream indexOfDifferences(String... strings) {
+        final IntStream.Builder builder = IntStream.builder();
+        for (int i = 0; i < strings.length; i++) {
+            for (int j = i + 1; j < strings.length; j++) {
+                builder.add(indexOfDifference(strings[i], strings[j]));
+            }
+
+        }
+        return builder.build();
     }
 
 }
