@@ -38,7 +38,7 @@ public class SkjermingshjemmelService {
                     return Arrays.stream(values)
                             .map(it -> {
                                 SkjermingshjemmelResource r = new SkjermingshjemmelResource();
-                                final String name = stripAccents(deleteWhitespace(it.substring(0, prefix + 1)));
+                                final String name = stripAccents(deleteWhitespace(it.substring(0, prefix + 2)));
                                 r.setSystemId(FintUtils.createIdentifikator(String.format("%s:%s", code, name)));
                                 r.setKode(name);
                                 r.setNavn(it);
