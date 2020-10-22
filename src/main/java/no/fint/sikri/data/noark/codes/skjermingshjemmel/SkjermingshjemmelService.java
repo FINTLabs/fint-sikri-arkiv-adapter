@@ -34,6 +34,13 @@ public class SkjermingshjemmelService {
                 .stream()
                 .flatMap(e -> {
                     String code = e.getKey();
+                    if (e.getValue().size() == 1) {
+                        SkjermingshjemmelResource r = new SkjermingshjemmelResource();
+                        r.setSystemId(FintUtils.createIdentifikator(code));
+                        r.setKode(code);
+                        e.getValue().forEach(r::setNavn);
+                        return Stream.of(r);
+                    }
                     String[] names = e.getValue().toArray(new String[0]);
                     String[] keys = Arrays.stream(names).map(this::removeChars).toArray(String[]::new);
                     log.info("Names: {}", Arrays.toString(keys));
