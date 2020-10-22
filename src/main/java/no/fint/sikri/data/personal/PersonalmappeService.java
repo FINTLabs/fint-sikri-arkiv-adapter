@@ -6,7 +6,7 @@ import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
-import no.fint.model.resource.administrasjon.personal.PersonalmappeResource;
+import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.service.SikriObjectModelService;

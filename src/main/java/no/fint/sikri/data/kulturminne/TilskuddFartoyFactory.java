@@ -2,8 +2,8 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
-import no.fint.model.resource.kultur.kulturminnevern.TilskuddFartoyResource;
+import no.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,15 +19,6 @@ public class TilskuddFartoyFactory {
         return noarkFactory.toCaseType(tilskuddFartoy);
     }
 
-    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
-        externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(externalKey);
-        externalSystemLinkCaseType.setExternalSystemCode(4);
-
-        return externalSystemLinkCaseType;
-    }
-
     public TilskuddFartoyResource toFintResource(CaseType input) {
 //        if (input.getFields().getVirksomhetsspesifikkeMetadata() == null
 //                || input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak() == null
@@ -37,7 +28,9 @@ public class TilskuddFartoyFactory {
 //            throw new NotTilskuddfartoyException(input.getFields().getMappeIdent());
 //        }
 
-        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(input, new TilskuddFartoyResource());
+        final TilskuddFartoyResource resource = new TilskuddFartoyResource();
+        resource.setSoknadsnummer(new Identifikator());
+        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(input, resource);
 
 //        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
 //        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));

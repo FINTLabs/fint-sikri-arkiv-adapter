@@ -5,11 +5,15 @@ import no.fint.arkiv.AdditionalFieldService;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
-import no.fint.model.administrasjon.arkiv.*;
+import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
+import no.fint.model.arkiv.kodeverk.Saksstatus;
+import no.fint.model.arkiv.noark.AdministrativEnhet;
+import no.fint.model.arkiv.noark.Arkivdel;
+import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.SaksmappeResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
+import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.utilities.FintUtils;
@@ -20,10 +24,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
@@ -42,6 +47,9 @@ public class NoarkFactory {
     private MerknadService merknadService;
 
     @Autowired
+    private KlasseFactory klasseFactory;
+
+    @Autowired
     private SikriCaseDefaultsService caseDefaultsService;
 
     @Autowired
@@ -50,11 +58,13 @@ public class NoarkFactory {
     @Autowired
     private AdditionalFieldService additionalFieldService;
 
-    private ObjectFactory objectFactory;
+    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
+        externalSystemLinkCaseType.setCaseId(caseId);
+        externalSystemLinkCaseType.setExternalKey(externalKey);
+        externalSystemLinkCaseType.setExternalSystemCode(4);
 
-    @PostConstruct
-    public void init() {
-        objectFactory = new ObjectFactory();
+        return externalSystemLinkCaseType;
     }
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
@@ -104,22 +114,11 @@ public class NoarkFactory {
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
 
-        optionalValue(input.getPrimaryClassification())
-                .ifPresent(c -> resource.addKlasse(
-                        Link.with(
-                                Klasse.class,
-                                "systemid",
-                                String.valueOf(input.getPrimaryClassification().getClassId()))
-                        )
-                );
-        optionalValue(input.getSecondaryClassification())
-                .ifPresent(c -> resource.addKlasse(
-                        Link.with(
-                                Klasse.class,
-                                "systemid",
-                                String.valueOf(input.getSecondaryClassification().getClassId()))
-                        )
-                );
+        resource.setKlasse(
+                Stream.of(input.getPrimaryClassification(), input.getSecondaryClassification())
+                        .filter(Objects::nonNull)
+                        .map(klasseFactory::toFintResource)
+                        .collect(Collectors.toList()));
 
         titleService.parseTitle(resource, input.getTitle());
         additionalFieldService.setFieldsForResource(resource,
@@ -140,7 +139,7 @@ public class NoarkFactory {
     }
 
     public <T extends SaksmappeResource> CaseType toCaseType(T resource) {
-        CaseType caseType = objectFactory.createCaseType();
+        CaseType caseType = new CaseType();
         caseDefaultsService.applyDefaultsToCaseType(resource, caseType);
 
         caseType.setTitle(titleService.getTitle(resource));

@@ -1,43 +1,58 @@
 package no.fint.sikri.data.noark.klasse;
 
 import no.fint.arkiv.sikri.oms.ClassType;
-import no.fint.model.administrasjon.arkiv.Klasse;
-import no.fint.model.administrasjon.arkiv.Klassifikasjonssystem;
+import no.fint.arkiv.sikri.oms.ClassificationType;
+import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.KlasseResource;
-import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.GregorianCalendar;
-
+import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class KlasseFactory {
 
     @Autowired
-    private KlasseService klasseService;
+    private SikriObjectModelService sikriObjectModelService;
 
     public KlasseResource toFintResource(ClassType input) {
         KlasseResource result = new KlasseResource();
-
-        result.setSystemId(FintUtils.createIdentifikator(input.getId()));
-        result.setKlasseId(FintUtils.createIdentifikator(input.getId()));
-        //result.setOpprettetAv(input.getFields().getOpprettetAv());
-        optionalValue(input.getCreatedDate())
-                .map(XMLGregorianCalendar::toGregorianCalendar)
-                .map(GregorianCalendar::getTime)
-                .ifPresent(result::setOpprettetDato);
+        result.setKlasseId(input.getId());
         result.setTittel(input.getDescription());
-        result.setBeskrivelse(input.getDescription());
-
         result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId()));
-
-        klasseService.getUnderKlasser(input.getId())
-                .forEach(c -> result.addUnderklasse(Link.with(Klasse.class, "systemid", c.getSystemId().getIdentifikatorverdi())));
-
+        //TODO input.getAccessCode();
         return result;
+    }
+
+    public KlasseResource toFintResource(ClassificationType input) {
+        KlasseResource result = new KlasseResource();
+        result.setKlasseId(input.getClassId());
+        result.setTittel(input.getDescription());
+        optionalValue(input.getSortOrder()).map(Integer::parseInt).ifPresent(result::setRekkefolge);
+        result.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", input.getClassificationSystemId()));
+        //TODO input.getAccessCode();
+        return result;
+    }
+
+    public ClassificationType toClassificationType(KlasseResource input) {
+        ClassificationType output = new ClassificationType();
+        output.setClassId(input.getKlasseId());
+        output.setSortOrder(String.valueOf(input.getRekkefolge()));
+        /* TODO if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setRemark(input.getTittel());
+        }
+        */
+        // TODO Possible to detect which classes reject description modifications?
+        sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
+                .stream()
+                .map(ClassType.class::cast)
+                .map(ClassType::getDescription)
+                .forEach(output::setDescription);
+        applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
+        return output;
     }
 }

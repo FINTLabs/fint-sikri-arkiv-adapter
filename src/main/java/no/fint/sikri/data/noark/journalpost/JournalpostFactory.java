@@ -1,16 +1,16 @@
 package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
-import no.fint.model.administrasjon.arkiv.Arkivressurs;
-import no.fint.model.administrasjon.arkiv.JournalStatus;
-import no.fint.model.administrasjon.arkiv.JournalpostType;
+import no.fint.model.arkiv.kodeverk.JournalStatus;
+import no.fint.model.arkiv.kodeverk.JournalpostType;
+import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
-import no.fint.model.resource.administrasjon.arkiv.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
-import no.fint.sikri.data.noark.korrespondansepart.KorrespondanseService;
+import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
+import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.utilities.XmlUtils;
@@ -42,15 +42,16 @@ public class JournalpostFactory {
     private DokumentbeskrivelseService dokumentbeskrivelseService;
 
     @Autowired
-    private KorrespondanseService korrespondanseService;
+    private KorrespondansepartService korrespondansepartService;
+
+    @Autowired
+    private KorrespondansepartFactory korrespondansepartFactory;
 
     @Autowired
     private MerknadService merknadService;
 
     @Autowired
     private NokkelordService nokkelordService;
-
-    private ObjectFactory objectFactory = new ObjectFactory();
 
     public JournalpostResource toFintResource(RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
@@ -76,7 +77,7 @@ public class JournalpostFactory {
                         .distinct()
                         .collect(Collectors.toList()));
 
-        journalpost.setKorrespondansepart(korrespondanseService.queryForRegistrering(result.getId().toString()));
+        journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(result.getId().toString()));
         journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(result.getId().toString()));
 
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
@@ -91,6 +92,7 @@ public class JournalpostFactory {
     }
 
     public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
+
         RegistryEntryType registryEntry = new RegistryEntryType();
 
         registryEntry.setCaseId(caseId);
@@ -138,6 +140,13 @@ public class JournalpostFactory {
                 .stream()
                 .map(dokumentbeskrivelseFactory::toDocumentDescription)
                 .forEach(result::addDocument);
+
+        if (journalpostResource.getKorrespondansepart() != null) {
+            journalpostResource.getKorrespondansepart()
+                    .stream()
+                    .map(korrespondansepartFactory::createSenderRecipient)
+                    .forEach(result::addSenderRecipient);
+        }
 
         return result;
     }

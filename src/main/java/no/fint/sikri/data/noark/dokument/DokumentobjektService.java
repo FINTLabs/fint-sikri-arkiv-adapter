@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
-import no.fint.model.resource.administrasjon.arkiv.DokumentobjektResource;
+import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

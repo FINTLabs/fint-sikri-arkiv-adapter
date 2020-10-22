@@ -15,9 +15,15 @@ import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 @Service
 public class CaseService {
     private final SikriObjectModelService objectModelService;
+    private final String[] relatedObjects;
 
     public CaseService(SikriObjectModelService objectModelService) {
         this.objectModelService = objectModelService;
+        relatedObjects = new String[] {
+                SikriObjectTypes.PRIMARY_CLASSIFICATION,
+                SikriObjectTypes.SECONDARY_CLASSIFICATION,
+                SikriObjectTypes.ADMINISTRATIVE_UNIT
+        };
     }
 
     public Stream<CaseType> getCaseByCaseNumber(String caseNumber) throws IllegalCaseNumberFormat {
@@ -28,7 +34,7 @@ public class CaseService {
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
                 0,
-                SikriObjectTypes.PRIMARY_CLASSIFICATION, SikriObjectTypes.ADMINISTRATIVE_UNIT)
+                relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
     }
@@ -38,7 +44,7 @@ public class CaseService {
                 SikriObjectTypes.CASE,
                 "Id=" + systemId,
                 0,
-                SikriObjectTypes.PRIMARY_CLASSIFICATION)
+                relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
 
@@ -52,7 +58,7 @@ public class CaseService {
                 SikriObjectTypes.CASE,
                 filter,
                 maxResult,
-                SikriObjectTypes.PRIMARY_CLASSIFICATION)
+                relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
     }
