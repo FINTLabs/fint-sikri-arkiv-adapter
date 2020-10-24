@@ -68,23 +68,23 @@ public class UpdateDrosjeloyveHandler implements Handler {
 
     }
 
-    private void updateCase(Event<FintLinks> response, String query, DrosjeloyveResource tilskuddFartoyResource) {
-        if (tilskuddFartoyResource.getJournalpost() == null ||
-                tilskuddFartoyResource.getJournalpost().isEmpty()) {
+    private void updateCase(Event<FintLinks> response, String query, DrosjeloyveResource drosjeloyveResource) {
+        if (drosjeloyveResource.getJournalpost() == null ||
+                drosjeloyveResource.getJournalpost().isEmpty()) {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
-        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
-        log.info("Complete document for update: {}", tilskuddFartoyResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource.getJournalpost());
+        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getDrosjeloyve(), drosjeloyveResource);
+        log.info("Complete document for update: {}", drosjeloyveResource);
+        List<Problem> problems = validationService.getProblems(drosjeloyveResource.getJournalpost());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
+            log.info("Validation problems!\n{}\n{}\n", drosjeloyveResource, problems);
             return;
         }
         try {
-            DrosjeloyveResource result = drosjeloyveService.updateDrosjeloyve(query, tilskuddFartoyResource);
+            DrosjeloyveResource result = drosjeloyveService.updateDrosjeloyve(query, drosjeloyveResource);
             response.setData(ImmutableList.of(result));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound e) {
@@ -105,8 +105,8 @@ public class UpdateDrosjeloyveHandler implements Handler {
             return;
         }
         try {
-            DrosjeloyveResource tilskuddFartoy = drosjeloyveService.createDrosjeloyve(drosjeloyveResource);
-            response.setData(ImmutableList.of(tilskuddFartoy));
+            DrosjeloyveResource drosjeloyve = drosjeloyveService.createDrosjeloyve(drosjeloyveResource);
+            response.setData(ImmutableList.of(drosjeloyve));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound | ClassNotFoundException e) {
             response.setResponseStatus(ResponseStatus.REJECTED);

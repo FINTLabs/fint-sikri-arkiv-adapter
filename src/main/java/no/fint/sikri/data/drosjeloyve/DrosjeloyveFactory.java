@@ -97,6 +97,8 @@ public class DrosjeloyveFactory {
     }
 
     public DrosjeloyveResource toFintResource(CaseType input) {
-        return noarkFactory.applyValuesForSaksmappe(input, new DrosjeloyveResource());
+        DrosjeloyveResource drosjeloyveResource = new DrosjeloyveResource();
+        drosjeloyveResource.setOrganisasjonsnummer(input.getPrimaryClassification().getClassId());
+        return noarkFactory.applyValuesForSaksmappe(input, drosjeloyveResource);
     }
 }

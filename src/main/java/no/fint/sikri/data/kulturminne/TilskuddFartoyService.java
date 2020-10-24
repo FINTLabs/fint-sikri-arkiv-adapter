@@ -22,35 +22,6 @@ public class TilskuddFartoyService {
     @Autowired
     private NoarkService noarkService;
 
-    /*
-    public TilskuddFartoyResource getTilskuddFartoyCaseByMappeId(String mappeId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromMappeId(mappeId);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(mappeId));
-    }
-
-    public TilskuddFartoyResource getTilskuddFartoyCaseBySoknadsnummer(String soknadsnummer) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.createQueryInput("refEksternId.eksternID", soknadsnummer);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(soknadsnummer));
-    }
-
-    public TilskuddFartoyResource getTilskuddFartoyCaseBySystemId(String systemId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromSystemId(systemId);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput))
-                .stream().findAny().orElseThrow(() -> new GetTilskuddFartoyNotFoundException(systemId));
-    }
-
-    public List<TilskuddFartoyResource> searchTilskuddFartoyCaseByQueryParams(Map<String, Object> query) throws GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
-        QueryInput queryInput = sakFactory.getQueryInputFromQueryParams(query);
-        return tilskuddFartoyFactory.toFintResourceList(sikriObjectModelService.query(queryInput));
-    }
-
-    public TilskuddFartoyResource updateTilskuddFartoyCase(String caseNumber, TilskuddFartoyResource tilskuddFartoyResource) {
-        throw new NotImplementedException("updateTilskuddFartoyCase");
-    }
-     */
-
     public TilskuddFartoyResource createTilskuddFartoyCase(TilskuddFartoyResource tilskuddFartoyResource) {
         log.info("Create tilskudd fartøy");
         final CaseType caseType = noarkService.createCase(
