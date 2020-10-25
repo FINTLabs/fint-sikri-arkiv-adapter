@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,7 +71,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
         log.info("Complete document for update: {}", tilskuddFartoyResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource.getJournalpost());
+        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource.getJournalpost()).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
@@ -91,7 +92,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
     private void createCase(Event<FintLinks> response, TilskuddFartoyResource tilskuddFartoyResource) {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
         log.info("Complete document for creation: {}", tilskuddFartoyResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource);
+        List<Problem> problems = validationService.getProblems(tilskuddFartoyResource).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");

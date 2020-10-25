@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -105,7 +106,7 @@ public class UpdatePersonalmappeHandler implements Handler {
         try {
             caseDefaultsService.applyDefaultsForCreation(caseDefaults.getPersonalmappe(), personalmappeResource);
             log.info("Complete document for creation: {}", personalmappeResource);
-            List<Problem> problems = validationService.getProblems(personalmappeResource);
+            List<Problem> problems = validationService.getProblems(personalmappeResource).collect(Collectors.toList());
             if (!problems.isEmpty()) {
                 response.setResponseStatus(ResponseStatus.REJECTED);
                 response.setMessage("Payload fails validation!");
