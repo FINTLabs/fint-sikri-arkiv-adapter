@@ -9,9 +9,10 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;
 import no.fint.sikri.data.noark.common.NoarkFactory;
-import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -21,15 +22,23 @@ import javax.annotation.PostConstruct;
 public class DrosjeloyveFactory {
 
     private final NoarkFactory noarkFactory;
-    private final SikriCaseDefaultsService caseDefaultsService;
     private final SikriObjectModelService sikriObjectModelService;
     private final CaseDefaults caseDefaults;
 
+    @Value("${fint.case.defaults.drosjeloyve.primarklassifikasjon}")
+    String primarklassifikasjon;
+
+    @Value("${fint.case.defaults.drosjeloyve.kKodeFagklasse}")
+    String kKodeFagklasse;
+
+    @Value("${fint.case.defaults.drosjeloyve.kKodeTilleggskode}")
+    String kKodeTilleggskode;
+
     private CaseProperties properties;
 
-    public DrosjeloyveFactory(NoarkFactory noarkFactory, SikriCaseDefaultsService caseDefaultsService, SikriObjectModelService sikriObjectModelService, CaseDefaults caseDefaults) {
+
+    public DrosjeloyveFactory(NoarkFactory noarkFactory, SikriObjectModelService sikriObjectModelService, CaseDefaults caseDefaults) {
         this.noarkFactory = noarkFactory;
-        this.caseDefaultsService = caseDefaultsService;
         this.sikriObjectModelService = sikriObjectModelService;
         this.caseDefaults = caseDefaults;
     }
@@ -42,7 +51,13 @@ public class DrosjeloyveFactory {
 
     public CaseType toCaseType(DrosjeloyveResource drosjeloyveResource) throws AdministrativeUnitNotFound {
 
-        return noarkFactory.toCaseType(drosjeloyveResource);
+
+        CaseType caseType = noarkFactory.toCaseType(drosjeloyveResource);
+
+        if (!StringUtils.isAllEmpty(properties.getJournalenhet())) {
+            caseType.setRegistryManagementUnitId(properties.getJournalenhet());
+        }
+        return caseType;
 
 
     }
@@ -52,7 +67,7 @@ public class DrosjeloyveFactory {
 
         ClassificationType classificationType = new ClassificationType();
         classificationType.setClassId(drosjeloyveResource.getOrganisasjonsnummer());
-        classificationType.setClassificationSystemId("LØYVE");
+        classificationType.setClassificationSystemId(primarklassifikasjon);
         classificationType.setDescription(drosjeloyveResource.getTittel());
         classificationType.setCaseId(caseId);
         classificationType.setIsRestricted(false);
@@ -62,7 +77,7 @@ public class DrosjeloyveFactory {
     }
 
     public ClassificationType createFagklasse(Integer caseId) throws ClassNotFoundException {
-        ClassType classType = getClassType("N12");
+        ClassType classType = getClassType(kKodeFagklasse);
 
         ClassificationType classificationType = new ClassificationType();
         classificationType.setClassId(classType.getId());
@@ -76,7 +91,7 @@ public class DrosjeloyveFactory {
     }
 
     public ClassificationType createTilleggsKode(Integer caseId) throws ClassNotFoundException {
-        ClassType classType = getClassType("&18");
+        ClassType classType = getClassType(kKodeTilleggskode);
 
         ClassificationType classificationType = new ClassificationType();
         classificationType.setClassId(classType.getId());
