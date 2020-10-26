@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SikriCaseDefaultsService extends CaseDefaultsService {
 
-    public void applyDefaultsToCaseType(SaksmappeResource saksmappeResource, CaseType caseType) {
+    public void applyDefaultsToCaseType(SaksmappeResource resource, CaseType caseType) {
         caseType.setIsPhysical(false);
+        //TODO -> Configurable?
+        caseType.setFileTypeId("TS");
     }
 
 }
