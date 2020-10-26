@@ -3,8 +3,8 @@ package no.fint.sikri.service;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.sikri.AdapterProps;
+import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.utilities.SikriObjectTypes;
-import no.fint.sikri.utilities.SikriUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,6 @@ public class SikriObjectModelService extends SikriAbstractService {
     private AdapterProps props;
 
     private ObjectModelService objectModelService;
-    private ObjectFactory objectFactory;
     private EphorteIdentity ephorteIdentity;
 
     public SikriObjectModelService() {
@@ -47,7 +46,6 @@ public class SikriObjectModelService extends SikriAbstractService {
         ObjectModelService_Service ss = new ObjectModelService_Service(wsdlLocationUrl, SERVICE_NAME);
         objectModelService = ss.getWsHttpsBindingTextObjectModelService(new AddressingFeature());
         super.setup(objectModelService, "/Services/ObjectModel/V3/En/ObjectModelService.svc");
-        objectFactory = new ObjectFactory();
         setupEphorteIdentity();
 
         final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");

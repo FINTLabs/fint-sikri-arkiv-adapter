@@ -3,11 +3,13 @@ package no.fint.sikri.data.utilities;
 import no.fint.model.resource.Link;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.xml.bind.JAXBElement;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public enum SikriUtils {
     ;
@@ -23,20 +25,21 @@ public enum SikriUtils {
     }
 
     public static <T> void applyParameterFromLink(List<Link> links, Function<String, T> mapper, Consumer<T> consumer) {
-        links.stream()
-                .map(Link::getHref)
-                .filter(StringUtils::isNotBlank)
-                .map(s -> StringUtils.substringAfterLast(s, "/"))
+        getLinkTargets(links)
                 .map(mapper)
                 .findFirst()
                 .ifPresent(consumer);
     }
 
-    public static void applyParameterFromLink(List<Link> links, Consumer<String> consumer) {
-        links.stream()
+    public static Stream<String> getLinkTargets(List<Link> links) {
+        return links.stream()
                 .map(Link::getHref)
                 .filter(StringUtils::isNotBlank)
-                .map(s -> StringUtils.substringAfterLast(s, "/"))
+                .map(s -> StringUtils.substringAfterLast(s, "/"));
+    }
+
+    public static void applyParameterFromLink(List<Link> links, Consumer<String> consumer) {
+        getLinkTargets(links)
                 .findFirst()
                 .ifPresent(consumer);
     }
@@ -56,7 +59,10 @@ public enum SikriUtils {
         return f -> optionalValue(function.apply(f));
     }
 
-    public static boolean notNil(JAXBElement<?> e) {
-        return !e.isNil();
+    public static URL getURL(String location) throws MalformedURLException {
+        if (StringUtils.startsWithAny(location, "file:", "http:", "https:")) {
+            return new URL(location);
+        }
+        return new URL("file:" + location);
     }
 }

@@ -13,8 +13,8 @@ import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
+import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
-import no.fint.sikri.repository.KodeverkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameter;
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.*;
 
 @Slf4j
 @Service
@@ -31,9 +30,6 @@ public class JournalpostFactory {
 
     @Autowired
     private XmlUtils xmlUtils;
-
-    @Autowired
-    private KodeverkRepository kodeverkRepository;
 
     @Autowired
     private DokumentbeskrivelseFactory dokumentbeskrivelseFactory;
@@ -49,6 +45,9 @@ public class JournalpostFactory {
 
     @Autowired
     private MerknadService merknadService;
+
+    @Autowired
+    private SkjermingService skjermingService;
 
     @Autowired
     private NokkelordService nokkelordService;
@@ -82,6 +81,8 @@ public class JournalpostFactory {
 
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
 
+        optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant))
+                .ifPresent(journalpost::setSkjerming);
 
         journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getOfficerNameId().toString()));
         journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getCreatedByUserNameId().toString()));
@@ -133,6 +134,8 @@ public class JournalpostFactory {
                 Integer::parseInt,
                 registryEntry::setCreatedByUserNameId
         );
+
+        skjermingService.applyAccessCodeAndPursuant(journalpostResource.getSkjerming(), registryEntry::setAccessCodeId, registryEntry::setPursuant);
 
         RegistryEntryDocuments result = new RegistryEntryDocuments(registryEntry);
 
