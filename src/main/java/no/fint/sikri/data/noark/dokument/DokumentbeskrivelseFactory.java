@@ -2,7 +2,6 @@ package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
-import no.fint.arkiv.sikri.oms.ObjectFactory;
 import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
 import no.fint.model.arkiv.kodeverk.DokumentStatus;
 import no.fint.model.arkiv.kodeverk.DokumentType;
@@ -41,8 +40,6 @@ public class DokumentbeskrivelseFactory {
     @Autowired
     private XmlUtils xmlUtils;
 
-    private ObjectFactory objectFactory = new ObjectFactory();
-
     public DokumentbeskrivelseResource toFintResource(RegistryEntryDocumentType result) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
@@ -55,6 +52,10 @@ public class DokumentbeskrivelseFactory {
                     optionalValue(documentDescription.getDocumentCategoryId()).map(Link.apply(DokumentType.class, "systemid")).ifPresent(resource::addDokumentType);
 
                     optionalValue(documentDescription.getCurrentVersion()).map(dokumentobjektFactory::toFintResource).map(Collections::singletonList).ifPresent(resource::setDokumentobjekt);
+
+                    optionalValue(skjermingService.getSkjermingResource(documentDescription::getAccessCodeId, documentDescription::getPursuant))
+                            .ifPresent(resource::setSkjerming);
+
                 }
         );
 
