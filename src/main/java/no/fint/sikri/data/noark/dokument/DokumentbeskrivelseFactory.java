@@ -11,6 +11,7 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
+import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -33,6 +34,9 @@ public class DokumentbeskrivelseFactory {
 
     @Autowired
     private DokumentobjektService dokumentobjektService;
+
+    @Autowired
+    private SkjermingService skjermingService;
 
     @Autowired
     private XmlUtils xmlUtils;
@@ -91,6 +95,8 @@ public class DokumentbeskrivelseFactory {
                 dokumentbeskrivelseResource.getDokumentType(),
                 documentDescriptionType::setDocumentCategoryId
         );
+
+        skjermingService.applyAccessCodeAndPursuant(dokumentbeskrivelseResource.getSkjerming(), documentDescriptionType::setAccessCodeId, documentDescriptionType::setPursuant);
 
         RegistryEntryDocuments.Document document = new RegistryEntryDocuments.Document();
         document.setDocumentDescription(documentDescriptionType);
