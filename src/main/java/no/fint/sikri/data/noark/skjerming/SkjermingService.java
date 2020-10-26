@@ -1,8 +1,10 @@
 package no.fint.sikri.data.noark.skjerming;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.NoarkMetadataService;
 import no.fint.model.arkiv.kodeverk.Skjermingshjemmel;
 import no.fint.model.arkiv.kodeverk.Tilgangsrestriksjon;
+import no.fint.model.felles.basisklasser.Begrep;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.*;
 
@@ -20,9 +23,11 @@ import static no.fint.sikri.data.utilities.SikriUtils.*;
 @Slf4j
 public class SkjermingService {
     private final KodeverkRepository kodeverkRepository;
+    private final NoarkMetadataService noarkMetadataService;
 
-    public SkjermingService(KodeverkRepository kodeverkRepository) {
+    public SkjermingService(KodeverkRepository kodeverkRepository, NoarkMetadataService noarkMetadataService) {
         this.kodeverkRepository = kodeverkRepository;
+        this.noarkMetadataService = noarkMetadataService;
     }
 
 
@@ -53,11 +58,20 @@ public class SkjermingService {
                 .ifPresent(s -> {
                     applyParameterFromLink(s.getTilgangsrestriksjon(), accessCodeConsumer);
                     getLinkTargets(s.getSkjermingshjemmel())
-                            .flatMap(id -> kodeverkRepository
-                                    .getSkjermingshjemmel()
-                                    .stream()
-                                    .filter(v -> v.getSystemId().getIdentifikatorverdi().equals(id)))
-                            .map(SkjermingshjemmelResource::getNavn)
+                            .flatMap(id ->
+                                    Stream.concat(
+                                            Stream.concat(
+                                                    // First, try finding pursuant from Sikri codes
+                                                    kodeverkRepository.getSkjermingshjemmel().stream(),
+                                                    // Second, try finding in Noark Skjermingshjemmel
+                                                    noarkMetadataService.getSkjermingshjemmel())
+                                                    .filter(it -> it.getSystemId().getIdentifikatorverdi().equals(id)),
+                                            getLinkTargets(s.getTilgangsrestriksjon())
+                                                    // Third, try finding in Noark Tilgangsrestriksjon
+                                                    .flatMap(acc -> noarkMetadataService.getTilgangsrestriksjon().filter(it -> it.getKode().equals(acc)))
+                                    ))
+                            .map(Begrep::getNavn)
+                            .filter(StringUtils::isNotBlank)
                             .findFirst()
                             .ifPresent(pursuantConsumer);
                 });
