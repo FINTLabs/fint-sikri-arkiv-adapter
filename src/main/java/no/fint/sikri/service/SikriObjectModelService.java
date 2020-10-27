@@ -140,6 +140,8 @@ public class SikriObjectModelService extends SikriAbstractService {
         ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
         ephorteIdentity.setUserName(props.getUser());
         ephorteIdentity.setPassword(props.getPassword());
+        if (StringUtils.isNotBlank(props.getRole()))
+            ephorteIdentity.setRole(props.getRole());
     }
 
 }
