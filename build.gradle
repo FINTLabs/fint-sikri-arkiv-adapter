@@ -85,7 +85,7 @@ dependencies {
 
     compile('org.springframework.boot:spring-boot-starter-web')
     runtime('org.springframework.boot:spring-boot-actuator')
-    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testCompile('cglib:cglib-nodep:3.3.0')
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
