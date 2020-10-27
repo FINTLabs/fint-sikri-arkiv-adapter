@@ -4,6 +4,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.utilities.NOARKUtils;
+import no.fint.sikri.model.ElementsIdentity;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,12 @@ public class CaseService {
         };
     }
 
-    public Stream<CaseType> getCaseByCaseNumber(String caseNumber) throws IllegalCaseNumberFormat {
+    public Stream<CaseType> getCaseByCaseNumber(ElementsIdentity identity, String caseNumber) throws IllegalCaseNumberFormat {
         String sequenceNumber = NOARKUtils.getCaseSequenceNumber(caseNumber);
         String caseYear = NOARKUtils.getCaseYear(caseNumber);
 
         return objectModelService.getDataObjects(
+                identity,
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
                 0,
@@ -39,8 +41,9 @@ public class CaseService {
                 .map(CaseType.class::cast);
     }
 
-    public Stream<CaseType> getCaseBySystemId(String systemId) {
+    public Stream<CaseType> getCaseBySystemId(ElementsIdentity identity, String systemId) {
         return objectModelService.getDataObjects(
+                identity,
                 SikriObjectTypes.CASE,
                 "Id=" + systemId,
                 0,
@@ -50,11 +53,12 @@ public class CaseService {
 
     }
 
-    public Stream<CaseType> getCaseByFilter(String query) {
+    public Stream<CaseType> getCaseByFilter(ElementsIdentity identity, String query) {
         final Map<String, Object> queryParams = getQueryParams("?" + query);
         final String filter = String.format("Title=%s", queryParams.get("title"));
         final int maxResult = Integer.parseInt((String) queryParams.getOrDefault("maxResult", "10"));
         return objectModelService.getDataObjects(
+                identity,
                 SikriObjectTypes.CASE,
                 filter,
                 maxResult,
@@ -63,14 +67,16 @@ public class CaseService {
                 .map(CaseType.class::cast);
     }
 
-    public Stream<CaseType> getCaseByExternalKey(String externalKey) {
-        return objectModelService.getDataObjects("ExternalSystemLinkCase",
+    public Stream<CaseType> getCaseByExternalKey(ElementsIdentity identity, String externalKey) {
+        return objectModelService.getDataObjects(
+                identity,
+                "ExternalSystemLinkCase",
                 "ExternalSystem.ExternalSystemName=FINT and ExternalKey=" + externalKey)
                 .stream()
                 .map(ExternalSystemLinkCaseType.class::cast)
                 .map(ExternalSystemLinkCaseType::getCaseId)
                 .filter(i -> i > 0)
                 .map(String::valueOf)
-                .flatMap(this::getCaseBySystemId);
+                .flatMap(systemId -> getCaseBySystemId(identity, systemId));
     }
 }

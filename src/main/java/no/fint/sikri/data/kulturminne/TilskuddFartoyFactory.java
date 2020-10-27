@@ -5,6 +5,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
+import no.fint.sikri.service.EphorteIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class TilskuddFartoyFactory {
 
     @Autowired
     private NoarkFactory noarkFactory;
+
+    @Autowired
+    private EphorteIdentityService identityService;
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
         return noarkFactory.toCaseType(tilskuddFartoy);
@@ -30,7 +34,7 @@ public class TilskuddFartoyFactory {
 
         final TilskuddFartoyResource resource = new TilskuddFartoyResource();
         resource.setSoknadsnummer(new Identifikator());
-        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(input, resource);
+        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(identityService.getIdentityForCaseType(resource), input, resource);
 
 //        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
 //        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));

@@ -5,9 +5,11 @@ import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
+import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.EphorteIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class GetTilskuddFartoyHandler implements Handler {
     @Autowired
     private CaseQueryService caseQueryService;
 
+    @Autowired
+    private EphorteIdentityService identityService;
+
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
@@ -31,7 +36,7 @@ public class GetTilskuddFartoyHandler implements Handler {
             throw new IllegalArgumentException("Invalid query: " + query);
         }
         caseQueryService
-                .query(query)
+                .query(identityService.getIdentityForClass(TilskuddFartoyResource.class), query)
                 .map(tilskuddFartoyFactory::toFintResource)
                 .forEach(response::addData);
         response.setResponseStatus(ResponseStatus.ACCEPTED);

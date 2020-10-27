@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.ds.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.utilities.SikriUtils;
+import no.fint.sikri.model.ElementsIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,9 @@ public class SikriDocumentService extends SikriAbstractService {
     private String wsdlLocation;
 
     @Autowired
-    private AdapterProps props;
+    private AdapterProps adapterProps;
 
     private DocumentService documentService;
-    private EphorteIdentity ephorteIdentity;
 
     public SikriDocumentService() {
         super("http://www.gecko.no/ephorte/services/documents/v3", "DocumentService");
@@ -42,42 +42,42 @@ public class SikriDocumentService extends SikriAbstractService {
         DocumentService_Service ss = new DocumentService_Service(wsdlLocationUrl, SERVICE_NAME);
         documentService = ss.getBasicHttpsBindingMtomStreamedDocumentService(new AddressingFeature());
         super.setup(documentService, "/Services/Documents/V3/DocumentService.svc");
-        setupEphorteIdentity();
     }
 
-    public SikriDocument getDocumentContentByDocumentId(int documentId, String variant, int version) {
+    public SikriDocument getDocumentContentByDocumentId(ElementsIdentity identity, int documentId, String variant, int version) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         GetDocumentContentMessage parameters = new GetDocumentContentMessage();
-        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentBase(parameters, documentId, ephorteIdentity, variant, version, contentType, fileName);
+        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentBase(parameters, documentId, mapIdentity(identity), variant, version, contentType, fileName);
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public SikriDocument getDocumentContentByJournalPostId(int journalpostId) {
+    public SikriDocument getDocumentContentByJournalPostId(ElementsIdentity identity, int journalpostId) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         GetJournalpostDocumentContentMessage parameters = new GetJournalpostDocumentContentMessage();
-        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentByJournalPostId(parameters, ephorteIdentity, journalpostId, contentType, fileName);
+        final DocumentReturnMessage documentReturnMessage = documentService.getDocumentContentByJournalPostId(parameters, mapIdentity(identity), journalpostId, contentType, fileName);
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public String uploadFile(byte[] content, String contentType, String fileName) {
+    public String uploadFile(ElementsIdentity identity, byte[] content, String contentType, String fileName) {
         Holder<String> identifier = new Holder<>();
         Holder<String> fileNameHolder = new Holder<>();
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, ephorteIdentity, fileNameHolder, null, identifier);
+        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return identifier.value;
     }
 
-    public void checkin(Integer docId, String variant, Integer version, String identifier) {
+    public void checkin(ElementsIdentity identity, Integer docId, String variant, Integer version, String identifier) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         log.debug("Try fetch document {} ...", identifier);
+        final EphorteIdentity ephorteIdentity = mapIdentity(identity);
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {}", documentReturnMessage);
+        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();
         checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = new DocumentCriteria();
@@ -89,6 +89,15 @@ public class SikriDocumentService extends SikriAbstractService {
         documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
     }
 
+    private EphorteIdentity mapIdentity(ElementsIdentity identity) {
+        EphorteIdentity ephorteIdentity = new EphorteIdentity();
+        ephorteIdentity.setUserName(identity.getUsername());
+        ephorteIdentity.setPassword(identity.getPassword());
+        ephorteIdentity.setExternalSystemName(identity.getExternalSystemName());
+        ephorteIdentity.setRole(identity.getRole());
+        ephorteIdentity.setDatabase(adapterProps.getDatabase());
+        return ephorteIdentity;
+    }
     /*
     public ResponseEntity<byte[]> download(String docId) {
         GetDocumentContentMessage param = objectFactory.();
@@ -114,14 +123,6 @@ public class SikriDocumentService extends SikriAbstractService {
 
     public boolean isHealty() {
         return true;
-    }
-
-    private void setupEphorteIdentity() {
-        ephorteIdentity = new EphorteIdentity();
-        ephorteIdentity.setDatabase(props.getDatabase());
-        ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
-        ephorteIdentity.setUserName(props.getUser());
-        ephorteIdentity.setPassword(props.getPassword());
     }
 
     @Data

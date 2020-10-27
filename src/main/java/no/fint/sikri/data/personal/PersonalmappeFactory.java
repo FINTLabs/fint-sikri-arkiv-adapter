@@ -16,6 +16,7 @@ import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
+import no.fint.sikri.service.EphorteIdentityService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -47,6 +48,9 @@ public class PersonalmappeFactory {
 
     @Autowired
     private CaseDefaults caseDefaults;
+
+    @Autowired
+    private EphorteIdentityService identityService;
 
     private CaseProperties properties;
 
@@ -107,6 +111,7 @@ public class PersonalmappeFactory {
     private Integer getAdministrativeUnitTypeId(String shortCodeThisLevel) throws AdministrativeUnitNotFound {
 
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
                 SikriObjectTypes.ADMINISTRATIVE_UNIT,
                 "ShortCodeThisLevel=" + shortCodeThisLevel
                         + " AND ClosedDate=@"
@@ -125,6 +130,7 @@ public class PersonalmappeFactory {
     public Integer getOfficerId(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound {
         String officerUserId = getIdFromLink(personalmappeResource.getLeder()).orElseThrow(() -> new UnableToGetIdFromLink("Finner ikke leder fra " + personalmappeResource.getTittel()));
         List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
                 SikriObjectTypes.USER,
                 "UserId=" + officerUserId,
                 Collections.singletonList("CurrentUserName")
@@ -165,7 +171,7 @@ public class PersonalmappeFactory {
     public PersonalmappeResource toFintResource(CaseType input) {
 
 
-        PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(input, new PersonalmappeResource());
+        PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(identityService.getIdentityForClass(PersonalmappeResource.class), input, new PersonalmappeResource());
 
         personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle()));
 

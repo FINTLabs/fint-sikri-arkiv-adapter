@@ -3,6 +3,7 @@ package no.fint.sikri.data.noark.part;
 import no.fint.arkiv.sikri.oms.CasePartyType;
 import no.fint.model.resource.arkiv.noark.PartResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
+import no.fint.sikri.model.ElementsIdentity;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,9 @@ public class PartService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<PartResource> queryForSaksmappe(SaksmappeResource saksmappe) {
+    public List<PartResource> queryForSaksmappe(ElementsIdentity identity, SaksmappeResource saksmappe) {
         return sikriObjectModelService.getDataObjects(
+                identity,
                 SikriObjectTypes.CASE_PARTY,
                 "CaseId=" + saksmappe.getSystemId().getIdentifikatorverdi()
         ).stream()

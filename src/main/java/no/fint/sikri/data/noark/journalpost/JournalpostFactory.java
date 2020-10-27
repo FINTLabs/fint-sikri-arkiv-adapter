@@ -15,6 +15,7 @@ import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
+import no.fint.sikri.model.ElementsIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +53,7 @@ public class JournalpostFactory {
     @Autowired
     private NokkelordService nokkelordService;
 
-    public JournalpostResource toFintResource(RegistryEntryType result) {
+    public JournalpostResource toFintResource(ElementsIdentity identity, RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
         journalpost.setTittel(result.getTitleRestricted());
@@ -76,10 +77,10 @@ public class JournalpostFactory {
                         .distinct()
                         .collect(Collectors.toList()));
 
-        journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(result.getId().toString()));
-        journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(result.getId().toString()));
+        journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(identity, result.getId().toString()));
+        journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(identity, result.getId().toString()));
 
-        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
+        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(identity, result.getId().toString()));
 
         optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant))
                 .ifPresent(journalpost::setSkjerming);
