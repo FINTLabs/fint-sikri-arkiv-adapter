@@ -132,7 +132,7 @@ public class KodeverkRepository {
         partRolle = partRolleService.getPartRolle().collect(Collectors.toList());
         merknadstype = merknadstypeService.getMerknadstype().collect(Collectors.toList());
         tilgangsrestriksjon = tilgangsrestriksjonService.getAccessCodeTable().collect(Collectors.toList());
-        skjermingshjemmel = skjermingshjemmelService.getLawTable().collect(Collectors.toList());
+        skjermingshjemmel = skjermingshjemmelService.getStatutoryAuthority().collect(Collectors.toList());
         variantformat = variantformatService.getVariantFormatTable().collect(Collectors.toList());
         // TODO klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
