@@ -3,23 +3,26 @@ package no.fint.sikri.data.noark.common;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.exception.CaseNotFound;
+import no.fint.sikri.data.noark.dokument.CheckinDocument;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
+import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -98,29 +101,33 @@ public class NoarkService {
             throw new CaseNotFound("Case not found for query " + query);
         }
         final CaseType caseType = cases.get(0);
-        sikriObjectModelService.createDataObjects(
-                saksmappeResource
-                        .getJournalpost()
-                        .stream()
-                        .map(r -> journalpostFactory.toRegistryEntryDocuments(caseType.getId(), r))
-                        .flatMap(d -> {
-                            final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(d.getRegistryEntry());
-                            return Stream.concat(
-                                    d.getSenderRecipients().stream().peek(it -> it.setRegistryEntryId(registryEntry.getId()))
-                                    ,
-                                    d.getDocuments().stream().map(it -> {
-                                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(it.getRight().getDocumentDescription());
-                                        it.getRight()
-                                                .getCheckinDocuments()
-                                                .stream()
-                                                .peek(checkinDocument -> checkinDocument.setDocumentId(documentDescription.getId()))
-                                                .peek(checkinDocument -> sikriObjectModelService.createDataObject(
-                                                        dokumentobjektService.createDocumentObject(checkinDocument)
-                                                ))
-                                                .forEach(dokumentobjektService::checkinDocument);
-                                        return dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), it.getLeft(), documentDescription.getId());
-                                    }));
-                        })
-                        .toArray(DataObject[]::new));
+
+        for (JournalpostResource journalpost : saksmappeResource.getJournalpost()) {
+            log.debug("Create journalpost {}", journalpost.getTittel());
+            final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost);
+            final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(registryEntryDocuments.getRegistryEntry());
+
+            for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
+                log.debug("Create SenderRecipient {}", senderRecipient.getName());
+                senderRecipient.setRegistryEntryId(registryEntry.getId());
+                sikriObjectModelService.createDataObject(senderRecipient);
+            }
+
+            for (Pair<String, RegistryEntryDocuments.Document> document : registryEntryDocuments.getDocuments()) {
+                log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+
+                for (CheckinDocument checkinDocument : document.getRight().getCheckinDocuments()) {
+                    log.debug("Create DocumentObject {}", checkinDocument.getGuid());
+                    checkinDocument.setDocumentId(documentDescription.getId());
+                    sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
+                    dokumentobjektService.checkinDocument(checkinDocument);
+                }
+
+                log.debug("Create RegistryEntryDocument {}", document.getLeft());
+                sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
+            }
+        }
+
     }
 }
