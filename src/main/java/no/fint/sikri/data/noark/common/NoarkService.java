@@ -113,7 +113,8 @@ public class NoarkService {
                     SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                     "RegistryEntryId=" + registryEntry.getId(),
                     1,
-                    SikriObjectTypes.DOCUMENT_DESCRIPTION);
+                    SikriObjectTypes.DOCUMENT_DESCRIPTION,
+                    "DocumentDescription.CurrentVersion");
             log.debug("Bernie made this: {}", dataObjects);
 
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
@@ -132,12 +133,15 @@ public class NoarkService {
                         log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
 
                         RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
+
+
                         checkinDocument.setDocumentId(bernieObject.getDocumentDescriptionId());
                         dokumentobjektService.checkinDocument(checkinDocument);
 
                         BeanUtils.copyProperties(document.getRight().getDocumentDescription(), bernieObject.getDocumentDescription());
                         log.debug("Updating 🧾 {}", bernieObject.getDocumentDescription());
                         sikriObjectModelService.updateDataObject(bernieObject.getDocumentDescription());
+
 
                         bernieObject.setDocumentLinkTypeId(document.getLeft());
                         log.debug("Updating 🌲 {}", bernieObject);
