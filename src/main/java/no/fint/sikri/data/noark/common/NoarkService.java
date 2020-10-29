@@ -15,8 +15,10 @@ import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriObjectModelService;
+import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,12 +73,12 @@ public class NoarkService {
 
         if (resource.getKlasse() != null) {
             sikriObjectModelService.createDataObjects(
-            resource.getKlasse()
-                    .stream()
-                    .map(klasseFactory::toClassificationType)
-                    .sorted(Comparator.comparing(ClassificationType::getSortOrder))
-                    .peek(cls -> cls.setCaseId(caseType.getId()))
-                    .toArray(DataObject[]::new)
+                    resource.getKlasse()
+                            .stream()
+                            .map(klasseFactory::toClassificationType)
+                            .sorted(Comparator.comparing(ClassificationType::getSortOrder))
+                            .peek(cls -> cls.setCaseId(caseType.getId()))
+                            .toArray(DataObject[]::new)
             );
         }
 
@@ -107,27 +109,55 @@ public class NoarkService {
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost);
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(registryEntryDocuments.getRegistryEntry());
 
+            final List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
+                    SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
+                    "RegistryEntryId=" + registryEntry.getId(),
+                    1,
+                    SikriObjectTypes.DOCUMENT_DESCRIPTION);
+            log.debug("Bernie made this: {}", dataObjects);
+
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
                 senderRecipient.setRegistryEntryId(registryEntry.getId());
                 sikriObjectModelService.createDataObject(senderRecipient);
             }
 
-            for (Pair<String, RegistryEntryDocuments.Document> document : registryEntryDocuments.getDocuments()) {
-                log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
-                final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+            for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
+                Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
 
-                for (CheckinDocument checkinDocument : document.getRight().getCheckinDocuments()) {
-                    log.debug("Create DocumentObject {}", checkinDocument.getGuid());
-                    checkinDocument.setDocumentId(documentDescription.getId());
-                    sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
-                    dokumentobjektService.checkinDocument(checkinDocument);
+                for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
+                    CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
+
+                    if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
+                        log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
+
+                        RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
+                        checkinDocument.setDocumentId(bernieObject.getDocumentDescriptionId());
+                        dokumentobjektService.checkinDocument(checkinDocument);
+
+                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), bernieObject.getDocumentDescription());
+                        log.debug("Updating 🧾 {}", bernieObject.getDocumentDescription());
+                        sikriObjectModelService.updateDataObject(bernieObject.getDocumentDescription());
+
+                        bernieObject.setDocumentLinkTypeId(document.getLeft());
+                        log.debug("Updating 🌲 {}", bernieObject);
+                        sikriObjectModelService.updateDataObject(bernieObject);
+
+                        log.debug("🤬🤬🤬");
+
+                    } else {
+                        // TODO 🚽 This creates too many DocumentDescription instances if there are multiple document objects on the same document description. 👿
+                        log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+                        log.debug("Create DocumentObject {}", checkinDocument.getGuid());
+                        checkinDocument.setDocumentId(documentDescription.getId());
+                        sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
+                        dokumentobjektService.checkinDocument(checkinDocument);
+                        log.debug("Create RegistryEntryDocument {}", document.getLeft());
+                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
+                    }
                 }
-
-                log.debug("Create RegistryEntryDocument {}", document.getLeft());
-                sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
             }
         }
-
     }
 }
