@@ -56,6 +56,15 @@ public class KorrespondansepartFactory {
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
         optionalValue(input.getKontaktperson()).ifPresent(output::setAttention);
 
+        if (StringUtils.isNotBlank(input.getOrganisasjonsnummer())) {
+            output.setIdTypeId("ORG");
+            output.setExternalId(input.getOrganisasjonsnummer());
+        }
+        if (StringUtils.isNotBlank(input.getFodselsnummer())) {
+            output.setIdTypeId("FNR");
+            output.setExternalId(input.getFodselsnummer());
+        }
+
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse).ifPresent(output::setEmail);
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer).ifPresent(output::setTelephone);
 

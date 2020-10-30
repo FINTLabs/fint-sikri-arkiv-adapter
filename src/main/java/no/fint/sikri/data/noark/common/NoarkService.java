@@ -129,7 +129,7 @@ public class NoarkService {
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
-                    if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
+                    if (false && i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
 
                         RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
@@ -141,7 +141,6 @@ public class NoarkService {
                         BeanUtils.copyProperties(document.getRight().getDocumentDescription(), bernieObject.getDocumentDescription());
                         log.debug("Updating 🧾 {}", bernieObject.getDocumentDescription());
                         sikriObjectModelService.updateDataObject(bernieObject.getDocumentDescription());
-
 
                         bernieObject.setDocumentLinkTypeId(document.getLeft());
                         log.debug("Updating 🌲 {}", bernieObject);
