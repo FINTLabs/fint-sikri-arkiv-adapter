@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.common;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.AdditionalFieldService;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
@@ -145,9 +146,9 @@ public class NoarkFactory {
         }
     }
 
-    public <T extends SaksmappeResource> CaseType toCaseType(T resource) {
+    public <T extends SaksmappeResource> CaseType toCaseType(CaseProperties caseProperties, T resource) {
         CaseType caseType = new CaseType();
-        caseDefaultsService.applyDefaultsToCaseType(resource, caseType);
+        caseDefaultsService.applyDefaultsToCaseType(caseProperties, resource, caseType);
 
         caseType.setTitle(titleService.getTitle(resource));
 
