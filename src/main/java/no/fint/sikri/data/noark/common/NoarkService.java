@@ -129,26 +129,26 @@ public class NoarkService {
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
-                    if (false && i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
-                        log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
-
-                        RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
-
-
-                        checkinDocument.setDocumentId(bernieObject.getDocumentDescriptionId());
-                        dokumentobjektService.checkinDocument(checkinDocument);
-
-                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), bernieObject.getDocumentDescription());
-                        log.debug("Updating 🧾 {}", bernieObject.getDocumentDescription());
-                        sikriObjectModelService.updateDataObject(bernieObject.getDocumentDescription());
-
-                        bernieObject.setDocumentLinkTypeId(document.getLeft());
-                        log.debug("Updating 🌲 {}", bernieObject);
-                        sikriObjectModelService.updateDataObject(bernieObject);
-
-                        log.debug("🤬🤬🤬");
-
-                    } else {
+//                    if (false && i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
+//                        log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
+//
+//                        RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
+//
+//
+//                        checkinDocument.setDocumentId(bernieObject.getDocumentDescriptionId());
+//                        dokumentobjektService.checkinDocument(checkinDocument);
+//
+//                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), bernieObject.getDocumentDescription());
+//                        log.debug("Updating 🧾 {}", bernieObject.getDocumentDescription());
+//                        sikriObjectModelService.updateDataObject(bernieObject.getDocumentDescription());
+//
+//                        bernieObject.setDocumentLinkTypeId(document.getLeft());
+//                        log.debug("Updating 🌲 {}", bernieObject);
+//                        sikriObjectModelService.updateDataObject(bernieObject);
+//
+//                        log.debug("🤬🤬🤬");
+//
+//                    } else {
                         // TODO 🚽 This creates too many DocumentDescription instances if there are multiple document objects on the same document description. 👿
                         log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
@@ -158,7 +158,7 @@ public class NoarkService {
                         dokumentobjektService.checkinDocument(checkinDocument);
                         log.debug("Create RegistryEntryDocument {}", document.getLeft());
                         sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
-                    }
+//                    }
                 }
             }
         }
