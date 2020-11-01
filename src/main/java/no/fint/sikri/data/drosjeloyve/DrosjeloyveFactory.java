@@ -52,7 +52,7 @@ public class DrosjeloyveFactory {
     public CaseType toCaseType(DrosjeloyveResource drosjeloyveResource) throws AdministrativeUnitNotFound {
 
 
-        CaseType caseType = noarkFactory.toCaseType(drosjeloyveResource);
+        CaseType caseType = noarkFactory.toCaseType(caseDefaults.getDrosjeloyve(), drosjeloyveResource);
 
         if (!StringUtils.isAllEmpty(properties.getJournalenhet())) {
             caseType.setRegistryManagementUnitId(properties.getJournalenhet());
