@@ -165,6 +165,11 @@ public class NoarkFactory {
         );
 
         applyParameterFromLink(
+                resource.getJournalenhet(),
+                caseType::setRegistryManagementUnitId
+        );
+
+        applyParameterFromLink(
                 resource.getArkivdel(),
                 caseType::setSeriesId
         );
