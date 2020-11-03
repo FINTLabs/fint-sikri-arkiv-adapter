@@ -78,7 +78,7 @@ public class SikriDocumentService extends SikriAbstractService {
         Holder<String> fileName = new Holder<>();
         log.debug("Try fetch document {} ...", identifier);
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {}", documentReturnMessage);
+        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();
         checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = new DocumentCriteria();

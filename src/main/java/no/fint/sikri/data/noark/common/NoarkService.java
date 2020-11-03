@@ -1,5 +1,7 @@
 package no.fint.sikri.data.noark.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
@@ -18,14 +20,13 @@ import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static no.fint.sikri.data.utilities.PropUtils.copyProperties;
 
 @Service
 @Slf4j
@@ -114,9 +115,14 @@ public class NoarkService {
                     SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                     "RegistryEntryId=" + registryEntry.getId(),
                     1,
-                    SikriObjectTypes.DOCUMENT_DESCRIPTION,
-                    SikriObjectTypes.DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY);
-            log.debug("Bernie made this: {}", dataObjects);
+                    SikriObjectTypes.DOCUMENT_DESCRIPTION);
+
+            if (log.isDebugEnabled()) {
+                try {
+                    log.debug("Bernie made this: {}", new ObjectMapper().writeValueAsString(dataObjects));
+                } catch (JsonProcessingException ignore) {
+                }
+            }
 
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
@@ -136,13 +142,19 @@ public class NoarkService {
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        copyProperties(document.getRight().getDocumentDescription(), documentDescription);
+                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId");
                         registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
-                        log.debug("Updating 🧾 {} {}", documentDescription, registryEntryDocument);
-                        sikriObjectModelService.updateDataObjects(documentDescription, registryEntryDocument);
+                        log.debug("Updating 💼 {}", documentDescription);
+                        sikriObjectModelService.updateDataObject(documentDescription);
+                        log.debug("Updating 📂 {}", registryEntryDocument);
+                        sikriObjectModelService.updateDataObject(registryEntryDocument);
 
+                        log.debug("Create 🧾 {}", checkinDocument.getGuid());
                         checkinDocument.setDocumentId(documentDescription.getId());
+                        sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
+
+                        log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(checkinDocument);
 
                         log.debug("🤬🤬🤬");
