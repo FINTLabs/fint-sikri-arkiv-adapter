@@ -111,6 +111,7 @@ public class NoarkService {
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost);
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(registryEntryDocuments.getRegistryEntry());
 
+            // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
             final List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
                     SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                     "RegistryEntryId=" + registryEntry.getId(),
@@ -119,7 +120,7 @@ public class NoarkService {
 
             if (log.isDebugEnabled()) {
                 try {
-                    log.debug("Bernie made this: {}", new ObjectMapper().writeValueAsString(dataObjects));
+                    log.debug("Elements made this: {}", new ObjectMapper().writeValueAsString(dataObjects));
                 } catch (JsonProcessingException ignore) {
                 }
             }
@@ -132,12 +133,13 @@ public class NoarkService {
 
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
                 Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
+                Integer documentDescriptionId = null;
 
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
-                        log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
+                        log.debug("ELEMENTS WORKAROUND HACK IN PROGRESS! 💣");
 
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
@@ -145,13 +147,14 @@ public class NoarkService {
                         BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId");
                         registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
-                        log.debug("Updating 💼 {}", documentDescription);
+                        log.debug("Update 💼 {}", documentDescription);
                         sikriObjectModelService.updateDataObject(documentDescription);
-                        log.debug("Updating 📂 {}", registryEntryDocument);
+                        log.debug("Update 📂 {}", registryEntryDocument);
                         sikriObjectModelService.updateDataObject(registryEntryDocument);
 
+                        documentDescriptionId = documentDescription.getId();
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
-                        checkinDocument.setDocumentId(documentDescription.getId());
+                        checkinDocument.setDocumentId(documentDescriptionId);
                         sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
 
                         log.debug("Checkin 🧾 {}", checkinDocument);
@@ -160,15 +163,18 @@ public class NoarkService {
                         log.debug("🤬🤬🤬");
 
                     } else {
-                        // TODO 🚽 This creates too many DocumentDescription instances if there are multiple document objects on the same document description. 👿
-                        log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
-                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+                        if (j == 0)
+                        {
+                            log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                            final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+                            documentDescriptionId = documentDescription.getId();
+                        }
                         log.debug("Create DocumentObject {}", checkinDocument.getGuid());
-                        checkinDocument.setDocumentId(documentDescription.getId());
+                        checkinDocument.setDocumentId(documentDescriptionId);
                         sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
                         dokumentobjektService.checkinDocument(checkinDocument);
                         log.debug("Create RegistryEntryDocument {}", document.getLeft());
-                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
+                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescriptionId));
                     }
                 }
             }
