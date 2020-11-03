@@ -18,13 +18,14 @@ import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static no.fint.sikri.data.utilities.PropUtils.copyProperties;
 
 @Service
 @Slf4j
@@ -132,21 +133,17 @@ public class NoarkService {
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         log.debug("BERNIE WORKAROUND HACK IN PROGRESS! 💣");
 
-                        RegistryEntryDocumentType bernieObject = (RegistryEntryDocumentType) dataObjects.get(0);
+                        RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
+                        final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        final DocumentDescriptionType documentDescription = document.getRight().getDocumentDescription();
-                        documentDescription.setId(bernieObject.getDocumentDescriptionId());
+                        copyProperties(document.getRight().getDocumentDescription(), documentDescription);
+                        registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
-                        log.debug("Updating 🧾 {}", documentDescription);
-                        sikriObjectModelService.updateDataObject(documentDescription);
+                        log.debug("Updating 🧾 {} {}", documentDescription, registryEntryDocument);
+                        sikriObjectModelService.updateDataObjects(documentDescription, registryEntryDocument);
 
-                        checkinDocument.setDocumentId(bernieObject.getDocumentDescriptionId());
+                        checkinDocument.setDocumentId(documentDescription.getId());
                         dokumentobjektService.checkinDocument(checkinDocument);
-
-
-                        bernieObject.setDocumentLinkTypeId(document.getLeft());
-                        log.debug("Updating 🌲 {}", bernieObject);
-                        sikriObjectModelService.updateDataObject(bernieObject);
 
                         log.debug("🤬🤬🤬");
 
