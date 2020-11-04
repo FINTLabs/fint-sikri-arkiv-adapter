@@ -7,6 +7,7 @@ import no.fint.model.resource.felles.kodeverk.FylkeResource;
 import no.fint.model.resource.felles.kodeverk.KommuneResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -25,14 +26,22 @@ public class LinkResolverService implements LinkResolver {
             return null;
         }
         if (StringUtils.contains(href, "/felles/kodeverk/kommune/")) {
-            final KommuneResource kommune = restTemplate.getForObject(href, KommuneResource.class);
-            log.info("Found {}", kommune);
-            return kommune;
+            try {
+                final KommuneResource kommune = restTemplate.getForObject(href, KommuneResource.class);
+                log.info("Found {}", kommune);
+                return kommune;
+            } catch (HttpStatusCodeException e) {
+                throw new IllegalArgumentException("HTTP status " + e.getStatusCode() + " when resolving link " + href);
+            }
         }
         if (StringUtils.contains(href, "/felles/kodeverk/fylke/")) {
-            final FylkeResource fylke = restTemplate.getForObject(href, FylkeResource.class);
-            log.info("Found {}", fylke);
-            return fylke;
+            try {
+                final FylkeResource fylke = restTemplate.getForObject(href, FylkeResource.class);
+                log.info("Found {}", fylke);
+                return fylke;
+            } catch (HttpStatusCodeException e) {
+                throw new IllegalArgumentException("HTTP status " + e.getStatusCode() + " when resolving link " + href);
+            }
         }
         log.info("No known resource for link {}", href);
         return null;
