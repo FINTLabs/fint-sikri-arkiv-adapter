@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.sak;
 
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.noark.SakResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
@@ -19,7 +20,7 @@ public class SakFactory {
     private NoarkFactory noarkFactory;
 
     public SakResource toFintResource(CaseType result) {
-        return noarkFactory.applyValuesForSaksmappe(result, new SakResource());
+        return noarkFactory.applyValuesForSaksmappe(new CaseProperties(), result, new SakResource());
     }
 
     public List<SakResource> toFintResourceList(List<CaseType> cases) {

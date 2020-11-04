@@ -1,6 +1,7 @@
 package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -21,7 +22,7 @@ public class DokumentbeskrivelseService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<DokumentbeskrivelseResource> queryForJournalpost(String id) {
+    public List<DokumentbeskrivelseResource> queryForJournalpost(CaseProperties caseProperties, String id) {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                 "RegistryEntryId=" + id,
@@ -34,7 +35,7 @@ public class DokumentbeskrivelseService {
                 SikriObjectTypes.DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY
         ).stream()
                 .map(RegistryEntryDocumentType.class::cast)
-                .map(dokumentbeskrivelseFactory::toFintResource)
+                .map(registryEntryDocumentType -> dokumentbeskrivelseFactory.toFintResource(caseProperties, registryEntryDocumentType))
                 .collect(Collectors.toList());
     }
 }

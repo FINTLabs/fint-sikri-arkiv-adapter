@@ -1,6 +1,7 @@
 package no.fint.sikri.data.noark.common;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
@@ -89,7 +90,7 @@ public class NoarkService {
         }
     }
 
-    public void updateCase(String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
+    public void updateCase(CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
         }
@@ -98,11 +99,14 @@ public class NoarkService {
             throw new CaseNotFound("Case not found for query " + query);
         }
         final CaseType caseType = cases.get(0);
+        noarkFactory.applyFieldsForSaksmappe(caseType, saksmappeResource);
+        noarkFactory.addLinksToSaksmappe(caseType, saksmappeResource);
+        noarkFactory.parseTitleAndFields(caseProperties, caseType, saksmappeResource);
         sikriObjectModelService.createDataObjects(
                 saksmappeResource
                         .getJournalpost()
                         .stream()
-                        .map(r -> journalpostFactory.toRegistryEntryDocuments(caseType.getId(), r))
+                        .map(r -> journalpostFactory.toRegistryEntryDocuments(caseProperties, caseType.getId(), saksmappeResource, r))
                         .flatMap(d -> {
                             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(d.getRegistryEntry());
                             return Stream.concat(

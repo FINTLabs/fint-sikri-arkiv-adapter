@@ -25,7 +25,7 @@ public class TilskuddFredaBygningPrivatEieFactory {
         resource.setSoknadsnummer(new Identifikator());
         resource.setMatrikkelnummer(new MatrikkelnummerResource());
 
-        return noarkFactory.applyValuesForSaksmappe(caseType, resource);
+        return noarkFactory.applyValuesForSaksmappe(caseDefaults.getTilskuddfredabygningprivateie(), caseType, resource);
     }
 
     public CaseType toCaseType(TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {

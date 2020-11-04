@@ -1,6 +1,8 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.CaseNotFound;
@@ -21,6 +23,9 @@ public class TilskuddFartoyService {
 
     @Autowired
     private NoarkService noarkService;
+
+    @Autowired
+    private CaseDefaults caseDefaults;
 
     /*
     public TilskuddFartoyResource getTilskuddFartoyCaseByMappeId(String mappeId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
@@ -62,7 +67,7 @@ public class TilskuddFartoyService {
     }
 
     public TilskuddFartoyResource updateTilskuddFartoyCase(String query, TilskuddFartoyResource tilskuddFartoyResource) throws CaseNotFound {
-        noarkService.updateCase(query, tilskuddFartoyResource);
+        noarkService.updateCase(caseDefaults.getTilskuddfartoy(), query, tilskuddFartoyResource);
         return caseQueryService
                 .query(query)
                 .map(tilskuddFartoyFactory::toFintResource)

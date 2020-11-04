@@ -165,7 +165,7 @@ public class PersonalmappeFactory {
     public PersonalmappeResource toFintResource(CaseType input) {
 
 
-        PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(input, new PersonalmappeResource());
+        PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(caseDefaults.getPersonalmappe(), input, new PersonalmappeResource());
 
         personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle()));
 

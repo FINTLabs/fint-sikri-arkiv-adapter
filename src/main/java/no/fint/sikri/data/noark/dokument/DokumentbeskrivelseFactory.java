@@ -1,6 +1,8 @@
 package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
+import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
 import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
 import no.fint.model.arkiv.kodeverk.DokumentStatus;
@@ -9,6 +11,8 @@ import no.fint.model.arkiv.kodeverk.TilknyttetRegistreringSom;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
+import no.fint.model.resource.arkiv.noark.RegistreringResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
@@ -35,12 +39,15 @@ public class DokumentbeskrivelseFactory {
     private DokumentobjektService dokumentobjektService;
 
     @Autowired
+    private TitleService titleService;
+
+    @Autowired
     private SkjermingService skjermingService;
 
     @Autowired
     private XmlUtils xmlUtils;
 
-    public DokumentbeskrivelseResource toFintResource(RegistryEntryDocumentType result) {
+    public DokumentbeskrivelseResource toFintResource(CaseProperties caseProperties, RegistryEntryDocumentType result) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
         optionalValue(result.getDocumentDescription()).ifPresent(
@@ -56,6 +63,7 @@ public class DokumentbeskrivelseFactory {
                     optionalValue(skjermingService.getSkjermingResource(documentDescription::getAccessCodeId, documentDescription::getPursuant))
                             .ifPresent(resource::setSkjerming);
 
+                    titleService.parseDocumentTitle(caseProperties.getTitle(), resource, documentDescription.getDocumentTitle());
                 }
         );
 
@@ -67,13 +75,10 @@ public class DokumentbeskrivelseFactory {
         return resource;
     }
 
-    public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
+    public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(CaseProperties caseProperties, SaksmappeResource saksmappeResource, RegistreringResource registreringResource, DokumentbeskrivelseResource dokumentbeskrivelseResource) {
         DocumentDescriptionType documentDescriptionType = new DocumentDescriptionType();
 
-        applyParameter(
-                dokumentbeskrivelseResource.getTittel(),
-                documentDescriptionType::setDocumentTitle
-        );
+        documentDescriptionType.setDocumentTitle(titleService.getDocumentTitle(caseProperties.getTitle(), saksmappeResource, registreringResource, dokumentbeskrivelseResource));
 
         applyParameter(
                 dokumentbeskrivelseResource.getOpprettetDato(),

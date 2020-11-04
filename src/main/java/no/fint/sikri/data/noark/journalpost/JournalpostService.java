@@ -1,6 +1,7 @@
 package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
@@ -22,7 +23,7 @@ public class JournalpostService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<JournalpostResource> queryForSaksmappe(SaksmappeResource saksmappe) {
+    public List<JournalpostResource> queryForSaksmappe(CaseProperties caseProperties, SaksmappeResource saksmappe) {
         return sikriObjectModelService.getDataObjects(
                 SikriObjectTypes.REGISTRY_ENTRY,
                 "CaseId=" + saksmappe.getSystemId().getIdentifikatorverdi(),
@@ -30,7 +31,7 @@ public class JournalpostService {
                 SikriObjectTypes.OFFICER_NAME)
                 .stream()
                 .map(RegistryEntryType.class::cast)
-                .map(journalpostFactory::toFintResource)
+                .map(registryEntryType -> journalpostFactory.toFintResource(caseProperties, registryEntryType))
                 .collect(Collectors.toList());
     }
 }

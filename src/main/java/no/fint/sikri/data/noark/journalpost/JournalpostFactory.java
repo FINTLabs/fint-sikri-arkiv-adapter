@@ -1,12 +1,15 @@
 package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
+import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
 import no.fint.model.arkiv.kodeverk.JournalStatus;
 import no.fint.model.arkiv.kodeverk.JournalpostType;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
@@ -44,6 +47,9 @@ public class JournalpostFactory {
     private KorrespondansepartFactory korrespondansepartFactory;
 
     @Autowired
+    private TitleService titleService;
+
+    @Autowired
     private MerknadService merknadService;
 
     @Autowired
@@ -52,11 +58,11 @@ public class JournalpostFactory {
     @Autowired
     private NokkelordService nokkelordService;
 
-    public JournalpostResource toFintResource(RegistryEntryType result) {
+    public JournalpostResource toFintResource(CaseProperties caseProperties, RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
-        journalpost.setTittel(result.getTitleRestricted());
-        journalpost.setOffentligTittel(result.getTitle());
+        journalpost.setTittel(result.getTitle());
+        journalpost.setOffentligTittel(result.getTitleRestricted());
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
         journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
@@ -79,7 +85,7 @@ public class JournalpostFactory {
         journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(result.getId().toString()));
         journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(result.getId().toString()));
 
-        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(result.getId().toString()));
+        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(caseProperties, result.getId().toString()));
 
         optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant))
                 .ifPresent(journalpost::setSkjerming);
@@ -89,15 +95,17 @@ public class JournalpostFactory {
         journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getRegistryEntryTypeId()));
         journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getRecordStatusId()));
 
+        titleService.parseRecordTitle(caseProperties.getTitle(), journalpost, result.getTitle());
+
         return journalpost;
     }
 
-    public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
+    public RegistryEntryDocuments toRegistryEntryDocuments(CaseProperties caseProperties, Integer caseId, SaksmappeResource saksmappe, JournalpostResource journalpostResource) {
 
         RegistryEntryType registryEntry = new RegistryEntryType();
 
         registryEntry.setCaseId(caseId);
-        registryEntry.setTitle(journalpostResource.getTittel());
+        registryEntry.setTitle(titleService.getRecordTitle(caseProperties.getTitle(), saksmappe, journalpostResource));
         registryEntry.setTitleRestricted(journalpostResource.getOffentligTittel());
 
         applyParameter(
@@ -141,7 +149,7 @@ public class JournalpostFactory {
 
         journalpostResource.getDokumentbeskrivelse()
                 .stream()
-                .map(dokumentbeskrivelseFactory::toDocumentDescription)
+                .map(dokumentbeskrivelseResource ->  dokumentbeskrivelseFactory.toDocumentDescription(caseProperties, saksmappe, journalpostResource, dokumentbeskrivelseResource))
                 .forEach(result::addDocument);
 
         if (journalpostResource.getKorrespondansepart() != null) {
