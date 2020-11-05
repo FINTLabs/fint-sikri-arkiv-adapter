@@ -137,7 +137,7 @@ public class NoarkFactory {
     }
 
     <T extends SaksmappeResource> void queryNestedResources(CaseProperties caseProperties, CaseType input, T resource) {
-        resource.setJournalpost(journalpostService.queryForSaksmappe(caseProperties, resource));
+        resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
         resource.setPart(partService.queryForSaksmappe(resource));
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
     }

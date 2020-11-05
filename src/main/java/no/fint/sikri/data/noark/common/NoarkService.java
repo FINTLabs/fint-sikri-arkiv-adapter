@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.common;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseProperties;
+import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
@@ -40,6 +41,9 @@ public class NoarkService {
 
     @Autowired
     private CaseQueryService caseQueryService;
+
+    @Autowired
+    private TitleService titleService;
 
     @Autowired
     private DokumentobjektService dokumentobjektService;
@@ -102,11 +106,13 @@ public class NoarkService {
         noarkFactory.applyFieldsForSaksmappe(caseType, saksmappeResource);
         noarkFactory.addLinksToSaksmappe(caseType, saksmappeResource);
         noarkFactory.parseTitleAndFields(caseProperties, caseType, saksmappeResource);
+        String recordPrefix = titleService.getRecordTitlePrefix(caseProperties.getTitle(), saksmappeResource);
+        String documentPrefix = titleService.getDocumentTitlePrefix(caseProperties.getTitle(), saksmappeResource);
         sikriObjectModelService.createDataObjects(
                 saksmappeResource
                         .getJournalpost()
                         .stream()
-                        .map(r -> journalpostFactory.toRegistryEntryDocuments(caseProperties, caseType.getId(), saksmappeResource, r))
+                        .map(r -> journalpostFactory.toRegistryEntryDocuments(caseType.getId(), r, recordPrefix, documentPrefix))
                         .flatMap(d -> {
                             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(d.getRegistryEntry());
                             return Stream.concat(
