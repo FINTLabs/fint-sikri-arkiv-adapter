@@ -61,7 +61,7 @@ public class PersonalmappeFactory {
 
     public CaseType toSikri(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         CaseType caseType = new CaseType();
-        caseDefaultsService.applyDefaultsToCaseType(personalmappeResource, caseType);
+        caseDefaultsService.applyDefaultsToCaseType(properties, personalmappeResource, caseType);
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
