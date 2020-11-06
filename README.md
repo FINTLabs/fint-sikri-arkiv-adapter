@@ -3,7 +3,7 @@ This adapter connects Sikris Elements/ePhorte to FINT.
 
 It uses the the following webserives:
 - `Object Model Service V3 En`
-- `Document Service V3`
+- `Document Service V3`  
 
 # Properties
 
