@@ -117,12 +117,12 @@ public class SikriObjectModelService extends SikriAbstractService {
         return insert.getDataObject();
     }
 
-    public List<DataObject> updateDataObjects(DataObject... dataObjects) {
+    public List<DataObject> updateDataObjects(SikriIdentity identity, DataObject... dataObjects) {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         for (DataObject dataObject : dataObjects) {
             arrayOfDataObject.getDataObject().add(dataObject);
         }
-        ArrayOfDataObject update = objectModelService.update(ephorteIdentity, arrayOfDataObject);
+        ArrayOfDataObject update = objectModelService.update(mapIdentity(identity), arrayOfDataObject);
         log.info("Updated {} objects", update.getDataObject().size());
         return update.getDataObject();
     }
@@ -139,6 +139,7 @@ public class SikriObjectModelService extends SikriAbstractService {
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
+        log.debug("Using identity {} / {}", identity.getUsername(), identity.getExternalSystemName());
         EphorteIdentity ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setUserName(identity.getUsername());
         ephorteIdentity.setPassword(identity.getPassword());
@@ -146,8 +147,6 @@ public class SikriObjectModelService extends SikriAbstractService {
         ephorteIdentity.setRole(identity.getRole());
         ephorteIdentity.setDatabase(adapterProps.getDatabase());
         return ephorteIdentity;
-        if (StringUtils.isNotBlank(props.getRole()))
-            ephorteIdentity.setRole(props.getRole());
     }
 
 }

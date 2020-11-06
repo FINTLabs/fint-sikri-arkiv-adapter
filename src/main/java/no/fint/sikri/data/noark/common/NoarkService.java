@@ -112,10 +112,11 @@ public class NoarkService {
         for (JournalpostResource journalpost : saksmappeResource.getJournalpost()) {
             log.debug("Create journalpost {}", journalpost.getTittel());
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost);
-            final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(registryEntryDocuments.getRegistryEntry());
+            final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(identity, registryEntryDocuments.getRegistryEntry());
 
             // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
             final List<DataObject> dataObjects = sikriObjectModelService.getDataObjects(
+                    identity,
                     SikriObjectTypes.REGISTRY_ENTRY_DOCUMENT,
                     "RegistryEntryId=" + registryEntry.getId(),
                     1,
@@ -131,7 +132,7 @@ public class NoarkService {
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
                 senderRecipient.setRegistryEntryId(registryEntry.getId());
-                sikriObjectModelService.createDataObject(senderRecipient);
+                sikriObjectModelService.createDataObject(identity, senderRecipient);
             }
 
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
@@ -151,17 +152,17 @@ public class NoarkService {
                         registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
                         log.debug("Update 💼 {}", documentDescription);
-                        sikriObjectModelService.updateDataObject(documentDescription);
+                        sikriObjectModelService.updateDataObject(identity, documentDescription);
                         log.debug("Update 📂 {}", registryEntryDocument);
-                        sikriObjectModelService.updateDataObject(registryEntryDocument);
+                        sikriObjectModelService.updateDataObject(identity, registryEntryDocument);
 
                         documentDescriptionId = documentDescription.getId();
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
                         checkinDocument.setDocumentId(documentDescriptionId);
-                        sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
 
                         log.debug("Checkin 🧾 {}", checkinDocument);
-                        dokumentobjektService.checkinDocument(checkinDocument);
+                        dokumentobjektService.checkinDocument(identity, checkinDocument);
 
                         log.debug("🤬🤬🤬");
 
@@ -169,15 +170,15 @@ public class NoarkService {
                         if (j == 0)
                         {
                             log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
-                            final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+                            final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
                             documentDescriptionId = documentDescription.getId();
                         }
                         log.debug("Create DocumentObject {}", checkinDocument.getGuid());
                         checkinDocument.setDocumentId(documentDescriptionId);
-                        sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
-                        dokumentobjektService.checkinDocument(checkinDocument);
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
+                        dokumentobjektService.checkinDocument(identity, checkinDocument);
                         log.debug("Create RegistryEntryDocument {}", document.getLeft());
-                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescriptionId));
+                        sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescriptionId));
                     }
                 }
             }

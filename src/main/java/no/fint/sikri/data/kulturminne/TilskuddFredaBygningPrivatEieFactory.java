@@ -17,10 +17,10 @@ public class TilskuddFredaBygningPrivatEieFactory {
     private final SikriIdentityService identityService;
     private final CaseDefaults caseDefaults;
 
-    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory) {
+    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory, SikriIdentityService identityService, CaseDefaults caseDefaults) {
         this.noarkFactory = noarkFactory;
-        this.caseDefaults = caseDefaults;
         this.identityService = identityService;
+        this.caseDefaults = caseDefaults;
     }
 
     public TilskuddFredaBygningPrivatEieResource toFintResource(CaseType caseType) {

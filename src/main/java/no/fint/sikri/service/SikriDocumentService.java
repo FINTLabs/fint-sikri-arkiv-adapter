@@ -6,7 +6,6 @@ import no.fint.arkiv.sikri.ds.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.model.SikriIdentity;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -91,6 +90,7 @@ public class SikriDocumentService extends SikriAbstractService {
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
+        log.debug("Using identity {} / {}", identity.getUsername(), identity.getExternalSystemName());
         EphorteIdentity ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setUserName(identity.getUsername());
         ephorteIdentity.setPassword(identity.getPassword());
