@@ -1,6 +1,8 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
@@ -15,8 +17,11 @@ public class TilskuddFartoyFactory {
     @Autowired
     private NoarkFactory noarkFactory;
 
+    @Autowired
+    private CaseDefaults caseDefaults;
+
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
-        return noarkFactory.toCaseType(tilskuddFartoy);
+        return noarkFactory.toCaseType(caseDefaults.getTilskuddfartoy(), tilskuddFartoy);
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {

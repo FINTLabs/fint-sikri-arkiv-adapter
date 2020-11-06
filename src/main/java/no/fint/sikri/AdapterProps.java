@@ -16,7 +16,7 @@ public class AdapterProps {
     @Value("${fint.sikri.password}")
     private String password;
 
-    @Value("${fint.sikri.role:test}")
+    @Value("${fint.sikri.role:}")
     private String role;
 
     @Value("${fint.sikri.database}")

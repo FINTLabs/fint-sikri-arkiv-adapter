@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.ds.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.utilities.SikriUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,7 @@ public class SikriDocumentService extends SikriAbstractService {
         Holder<String> fileName = new Holder<>();
         log.debug("Try fetch document {} ...", identifier);
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {}", documentReturnMessage);
+        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();
         checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = new DocumentCriteria();
@@ -122,6 +123,8 @@ public class SikriDocumentService extends SikriAbstractService {
         ephorteIdentity.setExternalSystemName(props.getExternalSystemName());
         ephorteIdentity.setUserName(props.getUser());
         ephorteIdentity.setPassword(props.getPassword());
+        if (StringUtils.isNotBlank(props.getRole()))
+            ephorteIdentity.setRole(props.getRole());
     }
 
     @Data

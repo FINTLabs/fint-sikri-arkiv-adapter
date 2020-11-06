@@ -56,12 +56,20 @@ public class KorrespondansepartFactory {
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
         optionalValue(input.getKontaktperson()).ifPresent(output::setAttention);
 
+        if (StringUtils.isNotBlank(input.getFodselsnummer())) {
+            output.setIdTypeId("FNR");
+            output.setExternalId(input.getFodselsnummer());
+        } else if (StringUtils.isNotBlank(input.getOrganisasjonsnummer())) {
+            output.setIdTypeId("ORG");
+            output.setExternalId(input.getOrganisasjonsnummer());
+        }
+
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse).ifPresent(output::setEmail);
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer).ifPresent(output::setTelephone);
 
         optionalValue(input.getAdresse()).map(AdresseResource::getPostnummer).ifPresent(output::setPostalCode);
         optionalValue(input.getAdresse()).map(AdresseResource::getPoststed).ifPresent(output::setCity);
-        optionalValue(input.getAdresse()).map(AdresseResource::getAdresselinje).map(i -> String.join("\n")).ifPresent(output::setPostalAddress);
+        optionalValue(input.getAdresse()).map(AdresseResource::getAdresselinje).map(i -> String.join(", ", i)).ifPresent(output::setPostalAddress);
         optionalValue(input.getAdresse())
                 .map(AdresseResource::getLand)
                 .map(List::stream)
