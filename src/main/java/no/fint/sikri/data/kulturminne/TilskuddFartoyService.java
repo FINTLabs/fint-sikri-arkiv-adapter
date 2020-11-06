@@ -7,7 +7,7 @@ import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class TilskuddFartoyService {
     private NoarkService noarkService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     /*
     public TilskuddFartoyResource getTilskuddFartoyCaseByMappeId(String mappeId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {

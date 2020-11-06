@@ -10,7 +10,7 @@ import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.model.SikriIdentity;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class PersonalmappeService {
     private CaseDefaults caseDefaults;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     private CaseProperties properties;
 

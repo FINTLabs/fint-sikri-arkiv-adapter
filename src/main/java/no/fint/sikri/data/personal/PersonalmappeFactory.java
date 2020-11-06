@@ -16,8 +16,8 @@ import no.fint.sikri.data.exception.UnableToGetIdFromLink;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
-import no.fint.sikri.service.EphorteIdentityService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +50,7 @@ public class PersonalmappeFactory {
     private CaseDefaults caseDefaults;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     private CaseProperties properties;
 

@@ -5,7 +5,7 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class KlasseFactory {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     public KlasseResource toFintResource(ClassType input) {
         KlasseResource result = new KlasseResource();

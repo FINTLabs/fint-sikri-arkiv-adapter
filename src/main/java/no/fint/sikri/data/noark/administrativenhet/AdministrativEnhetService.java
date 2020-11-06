@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.administrativenhet;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,7 @@ public class AdministrativEnhetService {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     public Stream<AdministrativEnhetResource> getAdministrativeEnheter() {
         return sikriObjectModelService.getDataObjects(

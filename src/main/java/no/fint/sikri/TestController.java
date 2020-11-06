@@ -6,8 +6,8 @@ import no.fint.event.model.Event;
 import no.fint.model.arkiv.kodeverk.KodeverkActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.handler.noark.KodeverkHandler;
-import no.fint.sikri.service.EphorteIdentityService;
 import no.fint.sikri.service.EventHandlerService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class TestController {
     private KodeverkHandler kodeverkHandler;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     @PostMapping
     public Event<FintLinks> handleEvent(@RequestBody Event<FintLinks> input) {

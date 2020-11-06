@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.codes.journalposttype;
 import no.fint.arkiv.sikri.oms.RegistryEntryTypeType;
 import no.fint.model.resource.arkiv.kodeverk.JournalpostTypeResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class JournalpostTypeService {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     public Stream<JournalpostTypeResource> getDocumentCategoryTable() {
         return sikriObjectModelService.getDataObjects(

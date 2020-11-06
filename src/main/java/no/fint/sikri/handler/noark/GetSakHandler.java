@@ -9,7 +9,7 @@ import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class GetSakHandler implements Handler {
     private SakFactory sakFactory;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     @Override
     public void accept(Event<FintLinks> response) {

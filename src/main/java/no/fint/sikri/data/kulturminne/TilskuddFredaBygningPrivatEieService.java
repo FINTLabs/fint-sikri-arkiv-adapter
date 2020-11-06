@@ -7,7 +7,7 @@ import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +16,9 @@ public class TilskuddFredaBygningPrivatEieService {
     private final NoarkService noarkService;
     private final TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory;
     private final CaseQueryService caseQueryService;
-    private final EphorteIdentityService identityService;
+    private final SikriIdentityService identityService;
 
-    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, EphorteIdentityService identityService) {
+    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, SikriIdentityService identityService) {
         this.noarkService = noarkService;
         this.tilskuddFredaBygningPrivatEieFactory = tilskuddFredaBygningPrivatEieFactory;
         this.caseQueryService = caseQueryService;

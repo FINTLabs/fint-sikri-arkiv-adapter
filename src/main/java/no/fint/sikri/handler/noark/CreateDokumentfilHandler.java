@@ -11,7 +11,7 @@ import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.data.noark.dokument.DokumentfilService;
 import no.fint.sikri.handler.Handler;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.ValidationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class CreateDokumentfilHandler implements Handler {
     private DokumentfilService dokumentfilService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     @Override
     public void accept(Event<FintLinks> response) {

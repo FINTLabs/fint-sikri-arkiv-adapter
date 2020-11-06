@@ -9,7 +9,7 @@ import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEi
 import no.fint.sikri.data.kulturminne.TilskuddFredaBygningPrivatEieFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class GetTilskuddFredaBygningPrivatEieHandler implements Handler {
     private CaseQueryService caseQueryService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     @Override
     public void accept(Event<FintLinks> response) {

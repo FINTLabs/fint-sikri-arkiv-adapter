@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.codes.dokumentstatus;
 import no.fint.arkiv.sikri.oms.DocumentStatusType;
 import no.fint.model.resource.arkiv.kodeverk.DokumentStatusResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class DokumentstatusService {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     public Stream<DokumentStatusResource> getDocumentStatusTable() {
         return sikriObjectModelService.getDataObjects(

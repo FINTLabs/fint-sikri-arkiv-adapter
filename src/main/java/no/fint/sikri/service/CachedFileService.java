@@ -32,7 +32,7 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     private ObjectMapper objectMapper;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     private LoadingCache<String, Path> files;
 

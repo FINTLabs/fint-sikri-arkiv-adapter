@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.StatutoryAutorityType;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
 import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SkjermingshjemmelService {
     private SikriObjectModelService sikriObjectModelService;
 
     @Autowired
-    private EphorteIdentityService identityService;
+    private SikriIdentityService identityService;
 
     public Stream<SkjermingshjemmelResource> getStatutoryAuthority() {
         return sikriObjectModelService.getDataObjects(

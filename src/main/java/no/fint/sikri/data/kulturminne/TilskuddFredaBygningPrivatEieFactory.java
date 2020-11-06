@@ -6,16 +6,16 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
-import no.fint.sikri.service.EphorteIdentityService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class TilskuddFredaBygningPrivatEieFactory {
     private final NoarkFactory noarkFactory;
-    private final EphorteIdentityService identityService;
+    private final SikriIdentityService identityService;
 
-    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory, EphorteIdentityService identityService) {
+    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory, SikriIdentityService identityService) {
         this.noarkFactory = noarkFactory;
         this.identityService = identityService;
     }
