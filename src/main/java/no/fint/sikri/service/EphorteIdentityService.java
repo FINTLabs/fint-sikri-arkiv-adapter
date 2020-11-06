@@ -2,7 +2,7 @@ package no.fint.sikri.service;
 
 import no.fint.sikri.SikriIdentities;
 import no.fint.sikri.data.exception.InvalidIdentity;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class EphorteIdentityService {
         this.identities = identities;
     }
 
-    public ElementsIdentity getIdentityForClass(Class<?> clazz) {
+    public SikriIdentity getIdentityForClass(Class<?> clazz) {
         String caseTypeName = resourceName(clazz);
         final String account = identities.getCasetype().get(caseTypeName);
         if (StringUtils.isBlank(account)) {
@@ -23,20 +23,20 @@ public class EphorteIdentityService {
         return getElementsIdentity(account);
     }
 
-    public ElementsIdentity getIdentityForCaseType(Object caseType) {
+    public SikriIdentity getIdentityForCaseType(Object caseType) {
         return getIdentityForClass(caseType.getClass());
     }
 
-    public ElementsIdentity getDefaultIdentity() {
+    public SikriIdentity getDefaultIdentity() {
         return getElementsIdentity(identities.getCasetype().get("default"));
     }
 
-    private ElementsIdentity getElementsIdentity(String account) {
-        final ElementsIdentity elementsIdentity = identities.getAccount().get(account);
-        if (elementsIdentity == null) {
+    private SikriIdentity getElementsIdentity(String account) {
+        final SikriIdentity sikriIdentity = identities.getAccount().get(account);
+        if (sikriIdentity == null) {
             throw new InvalidIdentity("Account " + account);
         }
-        return elementsIdentity;
+        return sikriIdentity;
     }
 
     private static String resourceName(Class<?> clazz) {

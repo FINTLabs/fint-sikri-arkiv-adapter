@@ -5,7 +5,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.EphorteIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class TilskuddFartoyService {
 
     public TilskuddFartoyResource createTilskuddFartoyCase(TilskuddFartoyResource tilskuddFartoyResource) {
         log.info("Create tilskudd fartøy");
-        ElementsIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
+        SikriIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
         final CaseType caseType = noarkService.createCase(
                 identity,
                 tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource),
@@ -69,7 +69,7 @@ public class TilskuddFartoyService {
     }
 
     public TilskuddFartoyResource updateTilskuddFartoyCase(String query, TilskuddFartoyResource tilskuddFartoyResource) throws CaseNotFound {
-        ElementsIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
+        SikriIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
         noarkService.updateCase(identity, query, tilskuddFartoyResource);
         return caseQueryService
                 .query(identity, query)

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,11 +58,11 @@ public class SikriObjectModelService extends SikriAbstractService {
         */
     }
 
-    public List<DataObject> getDataObjects(ElementsIdentity identity, String dataObjectName, String filter, int count, String... relatedObjects) {
+    public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName, String filter, int count, String... relatedObjects) {
         return getDataObjects(identity, dataObjectName, filter, count, Arrays.asList(relatedObjects));
     }
 
-    public List<DataObject> getDataObjects(ElementsIdentity identity, String dataObjectName, String filter, int count, Collection<String> relatedObjects) {
+    public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName, String filter, int count, Collection<String> relatedObjects) {
         FilteredQueryArguments filteredQueryArguments = new FilteredQueryArguments();
 
         if (count > 0) {
@@ -84,19 +84,19 @@ public class SikriObjectModelService extends SikriAbstractService {
 
     }
 
-    public List<DataObject> getDataObjects(ElementsIdentity identity, String dataObjectName) {
+    public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName) {
         return getDataObjects(identity, dataObjectName, null, 0, Collections.emptyList());
     }
 
-    public List<DataObject> getDataObjects(ElementsIdentity identity, String dataObjectName, String filter) {
+    public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName, String filter) {
         return getDataObjects(identity, dataObjectName, filter, 0, Collections.emptyList());
     }
 
-    public List<DataObject> getDataObjects(ElementsIdentity identity, String dataObjectName, String filter, List<String> relatedObjects) {
+    public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName, String filter, List<String> relatedObjects) {
         return getDataObjects(identity, dataObjectName, filter, 0, relatedObjects);
     }
 
-    public <T extends DataObject> T createDataObject(ElementsIdentity identity, T dataObject) {
+    public <T extends DataObject> T createDataObject(SikriIdentity identity, T dataObject) {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject insert = objectModelService.insert(mapIdentity(identity), arrayOfDataObject);
@@ -107,7 +107,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         return null;
     }
 
-    public List<DataObject> createDataObjects(ElementsIdentity identity, DataObject... objects) {
+    public List<DataObject> createDataObjects(SikriIdentity identity, DataObject... objects) {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         for (DataObject object : objects) {
             arrayOfDataObject.getDataObject().add(object);
@@ -117,7 +117,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         return insert.getDataObject();
     }
 
-    public DataObject updateDataObject(ElementsIdentity identity, DataObject dataObject) {
+    public DataObject updateDataObject(SikriIdentity identity, DataObject dataObject) {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject update = objectModelService.update(mapIdentity(identity), arrayOfDataObject);
@@ -128,7 +128,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         return null;
     }
 
-    private EphorteIdentity mapIdentity(ElementsIdentity identity) {
+    private EphorteIdentity mapIdentity(SikriIdentity identity) {
         EphorteIdentity ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setUserName(identity.getUsername());
         ephorteIdentity.setPassword(identity.getPassword());

@@ -1,7 +1,7 @@
 package no.fint.sikri;
 
 import lombok.Data;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.Map;
 @EnableConfigurationProperties
 @ConfigurationProperties("fint.sikri.identity")
 public class SikriIdentities {
-    private Map<String, ElementsIdentity> account;
+    private Map<String, SikriIdentity> account;
     private Map<String, String> casetype;
 
 }

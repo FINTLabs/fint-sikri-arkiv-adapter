@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.merknad;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.RemarkType;
 import no.fint.model.resource.arkiv.noark.MerknadResource;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MerknadService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
-    public List<MerknadResource> getRemarkForCase(ElementsIdentity identity, String id) {
+    public List<MerknadResource> getRemarkForCase(SikriIdentity identity, String id) {
         return sikriObjectModelService.getDataObjects(
                 identity,
                 SikriObjectTypes.REMARK,
@@ -37,7 +37,7 @@ public class MerknadService {
                 .collect(Collectors.toList());
     }
 
-    public List<MerknadResource> getRemarkForRegistryEntry(ElementsIdentity identity, String id) {
+    public List<MerknadResource> getRemarkForRegistryEntry(SikriIdentity identity, String id) {
         return sikriObjectModelService.getDataObjects(
                 identity,
                 SikriObjectTypes.REMARK,

@@ -20,7 +20,7 @@ import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class NoarkFactory {
         return externalSystemLinkCaseType;
     }
 
-    public <T extends SaksmappeResource> T applyValuesForSaksmappe(ElementsIdentity identity, CaseType input, T resource) {
+    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
                 input.getCaseYear().toString(),
                 input.getSequenceNumber().toString()

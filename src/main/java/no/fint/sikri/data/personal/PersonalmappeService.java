@@ -9,7 +9,7 @@ import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.EphorteIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -120,7 +120,7 @@ public class PersonalmappeService {
         if (!nin.equals(caseType.getPrimaryClassification().getClassId())) {
             throw new ClassificationIsNotPartOfPersonalFile(nin + " classId is not part of this personal file");
         }
-        final ElementsIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
+        final SikriIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
         ClassificationType classificationType = getClassificationBySystemId(nin).orElseThrow(() -> new ClassificationNotFound(caseType.getId().toString()));
 
         if (needsUpdate(caseType, personalmappeResource)) {
@@ -155,7 +155,7 @@ public class PersonalmappeService {
     public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound, AdministrativeUnitNotFound, GetPersonalmappeNotFoundException {
         log.info("Create personalmappe");
 
-        final ElementsIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
+        final SikriIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
 
         CaseType caseType = personalmappeFactory.toSikri(personalmappeResource);
         DataObject caseResponse = sikriObjectModelService.createDataObject(identity, caseType);

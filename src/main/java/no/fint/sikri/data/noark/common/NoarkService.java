@@ -10,7 +10,7 @@ import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.part.PartFactory;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.apache.commons.lang3.StringUtils;
@@ -50,13 +50,13 @@ public class NoarkService {
     @Autowired
     private DokumentbeskrivelseFactory dokumentbeskrivelseFactory;
 
-    public CaseType createCase(ElementsIdentity identity, CaseType input, SaksmappeResource resource) {
+    public CaseType createCase(SikriIdentity identity, CaseType input, SaksmappeResource resource) {
         CaseType result = sikriObjectModelService.createDataObject(identity, input);
         createRelatedObjectsForNewCase(identity, result, resource);
         return result;
     }
 
-    private void createRelatedObjectsForNewCase(ElementsIdentity identity, CaseType caseType, SaksmappeResource resource) {
+    private void createRelatedObjectsForNewCase(SikriIdentity identity, CaseType caseType, SaksmappeResource resource) {
         if (resource.getPart() != null) {
             sikriObjectModelService.createDataObjects(
                     identity,
@@ -86,13 +86,13 @@ public class NoarkService {
     }
 
 
-    public void createExternalSystemLink(ElementsIdentity identity, Integer caseId, Identifikator identifikator) {
+    public void createExternalSystemLink(SikriIdentity identity, Integer caseId, Identifikator identifikator) {
         if (identifikator != null && StringUtils.isNotBlank(identifikator.getIdentifikatorverdi())) {
             sikriObjectModelService.createDataObject(identity, noarkFactory.externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
         }
     }
 
-    public void updateCase(ElementsIdentity identity, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
+    public void updateCase(SikriIdentity identity, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
         }

@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.dokument;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -27,7 +27,7 @@ public class DokumentobjektService {
     @Autowired
     private DokumentobjektFactory dokumentobjektFactory;
 
-    public List<DokumentobjektResource> queryDokumentobjekt(ElementsIdentity identity, String id) {
+    public List<DokumentobjektResource> queryDokumentobjekt(SikriIdentity identity, String id) {
         return sikriObjectModelService.getDataObjects(
                 identity,
                 SikriObjectTypes.DOCUMENT_OBJECT,
@@ -40,7 +40,7 @@ public class DokumentobjektService {
                 .collect(Collectors.toList());
     }
 
-    public void checkinDocument(ElementsIdentity identity, CheckinDocument checkinDocument) {
+    public void checkinDocument(SikriIdentity identity, CheckinDocument checkinDocument) {
         sikriDocumentService.checkin(identity, checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getGuid());
     }
 

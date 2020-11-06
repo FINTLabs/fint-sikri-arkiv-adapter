@@ -3,7 +3,7 @@ package no.fint.sikri.data.noark.dokument;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.data.utilities.FintUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriDocumentService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
@@ -27,7 +27,7 @@ public class DokumentfilService {
         return new Tika().detect(content);
     }
 
-    public DokumentfilResource getDokumentfil(ElementsIdentity identity, String systemId) {
+    public DokumentfilResource getDokumentfil(SikriIdentity identity, String systemId) {
         final String[] strings = StringUtils.split(systemId, '_');
         int docId = Integer.parseInt(strings[0]);
         int version = Integer.parseInt(strings[1]);
@@ -48,7 +48,7 @@ public class DokumentfilService {
     }
 
 
-    public DokumentfilResource createDokumentfil(ElementsIdentity identity, DokumentfilResource resource) {
+    public DokumentfilResource createDokumentfil(SikriIdentity identity, DokumentfilResource resource) {
         final String docid = sikriDocumentService.uploadFile(identity, Base64.getDecoder().decode(resource.getData()), resource.getFormat(), resource.getFilnavn());
         resource.setSystemId(FintUtils.createIdentifikator(docid));
         return resource;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.ds.*;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class SikriDocumentService extends SikriAbstractService {
         super.setup(documentService, "/Services/Documents/V3/DocumentService.svc");
     }
 
-    public SikriDocument getDocumentContentByDocumentId(ElementsIdentity identity, int documentId, String variant, int version) {
+    public SikriDocument getDocumentContentByDocumentId(SikriIdentity identity, int documentId, String variant, int version) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         GetDocumentContentMessage parameters = new GetDocumentContentMessage();
@@ -52,7 +52,7 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public SikriDocument getDocumentContentByJournalPostId(ElementsIdentity identity, int journalpostId) {
+    public SikriDocument getDocumentContentByJournalPostId(SikriIdentity identity, int journalpostId) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         GetJournalpostDocumentContentMessage parameters = new GetJournalpostDocumentContentMessage();
@@ -60,7 +60,7 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public String uploadFile(ElementsIdentity identity, byte[] content, String contentType, String fileName) {
+    public String uploadFile(SikriIdentity identity, byte[] content, String contentType, String fileName) {
         Holder<String> identifier = new Holder<>();
         Holder<String> fileNameHolder = new Holder<>();
         fileNameHolder.value = fileName;
@@ -71,7 +71,7 @@ public class SikriDocumentService extends SikriAbstractService {
         return identifier.value;
     }
 
-    public void checkin(ElementsIdentity identity, Integer docId, String variant, Integer version, String identifier) {
+    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, String identifier) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
         log.debug("Try fetch document {} ...", identifier);
@@ -89,7 +89,7 @@ public class SikriDocumentService extends SikriAbstractService {
         documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
     }
 
-    private EphorteIdentity mapIdentity(ElementsIdentity identity) {
+    private EphorteIdentity mapIdentity(SikriIdentity identity) {
         EphorteIdentity ephorteIdentity = new EphorteIdentity();
         ephorteIdentity.setUserName(identity.getUsername());
         ephorteIdentity.setPassword(identity.getPassword());

@@ -15,7 +15,7 @@ import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
-import no.fint.sikri.model.ElementsIdentity;
+import no.fint.sikri.model.SikriIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +53,7 @@ public class JournalpostFactory {
     @Autowired
     private NokkelordService nokkelordService;
 
-    public JournalpostResource toFintResource(ElementsIdentity identity, RegistryEntryType result) {
+    public JournalpostResource toFintResource(SikriIdentity identity, RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
         journalpost.setTittel(result.getTitleRestricted());
