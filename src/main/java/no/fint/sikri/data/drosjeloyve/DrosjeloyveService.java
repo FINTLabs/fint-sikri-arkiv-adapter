@@ -56,9 +56,9 @@ public class DrosjeloyveService {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
                 "Id=" + id
                         + " AND Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
-                        + " AND SecondaryClassification.ClassId=" + kKodeFagklasse
-                        + " AND PrimaryClassification.CaseId=" + id
-                        + " AND PrimaryClassification.ClassificationSystem.Id=" + primarklassifikasjon,
+                        + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
+                        + "\" AND PrimaryClassification.CaseId=" + id
+                        + " AND PrimaryClassification.ClassificationSystemId=" + primarklassifikasjon,
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -85,8 +85,8 @@ public class DrosjeloyveService {
                 "CaseYear=" + year
                         + " AND SequenceNumber=" + sequenceNumber
                         + " AND Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
-                        + " AND SecondaryClassification.ClassId=" + kKodeFagklasse
-                        + " AND PrimaryClassification.ClassificationSystem.Id=" + primarklassifikasjon,
+                        + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
+                        + "\" AND PrimaryClassification.ClassificationSystemId=" + primarklassifikasjon,
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -104,8 +104,10 @@ public class DrosjeloyveService {
     public List<DrosjeloyveResource> getAllDrosjeloyve() {
         return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
                 "Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
-                        + " AND SecondaryClassification.ClassId=" + kKodeFagklasse
-                        + " AND PrimaryClassification.ClassificationSystem.Id=" + primarklassifikasjon,
+                        + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
+                        + "\" AND PrimaryClassification.ClassificationSystem" +
+                        "" +
+                        "Id=" + primarklassifikasjon,
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
