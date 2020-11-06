@@ -61,7 +61,7 @@ public class JournalpostFactory {
         journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
-        journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
+        // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
 
 
         // FIXME: 2019-05-08 check for empty
