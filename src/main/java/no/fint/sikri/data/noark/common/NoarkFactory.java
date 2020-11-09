@@ -76,7 +76,7 @@ public class NoarkFactory {
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseProperties caseProperties, CaseType input, T resource) {
         applyFieldsForSaksmappe(input, resource);
-        queryNestedResources(caseProperties, input, resource);
+        queryNestedResources(input, resource);
         addLinksToSaksmappe(input, resource);
         parseTitleAndFields(caseProperties, input, resource);
         return resource;
@@ -136,7 +136,7 @@ public class NoarkFactory {
                         .collect(Collectors.toList()));
     }
 
-    <T extends SaksmappeResource> void queryNestedResources(CaseProperties caseProperties, CaseType input, T resource) {
+    <T extends SaksmappeResource> void queryNestedResources(CaseType input, T resource) {
         resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
         resource.setPart(partService.queryForSaksmappe(resource));
         resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
