@@ -144,7 +144,8 @@ public class NoarkService {
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId");
+                        // TODO: 09/11/2020 Write a copy method that don't copy null values
+                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId", "documentCategoryId");
                         registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
                         log.debug("Update 💼 {}", documentDescription);
