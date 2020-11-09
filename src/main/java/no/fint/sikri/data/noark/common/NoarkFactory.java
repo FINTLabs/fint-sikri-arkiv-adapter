@@ -21,6 +21,7 @@ import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
+import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +64,14 @@ public class NoarkFactory {
     @Autowired
     private SkjermingService skjermingService;
 
+    @Autowired
+    private ExternalSystemLinkService externalSystemLinkService;
+
     public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
         ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
         externalSystemLinkCaseType.setCaseId(caseId);
         externalSystemLinkCaseType.setExternalKey(externalKey);
-        externalSystemLinkCaseType.setExternalSystemCode(4);
+        externalSystemLinkCaseType.setExternalSystemCode(externalSystemLinkService.getExternalSystemLinkId());
 
         return externalSystemLinkCaseType;
     }
