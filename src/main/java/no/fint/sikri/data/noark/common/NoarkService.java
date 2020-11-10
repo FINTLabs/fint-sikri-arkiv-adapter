@@ -144,7 +144,7 @@ public class NoarkService {
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId");
+                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId", "documentCategoryId");
                         registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
 
                         log.debug("Update 💼 {}", documentDescription);
