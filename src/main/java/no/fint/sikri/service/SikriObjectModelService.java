@@ -48,15 +48,6 @@ public class SikriObjectModelService extends SikriAbstractService {
         super.setup(objectModelService, "/Services/ObjectModel/V3/En/ObjectModelService.svc");
         setupEphorteIdentity();
 
-        final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");
-        if (externalSystems.isEmpty()) {
-            log.info("Creating ExternalSystem FINT ...");
-            ExternalSystemType externalSystem = new ExternalSystemType();
-            externalSystem.setExternalSystemName("FINT");
-            externalSystem.setIsActive(true);
-            final ExternalSystemType result = createDataObject(externalSystem);
-            log.info("Result: {}", result);
-        }
     }
 
     public List<DataObject> getDataObjects(String dataObjectName, String filter, int count, String... relatedObjects) {
