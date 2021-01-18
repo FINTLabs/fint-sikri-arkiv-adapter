@@ -15,10 +15,12 @@ import static no.fint.sikri.data.utilities.QueryUtils.getQueryParams;
 @Service
 public class CaseService {
     private final SikriObjectModelService objectModelService;
+    private final ExternalSystemLinkService externalSystemLinkService;
     private final String[] relatedObjects;
 
-    public CaseService(SikriObjectModelService objectModelService) {
+    public CaseService(SikriObjectModelService objectModelService, ExternalSystemLinkService externalSystemLinkService) {
         this.objectModelService = objectModelService;
+        this.externalSystemLinkService = externalSystemLinkService;
         relatedObjects = new String[] {
                 SikriObjectTypes.PRIMARY_CLASSIFICATION,
                 SikriObjectTypes.SECONDARY_CLASSIFICATION,
@@ -65,7 +67,10 @@ public class CaseService {
 
     public Stream<CaseType> getCaseByExternalKey(String externalKey) {
         return objectModelService.getDataObjects("ExternalSystemLinkCase",
-                "ExternalSystem.ExternalSystemName=FINT and ExternalKey=" + externalKey)
+                "ExternalSystem.ExternalSystemName="
+                        + externalSystemLinkService.getExternalSystemName()
+                        + " and ExternalKey="
+                        + externalKey)
                 .stream()
                 .map(ExternalSystemLinkCaseType.class::cast)
                 .map(ExternalSystemLinkCaseType::getCaseId)
