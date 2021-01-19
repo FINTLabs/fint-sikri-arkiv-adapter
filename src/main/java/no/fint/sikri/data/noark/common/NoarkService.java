@@ -15,12 +15,12 @@ import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseFactory;
 import no.fint.sikri.data.noark.part.PartFactory;
+import no.fint.sikri.data.utilities.FintPropertyUtils;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -144,16 +144,19 @@ public class NoarkService {
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        BeanUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription, "id", "dataObjectId", "documentCategoryId");
-                        registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
+                        FintPropertyUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription,
+                                p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId"),
+                                (src, dst) -> dst == null ? src : dst);
 
                         log.debug("Update 💼 {}", documentDescription);
                         sikriObjectModelService.updateDataObject(documentDescription);
+
+                        registryEntryDocument.setDocumentLinkTypeId(document.getLeft());
                         log.debug("Update 📂 {}", registryEntryDocument);
                         sikriObjectModelService.updateDataObject(registryEntryDocument);
 
-                        documentDescriptionId = documentDescription.getId();
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
+                        documentDescriptionId = documentDescription.getId();
                         checkinDocument.setDocumentId(documentDescriptionId);
                         sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
 
@@ -163,8 +166,7 @@ public class NoarkService {
                         log.debug("🤬🤬🤬");
 
                     } else {
-                        if (j == 0)
-                        {
+                        if (j == 0) {
                             log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
                             final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
                             documentDescriptionId = documentDescription.getId();
