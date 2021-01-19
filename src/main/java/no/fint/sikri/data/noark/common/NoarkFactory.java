@@ -15,7 +15,7 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
-import no.fint.sikri.data.noark.klasse.KlasseFactory;
+import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
@@ -31,9 +31,7 @@ import org.springframework.stereotype.Service;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
@@ -52,7 +50,7 @@ public class NoarkFactory {
     private MerknadService merknadService;
 
     @Autowired
-    private KlasseFactory klasseFactory;
+    private KlasseService klasseService;
 
     @Autowired
     private SikriCaseDefaultsService caseDefaultsService;
@@ -134,9 +132,7 @@ public class NoarkFactory {
                 .ifPresent(resource::setSkjerming);
 
         resource.setKlasse(
-                Stream.of(input.getPrimaryClassification(), input.getSecondaryClassification())
-                        .filter(Objects::nonNull)
-                        .map(klasseFactory::toFintResource)
+                klasseService.getKlasserByCaseId(input.getId())
                         .collect(Collectors.toList()));
     }
 

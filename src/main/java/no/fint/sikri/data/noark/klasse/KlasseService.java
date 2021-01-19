@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.klasse;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassType;
+import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -26,5 +27,10 @@ public class KlasseService {
                 .map(klasseFactory::toFintResource);
     }
 
+    public Stream<KlasseResource> getKlasserByCaseId(Integer id) {
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION, "CaseId="+ id)
+                .stream().map(ClassificationType.class::cast)
+                .map(klasseFactory::toFintResource);
+    }
 
 }
