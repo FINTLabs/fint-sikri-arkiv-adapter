@@ -150,7 +150,7 @@ public class NoarkFactory {
         for (PropertyDescriptor descriptor : PropertyUtils.getPropertyDescriptors(resource)) {
             if (FintComplexDatatypeObject.class.isAssignableFrom(descriptor.getPropertyType())) {
                 try {
-                    if (descriptor.getReadMethod().invoke(resource)  == null) {
+                    if (descriptor.getReadMethod().invoke(resource) == null) {
                         descriptor.getWriteMethod().invoke(resource, descriptor.getPropertyType().newInstance());
                     }
                 } catch (IllegalAccessException | InvocationTargetException | InstantiationException ignore) {
@@ -208,6 +208,12 @@ public class NoarkFactory {
         applyParameterFromLink(
                 resource.getSaksstatus(),
                 caseType::setCaseStatusId
+        );
+
+        applyParameterFromLink(
+                resource.getSaksansvarlig(),
+                Integer::parseUnsignedInt,
+                caseType::setOfficerNameId
         );
 
         return caseType;

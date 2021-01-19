@@ -125,13 +125,13 @@ public class JournalpostFactory {
 
         applyParameterFromLink(
                 journalpostResource.getSaksbehandler(),
-                Integer::parseInt,
+                Integer::parseUnsignedInt,
                 registryEntry::setOfficerNameId
         );
 
         applyParameterFromLink(
                 journalpostResource.getOpprettetAv(),
-                Integer::parseInt,
+                Integer::parseUnsignedInt,
                 registryEntry::setCreatedByUserNameId
         );
 
