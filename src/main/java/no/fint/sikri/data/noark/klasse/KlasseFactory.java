@@ -45,7 +45,7 @@ public class KlasseFactory {
         return output;
     }
 
-    public ClassificationType toNewClassification(Integer caseId, String classificationSystemId, KlasseResource input) {
+    public ClassificationType toNewClassification(Integer caseId, String classificationSystemId, KlasseResource input, ClassType classType) {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
         output.setClassificationSystemId(classificationSystemId);
@@ -53,12 +53,16 @@ public class KlasseFactory {
         output.setCaseId(caseId);
         output.setDescription(input.getTittel());
 
-        ClassType classType = new ClassType();
-        classType.setClassificationSystemId(classificationSystemId);
-        classType.setId(input.getKlasseId());
-        classType.setDescription(input.getTittel());
         output.setClazz(classType);
 
+        return output;
+    }
+
+    public ClassType toClassType(String classificationSystemId, KlasseResource input) {
+        ClassType output = new ClassType();
+        output.setClassificationSystemId(classificationSystemId);
+        output.setId(input.getKlasseId());
+        output.setDescription(input.getTittel());
         return output;
     }
 }

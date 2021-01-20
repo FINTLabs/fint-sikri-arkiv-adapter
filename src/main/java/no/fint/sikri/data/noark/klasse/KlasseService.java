@@ -47,7 +47,8 @@ public class KlasseService {
                 "ClassificationSystemId=" + classificationSystemId + " and Id=" + resource.getKlasseId())
                 .stream().map(ClassType.class::cast).collect(Collectors.toList());
         if (result.isEmpty()) {
-            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, classificationSystemId, resource));
+            final ClassType classType = sikriObjectModelService.createDataObject(klasseFactory.toClassType(classificationSystemId, resource));
+            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, classificationSystemId, resource, classType));
         } else {
             sikriObjectModelService.createDataObject(klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));
         }
