@@ -63,6 +63,8 @@ public class KlasseFactory {
         output.setClassificationSystemId(classificationSystemId);
         output.setId(input.getKlasseId());
         output.setDescription(input.getTittel());
+        output.setIsValidForRegistration(true);
+        output.setIsSecondaryClassAllowed(input.getRekkefolge() > 1);
         return output;
     }
 }
