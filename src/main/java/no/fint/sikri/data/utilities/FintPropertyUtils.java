@@ -35,7 +35,7 @@ public final class FintPropertyUtils {
                     final Object result = mergeFunction.apply(sourceValue, targetValue);
                     writeMethod.invoke(target, result);
                     log.trace("Set property {} to {}", propertyDescriptor.getName(), result);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException | NullPointerException e) {
                     log.debug("Unable to copy property {}", propertyDescriptor.getName(), e);
                 }
             }
