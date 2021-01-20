@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
@@ -34,32 +33,32 @@ public class KlasseFactory {
         return result;
     }
 
-    public ClassificationType toExistingClassification(Integer caseId, KlasseResource input, List<ClassType> classes) {
+    public ClassificationType toExistingClassification(Integer caseId, String classificationSystemId, KlasseResource input, List<ClassType> classes) {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
+        output.setClassificationSystemId(classificationSystemId);
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
         output.setCaseId(caseId);
         classes.stream()
                 .map(ClassType::getDescription)
                 .forEach(output::setDescription);
-        applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
         return output;
     }
 
-    public ClassificationType toNewClassification(Integer caseId, KlasseResource input) {
+    public ClassificationType toNewClassification(Integer caseId, String classificationSystemId, KlasseResource input) {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
+        output.setClassificationSystemId(classificationSystemId);
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
         output.setCaseId(caseId);
         output.setDescription(input.getTittel());
 
         ClassType classType = new ClassType();
-        applyParameterFromLink(input.getKlassifikasjonssystem(), classType::setClassificationSystemId);
+        classType.setClassificationSystemId(classificationSystemId);
         classType.setId(input.getKlasseId());
         classType.setDescription(input.getTittel());
         output.setClazz(classType);
 
-        applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
         return output;
     }
 }

@@ -6,12 +6,15 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static no.fint.sikri.data.utilities.SikriUtils.getLinkTargets;
 
 @Slf4j
 @Service
@@ -30,18 +33,23 @@ public class KlasseService {
     }
 
     public Stream<KlasseResource> getKlasserByCaseId(Integer id) {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION, "CaseId="+ id)
+        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION, "CaseId=" + id)
                 .stream().map(ClassificationType.class::cast)
                 .map(klasseFactory::toFintResource);
     }
 
     public void createClassification(Integer caseId, KlasseResource resource) {
-        final List<ClassType> result = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "ClassId=" + resource.getKlasseId())
+        final String classificationSystemId = getLinkTargets(resource.getKlassifikasjonssystem())
+                .filter(StringUtils::isNotBlank)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+        final List<ClassType> result = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS,
+                "ClassificationSystemId=" + classificationSystemId + " and Id=" + resource.getKlasseId())
                 .stream().map(ClassType.class::cast).collect(Collectors.toList());
         if (result.isEmpty()) {
-            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, resource));
+            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, classificationSystemId, resource));
         } else {
-            sikriObjectModelService.createDataObject(klasseFactory.toExistingClassification(caseId, resource, result));
+            sikriObjectModelService.createDataObject(klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));
         }
     }
 }
