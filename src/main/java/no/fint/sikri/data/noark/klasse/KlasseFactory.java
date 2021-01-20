@@ -5,6 +5,7 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +52,11 @@ public class KlasseFactory {
         output.setClassificationSystemId(classificationSystemId);
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
         output.setCaseId(caseId);
-        output.setDescription(input.getTittel());
+        if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setDescription(input.getTittel());
+        } else {
+            output.setDescription(input.getKlasseId());
+        }
 
         output.setClazz(classType);
 
@@ -62,7 +67,11 @@ public class KlasseFactory {
         ClassType output = new ClassType();
         output.setClassificationSystemId(classificationSystemId);
         output.setId(input.getKlasseId());
-        output.setDescription(input.getTittel());
+        if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setDescription(input.getTittel());
+        } else {
+            output.setDescription(input.getKlasseId());
+        }
         output.setIsValidForRegistration(true);
         output.setIsSecondaryClassAllowed(input.getRekkefolge() > 1);
         return output;
