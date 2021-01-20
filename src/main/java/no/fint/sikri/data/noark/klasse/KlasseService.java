@@ -9,6 +9,8 @@ import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -33,4 +35,13 @@ public class KlasseService {
                 .map(klasseFactory::toFintResource);
     }
 
+    public void createClassification(Integer caseId, KlasseResource resource) {
+        final List<ClassType> result = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "ClassId=" + resource.getKlasseId())
+                .stream().map(ClassType.class::cast).collect(Collectors.toList());
+        if (result.isEmpty()) {
+            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, resource));
+        } else {
+            sikriObjectModelService.createDataObject(klasseFactory.toExistingClassification(caseId, resource, result));
+        }
+    }
 }

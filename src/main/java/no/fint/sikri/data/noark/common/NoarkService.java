@@ -8,6 +8,7 @@ import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.dokument.CheckinDocument;
@@ -15,7 +16,7 @@ import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
-import no.fint.sikri.data.noark.klasse.KlasseFactory;
+import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
 import no.fint.sikri.service.CaseQueryService;
@@ -41,7 +42,7 @@ public class NoarkService {
     private PartFactory partFactory;
 
     @Autowired
-    private KlasseFactory klasseFactory;
+    private KlasseService klasseService;
 
     @Autowired
     private NoarkFactory noarkFactory;
@@ -79,14 +80,10 @@ public class NoarkService {
         }
 
         if (resource.getKlasse() != null) {
-            sikriObjectModelService.createDataObjects(
-                    resource.getKlasse()
-                            .stream()
-                            .map(klasseFactory::toClassificationType)
-                            .sorted(Comparator.comparing(ClassificationType::getSortOrder))
-                            .peek(cls -> cls.setCaseId(caseType.getId()))
-                            .toArray(DataObject[]::new)
-            );
+            resource.getKlasse()
+                    .stream()
+                    .sorted(Comparator.comparingInt(KlasseResource::getRekkefolge))
+                    .forEach(klasse -> klasseService.createClassification(caseType.getId(), klasse));
         }
 
         // TODO if (resource.getArkivnotat() != null) {}
