@@ -73,6 +73,14 @@ public class SikriDocumentService extends SikriAbstractService {
         return identifier.value;
     }
 
+    public SikriDocument getTempDocumentContentByTempId(String identifier) {
+        GetTempDocumentContentMessage parameters = new GetTempDocumentContentMessage();
+        Holder<String> contentType = new Holder<>();
+        Holder<String> fileName = new Holder<>();
+        final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(parameters, identifier, ephorteIdentity, contentType, fileName);
+        return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
+    }
+
     public void checkin(Integer docId, String variant, Integer version, String identifier) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
