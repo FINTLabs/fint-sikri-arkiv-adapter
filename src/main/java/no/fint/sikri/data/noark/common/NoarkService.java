@@ -140,7 +140,6 @@ public class NoarkService {
 
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
                 Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
-                Integer documentDescriptionId = null;
 
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
@@ -163,8 +162,7 @@ public class NoarkService {
                         sikriObjectModelService.updateDataObject(registryEntryDocument);
 
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
-                        documentDescriptionId = documentDescription.getId();
-                        checkinDocument.setDocumentId(documentDescriptionId);
+                        checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
 
                         log.debug("Checkin 🧾 {}", checkinDocument);
@@ -173,17 +171,15 @@ public class NoarkService {
                         log.debug("🤬🤬🤬");
 
                     } else {
-                        if (j == 0) {
-                            log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
-                            final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
-                            documentDescriptionId = documentDescription.getId();
-                        }
-                        log.debug("Create DocumentObject {}", checkinDocument.getGuid());
-                        checkinDocument.setDocumentId(documentDescriptionId);
+                        log.debug("Create 💼 {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
+                        log.debug("Create 🧾 {}", checkinDocument.getGuid());
+                        checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(dokumentobjektService.createDocumentObject(checkinDocument));
+                        log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(checkinDocument);
-                        log.debug("Create RegistryEntryDocument {}", document.getLeft());
-                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescriptionId));
+                        log.debug("Create 📂 {}", document.getLeft());
+                        sikriObjectModelService.createDataObject(dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }
                 }
             }
