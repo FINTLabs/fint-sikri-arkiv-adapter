@@ -171,7 +171,7 @@ public class NoarkService {
                         log.debug("🤬🤬🤬");
 
                     } else {
-                        log.debug("Create 💼 {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                        log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(document.getRight().getDocumentDescription());
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
                         checkinDocument.setDocumentId(documentDescription.getId());
