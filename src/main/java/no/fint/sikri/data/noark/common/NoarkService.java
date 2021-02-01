@@ -20,6 +20,7 @@ import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -62,6 +63,9 @@ public class NoarkService {
     @Autowired
     private DokumentbeskrivelseFactory dokumentbeskrivelseFactory;
 
+    @Autowired
+    private ExternalSystemLinkService externalSystemLinkService;
+
     public CaseType createCase(CaseType input, SaksmappeResource resource) {
         CaseType result = sikriObjectModelService.createDataObject(input);
         createRelatedObjectsForNewCase(result, resource);
@@ -94,9 +98,33 @@ public class NoarkService {
 
     public void createExternalSystemLink(Integer caseId, Identifikator identifikator) {
         if (identifikator != null && StringUtils.isNotBlank(identifikator.getIdentifikatorverdi())) {
-            sikriObjectModelService.createDataObject(noarkFactory.externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
+            sikriObjectModelService.createDataObject(externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
         }
     }
+
+    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
+        externalSystemLinkCaseType.setCaseId(caseId);
+        externalSystemLinkCaseType.setExternalKey(externalKey);
+        externalSystemLinkCaseType.setExternalSystemCode(externalSystemLinkService.getExternalSystemLinkId());
+
+        return externalSystemLinkCaseType;
+    }
+
+    public Identifikator getIdentifierFromExternalSystemLink(Integer caseId) {
+        Identifikator identifikator = new Identifikator();
+        final String filter = "ExternalSystemCode=" + externalSystemLinkService.getExternalSystemLinkId()
+                + " and CaseId=" + caseId;
+        sikriObjectModelService.getDataObjects(SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE, filter)
+                .stream()
+                .filter(ExternalSystemLinkCaseType.class::isInstance)
+                .map(ExternalSystemLinkCaseType.class::cast)
+                .map(ExternalSystemLinkType::getExternalKey)
+                .forEach(identifikator::setIdentifikatorverdi);
+        return identifikator;
+    }
+
+
 
     public void updateCase(CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {

@@ -6,7 +6,6 @@ import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.model.FintComplexDatatypeObject;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
@@ -22,7 +21,6 @@ import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
-import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,18 +61,6 @@ public class NoarkFactory {
 
     @Autowired
     private SkjermingService skjermingService;
-
-    @Autowired
-    private ExternalSystemLinkService externalSystemLinkService;
-
-    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
-        externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(externalKey);
-        externalSystemLinkCaseType.setExternalSystemCode(externalSystemLinkService.getExternalSystemLinkId());
-
-        return externalSystemLinkCaseType;
-    }
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseProperties caseProperties, CaseType input, T resource) {
         applyFieldsForSaksmappe(input, resource);

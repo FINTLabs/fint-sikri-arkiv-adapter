@@ -2,11 +2,10 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
+import no.fint.sikri.data.noark.common.NoarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,9 @@ public class TilskuddFartoyFactory {
     private NoarkFactory noarkFactory;
 
     @Autowired
+    private NoarkService noarkService;
+
+    @Autowired
     private CaseDefaults caseDefaults;
 
     public CaseType toCaseType(TilskuddFartoyResource tilskuddFartoy) {
@@ -25,43 +27,11 @@ public class TilskuddFartoyFactory {
     }
 
     public TilskuddFartoyResource toFintResource(CaseType input) {
-//        if (input.getFields().getVirksomhetsspesifikkeMetadata() == null
-//                || input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak() == null
-//                || input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid() == null
-//                || input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy() == null
-//                || input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn() == null) {
-//            throw new NotTilskuddfartoyException(input.getFields().getMappeIdent());
-//        }
 
         final TilskuddFartoyResource resource = new TilskuddFartoyResource();
-        resource.setSoknadsnummer(new Identifikator());
-        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(caseDefaults.getTilskuddfartoy(), input, resource);
+        resource.setSoknadsnummer(noarkService.getIdentifierFromExternalSystemLink(input.getId()));
 
-//        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
-//        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));
-//        tilskuddFartoy.setSoknadsnummer(createIdentifikator(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getSoeknadsnummer().().get(0)));
-//        tilskuddFartoy.setKulturminneId(input.getFields().getVirksomhetsspesifikkeMetadata().getDigisak().getKulturminneid().().get(0));
-
-//        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "soknadsnummer", tilskuddFartoy.getSoknadsnummer().getIdentifikatorverdi()));
-//        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "mappeid", input.getFields().getMappeIdent()));
-//        tilskuddFartoy.addSelf(Link.with(TilskuddFartoy.class, "systemid", input.getId()));
-
-        return tilskuddFartoy;
+        return noarkFactory.applyValuesForSaksmappe(caseDefaults.getTilskuddfartoy(), input, resource);
     }
-
-
-/*
-
-
-    public List<TilskuddFartoyResource> toFintResourceList(QueryResult results) throws GetDocumentException, IllegalCaseNumberFormat {
-        List<TilskuddFartoyResource> resources = new ArrayList<>(results.getResults().size());
-        for (Result__1 result : results.getResults()) {
-            resources.add(toFintResource(result));
-        }
-        return resources;
-    }
-
- */
-
 
 }
