@@ -26,10 +26,12 @@ import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +67,9 @@ public class NoarkService {
 
     @Autowired
     private ExternalSystemLinkService externalSystemLinkService;
+
+    @Value("${fint.sikri.noark.3.2:true}")
+    private boolean noark_3_2;
 
     public CaseType createCase(CaseType input, SaksmappeResource resource) {
         CaseType result = sikriObjectModelService.createDataObject(input);
@@ -144,6 +149,15 @@ public class NoarkService {
         for (JournalpostResource journalpost : saksmappeResource.getJournalpost()) {
             log.debug("Create journalpost {}", journalpost.getTittel());
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost, recordPrefix, documentPrefix);
+
+            boolean updateRegistryEntry = noark_3_2 &&
+                    registryEntryDocuments.getRegistryEntry().getRecordStatusId().equals("J");
+
+            if (updateRegistryEntry) {
+                registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
+                log.info("NOARK avsnitt 3.2: Setter journalstatus til {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
+            }
+
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(registryEntryDocuments.getRegistryEntry());
 
             // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
@@ -211,6 +225,24 @@ public class NoarkService {
                     }
                 }
             }
+
+            if (updateRegistryEntry) {
+                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
+                registryEntry.setRecordStatusId("J");
+                sikriObjectModelService.updateDataObject(registryEntry);
+            }
+        }
+    }
+
+    private String noark32Status(String registryEntryTypeId) {
+        switch (registryEntryTypeId.toUpperCase(Locale.ROOT)) {
+            case "I":
+            case "T":
+                return "M";
+            case "U":
+            case "N":
+            default:
+                return "R";
         }
     }
 }
