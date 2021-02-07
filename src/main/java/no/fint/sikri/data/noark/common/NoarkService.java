@@ -242,7 +242,7 @@ public class NoarkService {
             case "U":
             case "N":
             default:
-                return "R";
+                return "F";
         }
     }
 }
