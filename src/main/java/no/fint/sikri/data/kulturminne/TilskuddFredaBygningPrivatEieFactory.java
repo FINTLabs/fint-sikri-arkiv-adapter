@@ -7,16 +7,19 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class TilskuddFredaBygningPrivatEieFactory {
     private final NoarkFactory noarkFactory;
+    private final SikriIdentityService identityService;
     private final CaseDefaults caseDefaults;
 
-    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory, CaseDefaults caseDefaults) {
+    public TilskuddFredaBygningPrivatEieFactory(NoarkFactory noarkFactory, SikriIdentityService identityService, CaseDefaults caseDefaults) {
         this.noarkFactory = noarkFactory;
+        this.identityService = identityService;
         this.caseDefaults = caseDefaults;
     }
 
@@ -25,7 +28,7 @@ public class TilskuddFredaBygningPrivatEieFactory {
         resource.setSoknadsnummer(new Identifikator());
         resource.setMatrikkelnummer(new MatrikkelnummerResource());
 
-        return noarkFactory.applyValuesForSaksmappe(caseType, resource);
+        return noarkFactory.applyValuesForSaksmappe(identityService.getIdentityForCaseType(resource), caseType, resource);
     }
 
     public CaseType toCaseType(TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {

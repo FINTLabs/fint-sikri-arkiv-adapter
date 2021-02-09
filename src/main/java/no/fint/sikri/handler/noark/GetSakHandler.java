@@ -9,6 +9,7 @@ import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
 import no.fint.sikri.data.noark.sak.SakFactory;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class GetSakHandler implements Handler {
     @Autowired
     private SakFactory sakFactory;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
@@ -35,7 +39,7 @@ public class GetSakHandler implements Handler {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }
             caseQueryService
-                    .query(query)
+                    .query(identityService.getDefaultIdentity(), query)
                     .map(sakFactory::toFintResource)
                     .forEach(response::addData);
             response.setResponseStatus(ResponseStatus.ACCEPTED);

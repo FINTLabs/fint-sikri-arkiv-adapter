@@ -31,6 +31,9 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     private LoadingCache<String, Path> files;
 
     @PostConstruct
@@ -104,7 +107,7 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     @Override
     public Path load(String docId) throws Exception {
         log.info("Loading {} ...", docId);
-        DokumentfilResource resource = dokumentfilService.getDokumentfil(docId);
+        DokumentfilResource resource = dokumentfilService.getDokumentfil(identityService.getDefaultIdentity(), docId);
         return saveFile(resource);
     }
 

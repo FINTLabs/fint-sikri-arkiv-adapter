@@ -21,6 +21,7 @@ import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -76,7 +77,7 @@ public class NoarkFactory {
         return externalSystemLinkCaseType;
     }
 
-    public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseType input, T resource) {
+    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
                 input.getCaseYear().toString(),
                 input.getSequenceNumber().toString()
@@ -93,10 +94,10 @@ public class NoarkFactory {
         resource.setTittel(input.getTitle());
         resource.setOffentligTittel(input.getPublicTitle());
 
-        resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
-        resource.setPart(partService.queryForSaksmappe(resource));
+        resource.setJournalpost(journalpostService.queryForSaksmappe(identity, resource));
+        resource.setPart(partService.queryForSaksmappe(identity, resource));
 
-        resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
+        resource.setMerknad(merknadService.getRemarkForCase(identity, input.getId().toString()));
 
         optionalValue(skjermingService.getSkjermingResource(input::getAccessCodeId, input::getPursuant))
                 .ifPresent(resource::setSkjerming);

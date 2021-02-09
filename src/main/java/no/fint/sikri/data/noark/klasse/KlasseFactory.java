@@ -5,6 +5,7 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class KlasseFactory {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
+
+    @Autowired
+    private SikriIdentityService identityService;
 
     public KlasseResource toFintResource(ClassType input) {
         KlasseResource result = new KlasseResource();
@@ -47,11 +51,14 @@ public class KlasseFactory {
         }
         */
         // TODO Possible to detect which classes reject description modifications?
-        sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
+        sikriObjectModelService.getDataObjects(
+                identityService.getDefaultIdentity(),
+                SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
                 .stream()
                 .map(ClassType.class::cast)
                 .map(ClassType::getDescription)
                 .forEach(output::setDescription);
+
         applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
         return output;
     }
