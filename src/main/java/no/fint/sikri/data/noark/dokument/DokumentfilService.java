@@ -3,6 +3,7 @@ package no.fint.sikri.data.noark.dokument;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriDocumentService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
@@ -26,12 +27,13 @@ public class DokumentfilService {
         return new Tika().detect(content);
     }
 
-    public DokumentfilResource getDokumentfil(String systemId) {
-        final String[] strings = StringUtils.split(systemId, '_');
-        int docId = Integer.parseInt(strings[0]);
-        int version = Integer.parseInt(strings[1]);
-        String variant = strings[2];
-        final SikriDocumentService.SikriDocument sikriDocument = sikriDocumentService.getDocumentContentByDocumentId(docId, variant, version);
+    public DokumentfilResource getDokumentfil(SikriIdentity identity, String systemId) {
+        SikriDocumentService.SikriDocument sikriDocument;
+        if (systemId.contains("_")) {
+            sikriDocument = getSikriDocument(identity, systemId);
+        } else {
+            sikriDocument = sikriDocumentService.getTempDocumentContentByTempId(identity, systemId);
+        }
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
         if (StringUtils.isNotBlank(sikriDocument.getContentType())) {
@@ -46,9 +48,17 @@ public class DokumentfilService {
         return resource;
     }
 
+    private SikriDocumentService.SikriDocument getSikriDocument(SikriIdentity identity, String systemId) {
+        final String[] strings = StringUtils.split(systemId, '_');
+        int docId = Integer.parseInt(strings[0]);
+        int version = Integer.parseInt(strings[1]);
+        String variant = strings[2];
+        return sikriDocumentService.getDocumentContentByDocumentId(identity, docId, variant, version);
+    }
 
-    public DokumentfilResource createDokumentfil(DokumentfilResource resource) {
-        final String docid = sikriDocumentService.uploadFile(Base64.getDecoder().decode(resource.getData()), resource.getFormat(), resource.getFilnavn());
+
+    public DokumentfilResource createDokumentfil(SikriIdentity identity, DokumentfilResource resource) {
+        final String docid = sikriDocumentService.uploadFile(identity, Base64.getDecoder().decode(resource.getData()), resource.getFormat(), resource.getFilnavn());
         resource.setSystemId(FintUtils.createIdentifikator(docid));
         return resource;
     }

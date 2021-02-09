@@ -9,17 +9,40 @@ It uses the the following webserives:
 
 | Properties                                            | Default                                  | Description   |
 | :---------------------------------------------------- | :----------------------------------------| :------------ |
-| fint.sikri.user                                       |                                          |               |
-| fint.sikri.password                                   |                                          |               |
 | fint.sikri.endpoint-base-url                          |                                          |               |
 | fint.file-repository.cache-directory                  | file-cache                               |               |
 | fint.file-repository.cache-spec                       | expireAfterAccess=5m,expireAfterWrite=7m |               |
-| fint.kulturminne.tilskudd-fartoy.arkivdel             |                                          |               |
-| fint.kulturminne.tilskudd-fartoy.sub-archive          |                                          |               |
-| fint.kulturminne.tilskudd-fartoy.keywords             |                                          |               |
-| fint.kulturminne.tilskudd-fartoy.achive-code-type     |                                          |               |
-| fint.kulturminne.tilskudd-fartoy.intitial-case-status |                                          |               |
 
+# Case defaults
+
+See https://github.com/FINTLabs/fint-arkiv-case-defaults/blob/master/README.md for information on how to configure
+case defaults.
+
+# Configuring Ephorte Identities
+
+This adapter supports configuration of the `EphorteIdentity` to be used based on the case type.
+This is done in two steps:
+
+1. Configure accounts to use
+1. Configure account per case type
+
+## Accounts
+
+Accounts are configured using the following properties:
+
+- `fint.sikri.identity.account.<id>.external-system-name`
+- `fint.sikri.identity.account.<id>.username`
+- `fint.sikri.identity.account.<id>.password`
+- `fint.sikri.identity.account.<id>.role` (optional)
+
+The `<id>` part is a name you can choose freely.
+
+## Case types
+
+Case types are linked to accounts using the properties of the following form:
+
+- `fint.sikri.identity.casetype.default=<id>`
+- `fint.sikri.identity.casetype.<case>=<id>`
 
 # SOAP debug parameters
 

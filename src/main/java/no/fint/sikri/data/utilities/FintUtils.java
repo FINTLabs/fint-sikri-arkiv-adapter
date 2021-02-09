@@ -21,7 +21,17 @@ import java.util.stream.Stream;
 @Slf4j
 public final class FintUtils {
 
+    public static Identifikator createIdentifikator(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        return createIdentifikator(String.valueOf(id));
+    }
+
     public static Identifikator createIdentifikator(String value) {
+        if (value == null) {
+            return null;
+        }
         Identifikator identifikator = new Identifikator();
         identifikator.setIdentifikatorverdi(value);
         return identifikator;

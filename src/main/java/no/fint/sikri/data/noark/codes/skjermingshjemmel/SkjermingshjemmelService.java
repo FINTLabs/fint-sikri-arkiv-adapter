@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.StatutoryAutorityType;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
 import no.fint.sikri.data.utilities.FintUtils;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,13 @@ public class SkjermingshjemmelService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     public Stream<SkjermingshjemmelResource> getStatutoryAuthority() {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.STATUTORY_AUTORITY)
+        return sikriObjectModelService.getDataObjects(
+                identityService.getDefaultIdentity(),
+                SikriObjectTypes.STATUTORY_AUTORITY)
                 .stream()
                 .map(StatutoryAutorityType.class::cast)
                 .collect(Multimaps.toMultimap(StatutoryAutorityType::getAccessCodeId, StatutoryAutorityType::getPursuant, LinkedListMultimap::create))
