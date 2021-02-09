@@ -169,6 +169,12 @@ public class NoarkFactory {
         );
 
         applyParameterFromLink(
+                resource.getSaksansvarlig(),
+                Integer::parseInt,
+                caseType::setOfficerNameId
+        );
+
+        applyParameterFromLink(
                 resource.getJournalenhet(),
                 caseType::setRegistryManagementUnitId
         );
