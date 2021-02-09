@@ -5,7 +5,7 @@ import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.samferdsel.SamferdselActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.sikri.data.drosjeloyve.DrosjeloyveService;
+import no.fint.sikri.data.drosjeloyve.SoknadDrosjeloyveService;
 import no.fint.sikri.handler.Handler;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +16,16 @@ import java.util.Set;
 @Service
 public class GetAllDrosjeloyveHandler implements Handler {
 
-    private final DrosjeloyveService drosjeloyveService;
+    private final SoknadDrosjeloyveService soknadDrosjeloyveService;
 
-    public GetAllDrosjeloyveHandler(DrosjeloyveService drosjeloyveService) {
-        this.drosjeloyveService = drosjeloyveService;
+    public GetAllDrosjeloyveHandler(SoknadDrosjeloyveService soknadDrosjeloyveService) {
+        this.soknadDrosjeloyveService = soknadDrosjeloyveService;
     }
 
     @Override
     public void accept(Event<FintLinks> response) {
 
-        drosjeloyveService.getAllDrosjeloyve()
+        soknadDrosjeloyveService.getAllDrosjeloyve()
                 .forEach(response::addData);
 
         response.setResponseStatus(ResponseStatus.ACCEPTED);
@@ -34,6 +34,6 @@ public class GetAllDrosjeloyveHandler implements Handler {
 
     @Override
     public Set<String> actions() {
-        return Collections.singleton(SamferdselActions.GET_ALL_DROSJELOYVE.name());
+        return Collections.singleton(SamferdselActions.GET_ALL_SOKNADDROSJELOYVE.name());
     }
 }

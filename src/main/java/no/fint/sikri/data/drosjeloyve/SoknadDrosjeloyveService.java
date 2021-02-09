@@ -2,14 +2,17 @@ package no.fint.sikri.data.drosjeloyve;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
+import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.exception.DrosjeloyveNotFoundException;
 import no.fint.sikri.data.noark.common.NoarkService;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.CaseService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,14 +25,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class DrosjeloyveService {
+public class SoknadDrosjeloyveService {
 
-    private final DrosjeloyveFactory drosjeloyveFactory;
+    private final SoknadDrosjeloyveFactory soknadDrosjeloyveFactory;
     private final SikriObjectModelService sikriObjectModelService;
     private final CaseService caseService;
     private final NoarkService noarkService;
     private final CaseQueryService caseQueryService;
-    private final CaseDefaults caseDefaults;
+    private final CaseProperties caseProperties;
+    private final SikriIdentity identity;
 
     @Value("${fint.case.defaults.drosjeloyve.kKodeFagklasse}")
     String kKodeFagklasse;
@@ -40,22 +44,31 @@ public class DrosjeloyveService {
     @Value("${fint.case.defaults.drosjeloyve.primarklassifikasjon}")
     String primarklassifikasjon;
 
-    public DrosjeloyveService(DrosjeloyveFactory drosjeloyveFactory, SikriObjectModelService sikriObjectModelService, CaseService caseService, NoarkService noarkService, CaseQueryService caseQueryService, CaseDefaults caseDefaults) {
-        this.drosjeloyveFactory = drosjeloyveFactory;
+    public SoknadDrosjeloyveService(
+            SoknadDrosjeloyveFactory soknadDrosjeloyveFactory,
+            SikriObjectModelService sikriObjectModelService,
+            CaseService caseService,
+            NoarkService noarkService,
+            CaseQueryService caseQueryService,
+            CaseDefaults caseDefaults,
+            SikriIdentityService identityService) {
+        this.soknadDrosjeloyveFactory = soknadDrosjeloyveFactory;
         this.sikriObjectModelService = sikriObjectModelService;
         this.caseService = caseService;
         this.noarkService = noarkService;
         this.caseQueryService = caseQueryService;
-        this.caseDefaults = caseDefaults;
+        caseProperties = caseDefaults.getSoknaddrosjeloyve();
+        identity = identityService.getIdentityForClass(SoknadDrosjeloyveResource.class);
     }
 
-    public DrosjeloyveResource getDrosjeloyveBySystemId(String id) throws DrosjeloyveNotFoundException {
+    public SoknadDrosjeloyveResource getDrosjeloyveBySystemId(String id) throws DrosjeloyveNotFoundException {
 
         checkIfKKodeTilleggskodeIsPresent(id);
 
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
+        return sikriObjectModelService.getDataObjects(identity,
+                SikriObjectTypes.CASE,
                 "Id=" + id
-                        + " AND Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
+                        + " AND Series.Id=" + caseProperties.getArkivdel()
                         + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
                         + "\" AND PrimaryClassification.CaseId=" + id
                         + " AND PrimaryClassification.ClassificationSystemId=" + primarklassifikasjon,
@@ -64,13 +77,14 @@ public class DrosjeloyveService {
                         SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
-                .map(drosjeloyveFactory::toFintResource)
+                .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(DrosjeloyveNotFoundException::new);
     }
 
     private void checkIfKKodeTilleggskodeIsPresent(String id) throws DrosjeloyveNotFoundException {
-        sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION,
+        sikriObjectModelService.getDataObjects(identity,
+                SikriObjectTypes.CLASSIFICATION,
                 "ClassId=" + kKodeTilleggskode
                         + " AND caseid=" + id)
                 .stream()
@@ -79,12 +93,13 @@ public class DrosjeloyveService {
                 .orElseThrow(DrosjeloyveNotFoundException::new);
     }
 
-    public DrosjeloyveResource getDrosjeloyveByMappeId(String year, String sequenceNumber) throws DrosjeloyveNotFoundException {
+    public SoknadDrosjeloyveResource getDrosjeloyveByMappeId(String year, String sequenceNumber) throws DrosjeloyveNotFoundException {
 
-        DrosjeloyveResource drosjeloyveResource = sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
+        SoknadDrosjeloyveResource SoknadDrosjeloyveResource = sikriObjectModelService.getDataObjects(identity,
+                SikriObjectTypes.CASE,
                 "CaseYear=" + year
                         + " AND SequenceNumber=" + sequenceNumber
-                        + " AND Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
+                        + " AND Series.Id=" + caseProperties.getArkivdel()
                         + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
                         + "\" AND PrimaryClassification.ClassificationSystemId=" + primarklassifikasjon,
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
@@ -92,18 +107,19 @@ public class DrosjeloyveService {
                         SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
-                .map(drosjeloyveFactory::toFintResource)
+                .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(DrosjeloyveNotFoundException::new);
 
-        checkIfKKodeTilleggskodeIsPresent(drosjeloyveResource.getSystemId().getIdentifikatorverdi());
+        checkIfKKodeTilleggskodeIsPresent(SoknadDrosjeloyveResource.getSystemId().getIdentifikatorverdi());
 
-        return drosjeloyveResource;
+        return SoknadDrosjeloyveResource;
     }
 
-    public List<DrosjeloyveResource> getAllDrosjeloyve() {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
-                "Series.Id=" + caseDefaults.getDrosjeloyve().getArkivdel()
+    public List<SoknadDrosjeloyveResource> getAllDrosjeloyve() {
+        return sikriObjectModelService.getDataObjects(identity,
+                SikriObjectTypes.CASE,
+                "Series.Id=" + caseProperties.getArkivdel()
                         + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
                         + "\" AND PrimaryClassification.ClassificationSystem" +
                         "" +
@@ -113,7 +129,7 @@ public class DrosjeloyveService {
                         SikriObjectTypes.OFFICER_NAME))
                 .stream()
                 .map(CaseType.class::cast)
-                .map(drosjeloyveFactory::toFintResource)
+                .map(soknadDrosjeloyveFactory::toFintResource)
                 .map(drosjeloyve -> {
                     try {
                         checkIfKKodeTilleggskodeIsPresent(drosjeloyve.getSystemId().getIdentifikatorverdi());
@@ -128,28 +144,28 @@ public class DrosjeloyveService {
     }
 
 
-    public DrosjeloyveResource createDrosjeloyve(DrosjeloyveResource drosjeloyveResource) throws CaseNotFound, ClassNotFoundException {
+    public SoknadDrosjeloyveResource createDrosjeloyve(SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound, ClassNotFoundException {
         log.info("Create Drosjeløyve søknad");
 
-        CaseType caseResponse = sikriObjectModelService.createDataObject(drosjeloyveFactory.toCaseType(drosjeloyveResource));
+        CaseType caseResponse = sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.toCaseType(SoknadDrosjeloyveResource));
         Integer caseId = caseResponse.getId();
 
-        sikriObjectModelService.createDataObject(drosjeloyveFactory.createPrimaryClassification(drosjeloyveResource, caseId));
-        sikriObjectModelService.createDataObject(drosjeloyveFactory.createFagklasse(caseId));
-        sikriObjectModelService.createDataObject(drosjeloyveFactory.createTilleggsKode(caseId));
+        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createPrimaryClassification(SoknadDrosjeloyveResource, caseId));
+        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createFagklasse(caseId));
+        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createTilleggsKode(caseId));
 
-        return caseService.getCaseBySystemId(caseId.toString())
-                .map(drosjeloyveFactory::toFintResource)
+        return caseService.getCaseBySystemId(identity, caseId.toString())
+                .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable get case from Sikri after update"));
 
     }
 
-    public DrosjeloyveResource updateDrosjeloyve(String query, DrosjeloyveResource drosjeloyveResource) throws CaseNotFound {
-        noarkService.updateCase(query, drosjeloyveResource);
+    public SoknadDrosjeloyveResource updateDrosjeloyve(String query, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound {
+        noarkService.updateCase(identity, query, SoknadDrosjeloyveResource);
         return caseQueryService
-                .query(query)
-                .map(drosjeloyveFactory::toFintResource)
+                .query(identity, query)
+                .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable to find updated case for query " + query));
     }

@@ -5,9 +5,9 @@ import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.samferdsel.SamferdselActions;
 import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
-import no.fint.sikri.data.drosjeloyve.DrosjeloyveFactory;
-import no.fint.sikri.data.drosjeloyve.DrosjeloyveService;
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
+import no.fint.sikri.data.drosjeloyve.SoknadDrosjeloyveFactory;
+import no.fint.sikri.data.drosjeloyve.SoknadDrosjeloyveService;
 import no.fint.sikri.data.exception.DrosjeloyveNotFoundException;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.CaseQueryService;
@@ -21,13 +21,13 @@ import java.util.Set;
 public class GetDrosjeloyveHandler implements Handler {
 
     private final CaseQueryService caseQueryService;
-    private final DrosjeloyveFactory drosjeloyveFactory;
-    private final DrosjeloyveService drosjeloyveService;
+    private final SoknadDrosjeloyveFactory soknadDrosjeloyveFactory;
+    private final SoknadDrosjeloyveService soknadDrosjeloyveService;
 
-    public GetDrosjeloyveHandler(DrosjeloyveFactory drosjeloyveFactory, CaseQueryService caseQueryService, DrosjeloyveService drosjeloyveService) {
-        this.drosjeloyveFactory = drosjeloyveFactory;
+    public GetDrosjeloyveHandler(SoknadDrosjeloyveFactory soknadDrosjeloyveFactory, CaseQueryService caseQueryService, SoknadDrosjeloyveService soknadDrosjeloyveService) {
+        this.soknadDrosjeloyveFactory = soknadDrosjeloyveFactory;
         this.caseQueryService = caseQueryService;
-        this.drosjeloyveService = drosjeloyveService;
+        this.soknadDrosjeloyveService = soknadDrosjeloyveService;
     }
 
     @Override
@@ -36,12 +36,12 @@ public class GetDrosjeloyveHandler implements Handler {
         response.getData().clear();
         String[] split = query.split("/");
         try {
-            if (split[0].toLowerCase().equals("systemid")) {
-                DrosjeloyveResource drosjeloyve = drosjeloyveService.getDrosjeloyveBySystemId(split[1]);
+            if (split[0].equalsIgnoreCase("systemid")) {
+                SoknadDrosjeloyveResource drosjeloyve = soknadDrosjeloyveService.getDrosjeloyveBySystemId(split[1]);
                 response.addData(drosjeloyve);
                 response.setResponseStatus(ResponseStatus.ACCEPTED);
-            } else if (split[0].toLowerCase().equals("mappeid")) {
-                DrosjeloyveResource drosjeloyve = drosjeloyveService.getDrosjeloyveByMappeId(split[1], split[2]);
+            } else if (split[0].equalsIgnoreCase("mappeid")) {
+                SoknadDrosjeloyveResource drosjeloyve = soknadDrosjeloyveService.getDrosjeloyveByMappeId(split[1], split[2]);
                 response.addData(drosjeloyve);
                 response.setResponseStatus(ResponseStatus.ACCEPTED);
             } else {
@@ -57,6 +57,6 @@ public class GetDrosjeloyveHandler implements Handler {
 
     @Override
     public Set<String> actions() {
-        return Collections.singleton(SamferdselActions.GET_DROSJELOYVE.name());
+        return Collections.singleton(SamferdselActions.GET_SOKNADDROSJELOYVE.name());
     }
 }
