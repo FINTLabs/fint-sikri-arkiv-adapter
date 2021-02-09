@@ -190,7 +190,7 @@ public class NoarkService {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
-                        log.debug("ELEMENTS WORKAROUND HACK IN PROGRESS! 💣");
+                        log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
 
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
@@ -213,7 +213,7 @@ public class NoarkService {
                         log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(identity, checkinDocument);
 
-                        log.debug("🤬🤬🤬");
+                        log.debug("🍷🍷🍷");
 
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
