@@ -22,7 +22,6 @@ import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.model.SikriIdentity;
-import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,9 +63,9 @@ public class NoarkFactory {
     @Autowired
     private SkjermingService skjermingService;
 
-    public <T extends SaksmappeResource> T applyValuesForSaksmappe(CaseProperties caseProperties, CaseType input, T resource) {
-        applyFieldsForSaksmappe(input, resource);
-        queryNestedResources(input, resource);
+    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseProperties caseProperties, CaseType input, T resource) {
+        applyFieldsForSaksmappe(identity, input, resource);
+        queryNestedResources(identity, input, resource);
         addLinksToSaksmappe(input, resource);
         parseTitleAndFields(caseProperties, input, resource);
         return resource;
@@ -99,7 +98,7 @@ public class NoarkFactory {
                 .ifPresent(resource::addSaksstatus);
     }
 
-    <T extends SaksmappeResource> void applyFieldsForSaksmappe(CaseType input, T resource) {
+    <T extends SaksmappeResource> void applyFieldsForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
                 input.getCaseYear().toString(),
                 input.getSequenceNumber().toString()
@@ -120,14 +119,14 @@ public class NoarkFactory {
                 .ifPresent(resource::setSkjerming);
 
         resource.setKlasse(
-                klasseService.getKlasserByCaseId(input.getId())
+                klasseService.getKlasserByCaseId(identity, input.getId())
                         .collect(Collectors.toList()));
     }
 
-    <T extends SaksmappeResource> void queryNestedResources(CaseType input, T resource) {
-        resource.setJournalpost(journalpostService.queryForSaksmappe(resource));
-        resource.setPart(partService.queryForSaksmappe(resource));
-        resource.setMerknad(merknadService.getRemarkForCase(input.getId().toString()));
+    <T extends SaksmappeResource> void queryNestedResources(SikriIdentity identity, CaseType input, T resource) {
+        resource.setJournalpost(journalpostService.queryForSaksmappe(identity, resource));
+        resource.setPart(partService.queryForSaksmappe(identity, resource));
+        resource.setMerknad(merknadService.getRemarkForCase(identity, input.getId().toString()));
     }
 
     <T extends SaksmappeResource> void parseTitleAndFields(CaseProperties caseProperties, CaseType input, T resource) {

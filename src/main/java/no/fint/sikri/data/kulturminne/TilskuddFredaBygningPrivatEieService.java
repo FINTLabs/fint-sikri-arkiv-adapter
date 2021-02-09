@@ -20,16 +20,17 @@ public class TilskuddFredaBygningPrivatEieService {
     private final CaseDefaults caseDefaults;
     private final SikriIdentityService identityService;
 
-    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService) {
+    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, CaseDefaults caseDefaults, SikriIdentityService identityService) {
         this.noarkService = noarkService;
         this.tilskuddFredaBygningPrivatEieFactory = tilskuddFredaBygningPrivatEieFactory;
         this.caseQueryService = caseQueryService;
+        this.caseDefaults = caseDefaults;
+        this.identityService = identityService;
     }
 
     public TilskuddFredaBygningPrivatEieResource updateTilskuddFredaBygningPrivatEieCase(String query, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) throws CaseNotFound {
-        noarkService.updateCase(caseDefaults.getTilskuddfredabygningprivateie(), query, tilskuddFredaBygningPrivatEieResource);
         final SikriIdentity identity = identityService.getIdentityForClass(TilskuddFredaBygningPrivatEieResource.class);
-        noarkService.updateCase(identity, query, tilskuddFredaBygningPrivatEieResource);
+        noarkService.updateCase(identity, caseDefaults.getTilskuddfredabygningprivateie(), query, tilskuddFredaBygningPrivatEieResource);
         return caseQueryService
                 .query(identity, query)
                 .map(tilskuddFredaBygningPrivatEieFactory::toFintResource)

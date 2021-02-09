@@ -6,6 +6,7 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.data.noark.common.NoarkService;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,9 +34,11 @@ public class TilskuddFartoyFactory {
     public TilskuddFartoyResource toFintResource(CaseType input) {
 
         final TilskuddFartoyResource resource = new TilskuddFartoyResource();
-        resource.setSoknadsnummer(noarkService.getIdentifierFromExternalSystemLink(input.getId()));
+        final SikriIdentity identity = identityService.getIdentityForCaseType(resource);
 
-        return noarkFactory.applyValuesForSaksmappe(caseDefaults.getTilskuddfartoy(), input, resource);
+        resource.setSoknadsnummer(noarkService.getIdentifierFromExternalSystemLink(identity, input.getId()));
+
+        return noarkFactory.applyValuesForSaksmappe(identity, caseDefaults.getTilskuddfartoy(), input, resource);
     }
 
 }

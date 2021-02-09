@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -38,25 +39,25 @@ public class KlasseService {
                 .map(klasseFactory::toFintResource);
     }
 
-    public Stream<KlasseResource> getKlasserByCaseId(Integer id) {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION, "CaseId=" + id)
+    public Stream<KlasseResource> getKlasserByCaseId(SikriIdentity identity, Integer id) {
+        return sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASSIFICATION, "CaseId=" + id)
                 .stream().map(ClassificationType.class::cast)
                 .map(klasseFactory::toFintResource);
     }
 
-    public void createClassification(Integer caseId, KlasseResource resource) {
+    public void createClassification(SikriIdentity identity, Integer caseId, KlasseResource resource) {
         final String classificationSystemId = getLinkTargets(resource.getKlassifikasjonssystem())
                 .filter(StringUtils::isNotBlank)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        final List<ClassType> result = sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS,
+        final List<ClassType> result = sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASS,
                 "ClassificationSystemId=" + classificationSystemId + " and Id=" + resource.getKlasseId())
                 .stream().map(ClassType.class::cast).collect(Collectors.toList());
         if (result.isEmpty()) {
-            final ClassType classType = sikriObjectModelService.createDataObject(klasseFactory.toClassType(classificationSystemId, resource));
-            sikriObjectModelService.createDataObject(klasseFactory.toNewClassification(caseId, classificationSystemId, resource, classType));
+            final ClassType classType = sikriObjectModelService.createDataObject(identity, klasseFactory.toClassType(classificationSystemId, resource));
+            sikriObjectModelService.createDataObject(identity, klasseFactory.toNewClassification(caseId, classificationSystemId, resource, classType));
         } else {
-            sikriObjectModelService.createDataObject(klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));
+            sikriObjectModelService.createDataObject(identity, klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));
         }
     }
 }

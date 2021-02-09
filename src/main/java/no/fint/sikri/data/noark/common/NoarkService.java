@@ -18,8 +18,8 @@ import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
-import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriObjectModelService;
@@ -94,7 +94,7 @@ public class NoarkService {
             resource.getKlasse()
                     .stream()
                     .sorted(Comparator.comparingInt(KlasseResource::getRekkefolge))
-                    .forEach(klasse -> klasseService.createClassification(caseType.getId(), klasse));
+                    .forEach(klasse -> klasseService.createClassification(identity, caseType.getId(), klasse));
         }
 
         // TODO if (resource.getArkivnotat() != null) {}
@@ -105,7 +105,7 @@ public class NoarkService {
 
     public void createExternalSystemLink(SikriIdentity identity, Integer caseId, Identifikator identifikator) {
         if (identifikator != null && StringUtils.isNotBlank(identifikator.getIdentifikatorverdi())) {
-            sikriObjectModelService.createDataObject(externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
+            sikriObjectModelService.createDataObject(identity, externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
         }
     }
 
@@ -118,11 +118,11 @@ public class NoarkService {
         return externalSystemLinkCaseType;
     }
 
-    public Identifikator getIdentifierFromExternalSystemLink(Integer caseId) {
+    public Identifikator getIdentifierFromExternalSystemLink(SikriIdentity identity, Integer caseId) {
         Identifikator identifikator = new Identifikator();
         final String filter = "ExternalSystemCode=" + externalSystemLinkService.getExternalSystemLinkId()
                 + " and CaseId=" + caseId;
-        sikriObjectModelService.getDataObjects(SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE, filter)
+        sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE, filter)
                 .stream()
                 .filter(ExternalSystemLinkCaseType.class::isInstance)
                 .map(ExternalSystemLinkCaseType.class::cast)
@@ -133,7 +133,7 @@ public class NoarkService {
 
 
 
-    public void updateCase(CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
+    public void updateCase(SikriIdentity identity, CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
         }
@@ -142,7 +142,7 @@ public class NoarkService {
             throw new CaseNotFound("Case not found for query " + query);
         }
         final CaseType caseType = cases.get(0);
-        noarkFactory.applyFieldsForSaksmappe(caseType, saksmappeResource);
+        noarkFactory.applyFieldsForSaksmappe(identity, caseType, saksmappeResource);
         noarkFactory.addLinksToSaksmappe(caseType, saksmappeResource);
         noarkFactory.parseTitleAndFields(caseProperties, caseType, saksmappeResource);
         String recordPrefix = titleService.getRecordTitlePrefix(caseProperties.getTitle(), saksmappeResource);
@@ -232,7 +232,7 @@ public class NoarkService {
             if (updateRegistryEntry) {
                 log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
                 registryEntry.setRecordStatusId("J");
-                sikriObjectModelService.updateDataObject(registryEntry);
+                sikriObjectModelService.updateDataObject(identity, registryEntry);
             }
         }
     }
