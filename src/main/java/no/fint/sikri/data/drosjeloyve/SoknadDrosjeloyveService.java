@@ -162,7 +162,7 @@ public class SoknadDrosjeloyveService {
     }
 
     public SoknadDrosjeloyveResource updateDrosjeloyve(String query, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound {
-        noarkService.updateCase(identity, query, SoknadDrosjeloyveResource);
+        noarkService.updateCase(identity, caseProperties, query, SoknadDrosjeloyveResource);
         return caseQueryService
                 .query(identity, query)
                 .map(soknadDrosjeloyveFactory::toFintResource)
