@@ -46,7 +46,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         objectModelService = ss.getWsHttpsBindingTextObjectModelService(new AddressingFeature());
         super.setup(objectModelService, "/Services/ObjectModel/V3/En/ObjectModelService.svc");
 
-        /* TODO final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");
+        final List<DataObject> externalSystems = getDataObjects("ExternalSystem", "ExternalSystemName=FINT");
         if (externalSystems.isEmpty()) {
             log.info("Creating ExternalSystem FINT ...");
             ExternalSystemType externalSystem = new ExternalSystemType();
@@ -55,7 +55,6 @@ public class SikriObjectModelService extends SikriAbstractService {
             final ExternalSystemType result = createDataObject(externalSystem);
             log.info("Result: {}", result);
         }
-        */
     }
 
     public List<DataObject> getDataObjects(SikriIdentity identity, String dataObjectName, String filter, int count, String... relatedObjects) {
