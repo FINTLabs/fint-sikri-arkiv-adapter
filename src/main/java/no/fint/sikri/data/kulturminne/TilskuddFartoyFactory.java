@@ -2,7 +2,6 @@ package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
@@ -39,7 +38,10 @@ public class TilskuddFartoyFactory {
 
         final TilskuddFartoyResource resource = new TilskuddFartoyResource();
         resource.setSoknadsnummer(new Identifikator());
-        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(identityService.getIdentityForCaseType(resource), input, resource);
+        TilskuddFartoyResource tilskuddFartoy = noarkFactory.applyValuesForSaksmappe(
+                identityService.getIdentityForCaseType(resource),
+                caseDefaults.getTilskuddfartoy(),
+                input, resource);
 
 //        tilskuddFartoy.setFartoyNavn(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getFartoynavn().().get(0));
 //        tilskuddFartoy.setKallesignal(input.getFields().getVirksomhetsspesifikkeMetadata().getFartoy().getKallesignal().().get(0));

@@ -77,7 +77,7 @@ public class NoarkFactory {
         return externalSystemLinkCaseType;
     }
 
-    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
+    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseProperties caseProperties, CaseType input, T resource) {
         String caseNumber = NOARKUtils.getMappeId(
                 input.getCaseYear().toString(),
                 input.getSequenceNumber().toString()
@@ -133,8 +133,8 @@ public class NoarkFactory {
                         .map(klasseFactory::toFintResource)
                         .collect(Collectors.toList()));
 
-        titleService.parseTitle(resource, input.getTitle());
-        additionalFieldService.setFieldsForResource(resource,
+        titleService.parseCaseTitle(caseProperties.getTitle(), resource, input.getTitle());
+        additionalFieldService.setFieldsForResource(caseProperties.getField(), resource,
                 Arrays.stream(PropertyUtils.getPropertyDescriptors(input))
                         .filter(p -> p.getName().startsWith("customAttribute"))
                         .map(p -> new AdditionalFieldService.Field(p.getName(), readProperty(input, p)))
@@ -155,9 +155,9 @@ public class NoarkFactory {
         CaseType caseType = new CaseType();
         caseDefaultsService.applyDefaultsToCaseType(caseProperties, resource, caseType);
 
-        caseType.setTitle(titleService.getTitle(resource));
+        caseType.setTitle(titleService.getCaseTitle(caseProperties.getTitle(), resource));
 
-        additionalFieldService.getFieldsForResource(resource)
+        additionalFieldService.getFieldsForResource(caseProperties.getField(), resource)
                 .forEach(field ->
                         setProperty(caseType, field));
 
