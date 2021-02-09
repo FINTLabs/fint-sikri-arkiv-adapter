@@ -5,7 +5,9 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class TilskuddFartoyService {
 
     @Autowired
     private NoarkService noarkService;
+
+    @Autowired
+    private SikriIdentityService identityService;
 
     /*
     public TilskuddFartoyResource getTilskuddFartoyCaseByMappeId(String mappeId) throws NotTilskuddfartoyException, GetTilskuddFartoyNotFoundException, GetTilskuddFartoyException, GetDocumentException, IllegalCaseNumberFormat {
@@ -53,18 +58,21 @@ public class TilskuddFartoyService {
 
     public TilskuddFartoyResource createTilskuddFartoyCase(TilskuddFartoyResource tilskuddFartoyResource) {
         log.info("Create tilskudd fartøy");
+        SikriIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
         final CaseType caseType = noarkService.createCase(
+                identity,
                 tilskuddFartoyFactory.toCaseType(tilskuddFartoyResource),
                 tilskuddFartoyResource);
-        noarkService.createExternalSystemLink(caseType.getId(), tilskuddFartoyResource.getSoknadsnummer());
+        noarkService.createExternalSystemLink(identity, caseType.getId(), tilskuddFartoyResource.getSoknadsnummer());
         return tilskuddFartoyFactory.toFintResource(caseType);
 
     }
 
     public TilskuddFartoyResource updateTilskuddFartoyCase(String query, TilskuddFartoyResource tilskuddFartoyResource) throws CaseNotFound {
-        noarkService.updateCase(query, tilskuddFartoyResource);
+        SikriIdentity identity = identityService.getIdentityForClass(TilskuddFartoyResource.class);
+        noarkService.updateCase(identity, query, tilskuddFartoyResource);
         return caseQueryService
-                .query(query)
+                .query(identity, query)
                 .map(tilskuddFartoyFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable to find updated case for query " + query));

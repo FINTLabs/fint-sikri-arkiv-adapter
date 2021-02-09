@@ -9,6 +9,8 @@ import no.fint.arkiv.sikri.oms.DataObject;
 import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
+import no.fint.sikri.model.SikriIdentity;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class PersonalmappeService {
     @Autowired
     private CaseDefaults caseDefaults;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     private CaseProperties properties;
 
 
@@ -45,6 +50,7 @@ public class PersonalmappeService {
 
     private Optional<CaseType> getCaseByMappeId(String mappeId) throws IllegalCaseNumberFormat {
         return sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
                 SikriObjectTypes.CASE,
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
@@ -59,7 +65,9 @@ public class PersonalmappeService {
     }
 
     private Optional<CaseType> getCaseBySystemId(String systemId) {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CASE,
+        return sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
+                SikriObjectTypes.CASE,
                 "Id=" + systemId
                         + " AND FileTypeId=" + properties.getSaksmappeType()
                         + " AND CaseStatusId<>" + "A",
@@ -72,7 +80,9 @@ public class PersonalmappeService {
     }
 
     private Optional<ClassificationType> getClassificationBySystemId(String classId) {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASSIFICATION,
+        return sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
+                SikriObjectTypes.CLASSIFICATION,
                 "ClassId=" + classId
                         + " AND ClassificationSystemId=FNRP")
                 .stream()
@@ -110,11 +120,12 @@ public class PersonalmappeService {
         if (!nin.equals(caseType.getPrimaryClassification().getClassId())) {
             throw new ClassificationIsNotPartOfPersonalFile(nin + " classId is not part of this personal file");
         }
+        final SikriIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
         ClassificationType classificationType = getClassificationBySystemId(nin).orElseThrow(() -> new ClassificationNotFound(caseType.getId().toString()));
 
         if (needsUpdate(caseType, personalmappeResource)) {
-            sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(caseType, personalmappeResource));
-            sikriObjectModelService.updateDataObject(personalmappeFactory.toSikriUpdate(classificationType, personalmappeResource));
+            sikriObjectModelService.updateDataObject(identity, personalmappeFactory.toSikriUpdate(caseType, personalmappeResource));
+            sikriObjectModelService.updateDataObject(identity, personalmappeFactory.toSikriUpdate(classificationType, personalmappeResource));
             return personalmappeFactory.toFintResource(
                     getCaseBySystemId(caseType.getId().toString())
                             .orElseThrow(() -> new GetPersonalmappeNotFoundException("Unable get case from Sikri after update"))
@@ -144,13 +155,14 @@ public class PersonalmappeService {
     public PersonalmappeResource createPersonalmappe(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, OfficerNotFound, AdministrativeUnitNotFound, GetPersonalmappeNotFoundException {
         log.info("Create personalmappe");
 
+        final SikriIdentity identity = identityService.getIdentityForClass(PersonalmappeResource.class);
 
         CaseType caseType = personalmappeFactory.toSikri(personalmappeResource);
-        DataObject caseResponse = sikriObjectModelService.createDataObject(caseType);
+        DataObject caseResponse = sikriObjectModelService.createDataObject(identity, caseType);
         Integer caseId = ((CaseType) caseResponse).getId();
 
         ClassificationType classificationType = personalmappeFactory.createClassificationType(personalmappeResource, caseId);
-        sikriObjectModelService.createDataObject(classificationType);
+        sikriObjectModelService.createDataObject(identity, classificationType);
 
         return personalmappeFactory.toFintResource(
                 getCaseBySystemId(caseId.toString())
@@ -161,6 +173,7 @@ public class PersonalmappeService {
 
     public Optional<PersonalmappeResource> personalmappeExists(PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink {
         return sikriObjectModelService.getDataObjects(
+                identityService.getIdentityForClass(PersonalmappeResource.class),
                 SikriObjectTypes.CASE,
                 "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
                         + " AND FileTypeId=" + properties.getSaksmappeType()
