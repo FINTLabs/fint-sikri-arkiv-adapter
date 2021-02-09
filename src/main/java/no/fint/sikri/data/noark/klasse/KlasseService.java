@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +27,13 @@ public class KlasseService {
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     public Stream<KlasseResource> getKlasserByEmneId(String id) {
-        return sikriObjectModelService.getDataObjects(SikriObjectTypes.CLASS, "ClassificationSystemId=" + id)
+        return sikriObjectModelService.getDataObjects(
+                identityService.getDefaultIdentity(),
+                SikriObjectTypes.CLASS, "ClassificationSystemId=" + id)
                 .stream().map(ClassType.class::cast)
                 .map(klasseFactory::toFintResource);
     }

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,7 +71,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
         log.info("Complete document for update: {}", tilskuddFredaBygningPrivatEieResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource.getJournalpost());
+        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource.getJournalpost()).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
@@ -91,7 +92,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
     private void createCase(Event<FintLinks> response, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
         log.info("Complete document for creation: {}", tilskuddFredaBygningPrivatEieResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource);
+        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");

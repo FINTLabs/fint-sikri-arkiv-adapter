@@ -43,6 +43,7 @@ public class KlasseFactory {
         classes.stream()
                 .map(ClassType::getDescription)
                 .forEach(output::setDescription);
+
         return output;
     }
 

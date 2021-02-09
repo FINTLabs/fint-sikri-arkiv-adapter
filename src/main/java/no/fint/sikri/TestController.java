@@ -7,6 +7,7 @@ import no.fint.model.arkiv.kodeverk.KodeverkActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.handler.noark.KodeverkHandler;
 import no.fint.sikri.service.EventHandlerService;
+import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class TestController {
     @Autowired
     private KodeverkHandler kodeverkHandler;
 
+    @Autowired
+    private SikriIdentityService identityService;
+
     @PostMapping
     public Event<FintLinks> handleEvent(@RequestBody Event<FintLinks> input) {
         Event<FintLinks> response = new Event<>(input);
@@ -36,7 +40,7 @@ public class TestController {
 
     @GetMapping(path = "dataobjects")
     public List<DataObject> getDataObjects(@RequestParam String objectName) {
-        return objectModelService.getDataObjects(objectName);
+        return objectModelService.getDataObjects(identityService.getDefaultIdentity(), objectName);
     }
 
     @GetMapping(path = "kodeverk/{navn}")

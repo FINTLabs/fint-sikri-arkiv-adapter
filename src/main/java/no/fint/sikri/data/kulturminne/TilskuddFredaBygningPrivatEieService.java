@@ -6,7 +6,9 @@ import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.SikriIdentityService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,18 +18,20 @@ public class TilskuddFredaBygningPrivatEieService {
     private final TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory;
     private final CaseQueryService caseQueryService;
     private final CaseDefaults caseDefaults;
+    private final SikriIdentityService identityService;
 
-    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, CaseDefaults caseDefaults) {
+    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService) {
         this.noarkService = noarkService;
         this.tilskuddFredaBygningPrivatEieFactory = tilskuddFredaBygningPrivatEieFactory;
         this.caseQueryService = caseQueryService;
-        this.caseDefaults = caseDefaults;
     }
 
     public TilskuddFredaBygningPrivatEieResource updateTilskuddFredaBygningPrivatEieCase(String query, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) throws CaseNotFound {
         noarkService.updateCase(caseDefaults.getTilskuddfredabygningprivateie(), query, tilskuddFredaBygningPrivatEieResource);
+        final SikriIdentity identity = identityService.getIdentityForClass(TilskuddFredaBygningPrivatEieResource.class);
+        noarkService.updateCase(identity, query, tilskuddFredaBygningPrivatEieResource);
         return caseQueryService
-                .query(query)
+                .query(identity, query)
                 .map(tilskuddFredaBygningPrivatEieFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable to find updated case for query " + query));
@@ -35,10 +39,12 @@ public class TilskuddFredaBygningPrivatEieService {
 
     public TilskuddFredaBygningPrivatEieResource createTilskuddFredaBygningPrivatEieCase(TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
         log.info("Create tilskudd fartøy");
+        final SikriIdentity identity = identityService.getIdentityForClass(TilskuddFredaBygningPrivatEieResource.class);
         final CaseType caseType = noarkService.createCase(
+                identity,
                 tilskuddFredaBygningPrivatEieFactory.toCaseType(tilskuddFredaBygningPrivatEieResource),
                 tilskuddFredaBygningPrivatEieResource);
-        noarkService.createExternalSystemLink(caseType.getId(), tilskuddFredaBygningPrivatEieResource.getSoknadsnummer());
+        noarkService.createExternalSystemLink(identity, caseType.getId(), tilskuddFredaBygningPrivatEieResource.getSoknadsnummer());
         return tilskuddFredaBygningPrivatEieFactory.toFintResource(caseType);
     }
 }

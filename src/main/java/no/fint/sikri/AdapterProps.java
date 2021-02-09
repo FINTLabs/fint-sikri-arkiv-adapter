@@ -10,20 +10,8 @@ import java.nio.file.Path;
 @Component
 public class AdapterProps {
 
-    @Value("${fint.sikri.user}")
-    private String user;
-
-    @Value("${fint.sikri.password}")
-    private String password;
-
-    @Value("${fint.sikri.role:}")
-    private String role;
-
     @Value("${fint.sikri.database}")
     private String database;
-
-    @Value("${fint.sikri.external-system-name}")
-    private String externalSystemName;
 
     @Value("${fint.sikri.endpoint-base-url}")
     private String endpointBaseUrl;
