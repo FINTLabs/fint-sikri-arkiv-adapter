@@ -27,12 +27,12 @@ public class DokumentfilService {
         return new Tika().detect(content);
     }
 
-    public DokumentfilResource getDokumentfil(String systemId) {
+    public DokumentfilResource getDokumentfil(SikriIdentity identity, String systemId) {
         SikriDocumentService.SikriDocument sikriDocument;
         if (systemId.contains("_")) {
-            sikriDocument = getSikriDocument(systemId);
+            sikriDocument = getSikriDocument(identity, systemId);
         } else {
-            sikriDocument = sikriDocumentService.getTempDocumentContentByTempId(systemId);
+            sikriDocument = sikriDocumentService.getTempDocumentContentByTempId(identity, systemId);
         }
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
@@ -48,12 +48,12 @@ public class DokumentfilService {
         return resource;
     }
 
-    private SikriDocumentService.SikriDocument getSikriDocument(String systemId) {
+    private SikriDocumentService.SikriDocument getSikriDocument(SikriIdentity identity, String systemId) {
         final String[] strings = StringUtils.split(systemId, '_');
         int docId = Integer.parseInt(strings[0]);
         int version = Integer.parseInt(strings[1]);
         String variant = strings[2];
-        return sikriDocumentService.getDocumentContentByDocumentId(docId, variant, version);
+        return sikriDocumentService.getDocumentContentByDocumentId(identity, docId, variant, version);
     }
 
 
