@@ -35,13 +35,13 @@ public class SoknadDrosjeloyveService {
     private final CaseProperties caseProperties;
     private final SikriIdentity identity;
 
-    @Value("${fint.case.defaults.drosjeloyve.kKodeFagklasse}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse}")
     String kKodeFagklasse;
 
-    @Value("${fint.case.defaults.drosjeloyve.kKodeTilleggskode}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode}")
     String kKodeTilleggskode;
 
-    @Value("${fint.case.defaults.drosjeloyve.primarklassifikasjon}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon}")
     String primarklassifikasjon;
 
     public SoknadDrosjeloyveService(

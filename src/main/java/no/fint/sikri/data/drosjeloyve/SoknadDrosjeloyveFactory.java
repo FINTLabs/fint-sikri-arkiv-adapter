@@ -26,13 +26,13 @@ public class SoknadDrosjeloyveFactory {
     private final SikriIdentity identity;
     private final CaseProperties properties;
 
-    @Value("${fint.case.defaults.drosjeloyve.primarklassifikasjon}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon}")
     String primarklassifikasjon;
 
-    @Value("${fint.case.defaults.drosjeloyve.kKodeFagklasse}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse}")
     String kKodeFagklasse;
 
-    @Value("${fint.case.defaults.drosjeloyve.kKodeTilleggskode}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode}")
     String kKodeTilleggskode;
 
 
