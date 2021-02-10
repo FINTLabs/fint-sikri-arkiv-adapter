@@ -1,4 +1,4 @@
-package no.fint.sikri.handler.drosjeloyve;
+package no.fint.sikri.handler.samferdsel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -11,8 +11,8 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.samferdsel.SamferdselActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
-import no.fint.sikri.data.drosjeloyve.SoknadDrosjeloyveService;
 import no.fint.sikri.data.exception.CaseNotFound;
+import no.fint.sikri.data.samferdsel.SoknadDrosjeloyveService;
 import no.fint.sikri.handler.Handler;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import no.fint.sikri.service.ValidationService;
