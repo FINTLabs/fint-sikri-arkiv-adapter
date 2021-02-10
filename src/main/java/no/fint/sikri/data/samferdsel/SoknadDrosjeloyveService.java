@@ -1,4 +1,4 @@
-package no.fint.sikri.data.drosjeloyve;
+package no.fint.sikri.data.samferdsel;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
