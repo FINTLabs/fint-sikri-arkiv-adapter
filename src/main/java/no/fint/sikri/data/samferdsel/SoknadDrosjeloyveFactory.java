@@ -4,17 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
 import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ClassType;
-import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;
 import no.fint.sikri.data.noark.common.NoarkFactory;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriIdentityService;
-import no.fint.sikri.service.SikriObjectModelService;
-import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,24 +17,25 @@ import org.springframework.stereotype.Service;
 public class SoknadDrosjeloyveFactory {
 
     private final NoarkFactory noarkFactory;
-    private final SikriObjectModelService sikriObjectModelService;
     private final SikriIdentity identity;
     private final CaseProperties properties;
 
+    /*
     @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon}")
-    String primarklassifikasjon;
+    private String primarklassifikasjon;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse}")
-    String kKodeFagklasse;
+    private String kKodeFagklasse;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode}")
-    String kKodeTilleggskode;
+    private String kKodeTilleggskode;
 
 
+     */
 
-    public SoknadDrosjeloyveFactory(NoarkFactory noarkFactory, SikriObjectModelService sikriObjectModelService, CaseDefaults caseDefaults, SikriIdentityService identityService) {
+
+    public SoknadDrosjeloyveFactory(NoarkFactory noarkFactory, CaseDefaults caseDefaults, SikriIdentityService identityService) {
         this.noarkFactory = noarkFactory;
-        this.sikriObjectModelService = sikriObjectModelService;
         properties = caseDefaults.getSoknaddrosjeloyve();
         identity = identityService.getIdentityForClass(SoknadDrosjeloyveResource.class);
     }
@@ -56,13 +52,14 @@ public class SoknadDrosjeloyveFactory {
 
     }
 
-    public ClassificationType createPrimaryClassification(SoknadDrosjeloyveResource SoknadDrosjeloyveResource, Integer caseId) {
-        //String organisationName = SoknadDrosjeloyveResource.getTittel().split("-")[1].trim();
+    /*
+    public ClassificationType createPrimaryClassification(SoknadDrosjeloyveResource resource, Integer caseId) {
+        //String organisationName = resource.getTittel().split("-")[1].trim();
 
         ClassificationType classificationType = new ClassificationType();
-        classificationType.setClassId(SoknadDrosjeloyveResource.getOrganisasjonsnummer());
+        classificationType.setClassId(resource.getOrganisasjonsnummer());
         classificationType.setClassificationSystemId(primarklassifikasjon);
-        classificationType.setDescription(SoknadDrosjeloyveResource.getTittel());
+        classificationType.setDescription(resource.getTittel());
         classificationType.setCaseId(caseId);
         classificationType.setIsRestricted(false);
         classificationType.setSortOrder("1");
@@ -98,6 +95,7 @@ public class SoknadDrosjeloyveFactory {
         return classificationType;
     }
 
+
     private ClassType getClassType(String classId) throws ClassNotFoundException {
         return sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASS, "id=" + classId).stream()
                 .map(ClassType.class::cast)
@@ -105,6 +103,8 @@ public class SoknadDrosjeloyveFactory {
                 .orElseThrow(() -> new ClassNotFoundException(classId));
     }
 
+
+     */
     public SoknadDrosjeloyveResource toFintResource(CaseType input) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
         resource.setOrganisasjonsnummer(input.getPrimaryClassification().getClassId());
