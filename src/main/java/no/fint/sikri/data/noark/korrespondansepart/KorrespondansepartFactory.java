@@ -84,9 +84,28 @@ public class KorrespondansepartFactory {
                 .orElseGet(Stream::empty)
                 .map(Link::getHref)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))
-                .map("EM"::equals)
+                .map(StringUtils::upperCase)
+                .filter(s -> StringUtils.equalsAny(s, "EA", "EM", "EK", "IA", "IM", "IK"))
                 .findFirst()
-                .ifPresent(output::setIsRecipient);
+                .ifPresent(type -> {
+                    output.setCopyRecipient(false);
+                    if (StringUtils.startsWith(type, "E")) {
+                        output.setOfficerNameId(0);
+                        output.setAdministrativeUnitId(0);
+                        output.setIsResponsible(false);
+                    }
+                    if (StringUtils.startsWith(type, "I")) {
+                        output.setIsResponsible(true);
+                    }
+                    if (StringUtils.endsWith(type, "K")) {
+                        output.setCopyRecipient(true);
+                        output.setIsRecipient(true);
+                        output.setIsResponsible(false);
+                    }
+                    if (StringUtils.endsWith(type, "M")) {
+                        output.setIsRecipient(true);
+                    }
+                });
 
         return output;
     }
