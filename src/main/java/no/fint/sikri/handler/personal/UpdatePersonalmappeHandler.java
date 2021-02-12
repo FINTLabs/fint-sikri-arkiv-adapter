@@ -8,6 +8,7 @@ import no.fint.event.model.*;
 import no.fint.model.arkiv.personal.PersonalActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
+import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.personal.PersonalmappeService;
 import no.fint.sikri.handler.Handler;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class UpdatePersonalmappeHandler implements Handler {
+    @Autowired
+    private AdapterProps props;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -112,7 +116,9 @@ public class UpdatePersonalmappeHandler implements Handler {
                 response.setMessage("Payload fails validation!");
                 response.setProblems(problems);
                 log.info("Validation problems!\n{}\n{}\n", personalmappeResource, problems);
-                return;
+                if (props.isFatalValidation()) {
+                    return;
+                }
             }
             Optional<PersonalmappeResource> personalmappeExists = personalmappeService.personalmappeExists(personalmappeResource);
             if (personalmappeExists.isPresent()) {

@@ -22,4 +22,7 @@ public class AdapterProps {
     @Value("${fint.file-cache.spec:expireAfterAccess=5m,expireAfterWrite=7m}")
     private String cacheSpec;
 
+    @Value("${fint.validation.fatal:false}")
+    private boolean fatalValidation;
+
 }

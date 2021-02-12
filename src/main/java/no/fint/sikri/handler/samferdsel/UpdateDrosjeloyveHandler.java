@@ -11,6 +11,7 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.samferdsel.SamferdselActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
+import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.samferdsel.SoknadDrosjeloyveService;
 import no.fint.sikri.handler.Handler;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class UpdateDrosjeloyveHandler implements Handler {
 
+    private final AdapterProps props;
     private final ObjectMapper objectMapper;
     private final ValidationService validationService;
     private final SikriCaseDefaultsService caseDefaultsService;
@@ -34,7 +36,8 @@ public class UpdateDrosjeloyveHandler implements Handler {
     private final SoknadDrosjeloyveService soknadDrosjeloyveService;
 
 
-    public UpdateDrosjeloyveHandler(ObjectMapper objectMapper, ValidationService validationService, SikriCaseDefaultsService caseDefaultsService, CaseDefaults caseDefaults, SoknadDrosjeloyveService soknadDrosjeloyveService) {
+    public UpdateDrosjeloyveHandler(AdapterProps props, ObjectMapper objectMapper, ValidationService validationService, SikriCaseDefaultsService caseDefaultsService, CaseDefaults caseDefaults, SoknadDrosjeloyveService soknadDrosjeloyveService) {
+        this.props = props;
         this.objectMapper = objectMapper;
         this.validationService = validationService;
         this.caseDefaultsService = caseDefaultsService;
@@ -69,23 +72,25 @@ public class UpdateDrosjeloyveHandler implements Handler {
 
     }
 
-    private void updateCase(Event<FintLinks> response, String query, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) {
-        if (SoknadDrosjeloyveResource.getJournalpost() == null ||
-                SoknadDrosjeloyveResource.getJournalpost().isEmpty()) {
+    private void updateCase(Event<FintLinks> response, String query, SoknadDrosjeloyveResource soknadDrosjeloyveResource) {
+        if (soknadDrosjeloyveResource.getJournalpost() == null ||
+                soknadDrosjeloyveResource.getJournalpost().isEmpty()) {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
-        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getSoknaddrosjeloyve(), SoknadDrosjeloyveResource);
-        log.info("Complete document for update: {}", SoknadDrosjeloyveResource);
-        List<Problem> problems = validationService.getProblems(SoknadDrosjeloyveResource.getJournalpost()).collect(Collectors.toList());
+        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getSoknaddrosjeloyve(), soknadDrosjeloyveResource);
+        log.info("Complete document for update: {}", soknadDrosjeloyveResource);
+        List<Problem> problems = validationService.getProblems(soknadDrosjeloyveResource.getJournalpost()).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", SoknadDrosjeloyveResource, problems);
-            return;
+            log.info("Validation problems!\n{}\n{}\n", soknadDrosjeloyveResource, problems);
+            if (props.isFatalValidation()) {
+                return;
+            }
         }
         try {
-            SoknadDrosjeloyveResource result = soknadDrosjeloyveService.updateDrosjeloyve(query, SoknadDrosjeloyveResource);
+            SoknadDrosjeloyveResource result = soknadDrosjeloyveService.updateDrosjeloyve(query, soknadDrosjeloyveResource);
             response.setData(ImmutableList.of(result));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound e) {
@@ -94,19 +99,21 @@ public class UpdateDrosjeloyveHandler implements Handler {
         }
     }
 
-    private void createCase(Event<FintLinks> response, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound {
-        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getSoknaddrosjeloyve(), SoknadDrosjeloyveResource);
-        log.info("Complete document for creation: {}", SoknadDrosjeloyveResource);
-        List<Problem> problems = validationService.getProblems(SoknadDrosjeloyveResource).collect(Collectors.toList());
+    private void createCase(Event<FintLinks> response, SoknadDrosjeloyveResource soknadDrosjeloyveResource) throws CaseNotFound {
+        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getSoknaddrosjeloyve(), soknadDrosjeloyveResource);
+        log.info("Complete document for creation: {}", soknadDrosjeloyveResource);
+        List<Problem> problems = validationService.getProblems(soknadDrosjeloyveResource).collect(Collectors.toList());
         if (!problems.isEmpty()) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", SoknadDrosjeloyveResource, problems);
-            return;
+            log.info("Validation problems!\n{}\n{}\n", soknadDrosjeloyveResource, problems);
+            if (props.isFatalValidation()) {
+                return;
+            }
         }
         try {
-            SoknadDrosjeloyveResource drosjeloyve = soknadDrosjeloyveService.createDrosjeloyve(SoknadDrosjeloyveResource);
+            SoknadDrosjeloyveResource drosjeloyve = soknadDrosjeloyveService.createDrosjeloyve(soknadDrosjeloyveResource);
             response.setData(ImmutableList.of(drosjeloyve));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound | ClassNotFoundException e) {

@@ -11,6 +11,7 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
+import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyService;
 import no.fint.sikri.handler.Handler;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class UpdateTilskuddFartoyHandler implements Handler {
+    @Autowired
+    private AdapterProps props;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -77,7 +81,9 @@ public class UpdateTilskuddFartoyHandler implements Handler {
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
             log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
-            return;
+            if (props.isFatalValidation()) {
+                return;
+            }
         }
         try {
             TilskuddFartoyResource result = tilskuddfartoyService.updateTilskuddFartoyCase(query, tilskuddFartoyResource);
@@ -98,7 +104,9 @@ public class UpdateTilskuddFartoyHandler implements Handler {
             response.setMessage("Payload fails validation!");
             response.setProblems(problems);
             log.info("Validation problems!\n{}\n{}\n", tilskuddFartoyResource, problems);
-            return;
+            if (props.isFatalValidation()) {
+                return;
+            }
         }
         TilskuddFartoyResource tilskuddFartoy = tilskuddfartoyService.createTilskuddFartoyCase(tilskuddFartoyResource);
         response.setData(ImmutableList.of(tilskuddFartoy));
