@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
-import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.samferdsel.SamferdselActions;
 import no.fint.model.resource.FintLinks;
@@ -20,9 +19,7 @@ import no.fint.sikri.service.ValidationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -79,15 +76,8 @@ public class UpdateDrosjeloyveHandler implements Handler {
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getSoknaddrosjeloyve(), soknadDrosjeloyveResource);
         log.info("Complete document for update: {}", soknadDrosjeloyveResource);
-        List<Problem> problems = validationService.getProblems(soknadDrosjeloyveResource.getJournalpost()).collect(Collectors.toList());
-        if (!problems.isEmpty()) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage("Payload fails validation!");
-            response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", soknadDrosjeloyveResource, problems);
-            if (props.isFatalValidation()) {
-                return;
-            }
+        if (!validationService.validate(response, soknadDrosjeloyveResource.getJournalpost())) {
+            return;
         }
         try {
             SoknadDrosjeloyveResource result = soknadDrosjeloyveService.updateDrosjeloyve(query, soknadDrosjeloyveResource);
@@ -102,15 +92,8 @@ public class UpdateDrosjeloyveHandler implements Handler {
     private void createCase(Event<FintLinks> response, SoknadDrosjeloyveResource soknadDrosjeloyveResource) throws CaseNotFound {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getSoknaddrosjeloyve(), soknadDrosjeloyveResource);
         log.info("Complete document for creation: {}", soknadDrosjeloyveResource);
-        List<Problem> problems = validationService.getProblems(soknadDrosjeloyveResource).collect(Collectors.toList());
-        if (!problems.isEmpty()) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage("Payload fails validation!");
-            response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", soknadDrosjeloyveResource, problems);
-            if (props.isFatalValidation()) {
-                return;
-            }
+        if (!validationService.validate(response, soknadDrosjeloyveResource)) {
+            return;
         }
         try {
             SoknadDrosjeloyveResource drosjeloyve = soknadDrosjeloyveService.createDrosjeloyve(soknadDrosjeloyveResource);

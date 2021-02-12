@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
-import no.fint.event.model.*;
+import no.fint.event.model.Event;
+import no.fint.event.model.Operation;
+import no.fint.event.model.ResponseStatus;
+import no.fint.event.model.Status;
 import no.fint.model.arkiv.personal.PersonalActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
@@ -19,10 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -110,15 +111,8 @@ public class UpdatePersonalmappeHandler implements Handler {
         try {
             caseDefaultsService.applyDefaultsForCreation(caseDefaults.getPersonalmappe(), personalmappeResource);
             log.info("Complete document for creation: {}", personalmappeResource);
-            List<Problem> problems = validationService.getProblems(personalmappeResource).collect(Collectors.toList());
-            if (!problems.isEmpty()) {
-                response.setResponseStatus(ResponseStatus.REJECTED);
-                response.setMessage("Payload fails validation!");
-                response.setProblems(problems);
-                log.info("Validation problems!\n{}\n{}\n", personalmappeResource, problems);
-                if (props.isFatalValidation()) {
-                    return;
-                }
+            if (!validationService.validate(response, personalmappeResource)) {
+                return;
             }
             Optional<PersonalmappeResource> personalmappeExists = personalmappeService.personalmappeExists(personalmappeResource);
             if (personalmappeExists.isPresent()) {
