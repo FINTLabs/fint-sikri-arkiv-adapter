@@ -36,7 +36,7 @@ public class DokumentbeskrivelseService {
                 SikriObjectTypes.DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY
         ).stream()
                 .map(RegistryEntryDocumentType.class::cast)
-                .map(dokumentbeskrivelseFactory::toFintResource)
+                .map(registryEntryDocumentType -> dokumentbeskrivelseFactory.toFintResource(registryEntryDocumentType))
                 .collect(Collectors.toList());
     }
 }

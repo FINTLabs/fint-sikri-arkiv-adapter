@@ -3,9 +3,12 @@ package no.fint.sikri.data.noark.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseProperties;
+import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.*;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.dokument.CheckinDocument;
@@ -13,20 +16,23 @@ import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentobjektService;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
-import no.fint.sikri.data.noark.klasse.KlasseFactory;
+import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
-import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
+import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,13 +46,16 @@ public class NoarkService {
     private PartFactory partFactory;
 
     @Autowired
-    private KlasseFactory klasseFactory;
+    private KlasseService klasseService;
 
     @Autowired
     private NoarkFactory noarkFactory;
 
     @Autowired
     private CaseQueryService caseQueryService;
+
+    @Autowired
+    private TitleService titleService;
 
     @Autowired
     private DokumentobjektService dokumentobjektService;
@@ -56,6 +65,12 @@ public class NoarkService {
 
     @Autowired
     private DokumentbeskrivelseFactory dokumentbeskrivelseFactory;
+
+    @Autowired
+    private ExternalSystemLinkService externalSystemLinkService;
+
+    @Value("${fint.sikri.noark.3.2:true}")
+    private boolean noark_3_2;
 
     public CaseType createCase(SikriIdentity identity, CaseType input, SaksmappeResource resource) {
         CaseType result = sikriObjectModelService.createDataObject(identity, input);
@@ -76,15 +91,10 @@ public class NoarkService {
         }
 
         if (resource.getKlasse() != null) {
-            sikriObjectModelService.createDataObjects(
-                    identity,
-                    resource.getKlasse()
-                            .stream()
-                            .map(klasseFactory::toClassificationType)
-                            .sorted(Comparator.comparing(ClassificationType::getSortOrder))
-                            .peek(cls -> cls.setCaseId(caseType.getId()))
-                            .toArray(DataObject[]::new)
-            );
+            resource.getKlasse()
+                    .stream()
+                    .sorted(Comparator.comparingInt(KlasseResource::getRekkefolge))
+                    .forEach(klasse -> klasseService.createClassification(identity, caseType.getId(), klasse));
         }
 
         // TODO if (resource.getArkivnotat() != null) {}
@@ -95,11 +105,35 @@ public class NoarkService {
 
     public void createExternalSystemLink(SikriIdentity identity, Integer caseId, Identifikator identifikator) {
         if (identifikator != null && StringUtils.isNotBlank(identifikator.getIdentifikatorverdi())) {
-            sikriObjectModelService.createDataObject(identity, noarkFactory.externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
+            sikriObjectModelService.createDataObject(identity, externalSystemLink(caseId, identifikator.getIdentifikatorverdi()));
         }
     }
 
-    public void updateCase(SikriIdentity identity, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
+    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
+        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
+        externalSystemLinkCaseType.setCaseId(caseId);
+        externalSystemLinkCaseType.setExternalKey(externalKey);
+        externalSystemLinkCaseType.setExternalSystemCode(externalSystemLinkService.getExternalSystemLinkId());
+
+        return externalSystemLinkCaseType;
+    }
+
+    public Identifikator getIdentifierFromExternalSystemLink(SikriIdentity identity, Integer caseId) {
+        Identifikator identifikator = new Identifikator();
+        final String filter = "ExternalSystemCode=" + externalSystemLinkService.getExternalSystemLinkId()
+                + " and CaseId=" + caseId;
+        sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE, filter)
+                .stream()
+                .filter(ExternalSystemLinkCaseType.class::isInstance)
+                .map(ExternalSystemLinkCaseType.class::cast)
+                .map(ExternalSystemLinkType::getExternalKey)
+                .forEach(identifikator::setIdentifikatorverdi);
+        return identifikator;
+    }
+
+
+
+    public void updateCase(SikriIdentity identity, CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
         }
@@ -108,10 +142,24 @@ public class NoarkService {
             throw new CaseNotFound("Case not found for query " + query);
         }
         final CaseType caseType = cases.get(0);
+        noarkFactory.applyFieldsForSaksmappe(identity, caseType, saksmappeResource);
+        noarkFactory.addLinksToSaksmappe(caseType, saksmappeResource);
+        noarkFactory.parseTitleAndFields(caseProperties, caseType, saksmappeResource);
+        String recordPrefix = titleService.getRecordTitlePrefix(caseProperties.getTitle(), saksmappeResource);
+        String documentPrefix = titleService.getDocumentTitlePrefix(caseProperties.getTitle(), saksmappeResource);
 
         for (JournalpostResource journalpost : saksmappeResource.getJournalpost()) {
             log.debug("Create journalpost {}", journalpost.getTittel());
-            final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost);
+            final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost, recordPrefix, documentPrefix);
+
+            boolean updateRegistryEntry = noark_3_2 &&
+                    registryEntryDocuments.getRegistryEntry().getRecordStatusId().equals("J");
+
+            if (updateRegistryEntry) {
+                registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
+                log.info("NOARK avsnitt 3.2: Setter journalstatus til {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
+            }
+
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(identity, registryEntryDocuments.getRegistryEntry());
 
             // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
@@ -137,7 +185,6 @@ public class NoarkService {
 
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
                 Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
-                Integer documentDescriptionId = null;
 
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
@@ -160,8 +207,7 @@ public class NoarkService {
                         sikriObjectModelService.updateDataObject(identity, registryEntryDocument);
 
                         log.debug("Create 🧾 {}", checkinDocument.getGuid());
-                        documentDescriptionId = documentDescription.getId();
-                        checkinDocument.setDocumentId(documentDescriptionId);
+                        checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
 
                         log.debug("Checkin 🧾 {}", checkinDocument);
@@ -170,20 +216,36 @@ public class NoarkService {
                         log.debug("🍷🍷🍷");
 
                     } else {
-                        if (j == 0) {
-                            log.debug("Create DocumentDescription {}", document.getRight().getDocumentDescription().getDocumentTitle());
-                            final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
-                            documentDescriptionId = documentDescription.getId();
-                        }
-                        log.debug("Create DocumentObject {}", checkinDocument.getGuid());
-                        checkinDocument.setDocumentId(documentDescriptionId);
+                        log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
+                        final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
+                        log.debug("Create 🧾 {}", checkinDocument.getGuid());
+                        checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
+                        log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(identity, checkinDocument);
-                        log.debug("Create RegistryEntryDocument {}", document.getLeft());
-                        sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescriptionId));
+                        log.debug("Create 📂 {}", document.getLeft());
+                        sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }
                 }
             }
+
+            if (updateRegistryEntry) {
+                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
+                registryEntry.setRecordStatusId("J");
+                sikriObjectModelService.updateDataObject(identity, registryEntry);
+            }
+        }
+    }
+
+    private String noark32Status(String registryEntryTypeId) {
+        switch (registryEntryTypeId.toUpperCase(Locale.ROOT)) {
+            case "I":
+            case "T":
+                return "M";
+            case "U":
+            case "N":
+            default:
+                return "F";
         }
     }
 }

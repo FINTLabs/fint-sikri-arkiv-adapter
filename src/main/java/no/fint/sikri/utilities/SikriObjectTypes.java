@@ -25,6 +25,7 @@ public enum SikriObjectTypes {
     public static final String PRIMARY_CLASSIFICATION = "PrimaryClassification";
     public static final String SECONDARY_CLASSIFICATION = "SecondaryClassification";
     public static final String OFFICER_NAME = "OfficerName";
+    public static final String EXTERNAL_SYSTEM_LINK_CASE = "ExternalSystemLinkCase";
 
     public static final String DOCUMENT_DESCRIPTION_DOCUMENT_CATEGORY = DOCUMENT_DESCRIPTION + "." + DOCUMENT_CATEGORY;
 

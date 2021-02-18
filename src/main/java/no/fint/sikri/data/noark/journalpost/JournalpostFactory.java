@@ -56,8 +56,8 @@ public class JournalpostFactory {
     public JournalpostResource toFintResource(SikriIdentity identity, RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
 
-        journalpost.setTittel(result.getTitleRestricted());
-        journalpost.setOffentligTittel(result.getTitle());
+        journalpost.setTittel(result.getTitle());
+        journalpost.setOffentligTittel(result.getTitleRestricted());
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
         journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
@@ -93,13 +93,13 @@ public class JournalpostFactory {
         return journalpost;
     }
 
-    public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource) {
+    public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource, String recordPrefix, String documentPrefix) {
 
         RegistryEntryType registryEntry = new RegistryEntryType();
 
         registryEntry.setCaseId(caseId);
-        registryEntry.setTitle(journalpostResource.getTittel());
-        registryEntry.setTitleRestricted(journalpostResource.getOffentligTittel());
+        registryEntry.setTitle(recordPrefix + journalpostResource.getTittel());
+        //registryEntry.setTitleRestricted(recordPrefix + journalpostResource.getOffentligTittel());
 
         applyParameter(
                 journalpostResource.getOpprettetDato(),
@@ -126,13 +126,13 @@ public class JournalpostFactory {
 
         applyParameterFromLink(
                 journalpostResource.getSaksbehandler(),
-                Integer::parseInt,
+                Integer::parseUnsignedInt,
                 registryEntry::setOfficerNameId
         );
 
         applyParameterFromLink(
                 journalpostResource.getOpprettetAv(),
-                Integer::parseInt,
+                Integer::parseUnsignedInt,
                 registryEntry::setCreatedByUserNameId
         );
 
@@ -142,7 +142,7 @@ public class JournalpostFactory {
 
         journalpostResource.getDokumentbeskrivelse()
                 .stream()
-                .map(dokumentbeskrivelseFactory::toDocumentDescription)
+                .map(dokumentbeskrivelseResource -> dokumentbeskrivelseFactory.toDocumentDescription(dokumentbeskrivelseResource, documentPrefix))
                 .forEach(result::addDocument);
 
         if (journalpostResource.getKorrespondansepart() != null) {

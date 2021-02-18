@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
-import no.fint.event.model.Problem;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
+import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.kulturminne.TilskuddFredaBygningPrivatEieService;
 import no.fint.sikri.handler.Handler;
@@ -20,13 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
+    @Autowired
+    private AdapterProps props;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -71,12 +72,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
         log.info("Complete document for update: {}", tilskuddFredaBygningPrivatEieResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource.getJournalpost()).collect(Collectors.toList());
-        if (!problems.isEmpty()) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage("Payload fails validation!");
-            response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", tilskuddFredaBygningPrivatEieResource, problems);
+        if (!validationService.validate(response, tilskuddFredaBygningPrivatEieResource.getJournalpost())) {
             return;
         }
         try {
@@ -92,12 +88,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
     private void createCase(Event<FintLinks> response, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
         log.info("Complete document for creation: {}", tilskuddFredaBygningPrivatEieResource);
-        List<Problem> problems = validationService.getProblems(tilskuddFredaBygningPrivatEieResource).collect(Collectors.toList());
-        if (!problems.isEmpty()) {
-            response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage("Payload fails validation!");
-            response.setProblems(problems);
-            log.info("Validation problems!\n{}\n{}\n", tilskuddFredaBygningPrivatEieResource, problems);
+        if (!validationService.validate(response, tilskuddFredaBygningPrivatEieResource)) {
             return;
         }
         TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEie = tilskuddFredaBygningPrivatEieService.createTilskuddFredaBygningPrivatEieCase(tilskuddFredaBygningPrivatEieResource);

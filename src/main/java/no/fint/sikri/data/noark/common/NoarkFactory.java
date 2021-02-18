@@ -6,7 +6,7 @@ import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
+import no.fint.model.FintComplexDatatypeObject;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
@@ -14,7 +14,7 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
-import no.fint.sikri.data.noark.klasse.KlasseFactory;
+import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
 import no.fint.sikri.data.noark.part.PartService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
@@ -22,17 +22,15 @@ import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.model.SikriIdentity;
-import no.fint.sikri.service.ExternalSystemLinkService;
 import no.fint.sikri.service.SikriCaseDefaultsService;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
@@ -51,7 +49,7 @@ public class NoarkFactory {
     private MerknadService merknadService;
 
     @Autowired
-    private KlasseFactory klasseFactory;
+    private KlasseService klasseService;
 
     @Autowired
     private SikriCaseDefaultsService caseDefaultsService;
@@ -65,43 +63,15 @@ public class NoarkFactory {
     @Autowired
     private SkjermingService skjermingService;
 
-    @Autowired
-    private ExternalSystemLinkService externalSystemLinkService;
-
-    public ExternalSystemLinkCaseType externalSystemLink(Integer caseId, String externalKey) {
-        ExternalSystemLinkCaseType externalSystemLinkCaseType = new ExternalSystemLinkCaseType();
-        externalSystemLinkCaseType.setCaseId(caseId);
-        externalSystemLinkCaseType.setExternalKey(externalKey);
-        externalSystemLinkCaseType.setExternalSystemCode(externalSystemLinkService.getExternalSystemLinkId());
-
-        return externalSystemLinkCaseType;
+    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseProperties caseProperties, CaseType input, T resource) {
+        applyFieldsForSaksmappe(identity, input, resource);
+        queryNestedResources(identity, input, resource);
+        addLinksToSaksmappe(input, resource);
+        parseTitleAndFields(caseProperties, input, resource);
+        return resource;
     }
 
-    public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseProperties caseProperties, CaseType input, T resource) {
-        String caseNumber = NOARKUtils.getMappeId(
-                input.getCaseYear().toString(),
-                input.getSequenceNumber().toString()
-        );
-        Integer caseYear = input.getCaseYear();
-        Integer sequenceNumber = input.getSequenceNumber();
-
-        resource.setMappeId(FintUtils.createIdentifikator(caseNumber));
-        resource.setSystemId(FintUtils.createIdentifikator(input.getId().toString()));
-        resource.setSakssekvensnummer(String.valueOf(sequenceNumber));
-        resource.setSaksaar(String.valueOf(caseYear));
-        resource.setSaksdato(input.getCaseDate().toGregorianCalendar().getTime());
-        resource.setOpprettetDato(input.getCreatedDate().toGregorianCalendar().getTime());
-        resource.setTittel(input.getTitle());
-        resource.setOffentligTittel(input.getPublicTitle());
-
-        resource.setJournalpost(journalpostService.queryForSaksmappe(identity, resource));
-        resource.setPart(partService.queryForSaksmappe(identity, resource));
-
-        resource.setMerknad(merknadService.getRemarkForCase(identity, input.getId().toString()));
-
-        optionalValue(skjermingService.getSkjermingResource(input::getAccessCodeId, input::getPursuant))
-                .ifPresent(resource::setSkjerming);
-
+    <T extends SaksmappeResource> void addLinksToSaksmappe(CaseType input, T resource) {
         optionalValue(input.getAdministrativeUnit())
                 .map(AdministrativeUnitType::getShortCodeThisLevel)
                 .flatMap(SikriUtils::optionalValue)
@@ -126,27 +96,66 @@ public class NoarkFactory {
                 .map(String::valueOf)
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
-
-        resource.setKlasse(
-                Stream.of(input.getPrimaryClassification(), input.getSecondaryClassification())
-                        .filter(Objects::nonNull)
-                        .map(klasseFactory::toFintResource)
-                        .collect(Collectors.toList()));
-
-        titleService.parseCaseTitle(caseProperties.getTitle(), resource, input.getTitle());
-        additionalFieldService.setFieldsForResource(caseProperties.getField(), resource,
-                Arrays.stream(PropertyUtils.getPropertyDescriptors(input))
-                        .filter(p -> p.getName().startsWith("customAttribute"))
-                        .map(p -> new AdditionalFieldService.Field(p.getName(), readProperty(input, p)))
-                        .collect(Collectors.toList()));
-
-        return resource;
     }
 
-    private String readProperty(CaseType input, java.beans.PropertyDescriptor p) {
+    <T extends SaksmappeResource> void applyFieldsForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
+        String caseNumber = NOARKUtils.getMappeId(
+                input.getCaseYear().toString(),
+                input.getSequenceNumber().toString()
+        );
+        Integer caseYear = input.getCaseYear();
+        Integer sequenceNumber = input.getSequenceNumber();
+
+        resource.setMappeId(FintUtils.createIdentifikator(caseNumber));
+        resource.setSystemId(FintUtils.createIdentifikator(input.getId().toString()));
+        resource.setSakssekvensnummer(String.valueOf(sequenceNumber));
+        resource.setSaksaar(String.valueOf(caseYear));
+        resource.setSaksdato(input.getCaseDate().toGregorianCalendar().getTime());
+        resource.setOpprettetDato(input.getCreatedDate().toGregorianCalendar().getTime());
+        resource.setTittel(input.getTitle());
+        resource.setOffentligTittel(input.getPublicTitle());
+
+        optionalValue(skjermingService.getSkjermingResource(input::getAccessCodeId, input::getPursuant))
+                .ifPresent(resource::setSkjerming);
+
+        resource.setKlasse(
+                klasseService.getKlasserByCaseId(identity, input.getId())
+                        .collect(Collectors.toList()));
+    }
+
+    <T extends SaksmappeResource> void queryNestedResources(SikriIdentity identity, CaseType input, T resource) {
+        resource.setJournalpost(journalpostService.queryForSaksmappe(identity, resource));
+        resource.setPart(partService.queryForSaksmappe(identity, resource));
+        resource.setMerknad(merknadService.getRemarkForCase(identity, input.getId().toString()));
+    }
+
+    <T extends SaksmappeResource> void parseTitleAndFields(CaseProperties caseProperties, CaseType input, T resource) {
+        for (PropertyDescriptor descriptor : PropertyUtils.getPropertyDescriptors(resource)) {
+            if (FintComplexDatatypeObject.class.isAssignableFrom(descriptor.getPropertyType())) {
+                try {
+                    if (descriptor.getReadMethod().invoke(resource) == null) {
+                        descriptor.getWriteMethod().invoke(resource, descriptor.getPropertyType().newInstance());
+                    }
+                } catch (IllegalAccessException | InvocationTargetException | InstantiationException ignore) {
+                }
+            }
+        }
+
+        titleService.parseCaseTitle(caseProperties.getTitle(), resource, input.getTitle());
+        additionalFieldService.setFieldsForResource(
+                caseProperties.getField(),
+                resource,
+                Arrays.stream(PropertyUtils.getPropertyDescriptors(input))
+                        .map(PropertyDescriptor::getName)
+                        .filter(p -> p.startsWith("customAttribute"))
+                        .map(p -> new AdditionalFieldService.Field(p, readProperty(input, p)))
+                        .collect(Collectors.toList()));
+    }
+
+    private String readProperty(CaseType input, String name) {
         try {
-            return (String) p.getReadMethod().invoke(input);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+            return (String) PropertyUtils.getProperty(input, name);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
@@ -188,6 +197,12 @@ public class NoarkFactory {
         applyParameterFromLink(
                 resource.getSaksstatus(),
                 caseType::setCaseStatusId
+        );
+
+        applyParameterFromLink(
+                resource.getSaksansvarlig(),
+                Integer::parseUnsignedInt,
+                caseType::setOfficerNameId
         );
 
         return caseType;

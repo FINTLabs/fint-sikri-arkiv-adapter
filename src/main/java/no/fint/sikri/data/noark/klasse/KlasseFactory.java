@@ -5,23 +5,15 @@ import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
-import no.fint.sikri.service.SikriIdentityService;
-import no.fint.sikri.service.SikriObjectModelService;
-import no.fint.sikri.utilities.SikriObjectTypes;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import java.util.List;
+
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class KlasseFactory {
-
-    @Autowired
-    private SikriObjectModelService sikriObjectModelService;
-
-    @Autowired
-    private SikriIdentityService identityService;
 
     public KlasseResource toFintResource(ClassType input) {
         KlasseResource result = new KlasseResource();
@@ -42,24 +34,47 @@ public class KlasseFactory {
         return result;
     }
 
-    public ClassificationType toClassificationType(KlasseResource input) {
+    public ClassificationType toExistingClassification(Integer caseId, String classificationSystemId, KlasseResource input, List<ClassType> classes) {
         ClassificationType output = new ClassificationType();
         output.setClassId(input.getKlasseId());
+        output.setClassificationSystemId(classificationSystemId);
         output.setSortOrder(String.valueOf(input.getRekkefolge()));
-        /* TODO if (StringUtils.isNotBlank(input.getTittel())) {
-            output.setRemark(input.getTittel());
-        }
-        */
-        // TODO Possible to detect which classes reject description modifications?
-        sikriObjectModelService.getDataObjects(
-                identityService.getDefaultIdentity(),
-                SikriObjectTypes.CLASS, "Id=" + input.getKlasseId())
-                .stream()
-                .map(ClassType.class::cast)
+        output.setCaseId(caseId);
+        classes.stream()
                 .map(ClassType::getDescription)
                 .forEach(output::setDescription);
 
-        applyParameterFromLink(input.getKlassifikasjonssystem(), output::setClassificationSystemId);
+        return output;
+    }
+
+    public ClassificationType toNewClassification(Integer caseId, String classificationSystemId, KlasseResource input, ClassType classType) {
+        ClassificationType output = new ClassificationType();
+        output.setClassId(input.getKlasseId());
+        output.setClassificationSystemId(classificationSystemId);
+        output.setSortOrder(String.valueOf(input.getRekkefolge()));
+        output.setCaseId(caseId);
+        if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setDescription(input.getTittel());
+        } else {
+            output.setDescription(input.getKlasseId());
+        }
+
+        output.setClazz(classType);
+
+        return output;
+    }
+
+    public ClassType toClassType(String classificationSystemId, KlasseResource input) {
+        ClassType output = new ClassType();
+        output.setClassificationSystemId(classificationSystemId);
+        output.setId(input.getKlasseId());
+        if (StringUtils.isNotBlank(input.getTittel())) {
+            output.setDescription(input.getTittel());
+        } else {
+            output.setDescription(input.getKlasseId());
+        }
+        output.setIsValidForRegistration(true);
+        output.setIsSecondaryClassAllowed(input.getRekkefolge() > 1);
         return output;
     }
 }

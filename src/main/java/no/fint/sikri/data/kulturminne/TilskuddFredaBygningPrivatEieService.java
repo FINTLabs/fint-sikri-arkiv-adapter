@@ -1,6 +1,7 @@
 package no.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.arkiv.CaseDefaults;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.fint.sikri.data.exception.CaseNotFound;
@@ -16,18 +17,20 @@ public class TilskuddFredaBygningPrivatEieService {
     private final NoarkService noarkService;
     private final TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory;
     private final CaseQueryService caseQueryService;
+    private final CaseDefaults caseDefaults;
     private final SikriIdentityService identityService;
 
-    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, SikriIdentityService identityService) {
+    public TilskuddFredaBygningPrivatEieService(NoarkService noarkService, TilskuddFredaBygningPrivatEieFactory tilskuddFredaBygningPrivatEieFactory, CaseQueryService caseQueryService, CaseDefaults caseDefaults, SikriIdentityService identityService) {
         this.noarkService = noarkService;
         this.tilskuddFredaBygningPrivatEieFactory = tilskuddFredaBygningPrivatEieFactory;
         this.caseQueryService = caseQueryService;
+        this.caseDefaults = caseDefaults;
         this.identityService = identityService;
     }
 
     public TilskuddFredaBygningPrivatEieResource updateTilskuddFredaBygningPrivatEieCase(String query, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) throws CaseNotFound {
         final SikriIdentity identity = identityService.getIdentityForClass(TilskuddFredaBygningPrivatEieResource.class);
-        noarkService.updateCase(identity, query, tilskuddFredaBygningPrivatEieResource);
+        noarkService.updateCase(identity, caseDefaults.getTilskuddfredabygningprivateie(), query, tilskuddFredaBygningPrivatEieResource);
         return caseQueryService
                 .query(identity, query)
                 .map(tilskuddFredaBygningPrivatEieFactory::toFintResource)

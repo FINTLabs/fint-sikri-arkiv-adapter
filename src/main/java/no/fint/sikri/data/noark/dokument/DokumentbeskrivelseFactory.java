@@ -32,9 +32,6 @@ public class DokumentbeskrivelseFactory {
     private DokumentobjektFactory dokumentobjektFactory;
 
     @Autowired
-    private DokumentobjektService dokumentobjektService;
-
-    @Autowired
     private SkjermingService skjermingService;
 
     @Autowired
@@ -67,13 +64,10 @@ public class DokumentbeskrivelseFactory {
         return resource;
     }
 
-    public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource) {
+    public Pair<String, RegistryEntryDocuments.Document> toDocumentDescription(DokumentbeskrivelseResource dokumentbeskrivelseResource, String documentPrefix) {
         DocumentDescriptionType documentDescriptionType = new DocumentDescriptionType();
 
-        applyParameter(
-                dokumentbeskrivelseResource.getTittel(),
-                documentDescriptionType::setDocumentTitle
-        );
+        documentDescriptionType.setDocumentTitle(documentPrefix + dokumentbeskrivelseResource.getTittel());
 
         applyParameter(
                 dokumentbeskrivelseResource.getOpprettetDato(),
