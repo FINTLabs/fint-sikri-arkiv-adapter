@@ -11,7 +11,6 @@ import no.fint.sikri.data.exception.DrosjeloyveNotFoundException;
 import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
-import no.fint.sikri.service.CaseService;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -29,32 +28,29 @@ public class SoknadDrosjeloyveService {
 
     private final SoknadDrosjeloyveFactory soknadDrosjeloyveFactory;
     private final SikriObjectModelService sikriObjectModelService;
-    private final CaseService caseService;
     private final NoarkService noarkService;
     private final CaseQueryService caseQueryService;
     private final CaseProperties caseProperties;
     private final SikriIdentity identity;
 
-    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse:X}")
     String kKodeFagklasse;
 
-    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode:X}")
     String kKodeTilleggskode;
 
-    @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon}")
+    @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon:X}")
     String primarklassifikasjon;
 
     public SoknadDrosjeloyveService(
             SoknadDrosjeloyveFactory soknadDrosjeloyveFactory,
             SikriObjectModelService sikriObjectModelService,
-            CaseService caseService,
             NoarkService noarkService,
             CaseQueryService caseQueryService,
             CaseDefaults caseDefaults,
             SikriIdentityService identityService) {
         this.soknadDrosjeloyveFactory = soknadDrosjeloyveFactory;
         this.sikriObjectModelService = sikriObjectModelService;
-        this.caseService = caseService;
         this.noarkService = noarkService;
         this.caseQueryService = caseQueryService;
         caseProperties = caseDefaults.getSoknaddrosjeloyve();
