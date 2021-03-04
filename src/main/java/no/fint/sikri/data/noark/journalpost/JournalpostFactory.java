@@ -131,6 +131,17 @@ public class JournalpostFactory {
         );
 
         applyParameterFromLink(
+                journalpostResource.getAdministrativEnhet(),
+                Integer::parseUnsignedInt,
+                registryEntry::setAdministrativeUnitId
+        );
+
+        applyParameterFromLink(
+                journalpostResource.getJournalenhet(),
+                registryEntry::setRegistryManagementUnitId
+        );
+
+        applyParameterFromLink(
                 journalpostResource.getOpprettetAv(),
                 Integer::parseUnsignedInt,
                 registryEntry::setCreatedByUserNameId
@@ -148,7 +159,11 @@ public class JournalpostFactory {
         if (journalpostResource.getKorrespondansepart() != null) {
             journalpostResource.getKorrespondansepart()
                     .stream()
-                    .map(korrespondansepartFactory::createSenderRecipient)
+                    .map(input -> korrespondansepartFactory.createSenderRecipient(
+                            input,
+                            registryEntry.getOfficerNameId(),
+                            registryEntry.getAdministrativeUnitId(),
+                            registryEntry.getRegistryManagementUnitId()))
                     .forEach(result::addSenderRecipient);
         }
 
