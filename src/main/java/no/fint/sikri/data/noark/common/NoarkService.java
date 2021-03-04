@@ -153,7 +153,7 @@ public class NoarkService {
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost, recordPrefix, documentPrefix);
 
             boolean updateRegistryEntry = noark_3_2 &&
-                    registryEntryDocuments.getRegistryEntry().getRecordStatusId().equals("J");
+                    "J".equals(registryEntryDocuments.getRegistryEntry().getRecordStatusId());
 
             if (updateRegistryEntry) {
                 registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
