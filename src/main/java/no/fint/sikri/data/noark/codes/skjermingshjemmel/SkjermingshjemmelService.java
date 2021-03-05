@@ -49,8 +49,8 @@ public class SkjermingshjemmelService {
                     }
                     String[] names = e.getValue().toArray(new String[0]);
                     String[] keys = Arrays.stream(names).map(this::removeChars).toArray(String[]::new);
-                    log.info("Names: {}", Arrays.toString(keys));
-                    int prefix = indexOfDifferences(keys).peek(i -> log.info("Pos: {}", i)).max().orElse(0);
+                    log.debug("Names: {}", Arrays.toString(keys));
+                    int prefix = indexOfDifferences(keys).peek(i -> log.trace("Pos: {}", i)).max().orElse(0);
                     return IntStream.range(0, keys.length)
                             .mapToObj(it -> {
                                 SkjermingshjemmelResource r = new SkjermingshjemmelResource();
