@@ -25,7 +25,7 @@ apply plugin: 'org.springframework.boot'
 javadoc {
     source = sourceSets.main.allJava
     classpath = configurations.runtime
-    options.windowTitle = 'FINT Documaster Arkiv Adapter'
+    options.windowTitle = 'FINT Sikri Arkiv Adapter'
     options.memberLevel = JavadocMemberLevel.PRIVATE
     destinationDir = file('./javadocs/')
 }
