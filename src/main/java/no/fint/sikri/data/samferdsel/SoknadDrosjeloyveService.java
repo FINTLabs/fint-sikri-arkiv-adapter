@@ -34,12 +34,15 @@ public class SoknadDrosjeloyveService {
     private final SikriIdentity identity;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse:X}")
+    @Deprecated
     String kKodeFagklasse;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode:X}")
+    @Deprecated
     String kKodeTilleggskode;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon:X}")
+    @Deprecated
     String primarklassifikasjon;
 
     public SoknadDrosjeloyveService(

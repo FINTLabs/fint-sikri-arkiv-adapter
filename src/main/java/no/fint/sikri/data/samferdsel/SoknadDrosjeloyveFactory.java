@@ -20,19 +20,6 @@ public class SoknadDrosjeloyveFactory {
     private final SikriIdentity identity;
     private final CaseProperties properties;
 
-    /*
-    @Value("${fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon}")
-    private String primarklassifikasjon;
-
-    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse}")
-    private String kKodeFagklasse;
-
-    @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode}")
-    private String kKodeTilleggskode;
-
-
-     */
-
 
     public SoknadDrosjeloyveFactory(NoarkFactory noarkFactory, CaseDefaults caseDefaults, SikriIdentityService identityService) {
         this.noarkFactory = noarkFactory;
@@ -52,59 +39,6 @@ public class SoknadDrosjeloyveFactory {
 
     }
 
-    /*
-    public ClassificationType createPrimaryClassification(SoknadDrosjeloyveResource resource, Integer caseId) {
-        //String organisationName = resource.getTittel().split("-")[1].trim();
-
-        ClassificationType classificationType = new ClassificationType();
-        classificationType.setClassId(resource.getOrganisasjonsnummer());
-        classificationType.setClassificationSystemId(primarklassifikasjon);
-        classificationType.setDescription(resource.getTittel());
-        classificationType.setCaseId(caseId);
-        classificationType.setIsRestricted(false);
-        classificationType.setSortOrder("1");
-
-        return classificationType;
-    }
-
-    public ClassificationType createFagklasse(Integer caseId) throws ClassNotFoundException {
-        ClassType classType = getClassType(kKodeFagklasse);
-
-        ClassificationType classificationType = new ClassificationType();
-        classificationType.setClassId(classType.getId());
-        classificationType.setClassificationSystemId(classType.getClassificationSystemId());
-        classificationType.setDescription(classType.getDescription());
-        classificationType.setCaseId(caseId);
-        classificationType.setIsRestricted(false);
-        classificationType.setSortOrder("2");
-
-        return classificationType;
-    }
-
-    public ClassificationType createTilleggsKode(Integer caseId) throws ClassNotFoundException {
-        ClassType classType = getClassType(kKodeTilleggskode);
-
-        ClassificationType classificationType = new ClassificationType();
-        classificationType.setClassId(classType.getId());
-        classificationType.setClassificationSystemId(classType.getClassificationSystemId());
-        classificationType.setDescription(classType.getDescription());
-        classificationType.setCaseId(caseId);
-        classificationType.setIsRestricted(false);
-        classificationType.setSortOrder("3");
-
-        return classificationType;
-    }
-
-
-    private ClassType getClassType(String classId) throws ClassNotFoundException {
-        return sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASS, "id=" + classId).stream()
-                .map(ClassType.class::cast)
-                .findAny()
-                .orElseThrow(() -> new ClassNotFoundException(classId));
-    }
-
-
-     */
     public SoknadDrosjeloyveResource toFintResource(CaseType input) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
         resource.setOrganisasjonsnummer(input.getPrimaryClassification().getClassId());
