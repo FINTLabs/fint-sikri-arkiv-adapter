@@ -50,7 +50,7 @@ public class KorrespondansepartFactory {
         return output;
     }
 
-    public SenderRecipientType createSenderRecipient(KorrespondansepartResource input) {
+    public SenderRecipientType createSenderRecipient(KorrespondansepartResource input, Integer officerNameId, Integer administrativeUnitId, String registryManagementUnitId) {
         SenderRecipientType output = new SenderRecipientType();
 
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
@@ -89,20 +89,22 @@ public class KorrespondansepartFactory {
                 .findFirst()
                 .ifPresent(type -> {
                     output.setCopyRecipient(false);
+                    output.setIsRecipient(false);
+                    output.setIsResponsible(false);
                     if (StringUtils.startsWith(type, "E")) {
                         output.setOfficerNameId(0);
                         output.setAdministrativeUnitId(0);
-                        output.setIsResponsible(false);
-                    }
-                    if (StringUtils.startsWith(type, "I")) {
+                    } else if (StringUtils.startsWith(type, "I")) {
                         output.setIsResponsible(true);
+                        output.setOfficerNameId(officerNameId);
+                        output.setAdministrativeUnitId(administrativeUnitId);
+                        output.setRegistryManagementUnitId(registryManagementUnitId);
                     }
                     if (StringUtils.endsWith(type, "K")) {
                         output.setCopyRecipient(true);
                         output.setIsRecipient(true);
                         output.setIsResponsible(false);
-                    }
-                    if (StringUtils.endsWith(type, "M")) {
+                    } else if (StringUtils.endsWith(type, "M")) {
                         output.setIsRecipient(true);
                     }
                 });
