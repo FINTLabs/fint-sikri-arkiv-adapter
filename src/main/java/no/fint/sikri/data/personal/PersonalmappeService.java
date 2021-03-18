@@ -55,7 +55,7 @@ public class PersonalmappeService {
                 "SequenceNumber=" + NOARKUtils.getCaseSequenceNumber(mappeId)
                         + " AND CaseYear=" + NOARKUtils.getCaseYear(mappeId)
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + "A",
+                        + " AND CaseStatusId<>A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -70,7 +70,7 @@ public class PersonalmappeService {
                 SikriObjectTypes.CASE,
                 "Id=" + systemId
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + "A",
+                        + " AND CaseStatusId<>A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
@@ -175,9 +175,9 @@ public class PersonalmappeService {
         return sikriObjectModelService.getDataObjects(
                 identityService.getIdentityForClass(PersonalmappeResource.class),
                 SikriObjectTypes.CASE,
-                "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson())
+                "PrimaryClassification.ClassId=" + getIdFromLink(personalmappeResource.getPerson()).orElseThrow(IllegalStateException::new)
                         + " AND FileTypeId=" + properties.getSaksmappeType()
-                        + " AND CaseStatusId<>" + "A",
+                        + " AND CaseStatusId<>A",
                 Arrays.asList(SikriObjectTypes.PRIMARY_CLASSIFICATION,
                         SikriObjectTypes.ADMINISTRATIVE_UNIT,
                         SikriObjectTypes.OFFICER_NAME))
