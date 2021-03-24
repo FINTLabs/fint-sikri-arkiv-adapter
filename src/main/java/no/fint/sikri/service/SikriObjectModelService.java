@@ -88,6 +88,8 @@ public class SikriObjectModelService extends SikriAbstractService {
     public <T extends DataObject> T createDataObject(SikriIdentity identity, T dataObject) {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
+        // XXX 💩
+        log.info("💩 _can_ very soon (when calling insert) happen 😓");
         ArrayOfDataObject insert = objectModelService.insert(mapIdentity(identity), arrayOfDataObject);
         log.info("Created {} objects", insert.getDataObject().size());
         if (insert.getDataObject().size() == 1) {

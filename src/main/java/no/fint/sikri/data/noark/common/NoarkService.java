@@ -160,6 +160,8 @@ public class NoarkService {
                 log.info("NOARK avsnitt 3.2: Setter journalstatus til {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
             }
 
+            // XXX 💩
+            log.info("💩 _can_ very soon (when calling createDataObject) happen 😓");
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(identity, registryEntryDocuments.getRegistryEntry());
 
             // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
