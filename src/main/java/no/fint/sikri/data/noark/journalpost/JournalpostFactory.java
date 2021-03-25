@@ -16,7 +16,9 @@ import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
 import no.fint.sikri.model.SikriIdentity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -28,6 +30,9 @@ import static no.fint.sikri.data.utilities.SikriUtils.*;
 @Slf4j
 @Service
 public class JournalpostFactory {
+
+    @Value("${fint.sikri.registry-entry.access-code.downgrade-code:}")
+    private String downgradeCode;
 
     @Autowired
     private XmlUtils xmlUtils;
@@ -147,7 +152,14 @@ public class JournalpostFactory {
                 registryEntry::setCreatedByUserNameId
         );
 
-        skjermingService.applyAccessCodeAndPursuant(journalpostResource.getSkjerming(), registryEntry::setAccessCodeId, registryEntry::setPursuant);
+        if (skjermingService.applyAccessCodeAndPursuant(journalpostResource.getSkjerming(), registryEntry::setAccessCodeId, registryEntry::setPursuant)) {
+            // 🦍 If access code and pursuant was applied ..
+            if (StringUtils.isNotBlank(downgradeCode)) {
+                // 🦧 .. and a downgrading code has been set ..
+                registryEntry.setDowngradingCodeId(downgradeCode);
+                // 🐖 .. set it and hope for the best.
+            }
+        }
 
         RegistryEntryDocuments result = new RegistryEntryDocuments(registryEntry);
 
