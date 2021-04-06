@@ -19,6 +19,7 @@ import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
+import no.fint.sikri.data.utilities.XmlUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.ExternalSystemLinkService;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -38,6 +40,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class NoarkService {
+
+    // TODO Parameter
+    private final String followUpMethodId = "TE";
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
@@ -68,6 +73,9 @@ public class NoarkService {
 
     @Autowired
     private ExternalSystemLinkService externalSystemLinkService;
+
+    @Autowired
+    private XmlUtils xmlUtils;
 
     @Value("${fint.sikri.noark.3.2:true}")
     private boolean noark_3_2;
@@ -132,7 +140,6 @@ public class NoarkService {
     }
 
 
-
     public void updateCase(SikriIdentity identity, CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
@@ -180,6 +187,14 @@ public class NoarkService {
             }
 
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
+                if (StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")
+                        && senderRecipient.isIsResponsible() && senderRecipient.isIsRecipient()) {
+                    log.debug("Setting follow up method {} on {}", followUpMethodId, senderRecipient.getName());
+                    senderRecipient.setFollowUpMethodId(followUpMethodId);
+                    senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
+                    senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
+                }
+
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
                 senderRecipient.setRegistryEntryId(registryEntry.getId());
                 sikriObjectModelService.createDataObject(identity, senderRecipient);
