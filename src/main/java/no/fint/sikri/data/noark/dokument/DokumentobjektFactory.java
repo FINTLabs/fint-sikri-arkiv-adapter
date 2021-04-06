@@ -72,9 +72,9 @@ public class DokumentobjektFactory {
                 .map(guid -> {
                     CheckinDocument document = new CheckinDocument();
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
+                    applyIdFromLink(dokumentobjektResource.getFormat(), document::setContentType);
                     document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsnummer()).map(Math::toIntExact).orElse(1));
                     document.setGuid(guid);
-                    document.setContentType(dokumentobjektResource.getFormat());
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());
                     return document;
                 });
