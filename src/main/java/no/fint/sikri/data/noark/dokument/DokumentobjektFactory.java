@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.dokument;
 
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.arkiv.sikri.oms.FileFormatType;
+import no.fint.model.arkiv.kodeverk.Format;
 import no.fint.model.arkiv.kodeverk.Variantformat;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Dokumentfil;
@@ -28,7 +29,8 @@ public class DokumentobjektFactory {
                 .ifPresent(resource::setFilstorrelse);
 
         optionalValue(result.getFileformatId())
-                .ifPresent(resource::setFormat);
+                .map(Link.apply(Format.class, "systemid"))
+                .ifPresent(resource::addFormat);
 
         optionalValue(result.getFileFormat())
                 .map(FileFormatType::getDescription)
