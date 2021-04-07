@@ -249,10 +249,10 @@ public class NoarkService {
                         .map(SenderRecipientType.class::cast)
                         .filter(SenderRecipientType::isIsResponsible)
                         .forEach(senderRecipient -> {
-                            log.debug("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
                             senderRecipient.setFollowUpMethodId(followUpMethodId);
                             senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
                             senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
+                            log.trace("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
                             sikriObjectModelService.updateDataObject(identity, senderRecipient);
                         });
             }
