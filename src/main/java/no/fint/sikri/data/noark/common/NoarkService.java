@@ -41,8 +41,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class NoarkService {
 
-    // TODO Parameter
-    private final String followUpMethodId = "TE";
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
@@ -76,6 +74,9 @@ public class NoarkService {
 
     @Autowired
     private XmlUtils xmlUtils;
+
+    @Value("${fint.sikri.followup:}")
+    private String followUpMethodId; // = "TE";
 
     @Value("${fint.sikri.noark.3.2:true}")
     private boolean noark_3_2;
@@ -187,14 +188,6 @@ public class NoarkService {
             }
 
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
-                if (StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")
-                        && senderRecipient.isIsResponsible() && senderRecipient.isIsRecipient()) {
-                    log.debug("Setting follow up method {} on {}", followUpMethodId, senderRecipient.getName());
-                    senderRecipient.setFollowUpMethodId(followUpMethodId);
-                    senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
-                    senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
-                }
-
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
                 senderRecipient.setRegistryEntryId(registryEntry.getId());
                 sikriObjectModelService.createDataObject(identity, senderRecipient);
@@ -244,6 +237,24 @@ public class NoarkService {
                         sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }
                 }
+            }
+
+            if (StringUtils.isNotBlank(followUpMethodId)
+                    && StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")) {
+                log.debug("Updating SenderRecipients with follow-up {}", followUpMethodId);
+                sikriObjectModelService.getDataObjects(identity,
+                        SikriObjectTypes.SENDER_RECIPIENT,
+                        "RegistryEntryId=" + registryEntry.getId())
+                        .stream()
+                        .map(SenderRecipientType.class::cast)
+                        .filter(SenderRecipientType::isIsResponsible)
+                        .forEach(senderRecipient -> {
+                            log.debug("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
+                            senderRecipient.setFollowUpMethodId(followUpMethodId);
+                            senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
+                            senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
+                            sikriObjectModelService.updateDataObject(identity, senderRecipient);
+                        });
             }
 
             if (updateRegistryEntry) {
