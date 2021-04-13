@@ -246,7 +246,7 @@ public class NoarkService {
 
             if (StringUtils.isNotBlank(followUpMethodId)
                     && StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")) {
-                log.debug("Updating SenderRecipients 🕴 with follow-up {}", followUpMethodId);
+                log.debug("Updating SenderRecipients 📧 with follow-up {}", followUpMethodId);
                 sikriObjectModelService.getDataObjects(identity,
                         SikriObjectTypes.SENDER_RECIPIENT,
                         "RegistryEntryId=" + registryEntry.getId())
