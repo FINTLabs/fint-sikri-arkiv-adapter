@@ -242,7 +242,6 @@ public class NoarkService {
             if (updateRegistryEntry) {
                 log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
                 registryEntry.setRecordStatusId("J");
-                sikriObjectModelService.updateDataObject(identity, registryEntry);
             }
 
             if (StringUtils.isNotBlank(followUpMethodId)
@@ -261,9 +260,13 @@ public class NoarkService {
                             log.trace("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
                             sikriObjectModelService.updateDataObject(identity, senderRecipient);
                         });
-                registryEntry.setMustFollowUp();
+                registryEntry.setMustFollowUp(BacklogTypeType.NONE);
+                updateRegistryEntry = true;
             }
 
+            if (updateRegistryEntry) {
+                sikriObjectModelService.updateDataObject(identity, registryEntry);
+            }
         }
     }
 
