@@ -239,9 +239,15 @@ public class NoarkService {
                 }
             }
 
+            if (updateRegistryEntry) {
+                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
+                registryEntry.setRecordStatusId("J");
+                sikriObjectModelService.updateDataObject(identity, registryEntry);
+            }
+
             if (StringUtils.isNotBlank(followUpMethodId)
                     && StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")) {
-                log.debug("Updating SenderRecipients with follow-up {}", followUpMethodId);
+                log.debug("Updating SenderRecipients 🕴 with follow-up {}", followUpMethodId);
                 sikriObjectModelService.getDataObjects(identity,
                         SikriObjectTypes.SENDER_RECIPIENT,
                         "RegistryEntryId=" + registryEntry.getId())
@@ -255,13 +261,9 @@ public class NoarkService {
                             log.trace("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
                             sikriObjectModelService.updateDataObject(identity, senderRecipient);
                         });
+                registryEntry.setMustFollowUp();
             }
 
-            if (updateRegistryEntry) {
-                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
-                registryEntry.setRecordStatusId("J");
-                sikriObjectModelService.updateDataObject(identity, registryEntry);
-            }
         }
     }
 
