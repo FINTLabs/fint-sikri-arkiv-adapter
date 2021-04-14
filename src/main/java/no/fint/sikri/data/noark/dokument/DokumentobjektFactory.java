@@ -30,7 +30,7 @@ public class DokumentobjektFactory {
 
         optionalValue(result.getFileformatId())
                 .map(Link.apply(Format.class, "systemid"))
-                .ifPresent(resource::addFormat);
+                .ifPresent(resource::addFilformat);
 
         optionalValue(result.getFileFormat())
                 .map(FileFormatType::getDescription)
@@ -74,7 +74,7 @@ public class DokumentobjektFactory {
                 .map(guid -> {
                     CheckinDocument document = new CheckinDocument();
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
-                    applyIdFromLink(dokumentobjektResource.getFormat(), document::setContentType);
+                    applyIdFromLink(dokumentobjektResource.getFilformat(), document::setContentType);
                     document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsnummer()).map(Math::toIntExact).orElse(1));
                     document.setGuid(guid);
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());
