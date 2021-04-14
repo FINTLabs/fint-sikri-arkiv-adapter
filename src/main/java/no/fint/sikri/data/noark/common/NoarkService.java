@@ -181,6 +181,12 @@ public class NoarkService {
                 }
             }
 
+            registryEntryDocuments.getSenderRecipients().stream()
+                    .filter(it -> noValue(it.getAdministrativeUnitId()) && noValue(it.getOfficerNameId()))
+                    .map(SenderRecipientType::getName)
+                    .findFirst()
+                    .ifPresent(registryEntry::setSenderRecipient);
+
             for (SenderRecipientType senderRecipient : registryEntryDocuments.getSenderRecipients()) {
                 log.debug("Create SenderRecipient {}", senderRecipient.getName());
                 senderRecipient.setRegistryEntryId(registryEntry.getId());
@@ -239,6 +245,10 @@ public class NoarkService {
                 sikriObjectModelService.updateDataObject(identity, registryEntry);
             }
         }
+    }
+
+    private boolean noValue(Integer id) {
+        return id == null || id == 0;
     }
 
     private String noark32Status(String registryEntryTypeId) {
