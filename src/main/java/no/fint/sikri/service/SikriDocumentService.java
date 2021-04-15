@@ -85,6 +85,9 @@ public class SikriDocumentService extends SikriAbstractService {
         Holder<String> fileName = new Holder<>();
         log.debug("Try fetch document {} ...", identifier);
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
+        // FIXME This one keeps throwing errors like:
+        // Client received SOAP Fault from server: C:\files\temporaryfiles\srv\920717152\2231\423edcc9-d40d-465e-a118-11a0cb881704
+        // Please see the server log to find more detail regarding exact cause of the failure.
         final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
         log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();

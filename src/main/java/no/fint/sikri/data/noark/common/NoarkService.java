@@ -165,11 +165,9 @@ public class NoarkService {
 
             if (updateRegistryEntry) {
                 registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
-                log.info("NOARK avsnitt 3.2: Setter journalstatus til {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
+                log.info("NOARK section 3.2: Setting journalstatus to {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
             }
 
-            // XXX 💩
-            log.info("💩 _can_ very soon (when calling createDataObject) happen 😓");
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(identity, registryEntryDocuments.getRegistryEntry());
 
             // Elements creates one RegistryEntryDocument and DocumentDescription when creating a RegistryEntry.
@@ -246,7 +244,7 @@ public class NoarkService {
             }
 
             if (updateRegistryEntry) {
-                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
+                log.info("NOARK section 3.2: Updating journalstatus to J");
                 registryEntry.setRecordStatusId("J");
             }
 
