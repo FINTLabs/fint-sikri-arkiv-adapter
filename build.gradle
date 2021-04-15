@@ -43,11 +43,11 @@ afterEvaluate {
 sourceCompatibility = 1.8
 
 repositories {
+    mavenCentral()
+    jcenter()
     maven {
         url 'https://repo.fintlabs.no/releases'
     }
-    mavenCentral()
-    jcenter()
     maven {
         url 'https://dl.bintray.com/fint/maven'
     }
