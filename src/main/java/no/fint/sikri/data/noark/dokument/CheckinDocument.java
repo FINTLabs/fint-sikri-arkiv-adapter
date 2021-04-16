@@ -7,7 +7,7 @@ public class CheckinDocument {
     private String variant;
     private int version;
     private int documentId;
-    private String guid;
     private String contentType;
     private String format;
+    private byte[] content;
 }

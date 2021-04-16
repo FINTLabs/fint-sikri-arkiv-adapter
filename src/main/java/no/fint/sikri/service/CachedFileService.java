@@ -6,8 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.FileNotFound;
-import no.fint.sikri.data.noark.dokument.DokumentfilService;
+import no.fint.sikri.data.utilities.FintUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -26,7 +28,7 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     private AdapterProps props;
 
     @Autowired
-    private DokumentfilService dokumentfilService;
+    private SikriDocumentService sikriDocumentService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -105,10 +107,33 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
     }
 
     @Override
-    public Path load(String docId) throws Exception {
-        log.info("Loading {} ...", docId);
-        DokumentfilResource resource = dokumentfilService.getDokumentfil(identityService.getDefaultIdentity(), docId);
+    public Path load(String systemId) throws Exception {
+        log.info("Loading {} ...", systemId);
+        final String[] strings = StringUtils.split(systemId, '_');
+        int docId = Integer.parseInt(strings[0]);
+        int version = Integer.parseInt(strings[1]);
+        String variant = strings[2];
+        SikriDocumentService.SikriDocument sikriDocument = sikriDocumentService.getDocumentContentByDocumentId(identityService.getDefaultIdentity(), docId, variant, version);
+        DokumentfilResource resource = new DokumentfilResource();
+        resource.setSystemId(FintUtils.createIdentifikator(systemId));
+        if (StringUtils.isNotBlank(sikriDocument.getContentType())) {
+            resource.setFormat(sikriDocument.getContentType());
+        } else if (StringUtils.isNotBlank(sikriDocument.getFilename())) {
+            resource.setFormat(getContentType(sikriDocument.getFilename()));
+        } else {
+            resource.setFormat(getContentType(sikriDocument.getContent()));
+        }
+        resource.setFilnavn(sikriDocument.getFilename());
+        resource.setData(Base64.getEncoder().encodeToString(sikriDocument.getContent()));
         return saveFile(resource);
+    }
+
+    private String getContentType(String filename) {
+        return new Tika().detect(filename);
+    }
+
+    private String getContentType(byte[] content) {
+        return new Tika().detect(content);
     }
 
 }

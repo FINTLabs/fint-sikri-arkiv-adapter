@@ -7,9 +7,11 @@ import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Dokumentfil;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
+import no.fint.sikri.repository.InternalRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -19,6 +21,12 @@ import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class DokumentobjektFactory {
+
+    private final InternalRepository internalRepository;
+
+    public DokumentobjektFactory(InternalRepository internalRepository) {
+        this.internalRepository = internalRepository;
+    }
 
     public DokumentobjektResource toFintResource(DocumentObjectType result) {
         DokumentobjektResource resource = new DokumentobjektResource();
@@ -69,11 +77,12 @@ public class DokumentobjektFactory {
                 .map(Link::getHref)
                 .filter(StringUtils::isNotBlank)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))
-                .map(guid -> {
+                .map(internalRepository::silentGetFile)
+                .map(dokumentfilResource -> {
                     CheckinDocument document = new CheckinDocument();
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
                     document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsnummer()).map(Math::toIntExact).orElse(1));
-                    document.setGuid(guid);
+                    document.setContent(Base64.getDecoder().decode(dokumentfilResource.getData()));
                     document.setContentType(dokumentobjektResource.getFormat());
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());
                     return document;

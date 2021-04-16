@@ -41,7 +41,7 @@ public class DokumentobjektService {
     }
 
     public void checkinDocument(SikriIdentity identity, CheckinDocument checkinDocument) {
-        sikriDocumentService.checkin(identity, checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getGuid());
+        sikriDocumentService.checkin(identity, checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getSystemId());
     }
 
     public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument) {

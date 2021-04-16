@@ -66,7 +66,7 @@ public class SikriDocumentService extends SikriAbstractService {
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
+        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return identifier.value;
     }
@@ -80,13 +80,11 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, String identifier) {
+    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, byte[] content) {
+
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
-        log.debug("Try fetch document {} ...", identifier);
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
-        final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();
         checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = new DocumentCriteria();
