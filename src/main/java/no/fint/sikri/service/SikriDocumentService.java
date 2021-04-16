@@ -66,7 +66,7 @@ public class SikriDocumentService extends SikriAbstractService {
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
+        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return identifier.value;
     }
