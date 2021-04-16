@@ -66,7 +66,7 @@ public class SikriDocumentService extends SikriAbstractService {
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
+        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return identifier.value;
     }
@@ -81,19 +81,17 @@ public class SikriDocumentService extends SikriAbstractService {
     }
 
     public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, byte[] content) {
-
         Holder<String> contentType = new Holder<>();
-        Holder<String> fileName = new Holder<>();
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
         CheckinMessage checkinMessage = new CheckinMessage();
-        checkinMessage.setContent(documentReturnMessage.getContent());
+        checkinMessage.setContent(content);
         DocumentCriteria documentCriteria = new DocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(ephorteIdentity);
         documentCriteria.setVariant(variant);
         documentCriteria.setVersion(version);
         log.debug("Checkin {} ...", documentCriteria);
-        documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
+        documentService.checkin(checkinMessage, contentType.value, documentCriteria, null, null);
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
