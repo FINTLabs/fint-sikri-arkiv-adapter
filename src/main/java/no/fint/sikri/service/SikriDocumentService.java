@@ -83,19 +83,14 @@ public class SikriDocumentService extends SikriAbstractService {
     public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, String identifier) {
         Holder<String> contentType = new Holder<>();
         Holder<String> fileName = new Holder<>();
-        log.debug("Try fetch document {} ...", identifier);
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
-        final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
-        CheckinMessage checkinMessage = new CheckinMessage();
-        checkinMessage.setContent(documentReturnMessage.getContent());
         DocumentCriteria documentCriteria = new DocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(ephorteIdentity);
         documentCriteria.setVariant(variant);
         documentCriteria.setVersion(version);
         log.debug("Checkin {} ...", documentCriteria);
-        documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
+        documentService.checkin(null, contentType.value, documentCriteria, identifier, fileName.value);
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
