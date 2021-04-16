@@ -85,6 +85,7 @@ public class DokumentobjektFactory {
                     document.setContent(Base64.getDecoder().decode(dokumentfilResource.getData()));
                     document.setContentType(dokumentobjektResource.getFormat());
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());
+                    document.setFilename(dokumentfilResource.getFilnavn());
                     return document;
                 });
     }

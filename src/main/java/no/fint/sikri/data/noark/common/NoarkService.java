@@ -206,7 +206,7 @@ public class NoarkService {
                         log.debug("Update 📂 {}", registryEntryDocument);
                         sikriObjectModelService.updateDataObject(identity, registryEntryDocument);
 
-                        log.debug("Create 🧾 {}", checkinDocument.getSystemId());
+                        log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
 
@@ -218,7 +218,7 @@ public class NoarkService {
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
-                        log.debug("Create 🧾 {}", checkinDocument.getSystemId());
+                        log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
                         log.debug("Checkin 🧾 {}", checkinDocument);

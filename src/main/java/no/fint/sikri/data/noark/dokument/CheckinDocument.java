@@ -9,5 +9,6 @@ public class CheckinDocument {
     private int documentId;
     private String contentType;
     private String format;
+    private String filename;
     private byte[] content;
 }
