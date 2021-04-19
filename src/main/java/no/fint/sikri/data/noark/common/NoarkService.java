@@ -22,6 +22,7 @@ import no.fint.sikri.data.utilities.FintPropertyUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.ExternalSystemLinkService;
+import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,9 @@ public class NoarkService {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
+    
+    @Autowired
+    private SikriDocumentService sikriDocumentService;
 
     @Autowired
     private PartFactory partFactory;
@@ -189,6 +193,9 @@ public class NoarkService {
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
+                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getContentType(), checkinDocument.getFilename());
+                    log.debug("Uploaded filePath: {}", filePath);
+
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
 
@@ -208,10 +215,13 @@ public class NoarkService {
 
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument, filePath));
 
+                        /*
                         log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(identity, checkinDocument);
+
+                         */
 
                         log.debug("🍷🍷🍷");
 
@@ -220,9 +230,12 @@ public class NoarkService {
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument, filePath));
+                        /*
                         log.debug("Checkin 🧾 {}", checkinDocument);
                         dokumentobjektService.checkinDocument(identity, checkinDocument);
+
+                         */
                         log.debug("Create 📂 {}", document.getLeft());
                         sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }

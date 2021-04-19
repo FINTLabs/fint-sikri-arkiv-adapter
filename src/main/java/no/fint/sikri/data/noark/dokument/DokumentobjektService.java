@@ -44,12 +44,13 @@ public class DokumentobjektService {
         sikriDocumentService.checkin(identity, checkinDocument.getDocumentId(), checkinDocument.getVariant(), checkinDocument.getVersion(), checkinDocument.getContent());
     }
 
-    public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument) {
+    public DocumentObjectType createDocumentObject(CheckinDocument checkinDocument, String filePath) {
         DocumentObjectType documentObject = new DocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
         documentObject.setVariantFormatId(checkinDocument.getVariant());
         documentObject.setFileformatId(checkinDocument.getContentType());
+        documentObject.setFilePath(filePath);
         return documentObject;
     }
 }
