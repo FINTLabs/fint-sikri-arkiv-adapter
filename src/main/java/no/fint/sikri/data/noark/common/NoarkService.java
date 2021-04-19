@@ -13,7 +13,7 @@ import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.dokument.CheckinDocument;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
-import no.fint.sikri.data.noark.dokument.DokumentobjektService;
+import no.fint.sikri.data.noark.dokument.DokumentobjektFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseService;
@@ -62,7 +62,7 @@ public class NoarkService {
     private TitleService titleService;
 
     @Autowired
-    private DokumentobjektService dokumentobjektService;
+    private DokumentobjektFactory dokumentobjektFactory;
 
     @Autowired
     private JournalpostFactory journalpostFactory;
@@ -215,27 +215,18 @@ public class NoarkService {
 
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument, filePath));
-
-                        /*
-                        log.debug("Checkin 🧾 {}", checkinDocument);
-                        dokumentobjektService.checkinDocument(identity, checkinDocument);
-
-                         */
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
 
                         log.debug("🍷🍷🍷");
 
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
+
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument, filePath));
-                        /*
-                        log.debug("Checkin 🧾 {}", checkinDocument);
-                        dokumentobjektService.checkinDocument(identity, checkinDocument);
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
 
-                         */
                         log.debug("Create 📂 {}", document.getLeft());
                         sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }

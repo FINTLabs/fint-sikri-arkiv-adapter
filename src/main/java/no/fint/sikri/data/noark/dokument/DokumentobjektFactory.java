@@ -89,4 +89,15 @@ public class DokumentobjektFactory {
                     return document;
                 });
     }
+
+    public DocumentObjectType toDocumentObject(CheckinDocument checkinDocument, String filePath) {
+        DocumentObjectType documentObject = new DocumentObjectType();
+        documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
+        documentObject.setVersionNumber(checkinDocument.getVersion());
+        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        documentObject.setFileformatId(checkinDocument.getContentType());
+        documentObject.setFilePath(filePath);
+        return documentObject;
+    }
+
 }
