@@ -37,7 +37,6 @@ public class SikriDocumentService extends SikriAbstractService {
 
     @PostConstruct
     public void init() throws MalformedURLException {
-
         URL wsdlLocationUrl = SikriUtils.getURL(wsdlLocation);
         DocumentService_Service ss = new DocumentService_Service(wsdlLocationUrl, SERVICE_NAME);
         documentService = ss.getBasicHttpsBindingMtomStreamedDocumentService(new AddressingFeature());
@@ -66,9 +65,9 @@ public class SikriDocumentService extends SikriAbstractService {
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
+        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
-        return identifier.value;
+        return fileNameHolder.value;
     }
 
     public SikriDocument getTempDocumentContentByTempId(SikriIdentity identity, String identifier) {
@@ -80,22 +79,18 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, String identifier) {
+    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, byte[] content, String guid, String path) {
         Holder<String> contentType = new Holder<>();
-        Holder<String> fileName = new Holder<>();
-        log.debug("Try fetch document {} ...", identifier);
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
-        final DocumentReturnMessage documentReturnMessage = documentService.getTempDocumentContentByTempId(null, identifier, ephorteIdentity, contentType, fileName);
-        log.debug("Fetch result: {} bytes", documentReturnMessage.getContent().length);
         CheckinMessage checkinMessage = new CheckinMessage();
-        checkinMessage.setContent(documentReturnMessage.getContent());
+        checkinMessage.setContent(content);
         DocumentCriteria documentCriteria = new DocumentCriteria();
         documentCriteria.setDocumentId(docId);
         documentCriteria.setEphorteIdentity(ephorteIdentity);
         documentCriteria.setVariant(variant);
         documentCriteria.setVersion(version);
         log.debug("Checkin {} ...", documentCriteria);
-        documentService.checkin(checkinMessage, contentType.value, documentCriteria, identifier, fileName.value);
+        documentService.checkin(checkinMessage, contentType.value, documentCriteria, guid, path);
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
@@ -108,28 +103,6 @@ public class SikriDocumentService extends SikriAbstractService {
         ephorteIdentity.setDatabase(adapterProps.getDatabase());
         return ephorteIdentity;
     }
-    /*
-    public ResponseEntity<byte[]> download(String docId) {
-        GetDocumentContentMessage param = objectFactory.();
-        //param.
-        documentService.getDocumentContentBase(param)
-        //return restTemplate.getForEntity("/rms/api/public/noark5/v1/download?id={docId}", byte[].class, docId);
-    }
-
-    public String upload(String filename, MediaType contentType, byte[] data) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(contentType);
-        headers.set(HttpHeaders.CONTENT_DISPOSITION,
-                ContentDisposition.builder("attachment")
-                        .filename(filename, StandardCharsets.UTF_8)
-                        .build()
-                        .toString());
-        HttpEntity<byte[]> entity = new HttpEntity<>(data, headers);
-        ResponseEntity<JsonNode> result = restTemplate.exchange("/rms/api/public/noark5/v1/upload", HttpMethod.POST, entity, JsonNode.class);
-        return result.getBody().get("id").asText();
-    }
- */
-
 
     public boolean isHealty() {
         return true;
