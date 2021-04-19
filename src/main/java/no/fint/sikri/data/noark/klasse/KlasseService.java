@@ -11,6 +11,7 @@ import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public class KlasseService {
     @Autowired
     private SikriIdentityService identityService;
 
+    @Value("${fint.sikri.class.type.create:true}")
+    private boolean createClassType;
+
     public Stream<KlasseResource> getKlasserByEmneId(String id) {
         return sikriObjectModelService.getDataObjects(
                 identityService.getDefaultIdentity(),
@@ -51,20 +55,23 @@ public class KlasseService {
                 .filter(StringUtils::isNotBlank)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        final ClassificationSystemType classificationSystem =
-                sikriObjectModelService.getDataObjects(identity,
-                        SikriObjectTypes.CLASSIFICATION_SYSTEM, "Id=" + classificationSystemId)
-                        .stream()
-                        .map(ClassificationSystemType.class::cast)
-                        .findFirst()
-                        .orElseThrow(IllegalStateException::new);
         final List<ClassType> result = sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASS,
                 "ClassificationSystemId=" + classificationSystemId + " and Id=" + resource.getKlasseId())
                 .stream().map(ClassType.class::cast).collect(Collectors.toList());
         if (result.isEmpty()) {
-            ClassType classType = klasseFactory.toClassType(classificationSystemId, resource);
-            classType.setIsSecondaryClassAllowed(classificationSystem.isIsSecondaryClassAllowed());
-            classType = sikriObjectModelService.createDataObject(identity, classType);
+            ClassType classType = null;
+            if (createClassType) {
+                classType = klasseFactory.toClassType(classificationSystemId, resource);
+                final ClassificationSystemType classificationSystem =
+                        sikriObjectModelService.getDataObjects(identity,
+                                SikriObjectTypes.CLASSIFICATION_SYSTEM, "Id=" + classificationSystemId)
+                                .stream()
+                                .map(ClassificationSystemType.class::cast)
+                                .findFirst()
+                                .orElseThrow(IllegalStateException::new);
+                classType.setIsSecondaryClassAllowed(classificationSystem.isIsSecondaryClassAllowed());
+                classType = sikriObjectModelService.createDataObject(identity, classType);
+            }
             sikriObjectModelService.createDataObject(identity, klasseFactory.toNewClassification(caseId, classificationSystemId, resource, classType));
         } else {
             sikriObjectModelService.createDataObject(identity, klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));
