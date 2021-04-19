@@ -37,7 +37,6 @@ public class SikriDocumentService extends SikriAbstractService {
 
     @PostConstruct
     public void init() throws MalformedURLException {
-
         URL wsdlLocationUrl = SikriUtils.getURL(wsdlLocation);
         DocumentService_Service ss = new DocumentService_Service(wsdlLocationUrl, SERVICE_NAME);
         documentService = ss.getBasicHttpsBindingMtomStreamedDocumentService(new AddressingFeature());
@@ -80,7 +79,7 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, byte[] content) {
+    public void checkin(SikriIdentity identity, Integer docId, String variant, Integer version, byte[] content, String guid, String path) {
         Holder<String> contentType = new Holder<>();
         final EphorteIdentity ephorteIdentity = mapIdentity(identity);
         CheckinMessage checkinMessage = new CheckinMessage();
@@ -91,7 +90,7 @@ public class SikriDocumentService extends SikriAbstractService {
         documentCriteria.setVariant(variant);
         documentCriteria.setVersion(version);
         log.debug("Checkin {} ...", documentCriteria);
-        documentService.checkin(checkinMessage, contentType.value, documentCriteria, null, null);
+        documentService.checkin(checkinMessage, contentType.value, documentCriteria, guid, path);
     }
 
     private EphorteIdentity mapIdentity(SikriIdentity identity) {
@@ -104,28 +103,6 @@ public class SikriDocumentService extends SikriAbstractService {
         ephorteIdentity.setDatabase(adapterProps.getDatabase());
         return ephorteIdentity;
     }
-    /*
-    public ResponseEntity<byte[]> download(String docId) {
-        GetDocumentContentMessage param = objectFactory.();
-        //param.
-        documentService.getDocumentContentBase(param)
-        //return restTemplate.getForEntity("/rms/api/public/noark5/v1/download?id={docId}", byte[].class, docId);
-    }
-
-    public String upload(String filename, MediaType contentType, byte[] data) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(contentType);
-        headers.set(HttpHeaders.CONTENT_DISPOSITION,
-                ContentDisposition.builder("attachment")
-                        .filename(filename, StandardCharsets.UTF_8)
-                        .build()
-                        .toString());
-        HttpEntity<byte[]> entity = new HttpEntity<>(data, headers);
-        ResponseEntity<JsonNode> result = restTemplate.exchange("/rms/api/public/noark5/v1/upload", HttpMethod.POST, entity, JsonNode.class);
-        return result.getBody().get("id").asText();
-    }
- */
-
 
     public boolean isHealty() {
         return true;
