@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.klasse;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassType;
+import no.fint.arkiv.sikri.oms.ClassificationSystemType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.sikri.model.SikriIdentity;
@@ -50,11 +51,20 @@ public class KlasseService {
                 .filter(StringUtils::isNotBlank)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
+        final ClassificationSystemType classificationSystem =
+                sikriObjectModelService.getDataObjects(identity,
+                        SikriObjectTypes.CLASSIFICATION_SYSTEM, "Id=" + classificationSystemId)
+                        .stream()
+                        .map(ClassificationSystemType.class::cast)
+                        .findFirst()
+                        .orElseThrow(IllegalStateException::new);
         final List<ClassType> result = sikriObjectModelService.getDataObjects(identity, SikriObjectTypes.CLASS,
                 "ClassificationSystemId=" + classificationSystemId + " and Id=" + resource.getKlasseId())
                 .stream().map(ClassType.class::cast).collect(Collectors.toList());
         if (result.isEmpty()) {
-            final ClassType classType = sikriObjectModelService.createDataObject(identity, klasseFactory.toClassType(classificationSystemId, resource));
+            ClassType classType = klasseFactory.toClassType(classificationSystemId, resource);
+            classType.setIsSecondaryClassAllowed(classificationSystem.isIsSecondaryClassAllowed());
+            classType = sikriObjectModelService.createDataObject(identity, classType);
             sikriObjectModelService.createDataObject(identity, klasseFactory.toNewClassification(caseId, classificationSystemId, resource, classType));
         } else {
             sikriObjectModelService.createDataObject(identity, klasseFactory.toExistingClassification(caseId, classificationSystemId, resource, result));

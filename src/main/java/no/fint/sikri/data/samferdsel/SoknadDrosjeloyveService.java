@@ -11,6 +11,7 @@ import no.fint.sikri.data.exception.DrosjeloyveNotFoundException;
 import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
+import no.fint.sikri.service.CaseService;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -30,6 +31,7 @@ public class SoknadDrosjeloyveService {
     private final SikriObjectModelService sikriObjectModelService;
     private final NoarkService noarkService;
     private final CaseQueryService caseQueryService;
+    private final CaseService caseService;
     private final CaseProperties caseProperties;
     private final SikriIdentity identity;
 
@@ -50,12 +52,13 @@ public class SoknadDrosjeloyveService {
             SikriObjectModelService sikriObjectModelService,
             NoarkService noarkService,
             CaseQueryService caseQueryService,
-            CaseDefaults caseDefaults,
+            CaseService caseService, CaseDefaults caseDefaults,
             SikriIdentityService identityService) {
         this.soknadDrosjeloyveFactory = soknadDrosjeloyveFactory;
         this.sikriObjectModelService = sikriObjectModelService;
         this.noarkService = noarkService;
         this.caseQueryService = caseQueryService;
+        this.caseService = caseService;
         caseProperties = caseDefaults.getSoknaddrosjeloyve();
         identity = identityService.getIdentityForClass(SoknadDrosjeloyveResource.class);
     }
@@ -146,24 +149,16 @@ public class SoknadDrosjeloyveService {
     public SoknadDrosjeloyveResource createDrosjeloyve(SoknadDrosjeloyveResource resource) throws CaseNotFound, ClassNotFoundException {
         log.info("Create Drosjeløyve søknad");
 
-        CaseType caseType = noarkService.createCase(
+        CaseType caseResponse = noarkService.createCase(
                 identity,
                 soknadDrosjeloyveFactory.toCaseType(resource),
                 resource);
-        return soknadDrosjeloyveFactory.toFintResource(caseType);
-        /*
-        CaseType caseResponse = sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.toCaseType(resource));
         Integer caseId = caseResponse.getId();
-
-        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createPrimaryClassification(resource, caseId));
-        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createFagklasse(caseId));
-        sikriObjectModelService.createDataObject(identity, soknadDrosjeloyveFactory.createTilleggsKode(caseId));
 
         return caseService.getCaseBySystemId(identity, caseId.toString())
                 .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable get case from Sikri after update"));
-         */
     }
 
     public SoknadDrosjeloyveResource updateDrosjeloyve(String query, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound {

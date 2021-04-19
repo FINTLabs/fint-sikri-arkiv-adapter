@@ -74,7 +74,6 @@ public class KlasseFactory {
             output.setDescription(input.getKlasseId());
         }
         output.setIsValidForRegistration(true);
-        output.setIsSecondaryClassAllowed(input.getRekkefolge() > 1);
         return output;
     }
 }

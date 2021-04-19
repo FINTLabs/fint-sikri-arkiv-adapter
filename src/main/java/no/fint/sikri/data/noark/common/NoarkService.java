@@ -13,7 +13,7 @@ import no.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.dokument.CheckinDocument;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
-import no.fint.sikri.data.noark.dokument.DokumentobjektService;
+import no.fint.sikri.data.noark.dokument.DokumentobjektFactory;
 import no.fint.sikri.data.noark.journalpost.JournalpostFactory;
 import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseService;
@@ -23,6 +23,7 @@ import no.fint.sikri.data.utilities.XmlUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.ExternalSystemLinkService;
+import no.fint.sikri.service.SikriDocumentService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,9 @@ public class NoarkService {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
+    
+    @Autowired
+    private SikriDocumentService sikriDocumentService;
 
     @Autowired
     private PartFactory partFactory;
@@ -61,7 +65,7 @@ public class NoarkService {
     private TitleService titleService;
 
     @Autowired
-    private DokumentobjektService dokumentobjektService;
+    private DokumentobjektFactory dokumentobjektFactory;
 
     @Autowired
     private JournalpostFactory journalpostFactory;
@@ -203,6 +207,9 @@ public class NoarkService {
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
+                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getContentType(), checkinDocument.getFilename());
+                    log.debug("Uploaded filePath: {}", filePath);
+
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
 
@@ -220,23 +227,20 @@ public class NoarkService {
                         log.debug("Update 📂 {}", registryEntryDocument);
                         sikriObjectModelService.updateDataObject(identity, registryEntryDocument);
 
-                        log.debug("Create 🧾 {}", checkinDocument.getGuid());
+                        log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
-
-                        log.debug("Checkin 🧾 {}", checkinDocument);
-                        dokumentobjektService.checkinDocument(identity, checkinDocument);
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
 
                         log.debug("🍷🍷🍷");
 
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
-                        log.debug("Create 🧾 {}", checkinDocument.getGuid());
+
+                        log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
-                        sikriObjectModelService.createDataObject(identity, dokumentobjektService.createDocumentObject(checkinDocument));
-                        log.debug("Checkin 🧾 {}", checkinDocument);
-                        dokumentobjektService.checkinDocument(identity, checkinDocument);
+                        sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
+
                         log.debug("Create 📂 {}", document.getLeft());
                         sikriObjectModelService.createDataObject(identity, dokumentbeskrivelseFactory.toRegistryEntryDocument(registryEntry.getId(), document.getLeft(), documentDescription.getId()));
                     }
