@@ -26,6 +26,9 @@ public class SikriDocumentService extends SikriAbstractService {
     @Value("${fint.sikri.wsdl-location:./src/main/resources/wsdl}/DocumentServiceV3.wsdl")
     private String wsdlLocation;
 
+    @Value("${fint.sikri.documents.storage-identifier:}")
+    private String storageIdentifier;
+
     @Autowired
     private AdapterProps adapterProps;
 
@@ -66,8 +69,8 @@ public class SikriDocumentService extends SikriAbstractService {
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, null, identifier);
-        log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
+        final UploadReturnMessage uploadReturnMessage = documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, storageIdentifier, identifier);
+        log.debug("uploadFile result: filename = {}, identifier = {}, returnMessage = {}", fileNameHolder.value, identifier.value, uploadReturnMessage);
         return identifier.value;
     }
 
