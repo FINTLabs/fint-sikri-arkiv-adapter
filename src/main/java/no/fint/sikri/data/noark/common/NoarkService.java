@@ -79,9 +79,6 @@ public class NoarkService {
     @Autowired
     private XmlUtils xmlUtils;
 
-    @Value("${fint.sikri.followup:}")
-    private String followUpMethodId; // = "TE";
-
     @Value("${fint.sikri.noark.3.2:true}")
     private boolean noark_3_2;
 
@@ -252,9 +249,9 @@ public class NoarkService {
                 registryEntry.setRecordStatusId("J");
             }
 
-            if (StringUtils.isNotBlank(followUpMethodId)
+            if (StringUtils.isNotBlank(caseProperties.getAvskrivningsmaate())
                     && StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")) {
-                log.debug("Updating SenderRecipients 📧 with follow-up {}", followUpMethodId);
+                log.debug("Updating SenderRecipients 📧 with follow-up {}", caseProperties.getAvskrivningsmaate());
                 sikriObjectModelService.getDataObjects(identity,
                         SikriObjectTypes.SENDER_RECIPIENT,
                         "RegistryEntryId=" + registryEntry.getId())
@@ -262,10 +259,10 @@ public class NoarkService {
                         .map(SenderRecipientType.class::cast)
                         .filter(SenderRecipientType::isIsResponsible)
                         .forEach(senderRecipient -> {
-                            senderRecipient.setFollowUpMethodId(followUpMethodId);
+                            senderRecipient.setFollowUpMethodId(caseProperties.getAvskrivningsmaate());
                             senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
                             senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
-                            log.trace("Setting follow up method {} on {}", followUpMethodId, senderRecipient);
+                            log.trace("Setting follow up method {} on {}", caseProperties.getAvskrivningsmaate(), senderRecipient);
                             sikriObjectModelService.updateDataObject(identity, senderRecipient);
                         });
                 registryEntry.setMustFollowUp(BacklogTypeType.NONE);
