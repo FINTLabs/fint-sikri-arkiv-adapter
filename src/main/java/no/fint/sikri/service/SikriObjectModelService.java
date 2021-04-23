@@ -89,7 +89,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject insert = objectModelService.insert(mapIdentity(identity), arrayOfDataObject);
-        log.info("Created {} objects", insert.getDataObject().size());
+        log.debug("Created {} objects", insert.getDataObject().size());
         if (insert.getDataObject().size() == 1) {
             return (T) insert.getDataObject().get(0);
         }
@@ -102,7 +102,7 @@ public class SikriObjectModelService extends SikriAbstractService {
             arrayOfDataObject.getDataObject().add(object);
         }
         ArrayOfDataObject insert = objectModelService.insert(mapIdentity(identity), arrayOfDataObject);
-        log.info("Created {} objects", insert.getDataObject().size());
+        log.debug("Created {} objects", insert.getDataObject().size());
         return insert.getDataObject();
     }
 
@@ -112,7 +112,7 @@ public class SikriObjectModelService extends SikriAbstractService {
             arrayOfDataObject.getDataObject().add(dataObject);
         }
         ArrayOfDataObject update = objectModelService.update(mapIdentity(identity), arrayOfDataObject);
-        log.info("Updated {} objects", update.getDataObject().size());
+        log.debug("Updated {} objects", update.getDataObject().size());
         return update.getDataObject();
     }
 
@@ -120,7 +120,7 @@ public class SikriObjectModelService extends SikriAbstractService {
         ArrayOfDataObject arrayOfDataObject = new ArrayOfDataObject();
         arrayOfDataObject.getDataObject().add(dataObject);
         ArrayOfDataObject update = objectModelService.update(mapIdentity(identity), arrayOfDataObject);
-        log.info("Updated {} objects", update.getDataObject().size());
+        log.debug("Updated {} objects", update.getDataObject().size());
         if (update.getDataObject().size() == 1) {
             return update.getDataObject().get(0);
         }
