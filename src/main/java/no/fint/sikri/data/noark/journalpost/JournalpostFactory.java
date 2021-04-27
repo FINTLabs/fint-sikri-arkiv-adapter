@@ -171,7 +171,6 @@ public class JournalpostFactory {
         if (journalpostResource.getKorrespondansepart() != null) {
             journalpostResource.getKorrespondansepart()
                     .stream()
-                    .filter(it -> it.getKorrespondanseparttype().stream().map(Link::getHref).anyMatch(s -> StringUtils.endsWithAny(s,"EA", "EM", "EK")))
                     .map(input -> korrespondansepartFactory.createSenderRecipient(
                             input,
                             registryEntry.getOfficerNameId(),

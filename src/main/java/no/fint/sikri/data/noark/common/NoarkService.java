@@ -228,7 +228,7 @@ public class NoarkService {
                         checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
 
-                        log.debug("🍷🍷🍷🐔🐉");
+                        log.debug("🍷🍷🍷");
 
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
