@@ -39,7 +39,7 @@ public class TilskuddFredaBygningPrivatEieService {
     }
 
     public TilskuddFredaBygningPrivatEieResource createTilskuddFredaBygningPrivatEieCase(TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
-        log.info("Create tilskudd fartøy");
+        log.info("Create tilskudd FRIP");
         final SikriIdentity identity = identityService.getIdentityForClass(TilskuddFredaBygningPrivatEieResource.class);
         final CaseType caseType = noarkService.createCase(
                 identity,
