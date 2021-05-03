@@ -45,7 +45,7 @@ public class NoarkService {
 
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
-    
+
     @Autowired
     private SikriDocumentService sikriDocumentService;
 
@@ -161,10 +161,10 @@ public class NoarkService {
             log.debug("Create journalpost {}", journalpost.getTittel());
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost, recordPrefix, documentPrefix);
 
-            boolean updateRegistryEntry = noark_3_2 &&
+            final boolean updateRegistryEntryStatus = noark_3_2 &&
                     "J".equals(registryEntryDocuments.getRegistryEntry().getRecordStatusId());
 
-            if (updateRegistryEntry) {
+            if (updateRegistryEntryStatus) {
                 registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
                 log.info("NOARK section 3.2: Setting journalstatus to {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
             }
@@ -198,11 +198,21 @@ public class NoarkService {
                 sikriObjectModelService.createDataObject(identity, senderRecipient);
             }
 
+            if (registryEntry.getNumberOfSubDocuments() == null) {
+                registryEntry.setNumberOfSubDocuments(0);
+            }
+
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
                 Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
 
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
+
+                    if (StringUtils.equalsIgnoreCase(document.getLeft(), "H")) {
+                        registryEntry.setFileExtensionMainDocument(checkinDocument.getContentType());
+                    } else {
+                        registryEntry.setNumberOfSubDocuments(registryEntry.getNumberOfSubDocuments() + 1);
+                    }
 
                     final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getContentType(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
@@ -244,7 +254,7 @@ public class NoarkService {
                 }
             }
 
-            if (updateRegistryEntry) {
+            if (updateRegistryEntryStatus) {
                 log.info("NOARK section 3.2: Updating journalstatus to J");
                 registryEntry.setRecordStatusId("J");
             }
@@ -266,12 +276,9 @@ public class NoarkService {
                             sikriObjectModelService.updateDataObject(identity, senderRecipient);
                         });
                 registryEntry.setMustFollowUp(BacklogTypeType.NONE);
-                updateRegistryEntry = true;
             }
 
-            if (updateRegistryEntry) {
-                sikriObjectModelService.updateDataObject(identity, registryEntry);
-            }
+            sikriObjectModelService.updateDataObject(identity, registryEntry);
         }
     }
 
