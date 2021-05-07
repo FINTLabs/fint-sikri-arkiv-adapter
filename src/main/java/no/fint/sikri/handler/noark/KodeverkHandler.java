@@ -48,6 +48,7 @@ public class KodeverkHandler implements Handler {
         suppliers.put(GET_ALL_TILGANGSRESTRIKSJON, merge(noarkMetadataService::getTilgangsrestriksjon, kodeverkRepository::getTilgangsrestriksjon));
         suppliers.put(GET_ALL_TILKNYTTETREGISTRERINGSOM, merge(noarkMetadataService::getTilknyttetRegistreringSom, kodeverkRepository::getTilknyttetRegistreringSom));
         suppliers.put(GET_ALL_VARIANTFORMAT, merge(noarkMetadataService::getVariantformat, kodeverkRepository::getVariantformat));
+        suppliers.put(GET_ALL_FORMAT, merge(noarkMetadataService::getFormat, kodeverkRepository::getFormat));
 
         // TODO actionsMap.put(GET_ALL_KLASSIFIKASJONSSYSTEM, kodeverkRepository::getKlassifikasjonssystem);
         // TODO actionsMap.put(GET_ALL_KLASSE, kodeverkRepository::getKlasse);

@@ -41,13 +41,29 @@ public class KorrespondansepartFactory {
             output.setAdresse(adresse);
         }
 
-        if (input.isIsRecipient()) {
-            output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EM"));
+        String recipientType = "";
+
+        if (hasValue(input.getAdministrativeUnitId()) || hasValue(input.getOfficerNameId())) {
+            recipientType += "I";
         } else {
-            output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
+            recipientType += "E";
         }
 
+        if (input.isCopyRecipient()) {
+            recipientType += "K";
+        } else if (input.isIsRecipient()) {
+            recipientType += "M";
+        } else {
+            recipientType += "A";
+        }
+
+        output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", recipientType));
+
         return output;
+    }
+
+    private boolean hasValue(Integer value) {
+        return value != null && value != 0;
     }
 
     public SenderRecipientType createSenderRecipient(KorrespondansepartResource input, Integer officerNameId, Integer administrativeUnitId, String registryManagementUnitId) {

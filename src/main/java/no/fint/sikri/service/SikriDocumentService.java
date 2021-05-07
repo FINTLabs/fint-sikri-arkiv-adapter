@@ -59,13 +59,13 @@ public class SikriDocumentService extends SikriAbstractService {
         return new SikriDocument(documentReturnMessage.getContent(), fileName.value, contentType.value);
     }
 
-    public String uploadFile(SikriIdentity identity, byte[] content, String contentType, String fileName) {
+    public String uploadFile(SikriIdentity identity, byte[] content, String fileName) {
         Holder<String> identifier = new Holder<>();
         Holder<String> fileNameHolder = new Holder<>();
         fileNameHolder.value = fileName;
         UploadMessage parameters = new UploadMessage();
         parameters.setContent(content);
-        documentService.uploadFile(parameters, contentType, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
+        documentService.uploadFile(parameters, null, mapIdentity(identity), fileNameHolder, "ObjectModelService", identifier);
         log.debug("uploadFile result: filename = {}, identifier = {}", fileNameHolder.value, identifier.value);
         return fileNameHolder.value;
     }

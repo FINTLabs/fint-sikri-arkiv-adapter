@@ -9,6 +9,7 @@ import no.fint.sikri.utilities.SikriObjectTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.ws.soap.SOAPFaultException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,31 +25,41 @@ public class MerknadService {
     private SikriObjectModelService sikriObjectModelService;
 
     public List<MerknadResource> getRemarkForCase(SikriIdentity identity, String id) {
-        return sikriObjectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.REMARK,
-                "CaseId=" + id + " AND RegistryentryId=@",
-                0,
-                Collections.emptyList()
-        )
-                .stream()
-                .map(RemarkType.class::cast)
-                .map(merknadFactory::toFintResource)
-                .collect(Collectors.toList());
+        try {
+            return sikriObjectModelService.getDataObjects(
+                    identity,
+                    SikriObjectTypes.REMARK,
+                    "CaseId=" + id + " AND RegistryentryId=@",
+                    0,
+                    Collections.emptyList()
+            )
+                    .stream()
+                    .map(RemarkType.class::cast)
+                    .map(merknadFactory::toFintResource)
+                    .collect(Collectors.toList());
+        } catch (SOAPFaultException e) {
+            log.warn("Fault for getRemarkForCase({})", id ,e);
+            return Collections.emptyList();
+        }
     }
 
     public List<MerknadResource> getRemarkForRegistryEntry(SikriIdentity identity, String id) {
-        return sikriObjectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.REMARK,
-                "RegistryentryId=" + id,
-                0,
-                Collections.emptyList()
-        )
-                .stream()
-                .map(RemarkType.class::cast)
-                .map(merknadFactory::toFintResource)
-                .collect(Collectors.toList());
+        try {
+            return sikriObjectModelService.getDataObjects(
+                    identity,
+                    SikriObjectTypes.REMARK,
+                    "RegistryentryId=" + id,
+                    0,
+                    Collections.emptyList()
+            )
+                    .stream()
+                    .map(RemarkType.class::cast)
+                    .map(merknadFactory::toFintResource)
+                    .collect(Collectors.toList());
+        } catch (SOAPFaultException e) {
+            log.warn("Fault for getRemarkForRegistryEntry({})", id, e);
+            return Collections.emptyList();
+        }
     }
 
 

@@ -9,6 +9,7 @@ import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
 import no.fint.sikri.data.noark.codes.dokumentstatus.DokumentstatusService;
 import no.fint.sikri.data.noark.codes.dokumenttype.DokumenttypeService;
+import no.fint.sikri.data.noark.codes.format.FormatService;
 import no.fint.sikri.data.noark.codes.journalposttype.JournalpostTypeService;
 import no.fint.sikri.data.noark.codes.journalstatus.JournalStatusService;
 import no.fint.sikri.data.noark.codes.korrespondanseparttype.KorrespondansepartTypeService;
@@ -68,6 +69,9 @@ public class KodeverkRepository {
     private VariantformatService variantformatService;
 
     @Autowired
+    private FormatService formatService;
+
+    @Autowired
     private KlassifikasjonssystemService klassifikasjonssystemService;
 
     @Autowired
@@ -110,6 +114,9 @@ public class KodeverkRepository {
     private List<VariantformatResource> variantformat;
 
     @Getter
+    private List<FormatResource> format;
+
+    @Getter
     private List<KlasseResource> klasse;
 
     @Getter
@@ -134,6 +141,7 @@ public class KodeverkRepository {
         tilgangsrestriksjon = tilgangsrestriksjonService.getAccessCodeTable().collect(Collectors.toList());
         skjermingshjemmel = skjermingshjemmelService.getStatutoryAuthority().collect(Collectors.toList());
         variantformat = variantformatService.getVariantFormatTable().collect(Collectors.toList());
+        format = formatService.getFileFormatTable().collect(Collectors.toList());
         // TODO klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
         administrativEnhet = administrativEnhetService.getAdministrativeEnheter().collect(Collectors.toList());

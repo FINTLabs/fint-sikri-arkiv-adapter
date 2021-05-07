@@ -9,6 +9,7 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
 import no.fint.model.resource.arkiv.noark.SkjermingResource;
+import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.repository.KodeverkRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -53,28 +54,30 @@ public class SkjermingService {
         return null;
     }
 
-    public void applyAccessCodeAndPursuant(SkjermingResource skjerming, Consumer<String> accessCodeConsumer, Consumer<String> pursuantConsumer) {
-        optionalValue(skjerming)
-                .ifPresent(s -> {
-                    applyParameterFromLink(s.getTilgangsrestriksjon(), accessCodeConsumer);
-                    getLinkTargets(s.getSkjermingshjemmel())
-                            .flatMap(id ->
-                                    Stream.concat(
-                                            Stream.concat(
-                                                    // First, try finding pursuant from Sikri codes
-                                                    kodeverkRepository.getSkjermingshjemmel().stream(),
-                                                    // Second, try finding in Noark Skjermingshjemmel
-                                                    noarkMetadataService.getSkjermingshjemmel())
-                                                    .filter(it -> it.getSystemId().getIdentifikatorverdi().equals(id)),
-                                            getLinkTargets(s.getTilgangsrestriksjon())
-                                                    // Third, try finding in Noark Tilgangsrestriksjon
-                                                    .flatMap(acc -> noarkMetadataService.getTilgangsrestriksjon().filter(it -> it.getKode().equals(acc)))
-                                    ))
-                            .map(Begrep::getNavn)
-                            .filter(StringUtils::isNotBlank)
-                            .findFirst()
-                            .ifPresent(pursuantConsumer);
-                });
+    public boolean applyAccessCodeAndPursuant(SkjermingResource skjerming, Consumer<String> accessCodeConsumer, Consumer<String> pursuantConsumer) {
+        return optionalValue(skjerming)
+                .map(s ->
+                        applyParameterFromLink(s.getTilgangsrestriksjon(), accessCodeConsumer)
+                                &&
+                                getLinkTargets(s.getSkjermingshjemmel())
+                                        .flatMap(id ->
+                                                Stream.concat(
+                                                        Stream.concat(
+                                                                // First, try finding pursuant from Sikri codes
+                                                                kodeverkRepository.getSkjermingshjemmel().stream(),
+                                                                // Second, try finding in Noark Skjermingshjemmel
+                                                                noarkMetadataService.getSkjermingshjemmel())
+                                                                .filter(it -> it.getSystemId().getIdentifikatorverdi().equals(id)),
+                                                        getLinkTargets(s.getTilgangsrestriksjon())
+                                                                // Third, try finding in Noark Tilgangsrestriksjon
+                                                                .flatMap(acc -> noarkMetadataService.getTilgangsrestriksjon().filter(it -> it.getKode().equals(acc)))
+                                                ))
+                                        .map(Begrep::getNavn)
+                                        .filter(StringUtils::isNotBlank)
+                                        .findFirst()
+                                        .map(SikriUtils.success(pursuantConsumer))
+                                        .orElse(false))
+                .orElse(false);
     }
 
 }

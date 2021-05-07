@@ -124,6 +124,16 @@ public class BegrepMapper {
         return variantformatResource;
     }
 
+    public static FormatResource mapFormat(FileFormatType input) {
+        FormatResource output = new FormatResource();
+
+        output.setSystemId(FintUtils.createIdentifikator(input.getId()));
+        output.setKode(input.getId());
+        output.setNavn(input.getDescription());
+
+        return output;
+    }
+
     public static ArkivdelResource mapArkivdel(SeriesType seriesType) {
         ArkivdelResource resource = new ArkivdelResource();
         resource.setSystemId(FintUtils.createIdentifikator(seriesType.getId()));

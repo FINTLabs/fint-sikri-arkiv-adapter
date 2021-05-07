@@ -19,6 +19,7 @@ import no.fint.sikri.data.noark.journalpost.RegistryEntryDocuments;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.part.PartFactory;
 import no.fint.sikri.data.utilities.FintPropertyUtils;
+import no.fint.sikri.data.utilities.XmlUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.ExternalSystemLinkService;
@@ -32,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -40,9 +42,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class NoarkService {
 
+
     @Autowired
     private SikriObjectModelService sikriObjectModelService;
-    
+
     @Autowired
     private SikriDocumentService sikriDocumentService;
 
@@ -72,6 +75,9 @@ public class NoarkService {
 
     @Autowired
     private ExternalSystemLinkService externalSystemLinkService;
+
+    @Autowired
+    private XmlUtils xmlUtils;
 
     @Value("${fint.sikri.noark.3.2:true}")
     private boolean noark_3_2;
@@ -136,7 +142,6 @@ public class NoarkService {
     }
 
 
-
     public void updateCase(SikriIdentity identity, CaseProperties caseProperties, String query, SaksmappeResource saksmappeResource) throws CaseNotFound {
         if (!(caseQueryService.isValidQuery(query))) {
             throw new IllegalArgumentException("Invalid query: " + query);
@@ -156,12 +161,12 @@ public class NoarkService {
             log.debug("Create journalpost {}", journalpost.getTittel());
             final RegistryEntryDocuments registryEntryDocuments = journalpostFactory.toRegistryEntryDocuments(caseType.getId(), journalpost, recordPrefix, documentPrefix);
 
-            boolean updateRegistryEntry = noark_3_2 &&
+            final boolean updateRegistryEntryStatus = noark_3_2 &&
                     "J".equals(registryEntryDocuments.getRegistryEntry().getRecordStatusId());
 
-            if (updateRegistryEntry) {
+            if (updateRegistryEntryStatus) {
                 registryEntryDocuments.getRegistryEntry().setRecordStatusId(noark32Status(registryEntryDocuments.getRegistryEntry().getRegistryEntryTypeId()));
-                log.info("NOARK avsnitt 3.2: Setter journalstatus til {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
+                log.info("NOARK section 3.2: Setting journalstatus to {}", registryEntryDocuments.getRegistryEntry().getRecordStatusId());
             }
 
             final RegistryEntryType registryEntry = sikriObjectModelService.createDataObject(identity, registryEntryDocuments.getRegistryEntry());
@@ -193,13 +198,23 @@ public class NoarkService {
                 sikriObjectModelService.createDataObject(identity, senderRecipient);
             }
 
+            if (registryEntry.getNumberOfSubDocuments() == null) {
+                registryEntry.setNumberOfSubDocuments(0);
+            }
+
             for (int i = 0; i < registryEntryDocuments.getDocuments().size(); i++) {
                 Pair<String, RegistryEntryDocuments.Document> document = registryEntryDocuments.getDocuments().get(i);
 
                 for (int j = 0; j < document.getRight().getCheckinDocuments().size(); j++) {
                     CheckinDocument checkinDocument = document.getRight().getCheckinDocuments().get(j);
 
-                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getContentType(), checkinDocument.getFilename());
+                    if (StringUtils.equalsIgnoreCase(document.getLeft(), "H")) {
+                        registryEntry.setFileExtensionMainDocument(checkinDocument.getContentType());
+                    } else {
+                        registryEntry.setNumberOfSubDocuments(registryEntry.getNumberOfSubDocuments() + 1);
+                    }
+
+                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
 
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
@@ -239,11 +254,31 @@ public class NoarkService {
                 }
             }
 
-            if (updateRegistryEntry) {
-                log.info("NOARK avsnitt 3.2: Oppdaterer journalstatus til J");
+            if (updateRegistryEntryStatus) {
+                log.info("NOARK section 3.2: Updating journalstatus to J");
                 registryEntry.setRecordStatusId("J");
-                sikriObjectModelService.updateDataObject(identity, registryEntry);
             }
+
+            if (StringUtils.isNotBlank(caseProperties.getAvskrivningsmaate())
+                    && StringUtils.equalsAnyIgnoreCase(registryEntry.getRegistryEntryTypeId(), "I", "N")) {
+                log.debug("Updating SenderRecipients 📧 with follow-up {}", caseProperties.getAvskrivningsmaate());
+                sikriObjectModelService.getDataObjects(identity,
+                        SikriObjectTypes.SENDER_RECIPIENT,
+                        "RegistryEntryId=" + registryEntry.getId())
+                        .stream()
+                        .map(SenderRecipientType.class::cast)
+                        .filter(SenderRecipientType::isIsResponsible)
+                        .forEach(senderRecipient -> {
+                            senderRecipient.setFollowUpMethodId(caseProperties.getAvskrivningsmaate());
+                            senderRecipient.setFollowedUpByRegistryEntryId(registryEntry.getId());
+                            senderRecipient.setFollowedUpDate(xmlUtils.xmlDate(new Date()));
+                            log.trace("Setting follow up method {} on {}", caseProperties.getAvskrivningsmaate(), senderRecipient);
+                            sikriObjectModelService.updateDataObject(identity, senderRecipient);
+                        });
+                registryEntry.setMustFollowUp(BacklogTypeType.NONE);
+            }
+
+            sikriObjectModelService.updateDataObject(identity, registryEntry);
         }
     }
 

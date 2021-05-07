@@ -38,10 +38,18 @@ public enum SikriUtils {
                 .map(s -> StringUtils.substringAfterLast(s, "/"));
     }
 
-    public static void applyParameterFromLink(List<Link> links, Consumer<String> consumer) {
-        getLinkTargets(links)
+    public static boolean applyParameterFromLink(List<Link> links, Consumer<String> consumer) {
+        return getLinkTargets(links)
                 .findFirst()
-                .ifPresent(consumer);
+                .map(success(consumer))
+                .orElse(false);
+    }
+
+    public static <T> Function<T, Boolean> success(Consumer<T> consumer) {
+        return it -> {
+            consumer.accept(it);
+            return true;
+        };
     }
 
     public static Optional<String> optionalValue(String string) {

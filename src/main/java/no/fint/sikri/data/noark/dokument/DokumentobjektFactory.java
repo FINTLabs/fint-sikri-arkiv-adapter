@@ -2,6 +2,7 @@ package no.fint.sikri.data.noark.dokument;
 
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.arkiv.sikri.oms.FileFormatType;
+import no.fint.model.arkiv.kodeverk.Format;
 import no.fint.model.arkiv.kodeverk.Variantformat;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.arkiv.noark.Dokumentfil;
@@ -9,6 +10,7 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import no.fint.sikri.repository.InternalRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -21,6 +23,9 @@ import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class DokumentobjektFactory {
+
+    @Value("${fint.sikri.variantformat:}")
+    private String variantFormat;
 
     private final InternalRepository internalRepository;
 
@@ -36,7 +41,8 @@ public class DokumentobjektFactory {
                 .ifPresent(resource::setFilstorrelse);
 
         optionalValue(result.getFileformatId())
-                .ifPresent(resource::setFormat);
+                .map(Link.apply(Format.class, "systemid"))
+                .ifPresent(resource::addFilformat);
 
         optionalValue(result.getFileFormat())
                 .map(FileFormatType::getDescription)
@@ -81,9 +87,9 @@ public class DokumentobjektFactory {
                 .map(dokumentfilResource -> {
                     CheckinDocument document = new CheckinDocument();
                     applyIdFromLink(dokumentobjektResource.getVariantFormat(), document::setVariant);
+                    applyIdFromLink(dokumentobjektResource.getFilformat(), document::setContentType);
                     document.setVersion(Optional.ofNullable(dokumentobjektResource.getVersjonsnummer()).map(Math::toIntExact).orElse(1));
                     document.setContent(Base64.getDecoder().decode(dokumentfilResource.getData()));
-                    document.setContentType(dokumentobjektResource.getFormat());
                     document.setFormat(dokumentobjektResource.getFormatDetaljer());
                     document.setFilename(dokumentfilResource.getFilnavn());
                     return document;
@@ -94,7 +100,11 @@ public class DokumentobjektFactory {
         DocumentObjectType documentObject = new DocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
-        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        if (StringUtils.isNotBlank(variantFormat)) {
+            documentObject.setVariantFormatId(variantFormat);
+        } else {
+            documentObject.setVariantFormatId(checkinDocument.getVariant());
+        }
         documentObject.setFileformatId(checkinDocument.getContentType());
         documentObject.setFilePath(filePath);
         return documentObject;
