@@ -214,7 +214,7 @@ public class NoarkService {
                         registryEntry.setNumberOfSubDocuments(registryEntry.getNumberOfSubDocuments() + 1);
                     }
 
-                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getContentType(), checkinDocument.getFilename());
+                    final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
 
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {

@@ -10,6 +10,7 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import no.fint.sikri.repository.InternalRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -22,6 +23,9 @@ import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class DokumentobjektFactory {
+
+    @Value("${fint.sikri.variantformat:}")
+    private String variantFormat;
 
     private final InternalRepository internalRepository;
 
@@ -96,7 +100,11 @@ public class DokumentobjektFactory {
         DocumentObjectType documentObject = new DocumentObjectType();
         documentObject.setDocumentDescriptionId(checkinDocument.getDocumentId());
         documentObject.setVersionNumber(checkinDocument.getVersion());
-        documentObject.setVariantFormatId(checkinDocument.getVariant());
+        if (StringUtils.isNotBlank(variantFormat)) {
+            documentObject.setVariantFormatId(variantFormat);
+        } else {
+            documentObject.setVariantFormatId(checkinDocument.getVariant());
+        }
         documentObject.setFileformatId(checkinDocument.getContentType());
         documentObject.setFilePath(filePath);
         return documentObject;
