@@ -1,6 +1,5 @@
 package no.fint.sikri.data.noark.arkivressurs;
 
-import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.UserNameType;
 import no.fint.arkiv.sikri.oms.UserRoleType;
@@ -14,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +23,7 @@ public class ArkivressursService {
     private final SikriObjectModelService sikriObjectModelService;
     private final ArkivressursFactory factory;
     private final SikriIdentityService identityService;
-    private ImmutableMap<String, Integer> userIdInitialsMap;
+    private final Map<String, Integer> userIdInitialsMap = new ConcurrentHashMap<>();
 
     public ArkivressursService(SikriObjectModelService sikriObjectModelService, ArkivressursFactory factory, SikriIdentityService identityService) {
         this.sikriObjectModelService = sikriObjectModelService;
@@ -32,18 +32,16 @@ public class ArkivressursService {
     }
 
     public Stream<ArkivressursResource> getArkivressurser() {
-        final ImmutableMap.Builder<String, Integer> builder = ImmutableMap.builder();
         final Map<Integer, ArkivressursResource> userMap = sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_NAME, "IsCurrent=true")
                 .stream()
                 .map(UserNameType.class::cast)
                 .peek(u -> {
                     if (StringUtils.isNotBlank(u.getInitials())) {
-                        builder.put(u.getInitials(), u.getId());
+                        userIdInitialsMap.merge(u.getInitials(), u.getId(), Integer::max);
                     }
                     log.debug("{} = {}", u.getId(), u.getInitials());
                 })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
-        userIdInitialsMap = builder.build();
         log.debug("Map contains {} entries", userIdInitialsMap.size());
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
@@ -60,9 +58,6 @@ public class ArkivressursService {
         log.debug("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
             return Integer.valueOf(input);
-        }
-        if (userIdInitialsMap == null) {
-            return 0;
         }
         final Integer id = userIdInitialsMap.getOrDefault(input, 0);
         log.debug("Lookup initials {} = {}", input, id);
