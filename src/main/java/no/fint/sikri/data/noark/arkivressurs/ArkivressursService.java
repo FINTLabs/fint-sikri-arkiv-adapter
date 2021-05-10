@@ -56,6 +56,7 @@ public class ArkivressursService {
     }
 
     public Integer lookupUserId(String input) {
+        log.debug("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
             return Integer.valueOf(input);
         }
