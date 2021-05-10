@@ -42,7 +42,7 @@ public class ArkivressursService {
                     log.debug("{} = {}", u.getId(), u.getInitials());
                 })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
-        log.debug("Map contains {} entries", userIdInitialsMap.size());
+        log.debug("User ID Map contains {} entries", userIdInitialsMap.size());
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
                 .map(UserRoleType.class::cast)
@@ -55,7 +55,7 @@ public class ArkivressursService {
     }
 
     public Integer lookupUserId(String input) {
-        log.debug("Lookup initials {}", input);
+        log.trace("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
             return Integer.valueOf(input);
         }
