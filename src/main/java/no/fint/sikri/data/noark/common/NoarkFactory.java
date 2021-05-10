@@ -13,6 +13,7 @@ import no.fint.model.arkiv.noark.Arkivdel;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.SaksmappeResource;
+import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.klasse.KlasseService;
 import no.fint.sikri.data.noark.merknad.MerknadService;
@@ -62,6 +63,9 @@ public class NoarkFactory {
 
     @Autowired
     private SkjermingService skjermingService;
+
+    @Autowired
+    private ArkivressursService arkivressursService;
 
     public <T extends SaksmappeResource> T applyValuesForSaksmappe(SikriIdentity identity, CaseProperties caseProperties, CaseType input, T resource) {
         applyFieldsForSaksmappe(identity, input, resource);
@@ -180,7 +184,7 @@ public class NoarkFactory {
 
         applyParameterFromLink(
                 resource.getSaksansvarlig(),
-                Integer::parseInt,
+                arkivressursService::lookupUserId,
                 caseType::setOfficerNameId
         );
 
@@ -197,12 +201,6 @@ public class NoarkFactory {
         applyParameterFromLink(
                 resource.getSaksstatus(),
                 caseType::setCaseStatusId
-        );
-
-        applyParameterFromLink(
-                resource.getSaksansvarlig(),
-                Integer::parseUnsignedInt,
-                caseType::setOfficerNameId
         );
 
         return caseType;

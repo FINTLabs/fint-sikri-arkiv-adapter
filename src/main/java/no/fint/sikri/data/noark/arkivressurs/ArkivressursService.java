@@ -1,5 +1,6 @@
 package no.fint.sikri.data.noark.arkivressurs;
 
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.UserNameType;
 import no.fint.arkiv.sikri.oms.UserRoleType;
@@ -9,6 +10,7 @@ import no.fint.model.resource.arkiv.noark.ArkivressursResource;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -21,6 +23,7 @@ public class ArkivressursService {
     private final SikriObjectModelService sikriObjectModelService;
     private final ArkivressursFactory factory;
     private final SikriIdentityService identityService;
+    private transient ImmutableMap<String, Integer> userIdInitialsMap;
 
     public ArkivressursService(SikriObjectModelService sikriObjectModelService, ArkivressursFactory factory, SikriIdentityService identityService) {
         this.sikriObjectModelService = sikriObjectModelService;
@@ -29,11 +32,16 @@ public class ArkivressursService {
     }
 
     public Stream<ArkivressursResource> getArkivressurser() {
+        final ImmutableMap.Builder<String, Integer> builder = ImmutableMap.builder();
         final Map<Integer, ArkivressursResource> userMap = sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_NAME, "IsCurrent=true")
                 .stream()
                 .map(UserNameType.class::cast)
-                .peek(u -> log.debug("{} = {}", u.getUserId(), u.getInitials()))
+                .peek(u -> {
+                    builder.put(u.getInitials(), u.getId());
+                    log.debug("{} = {}", u.getId(), u.getInitials());
+                })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
+        userIdInitialsMap = builder.build();
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
                 .map(UserRoleType.class::cast)
@@ -43,5 +51,15 @@ public class ArkivressursService {
                     return v;
                 }));
         return userMap.values().stream();
+    }
+
+    public Integer lookupUserId(String input) {
+        if (StringUtils.isNumeric(input)) {
+            return Integer.valueOf(input);
+        }
+        if (userIdInitialsMap == null) {
+            return 0;
+        }
+        return userIdInitialsMap.getOrDefault(input, 0);
     }
 }

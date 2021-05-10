@@ -7,6 +7,7 @@ import no.fint.model.arkiv.kodeverk.JournalpostType;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
+import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
 import no.fint.sikri.data.noark.korrespondansepart.KorrespondansepartFactory;
@@ -57,6 +58,9 @@ public class JournalpostFactory {
 
     @Autowired
     private NokkelordService nokkelordService;
+
+    @Autowired
+    private ArkivressursService arkivressursService;
 
     public JournalpostResource toFintResource(SikriIdentity identity, RegistryEntryType result) {
         JournalpostResource journalpost = new JournalpostResource();
@@ -131,7 +135,7 @@ public class JournalpostFactory {
 
         applyParameterFromLink(
                 journalpostResource.getSaksbehandler(),
-                Integer::parseUnsignedInt,
+                arkivressursService::lookupUserId,
                 registryEntry::setOfficerNameId
         );
 
