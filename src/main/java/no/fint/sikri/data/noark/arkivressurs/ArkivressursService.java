@@ -9,9 +9,11 @@ import no.fint.model.resource.arkiv.noark.ArkivressursResource;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,6 +23,7 @@ public class ArkivressursService {
     private final SikriObjectModelService sikriObjectModelService;
     private final ArkivressursFactory factory;
     private final SikriIdentityService identityService;
+    private final Map<String, Integer> userIdInitialsMap = new ConcurrentHashMap<>();
 
     public ArkivressursService(SikriObjectModelService sikriObjectModelService, ArkivressursFactory factory, SikriIdentityService identityService) {
         this.sikriObjectModelService = sikriObjectModelService;
@@ -32,8 +35,14 @@ public class ArkivressursService {
         final Map<Integer, ArkivressursResource> userMap = sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_NAME, "IsCurrent=true")
                 .stream()
                 .map(UserNameType.class::cast)
-                .peek(u -> log.debug("{} = {}", u.getUserId(), u.getInitials()))
+                .peek(u -> {
+                    if (StringUtils.isNotBlank(u.getInitials())) {
+                        userIdInitialsMap.merge(u.getInitials(), u.getId(), Integer::max);
+                    }
+                    log.debug("{} = {}", u.getId(), u.getInitials());
+                })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
+        log.debug("User ID Map contains {} entries", userIdInitialsMap.size());
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
                 .map(UserRoleType.class::cast)
@@ -43,5 +52,15 @@ public class ArkivressursService {
                     return v;
                 }));
         return userMap.values().stream();
+    }
+
+    public Integer lookupUserId(String input) {
+        log.trace("Lookup initials {}", input);
+        if (StringUtils.isNumeric(input)) {
+            return Integer.valueOf(input);
+        }
+        final Integer id = userIdInitialsMap.getOrDefault(input, 0);
+        log.debug("Lookup initials {} = {}", input, id);
+        return id;
     }
 }
