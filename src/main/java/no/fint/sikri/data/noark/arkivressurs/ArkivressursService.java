@@ -33,7 +33,7 @@ public class ArkivressursService {
                 .stream()
                 .map(UserNameType.class::cast)
                 .peek(u -> log.debug("{} = {}", u.getUserId(), u.getInitials()))
-                .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource));
+                .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
                 .map(UserRoleType.class::cast)
