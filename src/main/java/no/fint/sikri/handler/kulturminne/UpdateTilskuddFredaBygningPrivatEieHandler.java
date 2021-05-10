@@ -71,7 +71,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
-        log.info("Complete document for update: {}", tilskuddFredaBygningPrivatEieResource);
+        log.debug("Complete document for update: {}", tilskuddFredaBygningPrivatEieResource);
         if (!validationService.validate(response, tilskuddFredaBygningPrivatEieResource.getJournalpost())) {
             return;
         }
@@ -87,7 +87,7 @@ public class UpdateTilskuddFredaBygningPrivatEieHandler implements Handler {
 
     private void createCase(Event<FintLinks> response, TilskuddFredaBygningPrivatEieResource tilskuddFredaBygningPrivatEieResource) {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfredabygningprivateie(), tilskuddFredaBygningPrivatEieResource);
-        log.info("Complete document for creation: {}", tilskuddFredaBygningPrivatEieResource);
+        log.debug("Complete document for creation: {}", tilskuddFredaBygningPrivatEieResource);
         if (!validationService.validate(response, tilskuddFredaBygningPrivatEieResource)) {
             return;
         }

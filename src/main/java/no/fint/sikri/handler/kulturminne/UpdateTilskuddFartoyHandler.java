@@ -71,7 +71,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
             throw new IllegalArgumentException("Update must contain at least one Journalpost");
         }
         caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
-        log.info("Complete document for update: {}", tilskuddFartoyResource);
+        log.debug("Complete document for update: {}", tilskuddFartoyResource);
         if (!validationService.validate(response, tilskuddFartoyResource.getJournalpost())) {
             return;
         }
@@ -87,7 +87,7 @@ public class UpdateTilskuddFartoyHandler implements Handler {
 
     private void createCase(Event<FintLinks> response, TilskuddFartoyResource tilskuddFartoyResource) {
         caseDefaultsService.applyDefaultsForCreation(caseDefaults.getTilskuddfartoy(), tilskuddFartoyResource);
-        log.info("Complete document for creation: {}", tilskuddFartoyResource);
+        log.debug("Complete document for creation: {}", tilskuddFartoyResource);
         if (!validationService.validate(response, tilskuddFartoyResource)) {
             return;
         }
