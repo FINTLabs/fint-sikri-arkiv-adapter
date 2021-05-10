@@ -23,7 +23,7 @@ public class ArkivressursService {
     private final SikriObjectModelService sikriObjectModelService;
     private final ArkivressursFactory factory;
     private final SikriIdentityService identityService;
-    private transient ImmutableMap<String, Integer> userIdInitialsMap;
+    private ImmutableMap<String, Integer> userIdInitialsMap;
 
     public ArkivressursService(SikriObjectModelService sikriObjectModelService, ArkivressursFactory factory, SikriIdentityService identityService) {
         this.sikriObjectModelService = sikriObjectModelService;
@@ -44,6 +44,7 @@ public class ArkivressursService {
                 })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
         userIdInitialsMap = builder.build();
+        log.debug("Map contains {} entries", userIdInitialsMap.size());
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
                 .map(UserRoleType.class::cast)
