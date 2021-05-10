@@ -37,7 +37,9 @@ public class ArkivressursService {
                 .stream()
                 .map(UserNameType.class::cast)
                 .peek(u -> {
-                    builder.put(u.getInitials(), u.getId());
+                    if (StringUtils.isNotBlank(u.getInitials())) {
+                        builder.put(u.getInitials(), u.getId());
+                    }
                     log.debug("{} = {}", u.getId(), u.getInitials());
                 })
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
