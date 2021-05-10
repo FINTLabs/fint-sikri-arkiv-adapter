@@ -62,6 +62,8 @@ public class ArkivressursService {
         if (userIdInitialsMap == null) {
             return 0;
         }
-        return userIdInitialsMap.getOrDefault(input, 0);
+        final Integer id = userIdInitialsMap.getOrDefault(input, 0);
+        log.debug("Lookup initials {} = {}", input, id);
+        return id;
     }
 }
