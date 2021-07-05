@@ -72,7 +72,7 @@ public class CaseService {
     public Stream<CaseType> getCaseByExternalKey(SikriIdentity identity, String externalKey) {
         return objectModelService.getDataObjects(
                 identity,
-                "ExternalSystemLinkCase",
+                SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE,
                 "ExternalSystem.ExternalSystemName="
                         + externalSystemLinkService.getExternalSystemName()
                         + " and ExternalKey="
