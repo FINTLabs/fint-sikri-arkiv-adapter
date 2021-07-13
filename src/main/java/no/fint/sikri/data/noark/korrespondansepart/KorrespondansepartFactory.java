@@ -8,6 +8,7 @@ import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -18,6 +19,10 @@ import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
 public class KorrespondansepartFactory {
+
+    @Value("${fint.sikri.droppinternekorrespondanseparter:false}")
+    private Boolean skipIntern;
+
     public KorrespondansepartResource toFintResource(SenderRecipientType input) {
         KorrespondansepartResource output = new KorrespondansepartResource();
 
@@ -101,7 +106,7 @@ public class KorrespondansepartFactory {
                 .map(Link::getHref)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))
                 .map(StringUtils::upperCase)
-                .filter(s -> StringUtils.equalsAny(s, "EA", "EM", "EK", "IA", "IM", "IK"))
+                .filter(s -> StringUtils.equalsAny(s, "EA", "EM", "EK", "IA", "IM", "IK") && (!skipIntern || !StringUtils.equalsAny(s, "IA", "IM", "IK")))
                 .findFirst()
                 .ifPresent(type -> {
                     output.setCopyRecipient(false);
