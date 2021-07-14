@@ -20,8 +20,8 @@ import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 @Service
 public class KorrespondansepartFactory {
 
-    @Value("${fint.sikri.droppinternekorrespondanseparter:false}")
-    private Boolean skipIntern;
+    @Value("${fint.sikri.skip-internal-contacts:false}")
+    private Boolean skipInternalContacts;
 
     public KorrespondansepartResource toFintResource(SenderRecipientType input) {
         KorrespondansepartResource output = new KorrespondansepartResource();
@@ -100,13 +100,18 @@ public class KorrespondansepartFactory {
                 .findFirst()
                 .ifPresent(output::setTwoLetterCountryCode);
 
+        String[] expectedContactTypes =
+                skipInternalContacts ?
+                        new String[] { "EA", "EM", "EK" } :
+                        new String[] { "EA", "EM", "EK", "IA", "IM", "IK" };
+
         optionalValue(input.getKorrespondanseparttype())
                 .map(List::stream)
                 .orElseGet(Stream::empty)
                 .map(Link::getHref)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))
                 .map(StringUtils::upperCase)
-                .filter(s -> StringUtils.equalsAny(s, "EA", "EM", "EK", "IA", "IM", "IK") && (!skipIntern || !StringUtils.equalsAny(s, "IA", "IM", "IK")))
+                .filter(s -> StringUtils.equalsAny(s, expectedContactTypes))
                 .findFirst()
                 .ifPresent(type -> {
                     output.setCopyRecipient(false);
