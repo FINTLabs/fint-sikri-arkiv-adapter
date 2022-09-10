@@ -203,6 +203,11 @@ public class NoarkFactory {
                 caseType::setCaseStatusId
         );
 
+        applyParameterFromLink(
+                resource.getSaksmappetype(),
+                caseType::setFileTypeId
+        );
+
         return caseType;
     }
 
