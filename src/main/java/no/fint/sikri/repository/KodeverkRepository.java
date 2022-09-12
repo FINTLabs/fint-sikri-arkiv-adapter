@@ -15,6 +15,7 @@ import no.fint.sikri.data.noark.codes.journalstatus.JournalStatusService;
 import no.fint.sikri.data.noark.codes.korrespondanseparttype.KorrespondansepartTypeService;
 import no.fint.sikri.data.noark.codes.merknadstype.MerknadstypeService;
 import no.fint.sikri.data.noark.codes.partrolle.PartRolleService;
+import no.fint.sikri.data.noark.codes.saksmappetype.SaksmappetypeService;
 import no.fint.sikri.data.noark.codes.saksstatus.SaksStatusService;
 import no.fint.sikri.data.noark.codes.skjermingshjemmel.SkjermingshjemmelService;
 import no.fint.sikri.data.noark.codes.tilgangsrestriksjon.TilgangsrestriksjonService;
@@ -77,6 +78,9 @@ public class KodeverkRepository {
     @Autowired
     private AdministrativEnhetService administrativEnhetService;
 
+    @Autowired
+    private SaksmappetypeService saksmappetypeService;
+
     @Getter
     private List<SaksstatusResource> saksstatus;
 
@@ -125,6 +129,8 @@ public class KodeverkRepository {
     @Getter
     private List<AdministrativEnhetResource> administrativEnhet;
 
+    @Getter
+    private List<SaksmappetypeResource> saksmappetype;
     private transient boolean healthy = false;
 
     @Scheduled(initialDelay = 10000, fixedDelayString = "${fint.kodeverk.refresh-interval:1500000}")
@@ -145,6 +151,7 @@ public class KodeverkRepository {
         // TODO klasse = klasseService.getKlasser().collect(Collectors.toList());
         klassifikasjonssystem = klassifikasjonssystemService.getKlassifikasjonssystem().collect(Collectors.toList());
         administrativEnhet = administrativEnhetService.getAdministrativeEnheter().collect(Collectors.toList());
+        saksmappetype = saksmappetypeService.getFileTypeTable().collect(Collectors.toList());
         log.info("Refreshed code lists");
         healthy = true;
     }

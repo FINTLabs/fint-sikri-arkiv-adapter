@@ -40,4 +40,5 @@ public enum SikriObjectTypes {
     public static final String USER_ROLE = "UserRole";
     public static final String CLASSIFICATION = "Classification";
     public static final String SERIES = "Series";
+    public static final String FILE_TYPE = "FileType";
 }
