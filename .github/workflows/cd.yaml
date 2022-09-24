@@ -27,7 +27,8 @@ jobs:
           tags: |
             type=ref,event=branch,suffix=-{{sha}}
             type=ref,event=pr,suffix=-{{sha}}
-            type=sha,prefix={{date 'YYYY-MM-DD-'}}
+            type=sha,prefix={{date 'YYYY-MM-DD-'}},enable={{is_default_branch}}
+            type=raw,value=latest,enable={{is_default_branch}}
       - name: Login to ACR
         uses: Azure/docker-login@v1
         if: github.actor != 'dependabot[bot]'
