@@ -7,13 +7,12 @@ on:
       - master
     types: [closed]
   push:
-    branches:
+    branches-ignore:
       - master
 
 jobs:
 
   publish:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
@@ -26,6 +25,8 @@ jobs:
         with:
           images: fintlabsacr.azurecr.io/sikri-arkiv-adapter
           tags: |
+            type=ref,event=branch
+            type=ref,event=pr
             type=sha,prefix={{date 'YYYY-MM-DD'}}
       - name: Login to ACR
         uses: Azure/docker-login@v1
