@@ -25,9 +25,9 @@ jobs:
         with:
           images: fintlabsacr.azurecr.io/sikri-arkiv-adapter
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=sha,prefix={{date 'YYYY-MM-DD'}}
+            type=ref,event=branch,suffix=-{{sha}}
+            type=ref,event=pr,suffix=-{{sha}}
+            type=sha,prefix={{date 'YYYY-MM-DD-'}}
       - name: Login to ACR
         uses: Azure/docker-login@v1
         if: github.actor != 'dependabot[bot]'
@@ -41,6 +41,9 @@ jobs:
           push: ${{ github.actor != 'dependabot[bot]' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            USERNAME=${{ github.actor }}
+            TOKEN=${{ secrets.GITHUB_TOKEN }}
       - name: Container scan
         uses: aquasecurity/trivy-action@master
         with:
