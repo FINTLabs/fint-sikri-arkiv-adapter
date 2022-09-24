@@ -1,10 +1,9 @@
 FROM gradle:4.10.2-jdk8-alpine as builder
 USER root
 COPY . .
-ARG apiVersion
 ARG USERNAME
 ARG TOKEN
-RUN gradle --no-daemon -PapiVersion=${apiVersion} -Pgpr.user=${USERNAME} -Pgpr.key=${TOKEN} build
+RUN gradle --no-daemon -Pgpr.user=${USERNAME} -Pgpr.key=${TOKEN} build
 
 FROM gcr.io/distroless/java:8
 ENV JAVA_TOOL_OPTIONS -XX:+ExitOnOutOfMemoryError
