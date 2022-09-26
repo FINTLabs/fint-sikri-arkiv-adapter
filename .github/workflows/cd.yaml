@@ -45,12 +45,3 @@ jobs:
           build-args: |
             USERNAME=${{ github.actor }}
             TOKEN=${{ secrets.GITHUB_TOKEN }}
-      - name: Container scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ steps.meta.outputs.tags }}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
