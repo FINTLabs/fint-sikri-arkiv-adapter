@@ -6,6 +6,7 @@ import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.arkiv.kodeverk.JournalStatus;
 import no.fint.model.arkiv.kodeverk.JournalpostType;
 import no.fint.model.arkiv.noark.Arkivressurs;
+import no.fint.model.arkiv.noark.Avskrivning;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
@@ -19,7 +20,6 @@ import no.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.fint.sikri.data.noark.skjerming.SkjermingService;
 import no.fint.sikri.data.utilities.XmlUtils;
 import no.fint.sikri.model.SikriIdentity;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,13 @@ import java.util.stream.Stream;
 
 import static no.fint.sikri.data.noark.skjerming.SkjermingService.hasTilgangsrestriksjon;
 import static no.fint.sikri.data.utilities.SikriUtils.*;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Slf4j
 @Service
 public class JournalpostFactory {
 
+    @Deprecated
     @Value("${fint.sikri.registry-entry.access-code.downgrade-code:}")
     private String downgradeCode;
 
@@ -90,6 +92,13 @@ public class JournalpostFactory {
 
         optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant)).ifPresent(
                 journalpost::setSkjerming);
+
+        if (isNotBlank(result.getDowngradingCodeId())) {
+            Avskrivning avskrivning = new Avskrivning();
+            avskrivning.setAvskrivningsmate(result.getDowngradingCodeId());
+            optionalValue(result.getDowngradedDate()).map(XmlUtils::javaDate).ifPresent(avskrivning::setAvskrivningsdato);
+            journalpost.setAvskrivning(avskrivning);
+        }
 
         journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(identity,
                 result.getId().toString()).map(it -> {
@@ -152,12 +161,18 @@ public class JournalpostFactory {
                 registryEntry::setAccessCodeId,
                 registryEntry::setPursuant)) {
             // 🦍 If access code and pursuant was applied ..
-            if (StringUtils.isNotBlank(downgradeCode)) {
+            if (isNotBlank(downgradeCode)) {
                 // 🦧 .. and a downgrading code has been set ..
                 registryEntry.setDowngradingCodeId(downgradeCode);
                 // 🐖 .. set it and hope for the best.
             }
         }
+
+        optionalValue(journalpostResource.getAvskrivning()).map(Avskrivning::getAvskrivningsmate)
+                .ifPresent(registryEntry::setDowngradingCodeId);
+        optionalValue(journalpostResource.getAvskrivning()).map(Avskrivning::getAvskrivningsdato)
+                .map(xmlUtils::xmlDate)
+                .ifPresent(registryEntry::setDowngradedDate);
 
         RegistryEntryDocuments result = new RegistryEntryDocuments(registryEntry);
 
