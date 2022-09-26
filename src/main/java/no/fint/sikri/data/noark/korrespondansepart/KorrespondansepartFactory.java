@@ -2,12 +2,10 @@ package no.fint.sikri.data.noark.korrespondansepart;
 
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
-import no.fint.model.arkiv.kodeverk.Tilgangsrestriksjon;
 import no.fint.model.felles.kodeverk.iso.Landkode;
 import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
-import no.fint.model.resource.arkiv.noark.SkjermingResource;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static no.fint.sikri.data.utilities.SikriUtils.getLinkTargets;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
@@ -64,12 +61,6 @@ public class KorrespondansepartFactory {
             recipientType += "M";
         } else {
             recipientType += "A";
-        }
-
-        if (input.isIsRestricted()) {
-            SkjermingResource skjerming = new SkjermingResource();
-            skjerming.addTilgangsrestriksjon(Link.with(Tilgangsrestriksjon.class, "systemid", "XXX"));
-            output.setSkjerming(skjerming);
         }
 
         output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", recipientType));
@@ -146,10 +137,6 @@ public class KorrespondansepartFactory {
                         output.setIsRecipient(true);
                     }
                 });
-
-        getLinkTargets(optionalValue(input.getSkjerming()).map(SkjermingResource::getTilgangsrestriksjon)
-                .orElseGet(Collections::emptyList)).filter(StringUtils::isNotBlank)
-                .forEach(it -> output.setIsRestricted(true));
 
         return output;
     }

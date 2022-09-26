@@ -2,11 +2,13 @@ package no.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.RegistryEntryType;
+import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.arkiv.kodeverk.JournalStatus;
 import no.fint.model.arkiv.kodeverk.JournalpostType;
 import no.fint.model.arkiv.noark.Arkivressurs;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.JournalpostResource;
+import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseFactory;
 import no.fint.sikri.data.noark.dokument.DokumentbeskrivelseService;
@@ -26,6 +28,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static no.fint.sikri.data.noark.skjerming.SkjermingService.hasTilgangsrestriksjon;
 import static no.fint.sikri.data.utilities.SikriUtils.*;
 
 @Slf4j
@@ -78,31 +81,43 @@ public class JournalpostFactory {
         journalpost.setReferanseArkivDel(Collections.emptyList());
 
         // TODO: 2019-05-08 Check noark if this is correct
-        journalpost.setForfatter(
-                Stream.<String>builder()
-                        .add(result.getCreatedByUserNameId().toString())
-                        .add(result.getOfficerName().getName())
-                        .build()
-                        .distinct()
-                        .collect(Collectors.toList()));
+        journalpost.setForfatter(Stream.<String>builder()
+                .add(result.getCreatedByUserNameId().toString())
+                .add(result.getOfficerName().getName())
+                .build()
+                .distinct()
+                .collect(Collectors.toList()));
 
-        journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(identity, result.getId().toString()));
+        optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant)).ifPresent(
+                journalpost::setSkjerming);
+
+        journalpost.setKorrespondansepart(korrespondansepartService.queryForRegistrering(identity,
+                result.getId().toString()).map(it -> {
+            KorrespondansepartResource korrespondansepartResource = korrespondansepartFactory.toFintResource(it);
+            if (result.isIsRestricted() && it.isIsRestricted()) {
+                korrespondansepartResource.setSkjerming(journalpost.getSkjerming());
+            }
+            return korrespondansepartResource;
+        }).collect(Collectors.toList()));
         journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(identity, result.getId().toString()));
 
-        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(identity, result.getId().toString()));
-
-        optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant))
-                .ifPresent(journalpost::setSkjerming);
+        journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(identity,
+                result.getId().toString()));
 
         journalpost.addSaksbehandler(Link.with(Arkivressurs.class, "systemid", result.getOfficerNameId().toString()));
-        journalpost.addOpprettetAv(Link.with(Arkivressurs.class, "systemid", result.getCreatedByUserNameId().toString()));
+        journalpost.addOpprettetAv(Link.with(Arkivressurs.class,
+                "systemid",
+                result.getCreatedByUserNameId().toString()));
         journalpost.addJournalposttype(Link.with(JournalpostType.class, "systemid", result.getRegistryEntryTypeId()));
         journalpost.addJournalstatus(Link.with(JournalStatus.class, "systemid", result.getRecordStatusId()));
 
         return journalpost;
     }
 
-    public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId, JournalpostResource journalpostResource, String recordPrefix, String documentPrefix) {
+    public RegistryEntryDocuments toRegistryEntryDocuments(Integer caseId,
+                                                           JournalpostResource journalpostResource,
+                                                           String recordPrefix,
+                                                           String documentPrefix) {
 
         RegistryEntryType registryEntry = new RegistryEntryType();
 
@@ -110,53 +125,32 @@ public class JournalpostFactory {
         registryEntry.setTitle(recordPrefix + journalpostResource.getTittel());
         //registryEntry.setTitleRestricted(recordPrefix + journalpostResource.getOffentligTittel());
 
-        applyParameter(
-                journalpostResource.getOpprettetDato(),
-                registryEntry::setCreatedDate,
-                xmlUtils::xmlDate
-        );
+        applyParameter(journalpostResource.getOpprettetDato(), registryEntry::setCreatedDate, xmlUtils::xmlDate);
 
-        applyParameter(
-                journalpostResource.getJournalDato(),
-                registryEntry::setRegistryDate,
-                xmlUtils::xmlDate
-        );
+        applyParameter(journalpostResource.getJournalDato(), registryEntry::setRegistryDate, xmlUtils::xmlDate);
 
-        applyParameterFromLink(
-                journalpostResource.getJournalposttype(),
-                registryEntry::setRegistryEntryTypeId
-        );
+        applyParameterFromLink(journalpostResource.getJournalposttype(), registryEntry::setRegistryEntryTypeId);
 
-        applyParameterFromLink(
-                journalpostResource.getJournalstatus(),
-                registryEntry::setRecordStatusId
-        );
+        applyParameterFromLink(journalpostResource.getJournalstatus(), registryEntry::setRecordStatusId);
 
 
-        applyParameterFromLink(
-                journalpostResource.getSaksbehandler(),
+        applyParameterFromLink(journalpostResource.getSaksbehandler(),
                 arkivressursService::lookupUserId,
-                registryEntry::setOfficerNameId
-        );
+                registryEntry::setOfficerNameId);
 
-        applyParameterFromLink(
-                journalpostResource.getAdministrativEnhet(),
+        applyParameterFromLink(journalpostResource.getAdministrativEnhet(),
                 Integer::parseUnsignedInt,
-                registryEntry::setAdministrativeUnitId
-        );
+                registryEntry::setAdministrativeUnitId);
 
-        applyParameterFromLink(
-                journalpostResource.getJournalenhet(),
-                registryEntry::setRegistryManagementUnitId
-        );
+        applyParameterFromLink(journalpostResource.getJournalenhet(), registryEntry::setRegistryManagementUnitId);
 
-        applyParameterFromLink(
-                journalpostResource.getOpprettetAv(),
+        applyParameterFromLink(journalpostResource.getOpprettetAv(),
                 Integer::parseUnsignedInt,
-                registryEntry::setCreatedByUserNameId
-        );
+                registryEntry::setCreatedByUserNameId);
 
-        if (skjermingService.applyAccessCodeAndPursuant(journalpostResource.getSkjerming(), registryEntry::setAccessCodeId, registryEntry::setPursuant)) {
+        if (skjermingService.applyAccessCodeAndPursuant(journalpostResource.getSkjerming(),
+                registryEntry::setAccessCodeId,
+                registryEntry::setPursuant)) {
             // 🦍 If access code and pursuant was applied ..
             if (StringUtils.isNotBlank(downgradeCode)) {
                 // 🦧 .. and a downgrading code has been set ..
@@ -169,18 +163,28 @@ public class JournalpostFactory {
 
         journalpostResource.getDokumentbeskrivelse()
                 .stream()
-                .map(dokumentbeskrivelseResource -> dokumentbeskrivelseFactory.toDocumentDescription(dokumentbeskrivelseResource, documentPrefix))
+                .map(dokumentbeskrivelseResource -> dokumentbeskrivelseFactory.toDocumentDescription(
+                        dokumentbeskrivelseResource,
+                        documentPrefix))
                 .forEach(result::addDocument);
 
+        /*
+        The rules for IsRestricted are as follows:
+        1. IsRestricted on RegistryEntry can only be set if AccessCode and Pursuant is set.
+        2. IsRestricted on SenderRecipient can only be set if IsRestricted on RegistryEntry is set.
+         */
         if (journalpostResource.getKorrespondansepart() != null) {
-            journalpostResource.getKorrespondansepart()
-                    .stream()
-                    .map(input -> korrespondansepartFactory.createSenderRecipient(
-                            input,
-                            registryEntry.getOfficerNameId(),
-                            registryEntry.getAdministrativeUnitId(),
-                            registryEntry.getRegistryManagementUnitId()))
-                    .forEach(result::addSenderRecipient);
+            journalpostResource.getKorrespondansepart().stream().map(input -> {
+                SenderRecipientType senderRecipient = korrespondansepartFactory.createSenderRecipient(input,
+                        registryEntry.getOfficerNameId(),
+                        registryEntry.getAdministrativeUnitId(),
+                        registryEntry.getRegistryManagementUnitId());
+                if (hasTilgangsrestriksjon(journalpostResource.getSkjerming()) && hasTilgangsrestriksjon(input.getSkjerming())) {
+                    registryEntry.setIsRestricted(true);
+                    senderRecipient.setIsRestricted(true);
+                }
+                return senderRecipient;
+            }).forEach(result::addSenderRecipient);
         }
 
         return result;
