@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.22.RELEASE'
+        springBootVersion = '2.3.4.RELEASE'
         js2pVersion = '1.0.1'
     }
     repositories {
@@ -15,6 +15,7 @@ buildscript {
 plugins {
     id 'com.github.ben-manes.versions' version '0.27.0'
     id "no.nils.wsdl2java" version "0.10"
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 apply plugin: 'java'
@@ -39,16 +40,15 @@ afterEvaluate {
     }
 }
 
-
 sourceCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     maven {
         url 'https://repo.fintlabs.no/releases'
     }
     mavenCentral()
     jcenter()
-    mavenLocal()
 }
 
 dependencies {
@@ -68,7 +68,6 @@ dependencies {
     compile('org.projectlombok:lombok:1.18.10')
     compile('commons-beanutils:commons-beanutils:1.9.4')
 
-
     // Spring adds validation-api 1.x and hibernate-validator 5.x by default, all three dependencies needed to override.
     // Version 6.1.0 does not work :(
     compile 'javax.validation:validation-api:2.0.1.Final'
@@ -85,14 +84,15 @@ dependencies {
     compile("no.fint:fint-administrasjon-resource-model-java:${apiVersion}")
 
     compile('org.springframework.boot:spring-boot-starter-web')
-    runtime('org.springframework.boot:spring-boot-actuator')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.9.4'
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
     testCompile('cglib:cglib-nodep:3.3.0')
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile 'com.azure:azure-storage-blob:12.1.0'
+    compile 'com.azure:azure-storage-blob:12.7.0'
     compile 'io.projectreactor:reactor-core:3.3.1.RELEASE'
 }
 
@@ -104,7 +104,6 @@ wsdl2java {
             ['-xjc-XtoString', '-client', '-b', "$projectDir/src/main/resources/wsdl/bindings-oms.xml", '-p', 'no.fint.arkiv.sikri.oms', '-autoNameResolution', "$projectDir/src/main/resources/wsdl/ObjectModelServiceV3En.wsdl"],
             ['-xjc-XtoString', '-client', '-exsh', 'true', '-b', "$projectDir/src/main/resources/wsdl/bindings-ds.xml", '-p', 'no.fint.arkiv.sikri.ds', "$projectDir/src/main/resources/wsdl/DocumentServiceV3.wsdl"],
     ]
-    //stabilizeAndMergeObjectFactory = true
 }
 
 wsdl2javaExt {
@@ -139,7 +138,7 @@ jar {
     }
 }
 
-bootRepackage.enabled = false
+bootJar.enabled = false
 
 bootRun {
     systemProperties System.properties
