@@ -38,7 +38,8 @@ public class KorrespondansepartFactory {
         }
 
         AdresseResource adresse = new AdresseResource();
-        optionalValue(input.getTwoLetterCountryCode()).map(Link.apply(Landkode.class, "systemid")).ifPresent(adresse::addLand);
+        optionalValue(input.getTwoLetterCountryCode()).map(Link.apply(Landkode.class, "systemid"))
+                .ifPresent(adresse::addLand);
         optionalValue(input.getPostalAddress()).map(Collections::singletonList).ifPresent(adresse::setAdresselinje);
         optionalValue(input.getPostalCode()).ifPresent(adresse::setPostnummer);
         optionalValue(input.getCity()).ifPresent(adresse::setPoststed);
@@ -71,7 +72,10 @@ public class KorrespondansepartFactory {
         return value != null && value != 0;
     }
 
-    public SenderRecipientType createSenderRecipient(KorrespondansepartResource input, Integer officerNameId, Integer administrativeUnitId, String registryManagementUnitId) {
+    public SenderRecipientType createSenderRecipient(KorrespondansepartResource input,
+                                                     Integer officerNameId,
+                                                     Integer administrativeUnitId,
+                                                     String registryManagementUnitId) {
         SenderRecipientType output = new SenderRecipientType();
 
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
@@ -85,14 +89,17 @@ public class KorrespondansepartFactory {
             output.setExternalId(input.getOrganisasjonsnummer());
         }
 
-        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse).ifPresent(output::setEmail);
-        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer).ifPresent(output::setTelephone);
+        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse)
+                .ifPresent(output::setEmail);
+        optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer)
+                .ifPresent(output::setTelephone);
 
         optionalValue(input.getAdresse()).map(AdresseResource::getPostnummer).ifPresent(output::setPostalCode);
         optionalValue(input.getAdresse()).map(AdresseResource::getPoststed).ifPresent(output::setCity);
-        optionalValue(input.getAdresse()).map(AdresseResource::getAdresselinje).map(i -> String.join(", ", i)).ifPresent(output::setPostalAddress);
-        optionalValue(input.getAdresse())
-                .map(AdresseResource::getLand)
+        optionalValue(input.getAdresse()).map(AdresseResource::getAdresselinje)
+                .map(i -> String.join(", ", i))
+                .ifPresent(output::setPostalAddress);
+        optionalValue(input.getAdresse()).map(AdresseResource::getLand)
                 .map(List::stream)
                 .orElseGet(Stream::empty)
                 .map(Link::getHref)
@@ -100,13 +107,9 @@ public class KorrespondansepartFactory {
                 .findFirst()
                 .ifPresent(output::setTwoLetterCountryCode);
 
-        String[] expectedContactTypes =
-                skipInternalContacts ?
-                        new String[] { "EA", "EM", "EK" } :
-                        new String[] { "EA", "EM", "EK", "IA", "IM", "IK" };
+        String[] expectedContactTypes = skipInternalContacts ? new String[]{"EA", "EM", "EK"} : new String[]{"EA", "EM", "EK", "IA", "IM", "IK"};
 
-        optionalValue(input.getKorrespondanseparttype())
-                .map(List::stream)
+        optionalValue(input.getKorrespondanseparttype()).map(List::stream)
                 .orElseGet(Stream::empty)
                 .map(Link::getHref)
                 .map(s -> StringUtils.substringAfterLast(s, "/"))

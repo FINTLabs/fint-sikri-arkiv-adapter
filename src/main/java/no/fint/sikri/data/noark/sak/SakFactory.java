@@ -23,8 +23,11 @@ public class SakFactory {
     public SakResource toFintResource(CaseType result) {
         return noarkFactory.applyValuesForSaksmappe(
                 identityService.getDefaultIdentity(),
-                new CaseProperties(),
+                new CaseProperties(), //TODO CaseProperties
                 result, new SakResource());
     }
 
+    public CaseType toCaseType(SakResource sakResource) {
+        return noarkFactory.toCaseType(new CaseProperties(), sakResource); //TODO CaseProperties
+    }
 }

@@ -141,4 +141,12 @@ public class BegrepMapper {
         resource.addKlassifikasjonssystem(Link.with(Klassifikasjonssystem.class, "systemid", seriesType.getPrimaryClassificationSystemId()));
         return resource;
     }
+
+    public static SaksmappetypeResource mapSaksmappetype(FileTypeType fileTypeType) {
+        SaksmappetypeResource resource = new SaksmappetypeResource();
+        resource.setSystemId(FintUtils.createIdentifikator(fileTypeType.getId()));
+        resource.setKode(fileTypeType.getId());
+        resource.setNavn(fileTypeType.getDescription());
+        return resource;
+    }
 }

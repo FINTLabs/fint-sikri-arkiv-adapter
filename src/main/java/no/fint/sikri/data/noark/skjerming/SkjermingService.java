@@ -9,6 +9,7 @@ import no.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
 import no.fint.model.resource.arkiv.noark.SkjermingResource;
+import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.repository.KodeverkRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -78,6 +79,13 @@ public class SkjermingService {
                                         .map(SikriUtils.success(pursuantConsumer))
                                         .orElse(false))
                 .orElse(false);
+    }
+
+    public static boolean hasTilgangsrestriksjon(SkjermingResource skjermingResource) {
+        if (skjermingResource == null || skjermingResource.getTilgangsrestriksjon() == null) {
+            return false;
+        }
+        return FintUtils.getIdFromLink(skjermingResource.getTilgangsrestriksjon()).isPresent();
     }
 
 }

@@ -13,7 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -39,14 +42,18 @@ public class TestController {
     }
 
     @GetMapping(path = "dataobjects")
-    public List<DataObject> getDataObjects(@RequestParam String objectName) {
-        return objectModelService.getDataObjects(identityService.getDefaultIdentity(), objectName);
+    public List<DataObject> getDataObjects(@RequestParam String objectName,
+                                           @RequestParam(required = false) String filter,
+                                           @RequestParam(required = false) String[] related) {
+        return objectModelService.getDataObjects(identityService.getDefaultIdentity(),
+                objectName,
+                filter,
+                Optional.ofNullable(related).map(Arrays::asList).orElse(Collections.emptyList()));
     }
 
     @GetMapping(path = "kodeverk/{navn}")
     public List<? extends FintLinks> getKodeverk(@PathVariable String navn) {
-        return kodeverkHandler
-                .actions()
+        return kodeverkHandler.actions()
                 .stream()
                 .filter(it -> StringUtils.containsIgnoreCase(it, navn))
                 .map(KodeverkActions::valueOf)

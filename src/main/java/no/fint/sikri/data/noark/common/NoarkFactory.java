@@ -7,6 +7,7 @@ import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.model.FintComplexDatatypeObject;
+import no.fint.model.arkiv.kodeverk.Saksmappetype;
 import no.fint.model.arkiv.kodeverk.Saksstatus;
 import no.fint.model.arkiv.noark.AdministrativEnhet;
 import no.fint.model.arkiv.noark.Arkivdel;
@@ -100,6 +101,11 @@ public class NoarkFactory {
                 .map(String::valueOf)
                 .map(Link.apply(Saksstatus.class, "systemid"))
                 .ifPresent(resource::addSaksstatus);
+
+        optionalValue(input.getFileTypeId())
+                .map(String::valueOf)
+                .map(Link.apply(Saksmappetype.class, "systemid"))
+                .ifPresent(resource::addSaksmappetype);
     }
 
     <T extends SaksmappeResource> void applyFieldsForSaksmappe(SikriIdentity identity, CaseType input, T resource) {
@@ -165,6 +171,7 @@ public class NoarkFactory {
     }
 
     public <T extends SaksmappeResource> CaseType toCaseType(CaseProperties caseProperties, T resource) {
+        log.debug("CaseProperties: {}", caseProperties);
         CaseType caseType = new CaseType();
         caseDefaultsService.applyDefaultsToCaseType(caseProperties, resource, caseType);
 
@@ -201,6 +208,11 @@ public class NoarkFactory {
         applyParameterFromLink(
                 resource.getSaksstatus(),
                 caseType::setCaseStatusId
+        );
+
+        applyParameterFromLink(
+                resource.getSaksmappetype(),
+                caseType::setFileTypeId
         );
 
         return caseType;
