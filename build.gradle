@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.2.4.RELEASE'
+        springBootVersion = '1.5.22.RELEASE'
         js2pVersion = '1.0.1'
     }
     repositories {
@@ -95,7 +95,7 @@ dependencies {
 
     compile('org.springframework.boot:spring-boot-starter-web')
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.9.4'
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
     testCompile('cglib:cglib-nodep:3.3.0')
@@ -148,7 +148,7 @@ jar {
     }
 }
 
-bootJar.enabled = false
+bootRepackage.enabled = false
 
 bootRun {
     systemProperties System.properties
