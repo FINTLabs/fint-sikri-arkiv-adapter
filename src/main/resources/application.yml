@@ -1,5 +1,6 @@
 server:
   port: 8091
+  servlet-path: /actuator
 
 springfox:
   title: 'FINT SSE Adapter Skeleton'
@@ -26,7 +27,14 @@ security:
     enabled: false
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health, shutdown, prometheus
+  security:
+    enabled: false
+
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  prometheus:
+    enabled: true
+  metrics:
+    enabled: true
