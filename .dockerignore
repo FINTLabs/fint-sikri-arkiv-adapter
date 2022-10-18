@@ -1,3 +1,5 @@
+.git
+.github
 .gradle
 .idea
 /build/
@@ -14,4 +16,3 @@ generated-sources
 /adapter.log*
 application-*.yml
 application-*.properties
-/bin/
