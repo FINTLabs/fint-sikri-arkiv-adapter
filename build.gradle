@@ -92,7 +92,7 @@ dependencies {
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile 'com.azure:azure-storage-blob:12.1.0'
+    compile 'com.azure:azure-storage-blob:12.20.0'
     compile 'io.projectreactor:reactor-core:3.3.1.RELEASE'
 }
 
