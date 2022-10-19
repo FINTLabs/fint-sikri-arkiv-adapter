@@ -94,20 +94,7 @@ dependencies {
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
-    // Version 12.20.0 of azure-storage-blob makes some fuzz with Jackson
-    // (worked with version 12.7.0);
-    // Version '2.8.11' of package 'jackson-*' is not supported
-    // (older than earliest supported version - `2.10.0`).
-    // It may result in runtime exceptions during serialization.
-    // Please consider updating Jackson to one of the supported versions
-    // https://aka.ms/azsdk/java/dependency/troubleshoot
-    compile 'com.azure:azure-storage-blob:12.20.0'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.10.0'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.10.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.0'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0'
-
+    compile 'com.azure:azure-storage-blob:12.7.0'
     compile 'io.projectreactor:reactor-core:3.3.1.RELEASE'
 }
 
