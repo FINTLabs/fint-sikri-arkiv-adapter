@@ -113,6 +113,7 @@ public class CachedFileService extends CacheLoader<String, Path> implements Remo
         int docId = Integer.parseInt(strings[0]);
         int version = Integer.parseInt(strings[1]);
         String variant = strings[2];
+        // TODO Possible to use different identity?
         SikriDocumentService.SikriDocument sikriDocument = sikriDocumentService.getDocumentContentByDocumentId(identityService.getDefaultIdentity(), docId, variant, version);
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));

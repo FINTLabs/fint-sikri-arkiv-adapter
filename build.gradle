@@ -43,22 +43,12 @@ afterEvaluate {
 sourceCompatibility = 1.8
 
 repositories {
-    mavenLocal()
     maven {
         url 'https://repo.fintlabs.no/releases'
     }
     mavenCentral()
     jcenter()
     mavenLocal()
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/FINTLabs/fint-arkiv-case-defaults")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
-        }
-    }
 }
 
 dependencies {
@@ -75,7 +65,7 @@ dependencies {
     compile('org.glassfish.jersey.core:jersey-client:2.29.1')
     compile('org.glassfish.jersey.core:jersey-common:2.29.1')
     compile('org.jooq:jool-java-8:0.9.14')
-    compile('org.projectlombok:lombok:1.18.10')
+    compile('org.projectlombok:lombok:1.18.24')
     compile('commons-beanutils:commons-beanutils:1.9.4')
 
     // Spring adds validation-api 1.x and hibernate-validator 5.x by default, all three dependencies needed to override.
@@ -84,12 +74,12 @@ dependencies {
     compile 'org.hibernate.validator:hibernate-validator:6.0.17.Final'
     compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.0.17.Final'
 
-    compile('no.fint:fint-sse:2.0.0')
+    compile('no.fint:fint-sse:2.0.1')
     compile('no.fint:fint-event-model:3.0.1')
     compile('no.fint:fint-relation-model:1.1.6')
     compile('no.fint:fint-model-resource:0.4.1')
 
-    compile('no.fintlabs:fint-arkiv-case-defaults:0.1-SNAPSHOT')
+    compile('no.fintlabs:fint-arkiv-case-defaults:4.2.0')
     compile("no.fint:fint-arkiv-resource-model-java:${apiVersion}")
     compile("no.fint:fint-administrasjon-resource-model-java:${apiVersion}")
 
@@ -103,7 +93,21 @@ dependencies {
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile 'com.azure:azure-storage-blob:12.7.0'
+
+    // Version 12.20.0 of azure-storage-blob makes some fuzz with Jackson
+    // (worked with version 12.7.0);
+    // Version '2.8.11' of package 'jackson-*' is not supported
+    // (older than earliest supported version - `2.10.0`).
+    // It may result in runtime exceptions during serialization.
+    // Please consider updating Jackson to one of the supported versions
+    // https://aka.ms/azsdk/java/dependency/troubleshoot
+    compile 'com.azure:azure-storage-blob:12.20.0'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.10.0'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.10.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.0'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0'
+
     compile 'io.projectreactor:reactor-core:3.3.1.RELEASE'
 }
 
