@@ -59,7 +59,7 @@ dependencies {
     wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics:1.11.1'
 
     compile('com.github.springfox.loader:springfox-loader:1.2.0')
-    compile('com.google.guava:guava:28.1-jre')
+    compile('com.google.guava:guava:28.2-jre')
     compile('org.apache.commons:commons-lang3:3.9')
     compile('org.apache.tika:tika-core:1.23')
     compile('org.glassfish.jersey.core:jersey-client:2.29.1')
