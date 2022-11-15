@@ -1,7 +1,3 @@
-server:
-  port: 8091
-  servlet-path: /actuator
-
 springfox:
   title: 'FINT SSE Adapter Skeleton'
   version: '@version@'
