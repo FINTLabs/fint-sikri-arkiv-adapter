@@ -10,7 +10,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(false);
+        web.debug(true);
         web.ignoring().antMatchers("/**");
     }
 
