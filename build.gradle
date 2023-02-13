@@ -74,7 +74,7 @@ dependencies {
     // Version 6.1.0 does not work :(
     compile 'javax.validation:validation-api:2.0.1.Final'
     compile 'org.hibernate.validator:hibernate-validator:6.0.23.Final'
-    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.0.23.Final'
+    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.2.5.Final'
 
     compile('no.fint:fint-sse:2.0.1')
     compile('no.fint:fint-event-model:3.0.2')
