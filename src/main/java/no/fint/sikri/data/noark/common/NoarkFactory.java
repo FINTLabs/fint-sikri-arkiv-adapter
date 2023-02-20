@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
@@ -176,6 +177,11 @@ public class NoarkFactory {
         caseDefaultsService.applyDefaultsToCaseType(caseProperties, resource, caseType);
 
         caseType.setTitle(titleService.getCaseTitle(caseProperties.getTitle(), resource));
+
+        // Offentlig tittel, straight through just as is, if it is. No TitleService.
+        optionalValue(resource.getOffentligTittel())
+                .map(String::valueOf)
+                .ifPresent(caseType::setPublicTitle);
 
         additionalFieldService.getFieldsForResource(caseProperties.getField(), resource)
                 .forEach(field ->

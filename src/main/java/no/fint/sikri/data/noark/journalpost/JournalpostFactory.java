@@ -132,7 +132,11 @@ public class JournalpostFactory {
 
         registryEntry.setCaseId(caseId);
         registryEntry.setTitle(recordPrefix + journalpostResource.getTittel());
-        //registryEntry.setTitleRestricted(recordPrefix + journalpostResource.getOffentligTittel());
+
+        // Offentlig tittel, straight through just as is, if it is
+        optionalValue(journalpostResource.getOffentligTittel())
+                .map(String::valueOf)
+                .ifPresent(registryEntry::setTitleRestricted);
 
         applyParameter(journalpostResource.getOpprettetDato(), registryEntry::setCreatedDate, xmlUtils::xmlDate);
 
