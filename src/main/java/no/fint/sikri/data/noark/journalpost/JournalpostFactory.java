@@ -133,8 +133,7 @@ public class JournalpostFactory {
         registryEntry.setCaseId(caseId);
         registryEntry.setTitle(recordPrefix + journalpostResource.getTittel());
 
-        // Offentlig tittel, straight through just as is, if it is
-        optionalValue(journalpostResource.getOffentligTittel())
+        optionalValue(getShieldedTitle(journalpostResource.getOffentligTittel()))
                 .map(String::valueOf)
                 .ifPresent(registryEntry::setTitleRestricted);
 

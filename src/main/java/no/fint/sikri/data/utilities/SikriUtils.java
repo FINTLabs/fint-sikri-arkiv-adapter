@@ -1,5 +1,6 @@
 package no.fint.sikri.data.utilities;
 
+import io.netty.util.internal.StringUtil;
 import no.fint.model.resource.Link;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public enum SikriUtils {
@@ -73,4 +76,25 @@ public enum SikriUtils {
         }
         return new URL("file:" + location);
     }
+
+    public static String getShieldedTitle(String caseTitle){
+        if (StringUtil.isNullOrEmpty(caseTitle)) {
+            return null;
+        }
+
+        Pattern pattern = Pattern.compile("@([^@]+)@");
+        Matcher matcher = pattern.matcher(caseTitle);
+        String shieldedTitle = caseTitle;
+        while (matcher.find()) {
+            String match = matcher.group();
+            String shieldedMatch = match.substring(1, match.length() - 1);
+            String[] words = shieldedMatch.split(" ");
+            for (String word : words) {
+                shieldedMatch = shieldedMatch.replace(word, "*****");
+            }
+            shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
+        }
+        return shieldedTitle;
+    }
+
 }

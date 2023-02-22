@@ -32,12 +32,9 @@ import org.springframework.stereotype.Service;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
-import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.*;
 
 @Slf4j
 @Service
@@ -179,14 +176,9 @@ public class NoarkFactory {
 
         caseType.setTitle(titleService.getCaseTitle(caseProperties.getTitle(), resource));
 
-        // Offentlig tittel, straight through just as is, if it is. No TitleService.
-        optionalValue(resource.getOffentligTittel())
+        optionalValue(getShieldedTitle(resource.getOffentligTittel()))
                 .map(String::valueOf)
                 .ifPresent(caseType::setPublicTitle);
-
-        optionalValue(getShieldedTitle(resource.getTittel()))
-                .map(String::valueOf)
-                .ifPresent(caseType::setPublicTitleNames);
 
         additionalFieldService.getFieldsForResource(caseProperties.getField(), resource)
                 .forEach(field ->
@@ -234,26 +226,6 @@ public class NoarkFactory {
             PropertyUtils.setSimpleProperty(caseType, field.getName(), field.getValue());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private String getShieldedTitle(String caseTitle){
-        Pattern pattern = Pattern.compile("@([^@]+)@");
-        Matcher matcher = pattern.matcher(caseTitle);
-        if (matcher.matches()) {
-            String shieldedTitle = caseTitle;
-            while (matcher.find()) {
-                String match = matcher.group();
-                String shieldedMatch = match.substring(1, match.length() - 1);
-                String[] words = shieldedMatch.split(" ");
-                for (String word : words) {
-                    shieldedMatch = shieldedMatch.replace(word, "*****");
-                }
-                shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
-            }
-            return shieldedTitle;
-        } else {
-            return null;
         }
     }
 
