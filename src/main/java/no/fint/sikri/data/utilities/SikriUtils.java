@@ -82,7 +82,7 @@ public enum SikriUtils {
             return null;
         }
 
-        Pattern pattern = Pattern.compile("@([^@]+)@");
+        Pattern pattern = Pattern.compile("(@\\S+@\\S+\\.\\S+@)|(@[^@]+@)");
         Matcher matcher = pattern.matcher(caseTitle);
         String shieldedTitle = caseTitle;
         while (matcher.find()) {

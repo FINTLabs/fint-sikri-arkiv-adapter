@@ -16,6 +16,17 @@ class NoarkTitleSpec extends Specification {
         result == "Sak 1 - ***** ***** og ***** ***** oppføring av garasje"
     }
 
+    def "Shield title with marked email address"() {
+        expect:
+        shieldedTitle == getShieldedTitle(publicCaseTitle)
+
+        where:
+        publicCaseTitle                                                      | shieldedTitle
+        "Sak 1 - @ola@normann.no@ og @lisa@normann.no@ oppføring av garasje" | "Sak 1 - ***** og ***** oppføring av garasje"
+        "Sak 2 - @ola@normann.no@"                                           | "Sak 2 - *****"
+        "Sak 3 - @Ola Normann@ med epost @ola@normann.no@"                   | "Sak 3 - ***** ***** med epost *****"
+    }
+
     def "Shield title with null value"() {
         when:
         def publicCaseTitle = null
