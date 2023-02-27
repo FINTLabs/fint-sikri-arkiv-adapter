@@ -77,7 +77,7 @@ public enum SikriUtils {
         return new URL("file:" + location);
     }
 
-    public static String getShieldedTitle(String caseTitle){
+    public static String getShieldedTitle(String caseTitle) {
         if (StringUtil.isNullOrEmpty(caseTitle)) {
             return null;
         }
@@ -95,6 +95,27 @@ public enum SikriUtils {
             shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
         }
         return shieldedTitle;
+    }
+
+    public static String getMarkedTitle(String caseTitle) {
+        if (StringUtil.isNullOrEmpty(caseTitle)) {
+            return null;
+        }
+
+        Pattern pattern = Pattern.compile("#([^#]+)#");
+        Matcher matcher = pattern.matcher(caseTitle);
+        String markedTitle = caseTitle;
+        while (matcher.find()) {
+            String match = matcher.group();
+            String markedMatch = match.substring(1, match.length() - 1);
+            String[] words = markedMatch.split(" ");
+            for (int i = 0; i < words.length - 1; i++) {
+                markedMatch = markedMatch.replace(words[i], "#####");
+            }
+            markedMatch = markedMatch.replace(words[words.length - 1], "####_");
+            markedTitle = markedTitle.replace(match, markedMatch);
+        }
+        return markedTitle;
     }
 
 }

@@ -180,6 +180,10 @@ public class NoarkFactory {
                 .map(String::valueOf)
                 .ifPresent(caseType::setPublicTitle);
 
+        optionalValue(getMarkedTitle(resource.getOffentligTittel()))
+                .map(String::valueOf)
+                .ifPresent(caseType::setPublicTitleNames);
+
         additionalFieldService.getFieldsForResource(caseProperties.getField(), resource)
                 .forEach(field ->
                         setProperty(caseType, field));
