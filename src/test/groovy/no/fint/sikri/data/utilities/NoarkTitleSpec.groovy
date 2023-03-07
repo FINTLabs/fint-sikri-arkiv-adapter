@@ -90,4 +90,30 @@ class NoarkTitleSpec extends Specification {
         result == "Uten markering"
     }
 
+    def "Public title with marked text and without shielded text"() {
+        when:
+        def publicCaseTitle = "Sak 1 - #Ole Nordmann# og #Lisa Nordmann# oppføring av garasje"
+        def result = getShieldedTitle(publicCaseTitle)
+
+        then:
+        result == "Sak 1 - Ole Nordmann og Lisa Nordmann oppføring av garasje"
+    }
+
+    def "Public title with shielded text and without marked text"() {
+        when:
+        def publicCaseTitle = "Sak 1 - @Ole Nordmann@ (ole@norge.no) oppføring av garasje"
+        def result = getMarkedTitle(publicCaseTitle)
+
+        then:
+        result == "Sak 1 - Ole Nordmann (ole@norge.no) oppføring av garasje"
+    }
+
+    def "Public title with marked text and without shielded text and with hashtag"() {
+        when:
+        def publicCaseTitle = "Sak 1 - #Ole Nordmann# og #Lisa Nordmann# søker tilskudd til #vixenawards"
+        def result = getShieldedTitle(publicCaseTitle)
+
+        then:
+        result == "Sak 1 - Ole Nordmann og Lisa Nordmann søker tilskudd til #vixenawards"
+    }
 }

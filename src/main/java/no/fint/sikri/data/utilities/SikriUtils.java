@@ -17,6 +17,9 @@ import java.util.stream.Stream;
 public enum SikriUtils {
     ;
 
+    private final static Pattern markedPattern = Pattern.compile("#([^#]+)#");
+    private final static Pattern shieldedPattern = Pattern.compile("(@\\S+@\\S+\\.\\S+@)|(@[^@]+@)");
+
     public static <T> void applyParameter(T value, Consumer<T> consumer) {
         applyParameter(value, consumer, Function.identity());
     }
@@ -77,14 +80,13 @@ public enum SikriUtils {
         return new URL("file:" + location);
     }
 
-    public static String getShieldedTitle(String caseTitle) {
-        if (StringUtil.isNullOrEmpty(caseTitle)) {
+    public static String getShieldedTitle(String title) {
+        if (StringUtil.isNullOrEmpty(title)) {
             return null;
         }
 
-        Pattern pattern = Pattern.compile("(@\\S+@\\S+\\.\\S+@)|(@[^@]+@)");
-        Matcher matcher = pattern.matcher(caseTitle);
-        String shieldedTitle = caseTitle;
+        Matcher matcher = shieldedPattern.matcher(title);
+        String shieldedTitle = title;
         while (matcher.find()) {
             String match = matcher.group();
             String shieldedMatch = match.substring(1, match.length() - 1);
@@ -94,17 +96,17 @@ public enum SikriUtils {
             }
             shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
         }
-        return shieldedTitle;
+
+        return cleanUpTitle(shieldedTitle, markedPattern);
     }
 
-    public static String getMarkedTitle(String caseTitle) {
-        if (StringUtil.isNullOrEmpty(caseTitle)) {
+    public static String getMarkedTitle(String title) {
+        if (StringUtil.isNullOrEmpty(title)) {
             return null;
         }
 
-        Pattern pattern = Pattern.compile("#([^#]+)#");
-        Matcher matcher = pattern.matcher(caseTitle);
-        String markedTitle = caseTitle;
+        Matcher matcher = markedPattern.matcher(title);
+        String markedTitle = title;
         while (matcher.find()) {
             String match = matcher.group();
             String markedMatch = match.substring(1, match.length() - 1);
@@ -115,7 +117,20 @@ public enum SikriUtils {
             markedMatch = markedMatch.replace(words[words.length - 1], "####_");
             markedTitle = markedTitle.replace(match, markedMatch);
         }
-        return markedTitle;
+
+        return cleanUpTitle(markedTitle, shieldedPattern);
     }
 
+    private static String cleanUpTitle(String title, Pattern pattern) {
+        Matcher matcher = pattern.matcher(title);
+        String cleanedTitle = title;
+        while (matcher.find()) {
+            String match = matcher.group();
+            String matchedText = match.substring(1, match.length() - 1);
+
+            cleanedTitle = cleanedTitle.replace(match, matchedText);
+        }
+
+        return cleanedTitle;
+    }
 }
