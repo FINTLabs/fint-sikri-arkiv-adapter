@@ -11,11 +11,11 @@ import javax.validation.Validation
 import javax.validation.ValidatorFactory
 
 class ValidationServiceSpec extends Specification {
+
     private ValidatorFactory validatorFactory
 
     void setup(){
         validatorFactory = Validation.buildDefaultValidatorFactory()
-
     }
 
     def "Let`s validate"() {
