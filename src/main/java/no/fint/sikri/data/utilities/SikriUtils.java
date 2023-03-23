@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 public enum SikriUtils {
     ;
 
-    private final static Pattern markedPattern = Pattern.compile("#([^#]+)#");
-    private final static Pattern shieldedPattern = Pattern.compile("(@\\S+@\\S+\\.\\S+@)|(@[^@]+@)");
+    private final static String MARKED_REGEX_PATTERN = "#([^#]+)#";
+    private final static String SHIELDED_REGEX_PATTERN = "@((\\S+@\\S+\\.\\S+)|([^@]+))@";
 
     public static <T> void applyParameter(T value, Consumer<T> consumer) {
         applyParameter(value, consumer, Function.identity());
@@ -85,19 +85,17 @@ public enum SikriUtils {
             return null;
         }
 
-        Matcher matcher = shieldedPattern.matcher(title);
+        Matcher matcher = Pattern.compile(SHIELDED_REGEX_PATTERN).matcher(title);
         String shieldedTitle = title;
         while (matcher.find()) {
             String match = matcher.group();
-            String shieldedMatch = match.substring(1, match.length() - 1);
-            String[] words = shieldedMatch.split(" ");
-            for (String word : words) {
-                shieldedMatch = shieldedMatch.replace(word, "*****");
-            }
+            String shieldedMatch = match
+                    .replaceAll("[^\\ ]+", "*****");
+
             shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
         }
 
-        return cleanUpTitle(shieldedTitle, markedPattern);
+        return cleanUpTitle(shieldedTitle, MARKED_REGEX_PATTERN);
     }
 
     public static String getMarkedTitle(String title) {
@@ -105,32 +103,22 @@ public enum SikriUtils {
             return null;
         }
 
-        Matcher matcher = markedPattern.matcher(title);
+        Matcher matcher = Pattern.compile(MARKED_REGEX_PATTERN).matcher(title);
         String markedTitle = title;
         while (matcher.find()) {
             String match = matcher.group();
-            String markedMatch = match.substring(1, match.length() - 1);
-            String[] words = markedMatch.split(" ");
-            for (int i = 0; i < words.length - 1; i++) {
-                markedMatch = markedMatch.replace(words[i], "#####");
-            }
-            markedMatch = markedMatch.replace(words[words.length - 1], "####_");
+
+            String markedMatch = match
+                    .replaceAll("[^\\ ]+", "#####")
+                    .replaceFirst("#####$", "####_");
+
             markedTitle = markedTitle.replace(match, markedMatch);
         }
 
-        return cleanUpTitle(markedTitle, shieldedPattern);
+        return cleanUpTitle(markedTitle, SHIELDED_REGEX_PATTERN);
     }
 
-    private static String cleanUpTitle(String title, Pattern pattern) {
-        Matcher matcher = pattern.matcher(title);
-        String cleanedTitle = title;
-        while (matcher.find()) {
-            String match = matcher.group();
-            String matchedText = match.substring(1, match.length() - 1);
-
-            cleanedTitle = cleanedTitle.replace(match, matchedText);
-        }
-
-        return cleanedTitle;
+    private static String cleanUpTitle(String title, String pattern) {
+        return Pattern.compile(pattern).matcher(title).replaceAll("$1");
     }
 }
