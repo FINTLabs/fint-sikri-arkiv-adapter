@@ -1,36 +1,42 @@
 package no.fint.sikri.service
 
-import no.fint.antlr.ODataLexer
-import no.fint.antlr.ODataParser
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
+import no.fint.antlr.FintFilterService
+import no.fint.sikri.data.exception.IllegalOdataFilterProperty
+import no.fint.sikri.model.SikriIdentity
 import spock.lang.Specification
 
 class CaseServiceSpec extends Specification {
 
-    def "Let`s filter something the OData way"() {
+    private CaseService caseService
+    private SikriObjectModelService sikriObjectModelService
+
+    void setup() {
+        sikriObjectModelService = Mock(SikriObjectModelService)
+        caseService = new CaseService(sikriObjectModelService,
+                Mock(ExternalSystemLinkService), Mock(FintFilterService))
+    }
+
+    def "Validate mapping for supported ODataFilters"() {
         when:
-        ODataLexer lexer = new ODataLexer(CharStreams.fromString("saksaar eq '2023' and sakssekvensnummer eq '1'"));
-        CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-        ODataParser oDataParser = new ODataParser(commonTokenStream);
-
-        ODataParser.FilterContext filterContext = oDataParser.filter();
-        def comparisonContexts = filterContext.comparison();
-
-        for (def context : comparisonContexts) {
-            String property = context.property().getText();
-            String operator = context.comparisonOperator().getText();
-            String value = context.value().getText();
-
-            assert property == 'saksaar' || 'sakssekvensnummer'
-            assert operator == 'eq'
-            assert value == '2023' || '1'
-
-            // At the end of the day, we want to produce:
-            // CaseYear=2023 AND SequenceNumber=27
-        }
+        caseService.getCaseByODataFilter(Mock(SikriIdentity), odataFilter)
 
         then:
-        42;
+        1 * sikriObjectModelService.getDataObjects(_, _, sikriFilter, _, _) >> Arrays.asList()
+        0 * sikriObjectModelService.getDataObjects(_, _, _, _, _) >> Arrays.asList()
+
+        where:
+        odataFilter                                       || sikriFilter
+        "saksaar eq '2023'"                               || "CaseYear='2023'"
+        "saksaar eq '2023' and sakssekvensnummer eq '27'" || "CaseYear='2023' AND SequenceNumber='27'"
+        "sakssekvensnummer eq '27'"                       || "SequenceNumber='27'"
     }
+
+    def "When unsupported ODataFilter property exception is thrown"() {
+        when:
+        caseService.getCaseByODataFilter(Mock(SikriIdentity), "neitakk eq '2000'")
+
+        then:
+        thrown(IllegalOdataFilterProperty)
+    }
+
 }

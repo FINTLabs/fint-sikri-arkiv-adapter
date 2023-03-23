@@ -17,8 +17,6 @@ public class CaseQueryService {
     private final String[] validQueries;
     private final FintFilterService oDataFilterService;
 
-    private final ImmutableMap<String, String> odataFilterFieldMapper;
-
     public CaseQueryService(CaseService caseService, FintFilterService oDataFilterService) {
         this.oDataFilterService = oDataFilterService;
 
@@ -30,11 +28,6 @@ public class CaseQueryService {
                 .put("?", caseService::getCaseByFilter)
                 .build();
         validQueries = queryMap.keySet().toArray(new String[0]);
-
-        odataFilterFieldMapper = new ImmutableMap.Builder<String, String>()
-                .put("saksaar", "CaseYear")
-                .put("sakssekvensnummer", "SequenceNumber")
-                .build();
     }
 
     public boolean isValidQuery(String query) {

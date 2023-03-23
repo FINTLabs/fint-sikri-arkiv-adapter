@@ -1,5 +1,6 @@
 package no.fint.sikri.service;
 
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.antlr.FintFilterService;
 import no.fint.antlr.ODataLexer;
@@ -7,6 +8,7 @@ import no.fint.antlr.ODataParser;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
+import no.fint.sikri.data.exception.IllegalOdataFilterProperty;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -26,18 +28,23 @@ public class CaseService {
     private final SikriObjectModelService objectModelService;
     private final ExternalSystemLinkService externalSystemLinkService;
     private final String[] relatedObjects;
-    private final FintFilterService oDataFilterService;
+    private final ImmutableMap<String, String> odataFilterFieldMapper;
 
     public CaseService(SikriObjectModelService objectModelService, ExternalSystemLinkService externalSystemLinkService, FintFilterService oDataFilterService) {
         this.objectModelService = objectModelService;
         this.externalSystemLinkService = externalSystemLinkService;
-        this.oDataFilterService = oDataFilterService;
 
         relatedObjects = new String[] {
                 SikriObjectTypes.PRIMARY_CLASSIFICATION,
                 SikriObjectTypes.SECONDARY_CLASSIFICATION,
                 SikriObjectTypes.ADMINISTRATIVE_UNIT
         };
+
+        odataFilterFieldMapper = new ImmutableMap.Builder<String, String>()
+                .put("saksaar", "CaseYear")
+                .put("sakssekvensnummer", "SequenceNumber")
+                .build();
+
     }
 
     public Stream<CaseType> getCaseByCaseNumber(SikriIdentity identity, String caseNumber) throws IllegalCaseNumberFormat {
@@ -80,13 +87,13 @@ public class CaseService {
                 .map(CaseType.class::cast);
     }
 
-    public Stream<CaseType> getCaseByODataFilter(SikriIdentity identity, String query) {
+    public Stream<CaseType> getCaseByODataFilter(SikriIdentity identity, String query) throws IllegalOdataFilterProperty {
         log.info("The Query, proudly present to you by the arkivlaget.io: " + query);
 
         return objectModelService.getDataObjects(
                         identity,
                         SikriObjectTypes.CASE,
-                        getFilter(query),
+                        getSikriFilterExpression(query),
                         10, // consider using 0 aka no limit
                         relatedObjects)
                 .stream()
@@ -109,19 +116,25 @@ public class CaseService {
                 .flatMap(systemId -> getCaseBySystemId(identity, systemId));
     }
 
-    // TODO 👷👷
-    private String getFilter(String query) {
+    private String getSikriFilterExpression(String query) throws IllegalOdataFilterProperty {
         ODataLexer lexer = new ODataLexer(CharStreams.fromString(query));
         CommonTokenStream commonTokens = new CommonTokenStream(lexer);
         ODataParser oDataParser = new ODataParser(commonTokens);
 
-        oDataParser.filter().comparison().stream().map(context -> {
-            log.info("Property: " + context.property().getText());
-            log.info("Operator: " + context.comparisonOperator().getText());
-            log.info("Value: " + context.value().getText());
-            return context;
-        }).collect(Collectors.toList());
+        return oDataParser.filter().comparison().stream()
+                .map(this::fromODataToSikriComparisonFilter)
+                .collect(Collectors.joining(" AND "));
+    }
 
-        return "SequenceNumber=27 AND CaseYear=2023";
+    private String fromODataToSikriComparisonFilter(ODataParser.ComparisonContext context) throws IllegalOdataFilterProperty {
+        String oDataProperty = context.property().getText();
+        String oDataOperator = context.comparisonOperator().getText();
+        String oDataValue = context.value().getText();
+
+        String sikriProperty = odataFilterFieldMapper.getOrDefault(oDataProperty, null);
+        if (sikriProperty == null) {
+            throw new IllegalOdataFilterProperty(String.format("OData property %s is not supported", oDataProperty));
+        }
+        return sikriProperty + "=" + oDataValue;
     }
 }
