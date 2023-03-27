@@ -8,7 +8,7 @@ import no.fint.antlr.ODataParser;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ExternalSystemLinkCaseType;
 import no.fint.sikri.data.exception.IllegalCaseNumberFormat;
-import no.fint.sikri.data.exception.IllegalOdataFilterProperty;
+import no.fint.sikri.data.exception.IllegalOdataFilter;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.utilities.SikriObjectTypes;
@@ -34,7 +34,7 @@ public class CaseService {
         this.objectModelService = objectModelService;
         this.externalSystemLinkService = externalSystemLinkService;
 
-        relatedObjects = new String[] {
+        relatedObjects = new String[]{
                 SikriObjectTypes.PRIMARY_CLASSIFICATION,
                 SikriObjectTypes.SECONDARY_CLASSIFICATION,
                 SikriObjectTypes.ADMINISTRATIVE_UNIT
@@ -43,8 +43,13 @@ public class CaseService {
         odataFilterFieldMapper = new ImmutableMap.Builder<String, String>()
                 .put("saksaar", "CaseYear")
                 .put("sakssekvensnummer", "SequenceNumber")
+                .put("arkivdel", "SeriesId")
+                .put("tilgangskode", "AccessCodeId")
+                .put("saksmappetype", "FileTypeId")
+                .put("tittel", "Title")
+                .put("systemid", "Id")
+                .put("mappeid", "CaseYear='%s' AND SequenceNumber='%s'")
                 .build();
-
     }
 
     public Stream<CaseType> getCaseByCaseNumber(SikriIdentity identity, String caseNumber) throws IllegalCaseNumberFormat {
@@ -52,22 +57,22 @@ public class CaseService {
         String caseYear = NOARKUtils.getCaseYear(caseNumber);
 
         return objectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.CASE,
-                "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
-                0,
-                relatedObjects)
+                        identity,
+                        SikriObjectTypes.CASE,
+                        "SequenceNumber=" + sequenceNumber + " AND CaseYear=" + caseYear,
+                        0,
+                        relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
     }
 
     public Stream<CaseType> getCaseBySystemId(SikriIdentity identity, String systemId) {
         return objectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.CASE,
-                "Id=" + systemId,
-                0,
-                relatedObjects)
+                        identity,
+                        SikriObjectTypes.CASE,
+                        "Id=" + systemId,
+                        0,
+                        relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
     }
@@ -78,17 +83,17 @@ public class CaseService {
         final String filter = String.format("Title=%s", queryParams.get("title"));
         final int maxResult = Integer.parseInt((String) queryParams.getOrDefault("maxResult", "10"));
         return objectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.CASE,
-                filter,
-                maxResult,
-                relatedObjects)
+                        identity,
+                        SikriObjectTypes.CASE,
+                        filter,
+                        maxResult,
+                        relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
     }
 
-    public Stream<CaseType> getCaseByODataFilter(SikriIdentity identity, String query) throws IllegalOdataFilterProperty {
-        log.info("The Query, proudly present to you by the arkivlaget.io: " + query);
+    public Stream<CaseType> getCaseByODataFilter(SikriIdentity identity, String query) throws IllegalOdataFilter {
+        CaseService.log.info("The Query, proudly present to you by the arkivlaget.io: " + query);
 
         return objectModelService.getDataObjects(
                         identity,
@@ -102,12 +107,12 @@ public class CaseService {
 
     public Stream<CaseType> getCaseByExternalKey(SikriIdentity identity, String externalKey) {
         return objectModelService.getDataObjects(
-                identity,
-                SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE,
-                "ExternalSystem.ExternalSystemName="
-                        + externalSystemLinkService.getExternalSystemName()
-                        + " and ExternalKey="
-                        + externalKey)
+                        identity,
+                        SikriObjectTypes.EXTERNAL_SYSTEM_LINK_CASE,
+                        "ExternalSystem.ExternalSystemName="
+                                + externalSystemLinkService.getExternalSystemName()
+                                + " and ExternalKey="
+                                + externalKey)
                 .stream()
                 .map(ExternalSystemLinkCaseType.class::cast)
                 .map(ExternalSystemLinkCaseType::getCaseId)
@@ -116,7 +121,7 @@ public class CaseService {
                 .flatMap(systemId -> getCaseBySystemId(identity, systemId));
     }
 
-    private String getSikriFilterExpression(String query) throws IllegalOdataFilterProperty {
+    private String getSikriFilterExpression(String query) throws IllegalOdataFilter {
         ODataLexer lexer = new ODataLexer(CharStreams.fromString(query));
         CommonTokenStream commonTokens = new CommonTokenStream(lexer);
         ODataParser oDataParser = new ODataParser(commonTokens);
@@ -126,15 +131,26 @@ public class CaseService {
                 .collect(Collectors.joining(" AND "));
     }
 
-    private String fromODataToSikriComparisonFilter(ODataParser.ComparisonContext context) throws IllegalOdataFilterProperty {
+    private String fromODataToSikriComparisonFilter(ODataParser.ComparisonContext context) throws IllegalOdataFilter {
         String oDataProperty = context.property().getText();
         String oDataOperator = context.comparisonOperator().getText();
         String oDataValue = context.value().getText();
 
-        String sikriProperty = odataFilterFieldMapper.getOrDefault(oDataProperty, null);
+        String sikriProperty = odataFilterFieldMapper.get(oDataProperty);
         if (sikriProperty == null) {
-            throw new IllegalOdataFilterProperty(String.format("OData property %s is not supported", oDataProperty));
+            throw new IllegalOdataFilter(String.format("OData property %s is not supported", oDataProperty));
         }
-        return sikriProperty + "=" + oDataValue;
+
+        if (!oDataOperator.equals("eq")) {
+            throw new IllegalOdataFilter(String.format("OData operator %s is not supported. Currently only support for 'eq' operator.", oDataProperty));
+        }
+
+        if (oDataProperty.equals("mappeid")) {
+            String caseYear = NOARKUtils.getCaseYear(oDataValue).replace("'", "");
+            String sequenceNumber = NOARKUtils.getCaseSequenceNumber(oDataValue).replace("'", "");
+            return String.format(sikriProperty, caseYear, sequenceNumber);
+        }
+
+        return String.format("%s=%s", sikriProperty, oDataValue);
     }
 }
