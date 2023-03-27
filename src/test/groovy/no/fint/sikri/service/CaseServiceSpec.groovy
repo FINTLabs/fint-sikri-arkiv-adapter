@@ -35,6 +35,10 @@ class CaseServiceSpec extends Specification {
         "tittel eq 'Drosjeløyvesøknad'"                   || "Title='Drosjeløyvesøknad'"
         "mappeid eq '2023/12345'"                         || "CaseYear='2023' AND SequenceNumber='12345'"
         "systemid eq '123456'"                            || "Id='123456'"
+        "klassifikasjon/primar/ordning eq 'ORG'"          || "PrimaryClassification.ClassificationSystemId='ORG'"
+        "klassifikasjon/primar/verdi eq '888888888'"      || "PrimaryClassification.ClassId='888888888'"
+        "klassifikasjon/sekundar/ordning eq 'EMNE'"       || "SecondaryClassification.ClassificationSystemId='EMNE'"
+        "klassifikasjon/sekundar/verdi eq 'N12'"          || "SecondaryClassification.ClassId='N12'"
     }
 
     def "When unsupported ODataFilter property exception is thrown"() {

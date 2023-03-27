@@ -49,6 +49,10 @@ public class CaseService {
                 .put("tittel", "Title")
                 .put("systemid", "Id")
                 .put("mappeid", "CaseYear='%s' AND SequenceNumber='%s'")
+                .put("klassifikasjon/primar/ordning", "PrimaryClassification.ClassificationSystemId")
+                .put("klassifikasjon/primar/verdi", "PrimaryClassification.ClassId")
+                .put("klassifikasjon/sekundar/ordning", "SecondaryClassification.ClassificationSystemId")
+                .put("klassifikasjon/sekundar/verdi", "SecondaryClassification.ClassId")
                 .build();
     }
 
@@ -142,7 +146,7 @@ public class CaseService {
         }
 
         if (!oDataOperator.equals("eq")) {
-            throw new IllegalOdataFilter(String.format("OData operator %s is not supported. Currently only support for 'eq' operator.", oDataProperty));
+            throw new IllegalOdataFilter(String.format("OData operator %s is not supported. Currently only support for 'eq' operator.", oDataOperator));
         }
 
         if (oDataProperty.equals("mappeid")) {
