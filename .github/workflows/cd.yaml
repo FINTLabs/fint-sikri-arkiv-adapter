@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: fintlabsacr.azurecr.io/sikri-arkiv-adapter
+          images: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter
           tags: |
             type=ref,event=branch,suffix=-{{sha}}
             type=ref,event=pr,suffix=-{{sha}}
