@@ -34,8 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
-import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
+import static no.fint.sikri.data.utilities.SikriUtils.*;
 
 @Slf4j
 @Service
@@ -176,6 +175,14 @@ public class NoarkFactory {
         caseDefaultsService.applyDefaultsToCaseType(caseProperties, resource, caseType);
 
         caseType.setTitle(titleService.getCaseTitle(caseProperties.getTitle(), resource));
+
+        optionalValue(getShieldedTitle(resource.getOffentligTittel()))
+                .map(String::valueOf)
+                .ifPresent(caseType::setPublicTitle);
+
+        optionalValue(getMarkedTitle(resource.getOffentligTittel()))
+                .map(String::valueOf)
+                .ifPresent(caseType::setPublicTitleNames);
 
         additionalFieldService.getFieldsForResource(caseProperties.getField(), resource)
                 .forEach(field ->
