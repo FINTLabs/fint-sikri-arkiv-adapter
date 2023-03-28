@@ -85,16 +85,7 @@ public enum SikriUtils {
             return null;
         }
 
-        Matcher matcher = Pattern.compile(SHIELDED_REGEX_PATTERN).matcher(title);
-        String shieldedTitle = title;
-        while (matcher.find()) {
-            String match = matcher.group();
-            String shieldedMatch = match
-                    .replaceAll("[^\\ ]+", "*****");
-
-            shieldedTitle = shieldedTitle.replace(match, shieldedMatch);
-        }
-
+        String shieldedTitle = getCustomizedTitle(title, SHIELDED_REGEX_PATTERN, "*****");
         return cleanUpTitle(shieldedTitle, MARKED_REGEX_PATTERN);
     }
 
@@ -103,19 +94,23 @@ public enum SikriUtils {
             return null;
         }
 
-        Matcher matcher = Pattern.compile(MARKED_REGEX_PATTERN).matcher(title);
+        String markedTitle = getCustomizedTitle(title, MARKED_REGEX_PATTERN, "#####");
+        return cleanUpTitle(markedTitle, SHIELDED_REGEX_PATTERN);
+    }
+
+    private static String getCustomizedTitle(String title, String pattern, String replacement) {
+        Matcher matcher = Pattern.compile(pattern).matcher(title);
         String markedTitle = title;
         while (matcher.find()) {
             String match = matcher.group();
 
             String markedMatch = match
-                    .replaceAll("[^\\ ]+", "#####")
+                    .replaceAll("[^\\ ]+", replacement)
                     .replaceFirst("#####$", "####_");
 
             markedTitle = markedTitle.replace(match, markedMatch);
         }
-
-        return cleanUpTitle(markedTitle, SHIELDED_REGEX_PATTERN);
+        return markedTitle;
     }
 
     private static String cleanUpTitle(String title, String pattern) {
