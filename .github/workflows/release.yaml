@@ -21,7 +21,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: fintlabsacr.azurecr.io/sikri-arkiv-adapter
+          images: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter
           flavor: |
             latest=false
           tags: |
