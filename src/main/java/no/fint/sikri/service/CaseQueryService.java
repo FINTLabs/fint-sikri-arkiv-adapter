@@ -1,6 +1,7 @@
 package no.fint.sikri.service;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.extern.slf4j.Slf4j;
 import no.fint.antlr.FintFilterService;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.sikri.model.SikriIdentity;
@@ -11,6 +12,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class CaseQueryService {
     private static final String ODATA_FILTER_QUERY_OPTION = "$filter=";
     private final ImmutableMap<String, BiFunction<SikriIdentity, String, Stream<CaseType>>> queryMap;
@@ -31,7 +33,9 @@ public class CaseQueryService {
     }
 
     public boolean isValidQuery(String query) {
-        return StringUtils.startsWithAny(StringUtils.lowerCase(query), validQueries) || isODataQuery(query);
+        log.debug("Currently validating this query: {}", query);
+        //return StringUtils.startsWithAny(StringUtils.lowerCase(query), validQueries) || isODataQuery(query);
+        return StringUtils.startsWithAny(StringUtils.lowerCase(query), validQueries);
     }
 
     public Stream<CaseType> query(SikriIdentity identity, String query) {
@@ -40,15 +44,15 @@ public class CaseQueryService {
                 return queryMap.get(prefix).apply(identity, StringUtils.removeStartIgnoreCase(query, prefix));
             }
 
-            if (ODATA_FILTER_QUERY_OPTION.equals(prefix)) {
-                return queryMap.get(prefix).apply(identity, query);
-            }
+//            if (ODATA_FILTER_QUERY_OPTION.equals(prefix)) {
+//                return queryMap.get(prefix).apply(identity, query);
+//            }
         }
 
         throw new IllegalArgumentException("Invalid query: " + query);
     }
 
-    private boolean isODataQuery(String query) {
-        return oDataFilterService.validate(query);
-    }
+//    private boolean isODataQuery(String query) {
+//        return oDataFilterService.validate(query);
+//    }
 }

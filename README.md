@@ -53,3 +53,26 @@ Case types are linked to accounts using the properties of the following form:
 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true 
 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=100000
 ```
+
+# OData filter support
+This adapter have support for OData filtering of cases. That means it's now possible to
+get cases based on a OData filter, not only `mappeid`, `systemid` and `soknadsnummer`.
+The old filter (query param `title`) is now deprecated, use `$filter=tittel eq 'Tittel'` instead!
+
+We support `saksaar`, `sakssekvensnummer`, `arkivdel`, `tilgangskode`, `saksmappetype`,
+`tittel`, `mappeid`, `systemid` and primary and secundary `klassifikasjon`.
+
+### Examples
+- `$filter=saksaar eq '2023'`
+- `$filter=saksaar eq '2023' and sakssekvensnummer eq '42'`
+- `$filter=sakssekvensnummer eq '42'`
+- `$filter=arkivdel eq 'Drosje'`
+- `$filter=tilgangskode eq 'UO'`
+- `$filter=saksmappetype eq 'SAK'`
+- `$filter=tittel eq 'Drosjeløyvesøknad'`
+- `$filter=mappeid eq '2023/12345'`
+- `$filter=systemid eq '123456'`
+- `$filter=klassifikasjon/primar/ordning eq 'ORG'`
+- `$filter=klassifikasjon/primar/verdi eq '123456789'`
+- `$filter=klassifikasjon/sekundar/ordning eq 'EMNE'`
+- `$filter=klassifikasjon/sekundar/verdi eq 'N12'`

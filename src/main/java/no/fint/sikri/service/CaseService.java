@@ -30,7 +30,7 @@ public class CaseService {
     private final String[] relatedObjects;
     private final ImmutableMap<String, String> odataFilterFieldMapper;
 
-    public CaseService(SikriObjectModelService objectModelService, ExternalSystemLinkService externalSystemLinkService, FintFilterService oDataFilterService) {
+    public CaseService(SikriObjectModelService objectModelService, ExternalSystemLinkService externalSystemLinkService) {
         this.objectModelService = objectModelService;
         this.externalSystemLinkService = externalSystemLinkService;
 
@@ -83,6 +83,7 @@ public class CaseService {
 
     @Deprecated
     public Stream<CaseType> getCaseByFilter(SikriIdentity identity, String query) {
+        log.warn("..so you want to use this old deprecated stuff ({})?! We recommend the new fancy OData way.", query);
         final Map<String, Object> queryParams = getQueryParams("?" + query);
         final String filter = String.format("Title=%s", queryParams.get("title"));
         final int maxResult = Integer.parseInt((String) queryParams.getOrDefault("maxResult", "10"));
@@ -97,7 +98,7 @@ public class CaseService {
     }
 
     public Stream<CaseType> getCaseByODataFilter(SikriIdentity identity, String query) throws IllegalOdataFilter {
-        CaseService.log.info("The Query, proudly present to you by the arkivlaget.io: " + query);
+        log.debug("The Odata filtered case query, proudly present to you by arkivlaget.io: " + query);
 
         return objectModelService.getDataObjects(
                         identity,

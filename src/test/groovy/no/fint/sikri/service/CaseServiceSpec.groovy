@@ -1,6 +1,6 @@
 package no.fint.sikri.service
 
-import no.fint.antlr.FintFilterService
+
 import no.fint.sikri.data.exception.IllegalOdataFilter
 import no.fint.sikri.model.SikriIdentity
 import spock.lang.Specification
@@ -13,7 +13,7 @@ class CaseServiceSpec extends Specification {
     void setup() {
         sikriObjectModelService = Mock(SikriObjectModelService)
         caseService = new CaseService(sikriObjectModelService,
-                Mock(ExternalSystemLinkService), Mock(FintFilterService))
+                Mock(ExternalSystemLinkService))
     }
 
     def "Validate mapping for supported ODataFilters"() {
