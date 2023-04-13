@@ -2,7 +2,6 @@ package no.fint.sikri.service;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.antlr.FintFilterService;
 import no.fint.antlr.ODataLexer;
 import no.fint.antlr.ODataParser;
 import no.fint.arkiv.sikri.oms.CaseType;
@@ -104,7 +103,7 @@ public class CaseService {
                         identity,
                         SikriObjectTypes.CASE,
                         getSikriFilterExpression(query),
-                        10, // consider using 0 aka no limit
+                        0,
                         relatedObjects)
                 .stream()
                 .map(CaseType.class::cast);
