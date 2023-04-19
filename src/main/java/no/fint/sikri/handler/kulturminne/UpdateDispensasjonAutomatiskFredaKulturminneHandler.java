@@ -67,21 +67,24 @@ public class UpdateDispensasjonAutomatiskFredaKulturminneHandler implements Hand
 
     }
 
-    private void updateCase(Event<FintLinks> response, String query, DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
+    private void updateCase(Event<FintLinks> response, String query,
+                            DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
+
         if (dispensasjonAutomatiskFredaKulturminne.getJournalpost() == null ||
                 dispensasjonAutomatiskFredaKulturminne.getJournalpost().isEmpty()) {
-            throw new IllegalArgumentException("Update must contain at least one Journalpost");
+            throw new IllegalArgumentException("Update must contain at least one journalpost");
         }
 
-        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getDispensasjonAutomatiskFredaKulturminne(), dispensasjonAutomatiskFredaKulturminne);
-        log.debug("Complete document for update: {}", dispensasjonAutomatiskFredaKulturminne);
+        caseDefaultsService.applyDefaultsForUpdate(caseDefaults.getDispensasjonautomatiskfredakulturminne(),
+                dispensasjonAutomatiskFredaKulturminne);
+        log.debug("Updating case ({}) with: {}", query, dispensasjonAutomatiskFredaKulturminne);
 
         if (!validationService.validate(response, dispensasjonAutomatiskFredaKulturminne.getJournalpost())) {
             return;
         }
 
         try {
-            DispensasjonAutomatiskFredaKulturminneResource result = dispensasjonAutomatiskFredaKulturminneService.updateDispensasjonAutomatiskFredaKulturminneCase(query, dispensasjonAutomatiskFredaKulturminneResource);
+            DispensasjonAutomatiskFredaKulturminneResource result = dispensasjonAutomatiskFredaKulturminneService.updateDispensasjonAutomatiskFredaKulturminneCase(query, dispensasjonAutomatiskFredaKulturminne);
             response.setData(ImmutableList.of(result));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound e) {
@@ -91,8 +94,8 @@ public class UpdateDispensasjonAutomatiskFredaKulturminneHandler implements Hand
     }
 
     private void createCase(Event<FintLinks> response, DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
-        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getDispensasjonAutomatiskFredaKulturminne(), dispensasjonAutomatiskFredaKulturminne);
-        log.debug("Complete document for creation: {}", dispensasjonAutomatiskFredaKulturminne);
+        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getDispensasjonautomatiskfredakulturminne(), dispensasjonAutomatiskFredaKulturminne);
+        log.debug("Creating case: {}", dispensasjonAutomatiskFredaKulturminne);
 
         if (!validationService.validate(response, dispensasjonAutomatiskFredaKulturminne)) {
             return;

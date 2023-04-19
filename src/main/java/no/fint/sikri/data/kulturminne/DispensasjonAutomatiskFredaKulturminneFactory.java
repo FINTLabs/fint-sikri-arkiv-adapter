@@ -19,7 +19,9 @@ public class DispensasjonAutomatiskFredaKulturminneFactory {
     private final SikriIdentityService identityService;
     private final CaseDefaults caseDefaults;
 
-    public DispensasjonAutomatiskFredaKulturminneFactory(NoarkFactory noarkFactory, NoarkService noarkService, SikriIdentityService identityService, CaseDefaults caseDefaults) {
+    public DispensasjonAutomatiskFredaKulturminneFactory(NoarkFactory noarkFactory, NoarkService noarkService,
+            SikriIdentityService identityService, CaseDefaults caseDefaults) {
+
         this.noarkFactory = noarkFactory;
         this.noarkService = noarkService;
         this.identityService = identityService;
@@ -35,11 +37,11 @@ public class DispensasjonAutomatiskFredaKulturminneFactory {
 
         return noarkFactory.applyValuesForSaksmappe(
                 identity,
-                caseDefaults.getDispensasjonAutomatiskFredaKulturminne(),
+                caseDefaults.getDispensasjonautomatiskfredakulturminne(),
                 caseType, resource);
     }
 
     public CaseType toCaseType(DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminneResource) {
-        return noarkFactory.toCaseType(caseDefaults.getDispensasjonAutomatiskFredaKulturminne(), dispensasjonAutomatiskFredaKulturminneResource);
+        return noarkFactory.toCaseType(caseDefaults.getDispensasjonautomatiskfredakulturminne(), dispensasjonAutomatiskFredaKulturminneResource);
     }
 }
