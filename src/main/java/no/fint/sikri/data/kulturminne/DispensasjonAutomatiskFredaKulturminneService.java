@@ -20,9 +20,10 @@ public class DispensasjonAutomatiskFredaKulturminneService {
     private final CaseDefaults caseDefaults;
     private final SikriIdentityService identityService;
 
-    public DispensasjonAutomatiskFredaKulturminneService(NoarkService noarkService,
-        DispensasjonAutomatiskFredaKulturminneFactory dispensasjonAutomatiskFredaKulturminneFactory,
-        CaseQueryService caseQueryService, CaseDefaults caseDefaults, SikriIdentityService identityService) {
+    public DispensasjonAutomatiskFredaKulturminneService(
+            NoarkService noarkService,
+            DispensasjonAutomatiskFredaKulturminneFactory dispensasjonAutomatiskFredaKulturminneFactory,
+            CaseQueryService caseQueryService, CaseDefaults caseDefaults, SikriIdentityService identityService) {
 
         this.noarkService = noarkService;
         this.dispensasjonAutomatiskFredaKulturminneFactory = dispensasjonAutomatiskFredaKulturminneFactory;
@@ -31,12 +32,14 @@ public class DispensasjonAutomatiskFredaKulturminneService {
         this.identityService = identityService;
     }
 
-    public DispensasjonAutomatiskFredaKulturminneResource updateDispensasjonAutomatiskFredaKulturminneCase(String query,
-        DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminneResource) throws CaseNotFound {
+    public DispensasjonAutomatiskFredaKulturminneResource updateDispensasjonAutomatiskFredaKulturminneCase(
+            String query, DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminneResource)
+            throws CaseNotFound {
 
         log.debug("About to update a disp §8.1 case.");
         final SikriIdentity identity = identityService.getIdentityForClass(DispensasjonAutomatiskFredaKulturminneResource.class);
-        noarkService.updateCase(identity, caseDefaults.getDispensasjonautomatiskfredakulturminne(), query, dispensasjonAutomatiskFredaKulturminneResource);
+        noarkService.updateCase(identity, caseDefaults.getDispensasjonautomatiskfredakulturminne(), query,
+                dispensasjonAutomatiskFredaKulturminneResource);
 
         return caseQueryService
                 .query(identity, query)
@@ -45,11 +48,12 @@ public class DispensasjonAutomatiskFredaKulturminneService {
                 .orElseThrow(() -> new CaseNotFound("Unable to find updated case for query " + query));
     }
 
-    public DispensasjonAutomatiskFredaKulturminneResource createDispensasjonAutomatiskFredaKulturminneCase(DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
+    public DispensasjonAutomatiskFredaKulturminneResource createDispensasjonAutomatiskFredaKulturminneCase(
+            DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
+
         log.debug("About to create a disp §8.1 case.");
         final SikriIdentity identity = identityService.getIdentityForClass(DispensasjonAutomatiskFredaKulturminneResource.class);
-        final CaseType caseType = noarkService.createCase(
-                identity,
+        final CaseType caseType = noarkService.createCase(identity,
                 dispensasjonAutomatiskFredaKulturminneFactory.toCaseType(dispensasjonAutomatiskFredaKulturminne),
                 dispensasjonAutomatiskFredaKulturminne);
         noarkService.createExternalSystemLink(identity, caseType.getId(), dispensasjonAutomatiskFredaKulturminne.getSoknadsnummer());

@@ -19,7 +19,8 @@ public class DispensasjonAutomatiskFredaKulturminneFactory {
     private final SikriIdentityService identityService;
     private final CaseDefaults caseDefaults;
 
-    public DispensasjonAutomatiskFredaKulturminneFactory(NoarkFactory noarkFactory, NoarkService noarkService,
+    public DispensasjonAutomatiskFredaKulturminneFactory(
+            NoarkFactory noarkFactory, NoarkService noarkService,
             SikriIdentityService identityService, CaseDefaults caseDefaults) {
 
         this.noarkFactory = noarkFactory;

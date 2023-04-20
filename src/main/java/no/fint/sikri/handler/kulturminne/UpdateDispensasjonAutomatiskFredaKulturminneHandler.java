@@ -84,7 +84,9 @@ public class UpdateDispensasjonAutomatiskFredaKulturminneHandler implements Hand
         }
 
         try {
-            DispensasjonAutomatiskFredaKulturminneResource result = dispensasjonAutomatiskFredaKulturminneService.updateDispensasjonAutomatiskFredaKulturminneCase(query, dispensasjonAutomatiskFredaKulturminne);
+            DispensasjonAutomatiskFredaKulturminneResource result =
+                    dispensasjonAutomatiskFredaKulturminneService.updateDispensasjonAutomatiskFredaKulturminneCase(
+                            query, dispensasjonAutomatiskFredaKulturminne);
             response.setData(ImmutableList.of(result));
             response.setResponseStatus(ResponseStatus.ACCEPTED);
         } catch (CaseNotFound e) {
@@ -93,15 +95,20 @@ public class UpdateDispensasjonAutomatiskFredaKulturminneHandler implements Hand
         }
     }
 
-    private void createCase(Event<FintLinks> response, DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
-        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getDispensasjonautomatiskfredakulturminne(), dispensasjonAutomatiskFredaKulturminne);
+    private void createCase(Event<FintLinks> response,
+                            DispensasjonAutomatiskFredaKulturminneResource dispensasjonAutomatiskFredaKulturminne) {
+
+        caseDefaultsService.applyDefaultsForCreation(caseDefaults.getDispensasjonautomatiskfredakulturminne(),
+                dispensasjonAutomatiskFredaKulturminne);
         log.debug("Creating case: {}", dispensasjonAutomatiskFredaKulturminne);
 
         if (!validationService.validate(response, dispensasjonAutomatiskFredaKulturminne)) {
             return;
         }
 
-        DispensasjonAutomatiskFredaKulturminneResource result = dispensasjonAutomatiskFredaKulturminneService.createDispensasjonAutomatiskFredaKulturminneCase(dispensasjonAutomatiskFredaKulturminne);
+        DispensasjonAutomatiskFredaKulturminneResource result =
+                dispensasjonAutomatiskFredaKulturminneService
+                        .createDispensasjonAutomatiskFredaKulturminneCase(dispensasjonAutomatiskFredaKulturminne);
         response.setData(ImmutableList.of(result));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
     }
