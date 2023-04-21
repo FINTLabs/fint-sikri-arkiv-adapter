@@ -133,11 +133,11 @@ public class JournalpostFactory {
         registryEntry.setCaseId(caseId);
         registryEntry.setTitle(recordPrefix + journalpostResource.getTittel());
 
-        optionalValue(getShieldedTitle(journalpostResource.getOffentligTittel()))
+        optionalValue(getShieldedTitle(recordPrefix + journalpostResource.getOffentligTittel()))
                 .map(String::valueOf)
                 .ifPresent(registryEntry::setTitleRestricted);
 
-        optionalValue(getMarkedTitle(journalpostResource.getOffentligTittel()))
+        optionalValue(getMarkedTitle(recordPrefix + journalpostResource.getOffentligTittel()))
                 .map(String::valueOf)
                 .ifPresent(registryEntry::setTitlePersonNameTagged);
 
