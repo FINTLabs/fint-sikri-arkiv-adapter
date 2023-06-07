@@ -1,5 +1,6 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
 import no.fint.model.felles.kodeverk.iso.Landkode;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
+@Slf4j
 public class KorrespondansepartFactory {
 
     @Value("${fint.sikri.skip-internal-contacts:false}")
@@ -108,6 +110,8 @@ public class KorrespondansepartFactory {
                 .ifPresent(output::setTwoLetterCountryCode);
 
         String[] expectedContactTypes = skipInternalContacts ? new String[]{"EA", "EM", "EK"} : new String[]{"EA", "EM", "EK", "IA", "IM", "IK"};
+        log.debug("The boolean skipInternalContacs is set to {} resulting in these expected contact types: {}",
+                skipInternalContacts, expectedContactTypes);
 
         optionalValue(input.getKorrespondanseparttype()).map(List::stream)
                 .orElseGet(Stream::empty)
@@ -138,6 +142,8 @@ public class KorrespondansepartFactory {
                     }
                 });
 
+        log.debug("About to return the SenderRecipientType. Is it at recipient? Answer: {}. OfficerNameId: {}, AdministrativeUnitId: {}",
+                output.isIsRecipient(), output.getOfficerNameId(), output.getAdministrativeUnitId());
         return output;
     }
 }
