@@ -67,8 +67,8 @@ public class KorrespondansepartFactory {
 
         output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", recipientType));
 
-        log.debug("Based on the input, the recipientType is set to '{}, and the KorrespondansepartType to: {}'",
-                recipientType, output.getKorrespondanseparttype());
+        log.debug("Based on the input, the recipientType is set to {}, and the KorrespondansepartType to: {}. Size: {}",
+                recipientType, output.getKorrespondanseparttype(), output.getKorrespondanseparttype().size());
 
         return output;
     }
