@@ -43,6 +43,7 @@ public class CaseService {
                 .put("saksaar", "CaseYear")
                 .put("sakssekvensnummer", "SequenceNumber")
                 .put("arkivdel", "SeriesId")
+                .put("administrativenhet", "AdministrativeUnitId")
                 .put("tilgangskode", "AccessCodeId")
                 .put("saksmappetype", "FileTypeId")
                 .put("tittel", "Title")
