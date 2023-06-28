@@ -60,7 +60,7 @@ get cases based on a OData filter, not only `mappeid`, `systemid` and `soknadsnu
 The old filter (query param `title`) is now deprecated, use `$filter=tittel eq 'Tittel'` instead!
 FYI: The title filter is by nature a contains so you don't need a complete title.
 
-We support `saksaar`, `sakssekvensnummer`, `arkivdel`, `tilgangskode`, `saksmappetype`,
+We support `saksaar`, `sakssekvensnummer`, `arkivdel`, `administrativenhet`, `tilgangskode`, `saksmappetype`,
 `tittel`, `mappeid`, `systemid` and primary and secundary `klassifikasjon`.
 
 ### Examples
@@ -68,6 +68,7 @@ We support `saksaar`, `sakssekvensnummer`, `arkivdel`, `tilgangskode`, `saksmapp
 - `$filter=saksaar eq '2023' and sakssekvensnummer eq '42'`
 - `$filter=sakssekvensnummer eq '42'`
 - `$filter=arkivdel eq 'Drosje'`
+- `$filter=administrativenhet eq '1337'`
 - `$filter=tilgangskode eq 'UO'`
 - `$filter=saksmappetype eq 'SAK'`
 - `$filter=tittel eq 'Drosjeløyvesøknad'`
