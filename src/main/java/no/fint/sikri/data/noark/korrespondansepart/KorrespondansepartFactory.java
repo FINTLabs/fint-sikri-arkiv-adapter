@@ -148,8 +148,9 @@ public class KorrespondansepartFactory {
                     }
                 });
 
-        log.debug("About to return the SenderRecipientType. Is it at recipient? Answer: {}. OfficerNameId: {}, AdministrativeUnitId: {}",
+        log.debug("About to return the SenderRecipientType. Is it at recipient? Answer: {}. OfficerNameId: {}, AdministrativeUnitId: {}.",
                 output.isIsRecipient(), output.getOfficerNameId(), output.getAdministrativeUnitId());
+        log.debug("The SenderRecipientType was made based on this input (KorrespondansepartResource): {}", input.getKorrespondanseparttype());
         return output;
     }
 }
