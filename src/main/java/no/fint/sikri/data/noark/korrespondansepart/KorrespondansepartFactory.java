@@ -116,7 +116,7 @@ public class KorrespondansepartFactory {
                 .ifPresent(output::setTwoLetterCountryCode);
 
         String[] expectedContactTypes = skipInternalContacts ? new String[]{"EA", "EM", "EK"} : new String[]{"EA", "EM", "EK", "IA", "IM", "IK"};
-        log.debug("The boolean skipInternalContacs is set to {} resulting in these expected contact types: {}",
+        log.debug("The boolean skipInternalContacts is set to {} resulting in these expected contact types: {}",
                 skipInternalContacts, expectedContactTypes);
 
         optionalValue(input.getKorrespondanseparttype()).map(List::stream)
@@ -127,6 +127,7 @@ public class KorrespondansepartFactory {
                 .filter(s -> StringUtils.equalsAny(s, expectedContactTypes))
                 .findFirst()
                 .ifPresent(type -> {
+                    log.debug("Currently giving the type '{}' some TLC.", type);
                     output.setCopyRecipient(false);
                     output.setIsRecipient(false);
                     output.setIsResponsible(false);
