@@ -78,7 +78,6 @@ public class JournalpostFactory {
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
         // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
 
-
         // FIXME: 2019-05-08 check for empty
         journalpost.setReferanseArkivDel(Collections.emptyList());
 

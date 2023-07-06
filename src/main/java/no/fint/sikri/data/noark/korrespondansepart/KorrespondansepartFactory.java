@@ -69,7 +69,6 @@ public class KorrespondansepartFactory {
 
         log.debug("AdministrativeUnitId: {}, OfficerNameId: {}, IsCopyRecipient: {}, IsRecipient: {}",
                 input.getAdministrativeUnitId(), input.getOfficerNameId(), input.isCopyRecipient(), input.isIsRecipient());
-
         log.debug("Based on the input, the recipientType is set to {}, and the KorrespondansepartType to: {}. Size: {}",
                 recipientType, output.getKorrespondanseparttype(), output.getKorrespondanseparttype().size());
 
@@ -127,7 +126,7 @@ public class KorrespondansepartFactory {
                 .filter(s -> StringUtils.equalsAny(s, expectedContactTypes))
                 .findFirst()
                 .ifPresent(type -> {
-                    log.debug("Currently giving the type '{}' some TLC.", type);
+                    log.trace("Currently giving the type '{}' some TLC.", type);
                     output.setCopyRecipient(false);
                     output.setIsRecipient(false);
                     output.setIsResponsible(false);
@@ -149,9 +148,11 @@ public class KorrespondansepartFactory {
                     }
                 });
 
-        log.debug("About to return the SenderRecipientType. Is it at recipient? Answer: {}. OfficerNameId: {}, AdministrativeUnitId: {}.",
+        log.debug("About to return the SenderRecipientType. IsRecipient: {}, OfficerNameId: {}, AdministrativeUnitId: {}.",
                 output.isIsRecipient(), output.getOfficerNameId(), output.getAdministrativeUnitId());
-        log.debug("The SenderRecipientType was made based on this input (KorrespondansepartResource): {}", input.getKorrespondanseparttype());
+        log.debug("The SenderRecipientType was made based on this input (KorrespondansepartResource): {}",
+                input.getKorrespondanseparttype());
+
         return output;
     }
 }
