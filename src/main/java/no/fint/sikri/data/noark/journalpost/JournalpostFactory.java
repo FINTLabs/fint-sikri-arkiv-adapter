@@ -78,7 +78,6 @@ public class JournalpostFactory {
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
         // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
 
-
         // FIXME: 2019-05-08 check for empty
         journalpost.setReferanseArkivDel(Collections.emptyList());
 
@@ -108,6 +107,9 @@ public class JournalpostFactory {
             }
             return korrespondansepartResource;
         }).collect(Collectors.toList()));
+        log.debug("There are currently {} korrespondansepart(s) on this journalpost aka number {}.",
+                journalpost.getKorrespondansepart().size(), journalpost.getJournalPostnummer());
+
         journalpost.setMerknad(merknadService.getRemarkForRegistryEntry(identity, result.getId().toString()));
 
         journalpost.setDokumentbeskrivelse(dokumentbeskrivelseService.queryForJournalpost(identity,

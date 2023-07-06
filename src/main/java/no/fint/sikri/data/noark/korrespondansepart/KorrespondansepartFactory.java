@@ -1,5 +1,6 @@
 package no.fint.sikri.data.noark.korrespondansepart;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
 import no.fint.model.felles.kodeverk.iso.Landkode;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 import static no.fint.sikri.data.utilities.SikriUtils.optionalValue;
 
 @Service
+@Slf4j
 public class KorrespondansepartFactory {
 
     @Value("${fint.sikri.skip-internal-contacts:false}")
@@ -65,6 +67,11 @@ public class KorrespondansepartFactory {
 
         output.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", recipientType));
 
+        log.debug("AdministrativeUnitId: {}, OfficerNameId: {}, IsCopyRecipient: {}, IsRecipient: {}",
+                input.getAdministrativeUnitId(), input.getOfficerNameId(), input.isCopyRecipient(), input.isIsRecipient());
+        log.debug("Based on the input, the recipientType is set to {}, and the KorrespondansepartType to: {}. Size: {}",
+                recipientType, output.getKorrespondanseparttype(), output.getKorrespondanseparttype().size());
+
         return output;
     }
 
@@ -108,6 +115,8 @@ public class KorrespondansepartFactory {
                 .ifPresent(output::setTwoLetterCountryCode);
 
         String[] expectedContactTypes = skipInternalContacts ? new String[]{"EA", "EM", "EK"} : new String[]{"EA", "EM", "EK", "IA", "IM", "IK"};
+        log.debug("The boolean skipInternalContacts is set to {} resulting in these expected contact types: {}",
+                skipInternalContacts, expectedContactTypes);
 
         optionalValue(input.getKorrespondanseparttype()).map(List::stream)
                 .orElseGet(Stream::empty)
@@ -117,6 +126,7 @@ public class KorrespondansepartFactory {
                 .filter(s -> StringUtils.equalsAny(s, expectedContactTypes))
                 .findFirst()
                 .ifPresent(type -> {
+                    log.trace("Currently giving the type '{}' some TLC.", type);
                     output.setCopyRecipient(false);
                     output.setIsRecipient(false);
                     output.setIsResponsible(false);
@@ -137,6 +147,11 @@ public class KorrespondansepartFactory {
                         output.setIsRecipient(true);
                     }
                 });
+
+        log.debug("About to return the SenderRecipientType. IsRecipient: {}, OfficerNameId: {}, AdministrativeUnitId: {}.",
+                output.isIsRecipient(), output.getOfficerNameId(), output.getAdministrativeUnitId());
+        log.debug("The SenderRecipientType was made based on this input (KorrespondansepartResource): {}",
+                input.getKorrespondanseparttype());
 
         return output;
     }
