@@ -118,3 +118,5 @@ spec:
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
+            - {name: logging.level.org.springframework.security, value: 'warn'}
+            - {name: logging.level.org.springframework.security.web.FilterChainProxy, value: 'warn'}

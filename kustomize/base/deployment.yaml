@@ -77,5 +77,3 @@ spec:
             - {name: fint.sikri.wsdl-location, value: /app }
             - {name: logging.level.no.fint.arkiv, value: trace}
             - {name: logging.level.no.fint.sikri, value: trace}
-            - {name: logging.level.org.springframework.security, value: 'warn'}
-            - {name: logging.level.org.springframework.security.web.FilterChainProxy, value: 'warn'}
