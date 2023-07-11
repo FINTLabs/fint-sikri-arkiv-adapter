@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adapter-sikri-arkiv
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: adapter-sikri-arkiv
+  template:
+    metadata:
+      labels:
+        app: adapter-sikri-arkiv
+      annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "8080"
+          prometheus.io/path: "prometheus"
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: tempdir
+          emptyDir: 
+            sizeLimit: 1G
+      containers:
+        - name: adapter-sikri-arkiv
+          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-06-28-7f3378c
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+            requests:
+              memory: "1Gi"
+              cpu: "250m"
+          ports:
+            - containerPort: 8091
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: tempdir
+              mountPath: /temp
+          env:
+            - {name: TZ, value: Europe/Oslo}
+            - name: JAVA_TOOL_OPTIONS
+              value: >-
+                -Xmx1G -verbose:gc
+                -XX:+ExitOnOutOfMemoryError
+                -Dfile.encoding=UTF-8
+                -Dcom.sun.security.enableAIAcaIssuers=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
+            - {name: security.basic.enabled, value: "false"}
+            - {name: endpoints.enabled, value: "false"}
+            - {name: endpoints.sensitive, value: "false"}
+            - {name: endpoints.health.enabled, value: "true" }
+            - {name: endpoints.prometheus.enabled, value: "true" }
+            - {name: endpoints.metrics.enabled, value: "true" }
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
+            - {name: fint.adapter.endpoints.providers.samferdsel, value: https://beta.felleskomponent.no/arkiv/samferdsel/provider}
+            - {name: fint.adapter.reject-unknown-events, value: 'false'}
+            - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
+            - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
+            - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
+            - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
+            - {name: fint.file-cache.directory, value: '/temp'}
+            - {name: fint.sikri.wsdl-location, value: /app }
+            - {name: logging.level.no.fint.arkiv, value: trace}
+            - {name: logging.level.no.fint.sikri, value: trace}
+            - {name: logging.level.org.springframework.security, value: 'warn'}
+            - {name: logging.level.org.springframework.security.web.FilterChainProxy, value: 'warn'}
