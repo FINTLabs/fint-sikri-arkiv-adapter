@@ -62,6 +62,7 @@ jobs:
       contents: read
       packages: write
     strategy:
+      fail-fast: false
       matrix:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
 
