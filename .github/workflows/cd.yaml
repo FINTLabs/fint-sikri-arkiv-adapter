@@ -83,10 +83,9 @@ jobs:
           resource-group: ${{ env.BETA_CLUSTER_RESOURCE_GROUP }}
 
       - name: Deploy
-        if: github.ref == 'refs/heads/main'
+#        if: github.ref == 'refs/heads/main'
         uses: azure/k8s-deploy@v4
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ needs.build-and-publish.outputs.tags }}
-          namespace: ${{ matrix.org }}
+#         images: ${{ needs.build-and-publish.outputs.tags }}
