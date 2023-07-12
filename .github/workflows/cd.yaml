@@ -77,6 +77,8 @@ jobs:
 
       - name: Set up kubelogin
         uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.30'
 
       - name: Login to Azure
         uses: azure/login@v1
