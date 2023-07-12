@@ -75,10 +75,14 @@ jobs:
           renderEngine: 'kustomize'
           kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/beta'
 
-      - name: Set the target cluster
-        uses: azure/aks-set-context@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          creds: '${{ secrets.AKS_BETA_FINT_GITHUB }}'
+          creds: ${{ secrets.AKS_BETA_FINT_GITHUB }}
+
+      - name: Set the target cluster
+        uses: azure/aks-set-context@v3
+        with:
           cluster-name: ${{ env.BETA_CLUSTER_NAME }}
           resource-group: ${{ env.BETA_CLUSTER_RESOURCE_GROUP }}
 
