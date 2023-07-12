@@ -13,7 +13,6 @@ on:
    #   - master
 
 env:
-  REGISTRY_NAME: fintlabsacr
   BETA_CLUSTER_NAME: aks-beta-fint-2021-11-23
   BETA_CLUSTER_RESOURCE_GROUP: rg-aks-beta
 
@@ -33,20 +32,19 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch,suffix=-{{sha}}
             type=ref,event=pr,suffix=-{{sha}}
             type=sha,prefix={{date 'YYYY-MM-DD-'}},enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Login to ACR
-        uses: Azure/docker-login@v1
-        if: github.actor != 'dependabot[bot]'
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2.2.0
         with:
-          login-server: fintlabsacr.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         uses: docker/build-push-action@v4
@@ -58,6 +56,7 @@ jobs:
   deploy-to-aks:
     runs-on: ubuntu-latest
     needs: build-and-publish
+#   if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
       packages: write
@@ -84,7 +83,6 @@ jobs:
           resource-group: ${{ env.BETA_CLUSTER_RESOURCE_GROUP }}
 
       - name: Deploy
-#       if: github.ref == 'refs/heads/main'
         uses: azure/k8s-deploy@v4
         with:
           action: deploy
