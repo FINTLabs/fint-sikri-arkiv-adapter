@@ -7,7 +7,6 @@ spec:
     spec:
       containers:
         - name: adapter-sikri-arkiv
-          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
           envFrom:
             - secretRef:
                 name: innlandet-arkiv-sikri

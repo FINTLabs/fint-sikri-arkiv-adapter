@@ -58,7 +58,20 @@ jobs:
       fail-fast: false
       matrix:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
-        cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
+        cluster: [ aks-beta-fint-2021-11-23 ]
+        include: 
+          - org: innlandetfylke-no
+            cluster: aks-beta-fint-2021-11-23
+            version: 2023-04-21-01fd91d
+          - org: mrfylke-no
+            cluster: aks-beta-fint-2021-11-23
+            version: 2023-04-21-01fd91d
+          - org: rogfk-no
+            cluster: aks-beta-fint-2021-11-23
+            version: 2023-04-21-01fd91d
+          - org: viken-no
+            cluster: aks-beta-fint-2021-11-23
+            version: 2023-06-28-7f3378c
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
@@ -97,7 +110,7 @@ jobs:
             export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --set-exit-code"
           }
           {
-            echo '```bash'
+            echo '```bash
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
             echo '```'
           } >> $GITHUB_STEP_SUMMARY
@@ -107,4 +120,4 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-#         images: ${{ needs.build-and-publish.outputs.tags }}
+          images: ${{ matrix.version == '' && needs.build-and-publish.outputs.tags || format('ghcr.io/{0}:{1}', github.repository, matrix.version) }}

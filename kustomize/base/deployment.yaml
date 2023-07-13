@@ -26,7 +26,7 @@ spec:
             sizeLimit: 1G
       containers:
         - name: adapter-sikri-arkiv
-          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-06-28-7f3378c
+          image: ghcr.io/fintlabs/fint-sikri-arkiv-adapter:empty
           resources:
             limits:
               memory: "2Gi"
