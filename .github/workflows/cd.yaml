@@ -58,16 +58,7 @@ jobs:
       fail-fast: false
       matrix:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
-        cluster: [ aks-beta-fint-2021-11-23 ]
-        include: 
-          - org: innlandetfylke-no
-            cluster: aks-api-fint-2022-02-08
-          - org: mrfylke-no
-            cluster: aks-api-fint-2022-02-08
-          - org: rogfk-no
-            cluster: aks-api-fint-2022-02-08
-          - org: viken-no
-            cluster: aks-api-fint-2022-02-08
+        cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
@@ -109,7 +100,6 @@ jobs:
             echo '```bash'
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
             echo '```'
-
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Deploy to Kubernetes
