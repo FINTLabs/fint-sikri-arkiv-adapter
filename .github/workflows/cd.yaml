@@ -100,7 +100,7 @@ jobs:
       - name: Output kubectl diff summary 
         run: |
           {
-            brew install homeport/tap/dyff
+            /home/linuxbrew/.linuxbrew/bin/brew install homeport/tap/dyff
             export KUBECTL_EXTERNAL_DIFF="dyff between --omit-header --set-exit-code"
           }
           {
