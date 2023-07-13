@@ -95,5 +95,10 @@ spec:
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
             - {name: fint.sikri.wsdl-location, value: /app }
+
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
+            - {name: fint.adapter.endpoints.providers.samferdsel, value: https://beta.felleskomponent.no/arkiv/samferdsel/provider}
             - {name: logging.level.no.fint.arkiv, value: info}
             - {name: logging.level.no.fint.sikri, value: info}

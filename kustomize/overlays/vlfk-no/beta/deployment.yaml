@@ -23,6 +23,10 @@ spec:
                 -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=5000
+            - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
+            - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
+            - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
+            - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
             - {name: springfox.title, value: "Elements Adapter for Vestland"}
             - {name: fint.case.coding.journalposttype.I, value: 'I'}
             - {name: fint.case.coding.journalposttype.N, value: 'N'}
@@ -103,3 +107,7 @@ spec:
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.skip-internal-contacts, value: 'false' }
             - {name: fint.sikri.variantformat, value: 'P'}
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
+            - {name: fint.adapter.endpoints.providers.samferdsel, value: https://beta.felleskomponent.no/arkiv/samferdsel/provider}

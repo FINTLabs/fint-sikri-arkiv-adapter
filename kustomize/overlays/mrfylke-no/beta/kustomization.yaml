@@ -28,17 +28,3 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/name
         value: "adapter-sikri-arkiv-mrfylke-no"
-    
-# remove fint.case.coding.format.* from base 🫣
-  - target:
-      kind: Deployment
-      name: adapter-sikri-arkiv
-    patch: |-
-      - op: remove
-        path: "/spec/template/spec/containers/0/env/89"
-      - op: remove
-        path: "/spec/template/spec/containers/0/env/88"
-      - op: remove
-        path: "/spec/template/spec/containers/0/env/87"
-      - op: remove
-        path: "/spec/template/spec/containers/0/env/86"
