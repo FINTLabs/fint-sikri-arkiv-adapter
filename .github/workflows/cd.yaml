@@ -120,4 +120,4 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ matrix.version == '' && needs.build-and-publish.outputs.tags || format('ghcr.io/{0}:{1}', github.repository, matrix.version) }}
+          images: ${{ matrix.version && format('fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:{0}', matrix.version) || needs.build-and-publish.outputs.tags }}
