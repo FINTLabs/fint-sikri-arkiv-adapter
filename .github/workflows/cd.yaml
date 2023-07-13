@@ -120,4 +120,4 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ matrix.use-image-from-overlay && '' || needs.build-and-publish.outputs.tags }}
+          images: ${{ matrix.use-image-from-overlay && 'none:none' || needs.build-and-publish.outputs.tags }}
