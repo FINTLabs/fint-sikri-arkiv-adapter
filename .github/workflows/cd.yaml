@@ -61,6 +61,8 @@ jobs:
         include: 
           - org: innlandetfylke-no
             cluster: aks-api-fint-2022-02-08
+          - org: mrfylke-no
+            cluster: aks-api-fint-2022-02-08
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
