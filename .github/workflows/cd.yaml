@@ -62,14 +62,15 @@ jobs:
           - org: innlandetfylke-no
             environment: aks-api-fint-2022-02-08
     environment:
-      name: ${{ matrix.org }}-${{env.ENVIRONMENT}}
+      name: ${{ matrix.org }}-${{ matrix.cluster }}
 
     steps: 
       - uses: actions/checkout@v3
 
       - name: Set version witout prefix
+        id: environment
         run: |
-          echo "ENVIRONMENT=$(cut -d\- -f2 <<< ${{ matrix.cluster }})" >> $GITHUB_ENV
+          cut -d\- -f2 <<< ${{ matrix.cluster }}
 
       - name: Bake manifests with Kustomize
         id: bake
