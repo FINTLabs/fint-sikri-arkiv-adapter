@@ -110,7 +110,7 @@ jobs:
             export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --set-exit-code"
           }
           {
-            echo '```bash
+            echo '```bash'
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
             echo '```'
           } >> $GITHUB_STEP_SUMMARY
