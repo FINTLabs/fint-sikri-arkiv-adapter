@@ -70,7 +70,7 @@ jobs:
       - name: Set version witout prefix
         id: environment
         run: |
-          cut -d\- -f2 <<< ${{ matrix.cluster }}
+          echo "result=$(cut -d\- -f2 <<< ${{ matrix.cluster }})" >> $GITHUB_OUTPUT
 
       - name: Bake manifests with Kustomize
         id: bake
