@@ -103,12 +103,12 @@ jobs:
           {
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
             brew install homeport/tap/dyff
-            export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --omit-header --set-exit-code"
+            export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --set-exit-code"
           }
           {
-            echo "```bash"
+            echo '```bash'
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
-            echo "```"
+            echo '```'
 
           } >> $GITHUB_STEP_SUMMARY
 
