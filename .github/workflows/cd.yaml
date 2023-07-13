@@ -63,6 +63,8 @@ jobs:
             cluster: aks-api-fint-2022-02-08
           - org: mrfylke-no
             cluster: aks-api-fint-2022-02-08
+          - org: rogfk-no
+            cluster: aks-api-fint-2022-02-08
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
@@ -92,7 +94,14 @@ jobs:
           cluster-name: ${{ matrix.cluster }}
           resource-group: rg-aks-${{ steps.environment.outputs.name }}
           admin: true
-          
+
+      - name: Output kubectl diff summary 
+        run: |
+          {
+            echo "# `kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }}`"
+            echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
+          } >> $GITHUB_STEP_SUMMARY
+
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v4
         with:
