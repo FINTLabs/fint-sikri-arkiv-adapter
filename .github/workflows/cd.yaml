@@ -12,10 +12,6 @@ on:
    #branches-ignore:
    #   - master
 
-env:
-  BETA_CLUSTER_NAME: aks-beta-fint-2021-11-23
-  BETA_CLUSTER_RESOURCE_GROUP: rg-aks-beta
-
 jobs:
 
   build-and-publish:
@@ -61,30 +57,35 @@ jobs:
       fail-fast: false
       matrix:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
-        environment: [ beta ]
+        cluster: [ aks-beta-fint-2021-11-23 ]
     environment:
-      name: ${{ matrix.org }}-${{ matrix.environment }}
+      name: ${{ matrix.org }}-${{ steps.environment.outputs.result }}
 
     steps: 
       - uses: actions/checkout@v3
+
+      - name: Set version witout prefix
+        id: environment
+        run: |
+          cut -d\- -f2 <<< ${{ matrix.cluster }}
 
       - name: Bake manifests with Kustomize
         id: bake
         uses: azure/k8s-bake@v2
         with:
           renderEngine: 'kustomize'
-          kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/beta'
+          kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/${{ steps.environment.outputs.result }}'
 
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AKS_BETA_FINT_GITHUB }}
+          creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.result)] }}"
 
       - name: Set the target cluster
         uses: azure/aks-set-context@v3
         with:
-          cluster-name: ${{ env.BETA_CLUSTER_NAME }}
-          resource-group: ${{ env.BETA_CLUSTER_RESOURCE_GROUP }}
+          cluster-name: ${{ matrix.cluster }}
+          resource-group: rg-aks-${{ steps.environment.outputs.result }}
           admin: true
           
       - name: Deploy to Kubernetes
