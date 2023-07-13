@@ -60,35 +60,35 @@ jobs:
         cluster: [ aks-beta-fint-2021-11-23 ]
         include: 
           - org: innlandetfylke-no
-            environment: aks-api-fint-2022-02-08
+            cluster: aks-api-fint-2022-02-08
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
     steps: 
       - uses: actions/checkout@v3
 
-      - name: Set version witout prefix
+      - name: Get environment
         id: environment
         run: |
-          echo "result=$(cut -d\- -f2 <<< ${{ matrix.cluster }})" >> $GITHUB_OUTPUT
+          echo "name=$(cut -d\- -f2 <<< ${{ matrix.cluster }})" >> $GITHUB_OUTPUT
 
       - name: Bake manifests with Kustomize
         id: bake
         uses: azure/k8s-bake@v2
         with:
           renderEngine: 'kustomize'
-          kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/${{ steps.environment.outputs.result }}'
+          kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/${{ steps.environment.outputs.name }}'
 
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.result)] }}"
+          creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.name)] }}"
 
       - name: Set the target cluster
         uses: azure/aks-set-context@v3
         with:
           cluster-name: ${{ matrix.cluster }}
-          resource-group: rg-aks-${{ steps.environment.outputs.result }}
+          resource-group: rg-aks-${{ steps.environment.outputs.name }}
           admin: true
           
       - name: Deploy to Kubernetes
