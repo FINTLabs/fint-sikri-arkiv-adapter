@@ -62,16 +62,16 @@ jobs:
         include: 
           - org: innlandetfylke-no
             cluster: aks-beta-fint-2021-11-23
-            image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
+            use-image-from-overlay: true
           - org: mrfylke-no
             cluster: aks-beta-fint-2021-11-23
-            image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
+            use-image-from-overlay: true
           - org: rogfk-no
             cluster: aks-beta-fint-2021-11-23
-            image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
+            use-image-from-overlay: true
           - org: viken-no
             cluster: aks-beta-fint-2021-11-23
-            image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-06-28-7f3378c
+            use-image-from-overlay: true
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
@@ -120,4 +120,4 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ matrix.image && matrix.image || needs.build-and-publish.outputs.tags }}
+          images: ${{ matrix.use-image-from-overlay && '' || needs.build-and-publish.outputs.tags }}
