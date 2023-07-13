@@ -65,6 +65,8 @@ jobs:
             cluster: aks-api-fint-2022-02-08
           - org: rogfk-no
             cluster: aks-api-fint-2022-02-08
+          - org: viken-no
+            cluster: aks-api-fint-2022-02-08
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
@@ -98,8 +100,14 @@ jobs:
       - name: Output kubectl diff summary 
         run: |
           {
+            brew install homeport/tap/dyff
+            export KUBECTL_EXTERNAL_DIFF="dyff between --omit-header --set-exit-code"
+          }
+          {
             echo "# `kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }}`"
+            echo "```"
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
+            echo "```"
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Deploy to Kubernetes
