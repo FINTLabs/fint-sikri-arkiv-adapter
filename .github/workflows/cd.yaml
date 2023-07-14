@@ -7,10 +7,8 @@ on:
       - master
     types: [closed]
   push:
-    branches:
-      - kustomize
-   #branches-ignore:
-   #   - master
+   branches-ignore:
+      - master
 
 jobs:
 
@@ -50,7 +48,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy-to-aks:
-    #if: github.ref == 'refs/heads/main'
     name: ${{ matrix.org }}-${{ matrix.cluster }}
     runs-on: ubuntu-latest
     needs: build-and-publish
@@ -109,6 +106,11 @@ jobs:
           cluster-name: ${{ matrix.cluster }}
           resource-group: rg-aks-${{ steps.environment.outputs.name }}
           admin: true
+       
+      - if: github.ref != 'refs/heads/master'
+        run: |
+          echo "## Dry run - not a real deploy" >> $GITHUB_STEP_SUMMARY
+          echo "To deploy, merge to master." >> $GITHUB_STEP_SUMMARY
 
       - name: Output kubectl diff summary 
         run: |
@@ -124,6 +126,7 @@ jobs:
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Deploy to Kubernetes
+        if: github.ref == 'refs/heads/master'
         uses: azure/k8s-deploy@v4
         with:
           action: deploy
