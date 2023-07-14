@@ -68,6 +68,10 @@ jobs:
           - org: rogfk-no
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
+
+          - org: afk-no
+            cluster: aks-beta-fint-2021-11-23
+            force-deploy: true
           
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
@@ -99,7 +103,7 @@ jobs:
           resource-group: rg-aks-${{ steps.environment.outputs.name }}
           admin: true
        
-      - if: github.ref != 'refs/heads/master'
+      - if: github.ref != 'refs/heads/master' && matrix.force-deploy != true
         run: |
           echo "## Dry run - not a real deploy" >> $GITHUB_STEP_SUMMARY
           echo "To deploy, merge to master." >> $GITHUB_STEP_SUMMARY
@@ -118,7 +122,7 @@ jobs:
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Deploy to Kubernetes
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || matrix.force-deploy == true
         uses: azure/k8s-deploy@v4
         with:
           action: deploy

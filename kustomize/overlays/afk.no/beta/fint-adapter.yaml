@@ -1,0 +1,14 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintAdapter
+metadata:
+  name: sikri-arkiv-beta
+
+spec:
+  orgId: afk.no
+  note: Brukes av sikri-arkiv-adapter. Automatisk opprettet ved oppretting av adapter.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_kulturminnevern
+    - arkiv_samferdsel
+    - arkiv_personal
