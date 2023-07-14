@@ -7,7 +7,6 @@ spec:
     spec:
       containers:
         - name: adapter-sikri-arkiv
-          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-07-06-b72de4c
           resources:
             limits:
               memory: "9Gi"

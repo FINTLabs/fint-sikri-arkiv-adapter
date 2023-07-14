@@ -58,7 +58,7 @@ jobs:
       fail-fast: false
       matrix:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
-        cluster: [ aks-beta-fint-2021-11-23 ]
+        cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - org: innlandetfylke-no
             cluster: aks-beta-fint-2021-11-23
@@ -69,9 +69,17 @@ jobs:
           - org: rogfk-no
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
-          - org: viken-no
-            cluster: aks-beta-fint-2021-11-23
+
+          - org: innlandetfylke-no
+            cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
+          - org: mrfylke-no
+            cluster: aks-api-fint-2022-02-08
+            use-image-from-overlay: true
+          - org: rogfk-no
+            cluster: aks-api-fint-2022-02-08
+            use-image-from-overlay: true
+          
     environment:
       name: ${{ matrix.org }}-${{ matrix.cluster }}
 
