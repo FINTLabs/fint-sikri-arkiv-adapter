@@ -72,9 +72,6 @@ jobs:
           - org: afk-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
-          
-    environment:
-      name: ${{ matrix.org }}-${{ matrix.cluster }}
 
     steps: 
       - uses: actions/checkout@v3
