@@ -11,12 +11,12 @@ fint:
 
   oauth:
     enabled: true
-  #    username:
-  #    password:
-  #    client-id:
-  #    client-secret:
-  #    access-token-uri:
-  #    scope:
+    username: ${fint.core.oauth2.username}
+    password: ${fint.core.oauth2.password}
+    client-id: ${fint.core.oauth2.client-id}
+    client-secret: ${fint.core.oauth2.client-secret}
+#    access-token-uri:
+#    scope:
 
 security:
   basic:

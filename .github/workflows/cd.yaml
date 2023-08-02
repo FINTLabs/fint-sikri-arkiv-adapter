@@ -49,6 +49,7 @@ jobs:
         org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
+          # Kjører eldre image (beta)
           - org: innlandetfylke-no
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
@@ -59,6 +60,11 @@ jobs:
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
 
+          # Oppsplitting av Viken pågår (beta)
+          - org: afk-no
+            cluster: aks-beta-fint-2021-11-23
+
+          # Kjører eldre image (api)
           - org: innlandetfylke-no
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
@@ -68,9 +74,6 @@ jobs:
           - org: rogfk-no
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
-          
-    environment:
-      name: ${{ matrix.org }}-${{ matrix.cluster }}
 
     steps: 
       - uses: actions/checkout@v3
@@ -99,18 +102,18 @@ jobs:
           resource-group: rg-aks-${{ steps.environment.outputs.name }}
           admin: true
        
-      - if: github.ref != 'refs/heads/master'
+      - if: github.ref != 'refs/heads/master' && matrix.deploy-every-branch != true
         run: |
-          echo "## Dry run - not a real deploy" >> $GITHUB_STEP_SUMMARY
-          echo "To deploy, merge to master." >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Dry run - not a real deploy"
+            echo "To deploy, merge to master." 
+          } >> $GITHUB_STEP_SUMMARY
 
       - name: Output kubectl diff summary 
         run: |
-          {
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-            brew install homeport/tap/dyff
-            export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --set-exit-code"
-          }
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install homeport/tap/dyff
+          export KUBECTL_EXTERNAL_DIFF="dyff between --no-table-style --set-exit-code"
           {
             echo '```bash'
             echo "$(kubectl diff -f ${{ steps.bake.outputs.manifestsBundle }})"
@@ -118,7 +121,7 @@ jobs:
           } >> $GITHUB_STEP_SUMMARY
 
       - name: Deploy to Kubernetes
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || matrix.deploy-every-branch == true
         uses: azure/k8s-deploy@v4
         with:
           action: deploy
