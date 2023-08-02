@@ -2,9 +2,10 @@ apiVersion: fintlabs.no/v1alpha1
 kind: FintAdapter
 metadata:
   name: sikri-arkiv-beta
+  namespace: bfk-no
   labels:
     app.kubernetes.io/name: sikri-arkiv-beta
-    app.kubernetes.io/instance: sikri-arkiv-beta_bfk_no
+    app.kubernetes.io/instance: sikri-arkiv-beta_bfk-no
     app.kubernetes.io/version: latest
     app.kubernetes.io/component: sikri-arkiv-adapter
     app.kubernetes.io/part-of: arkiv
