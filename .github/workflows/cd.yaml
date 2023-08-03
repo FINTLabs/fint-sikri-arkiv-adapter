@@ -126,7 +126,7 @@ jobs:
       - name: Get namespace from config file
         id: namespace
         run: |
-          namespace=$(yq eval '.metadata.namespace' ${{ steps.bake.outputs.manifestsBundle }})
+          namespace=$(yq eval 'select(fi == 0) | .metadata.namespace' ${{ steps.bake.outputs.manifestsBundle }} | grep -v null | head -n 1)
           echo "name=$namespace" >> $GITHUB_OUTPUT
 
       - name: Deploy to Kubernetes
