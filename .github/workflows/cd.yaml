@@ -63,6 +63,7 @@ jobs:
           # Oppsplitting av Viken pågår (beta)
           - org: afk-no
             cluster: aks-beta-fint-2021-11-23
+            deploy-every-branch: true
           - org: bfk-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
