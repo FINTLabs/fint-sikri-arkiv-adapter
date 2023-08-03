@@ -18,7 +18,7 @@ spec:
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
             - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
-            - {name: springfox.title, value: "Elements Adapter for Buskerud"}
+            - {name: springfox.title, value: "Elements Adapter for Østfold"}
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '179'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DLØYVE'}
