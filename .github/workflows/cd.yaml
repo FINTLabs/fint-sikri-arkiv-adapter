@@ -67,12 +67,15 @@ jobs:
           - org: afk-no
             cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
+            deploy-every-branch: true
           - org: bfk-no
             cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
+            deploy-every-branch: true
           - org: ofk-no
             cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
+            deploy-every-branch: true
 
           # Kjører eldre image (api)
           - org: innlandetfylke-no
