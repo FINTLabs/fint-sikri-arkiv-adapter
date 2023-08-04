@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv-viken-no
+  name: adapter-sikri-arkiv
+  namespace: viken-no
 spec:
   template:
     spec:
@@ -9,7 +10,7 @@ spec:
         - name: adapter-sikri-arkiv
           envFrom:
             - secretRef:
-                name: viken-arkiv-sikri
+                name: arkiv-sikri-onepassword
           env:
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
