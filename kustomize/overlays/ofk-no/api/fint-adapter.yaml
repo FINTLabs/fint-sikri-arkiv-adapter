@@ -1,0 +1,23 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintAdapter
+metadata:
+  name: sikri-arkiv-api
+  namespace: ofk-no
+  labels:
+    app.kubernetes.io/name: sikri-arkiv-api
+    app.kubernetes.io/instance: sikri-arkiv-api_ofk-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: sikri-arkiv-adapter
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: ofk.no
+
+spec:
+  orgId: ofk.no
+  note: Brukes av sikri-arkiv-adapter. Automatisk opprettet ved oppretting av adapter.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_kulturminnevern
+    - arkiv_samferdsel
+    - arkiv_personal
