@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adapter-sikri-arkiv
+  namespace: afk-no
+spec:
+  template:
+    spec:
+      containers:
+        - name: adapter-sikri-arkiv
+          envFrom:
+            - secretRef:
+                name: arkiv-sikri-afk-no
+            - secretRef:
+                name: sikri-arkiv-api # fint-adapter
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: >-
+                -Xmx5G -verbose:gc
+                -XX:+ExitOnOutOfMemoryError
+                -Dfile.encoding=UTF-8
+                -Dcom.sun.security.enableAIAcaIssuers=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=10000
+            - {name: fint.case.coding.filformat.RA-PDF, value: 'PDF'}
+            - {name: fint.case.coding.filformat.RA-TEKST, value: 'TEXT'}
+            - {name: fint.case.coding.filformat.RA-JPEG, value: 'JPEG'}
+            - {name: fint.case.coding.filformat.RA-TIFF6, value: 'TIFF'}
+            - {name: springfox.title, value: "Elements Adapter for Innlandet"}
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '4304'} # Samferdsel - Vegeier
+            - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DLØYVE'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'SAA'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse, value: 'N12'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode, value: '&18'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.ordning, value: 'ORGNR'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.tittel, value: '${organisasjonsnavn}'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.verdi, value: '${organisasjonsnummer}'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.ordning, value: 'EMNE'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon, value: 'ORGNR'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '4554' } # LULHAJ
+            #- {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '4554' } # LULHAJ
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksstatus, value: 'B'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
+            - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '3890' } # Kultur - Bygg og landskap
+            - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: SA }
+            - {name: fint.case.defaults.tilskuddfartoy.avskrivningsmaate, value: TE }
+            - {name: fint.case.defaults.tilskuddfartoy.dokumentstatus, value: F }
+            - {name: fint.case.defaults.tilskuddfartoy.dokumentType, value: ND }
+            - {name: fint.case.defaults.tilskuddfartoy.journalenhet, value: 'SAA' }
+            - {name: fint.case.defaults.tilskuddfartoy.journalpostType, value: I }
+            - {name: fint.case.defaults.tilskuddfartoy.journalstatus, value: J }
+            - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.1.ordning, value: 'EMNE' }
+            - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.1.verdi, value: 'C59' }
+            - {name: fint.case.defaults.tilskuddfartoy.korrespondansepartType, value: EA }
+            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '2203' }
+            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '2203' }
+            - {name: fint.case.defaults.tilskuddfartoy.saksmappeType, value: KA }
+            - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: B }
+            - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - Søknad om tilskudd post 74 - fartøyvern' }
+            - {name: fint.case.defaults.tilskuddfartoy.title.records, value: '#{tittel.replaceFirst("Søknad om tilskudd.*","")}'}
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '3890' } # Kultur - Bygg og landskap
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: SA }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.avskrivningsmaate, value: TE }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentType, value: ND }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalenhet, value: 'SAA' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalpostType, value: I }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalstatus, value: J }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.1.ordning, value: 'EMNE' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.1.verdi, value: 'C59' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.korrespondansepartType, value: EA }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksansvarlig, value: '2271' } # HANGRI
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksbehandler, value: '2271' } # HANGRI
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksmappeType, value: KA }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: B }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: '${link:matrikkelnummer.kommunenummer#kode}-${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${bygningsnavn} - Søknad om tilskudd post 71 - freda bygninger i privat eie - ${link:matrikkelnummer.kommunenummer#navn} kommune' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '#{tittel.replaceFirst("Søknad om tilskudd.*","")}'}
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '3890' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: SA }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.avskrivningsmaate, value: TE }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentstatus, value: F }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentType, value: ND }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalenhet, value: 'SAA' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalpostType, value: I }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalstatus, value: J }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.klassifikasjon.1.ordning, value: 'EMNE' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.klassifikasjon.1.verdi, value: 'C51' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.korrespondansepartType, value: EA }
+            # - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksansvarlig, value: '' }
+            # - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksbehandler, value: '' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksmappeType, value: KA }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#kode}-${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - Kulturminneloven §8.1 - dispensasjon automatisk freda kulturminne - ${link$matrikkelnummer.kommunenummer#navn} kommune - ${tiltak}' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("Kulturminneloven §8.1.*","")}'}
+            - {name: fint.sikri.identity.casetype.default, value: digisak}
+            - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: samferdsel}
+            - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak}
+            - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
+            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
+            - {name: fint.sikri.variantformat, value: P }
+
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://api.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://api.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.kulturminne, value: https://api.felleskomponent.no/arkiv/kulturminnevern/provider}
+            - {name: fint.adapter.endpoints.providers.samferdsel, value: https://api.felleskomponent.no/arkiv/samferdsel/provider}
+            - {name: logging.level.no.fint.arkiv, value: info}
+            - {name: logging.level.no.fint.sikri, value: info}

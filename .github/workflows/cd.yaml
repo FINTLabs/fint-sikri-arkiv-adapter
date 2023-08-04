@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
+        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no, afk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - cluster: aks-beta-fint-2021-11-23
@@ -63,11 +63,11 @@ jobs:
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
 
-          # Oppsplitting av Viken pågår (beta)
+          # Oppsplitting av Viken pågår
           - org: afk-no
-            cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
             deploy-every-branch: true
+            
           - org: bfk-no
             cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
