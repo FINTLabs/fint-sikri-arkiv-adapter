@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no ]
+        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - cluster: aks-beta-fint-2021-11-23
@@ -70,9 +70,7 @@ jobs:
           - org: bfk-no
             override-default-namespace: true
             deploy-every-branch: true
-
           - org: ofk-no
-            cluster: aks-beta-fint-2021-11-23
             override-default-namespace: true
             deploy-every-branch: true
 
