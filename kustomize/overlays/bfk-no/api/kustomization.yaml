@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: bfk-no
+
+resources:
+  - ../../../base
+  - onepassword.yaml
+  - fint-adapter.yaml
+
+commonLabels:
+  app.kubernetes.io/instance: adapter-sikri-arkiv_bfk-no
+  fintlabs.no/org-id: bfk.no
+
+patches:
+  
+  - target:
+      kind: Deployment
+      name: adapter-sikri-arkiv
+    path: deployment.yaml

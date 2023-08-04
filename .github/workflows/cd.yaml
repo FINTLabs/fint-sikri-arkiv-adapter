@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no ]
+        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - cluster: aks-beta-fint-2021-11-23
@@ -62,20 +62,6 @@ jobs:
           - org: rogfk-no
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
-
-          # Oppsplitting av Viken pågår (beta)
-          - org: afk-no
-            cluster: aks-beta-fint-2021-11-23
-            override-default-namespace: true
-            deploy-every-branch: true
-          - org: bfk-no
-            cluster: aks-beta-fint-2021-11-23
-            override-default-namespace: true
-            deploy-every-branch: true
-          - org: ofk-no
-            cluster: aks-beta-fint-2021-11-23
-            override-default-namespace: true
-            deploy-every-branch: true
 
           # Kjører eldre image (api)
           - org: innlandetfylke-no
@@ -133,6 +119,12 @@ jobs:
             echo '```'
           } >> $GITHUB_STEP_SUMMARY
 
+      - name: Get namespace from config file
+        id: namespace
+        run: |
+          namespace=$(yq '.metadata.namespace' ${{ steps.bake.outputs.manifestsBundle }} | head -n 1 | sed 's/^null$/default/')
+          echo "name=$namespace" >> $GITHUB_OUTPUT
+
       - name: Deploy to Kubernetes
         if: github.ref == 'refs/heads/master' || matrix.deploy-every-branch == true
         uses: azure/k8s-deploy@v4
@@ -140,4 +132,4 @@ jobs:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: ${{ matrix.use-image-from-overlay && 'none:none' || needs.build-and-publish.outputs.tags }}
-          namespace: ${{ matrix.override-default-namespace && matrix.org || 'default'}}
+          namespace: ${{ steps.namespace.outputs.name }}
