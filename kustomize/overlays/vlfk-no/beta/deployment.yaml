@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv-vlfk
+  name: adapter-sikri-arkiv
+  namespace: vlfk-no
 spec:
   template:
     spec:
@@ -9,7 +10,7 @@ spec:
         - name: adapter-sikri-arkiv
           envFrom:
             - secretRef:
-                name: adapter-arkiv-vlfk
+                name: arkiv-sikri-onepassword
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-
