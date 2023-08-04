@@ -63,17 +63,6 @@ jobs:
             cluster: aks-beta-fint-2021-11-23
             use-image-from-overlay: true
 
-          # Oppsplitting av Viken pågår
-          - org: afk-no
-            override-default-namespace: true
-            deploy-every-branch: true
-          - org: bfk-no
-            override-default-namespace: true
-            deploy-every-branch: true
-          - org: ofk-no
-            override-default-namespace: true
-            deploy-every-branch: true
-
           # Kjører eldre image (api)
           - org: innlandetfylke-no
             cluster: aks-api-fint-2022-02-08
