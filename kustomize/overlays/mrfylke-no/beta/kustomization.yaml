@@ -7,6 +7,10 @@ resources:
   - ../../../base
   - onepassword.yaml
 
+commonLabels:
+  app.kubernetes.io/instance: adapter-sikri-arkiv_mrfylke-no
+  fintlabs.no/org-id: mrfylke.no
+
 patches:
   
   - target:
