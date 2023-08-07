@@ -2,6 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: adapter-sikri-arkiv
+  labels:
+    app.kubernetes.io/instance: adapter-sikri-arkiv_fintlabs_no
+    app.kubernetes.io/name: adapter-sikri-arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: fintlabs.no
 spec:
   strategy:
     rollingUpdate:

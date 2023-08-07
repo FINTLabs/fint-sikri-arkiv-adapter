@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv-mrfylke-no
+  name: adapter-sikri-arkiv
+  namespace: mrfylke-no
 spec:
   template:
     spec:
@@ -10,7 +11,7 @@ spec:
           image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
           envFrom:
             - secretRef:
-                name: mrfylke-arkiv-sikri
+                name: arkiv-sikri-onepassword
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-

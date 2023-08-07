@@ -1,9 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: viken-no
+
 resources:
   - ../../../base
   - onepassword.yaml
+
+commonLabels:
+  app.kubernetes.io/instance: adapter-sikri-arkiv_viken-no
+  fintlabs.no/org-id: viken.no
 
 patches:
   
@@ -11,20 +17,3 @@ patches:
       kind: Deployment
       name: adapter-sikri-arkiv
     path: deployment.yaml
-
-  - target:
-      kind: Deployment
-      name: adapter-sikri-arkiv
-    patch: |-
-      - op: replace
-        path: "/metadata/name"
-        value: "adapter-sikri-arkiv-viken-no"
-      - op: replace
-        path: "/spec/selector/matchLabels/app"
-        value: "adapter-sikri-arkiv-viken-no"
-      - op: replace
-        path: "/spec/template/metadata/labels/app"
-        value: "adapter-sikri-arkiv-viken-no"
-      - op: replace
-        path: /spec/template/spec/containers/0/name
-        value: "adapter-sikri-arkiv-viken-no"

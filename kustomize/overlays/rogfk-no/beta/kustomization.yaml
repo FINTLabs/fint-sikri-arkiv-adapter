@@ -1,9 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: rogfk-no
+
 resources:
   - ../../../base
   - onepassword.yaml
+
+commonLabels:
+  app.kubernetes.io/instance: adapter-sikri-arkiv_rogfk-no
+  fintlabs.no/org-id: rogfk.no
 
 patches:
   
@@ -12,19 +18,3 @@ patches:
       name: adapter-sikri-arkiv
     path: deployment.yaml
 
-  - target:
-      kind: Deployment
-      name: adapter-sikri-arkiv
-    patch: |-
-      - op: replace
-        path: "/metadata/name"
-        value: "adapter-sikri-arkiv-rogfk-no"
-      - op: replace
-        path: "/spec/selector/matchLabels/app"
-        value: "adapter-sikri-arkiv-rogfk-no"
-      - op: replace
-        path: "/spec/template/metadata/labels/app"
-        value: "adapter-sikri-arkiv-rogfk-no"
-      - op: replace
-        path: /spec/template/spec/containers/0/name
-        value: "adapter-sikri-arkiv-rogfk-no"
