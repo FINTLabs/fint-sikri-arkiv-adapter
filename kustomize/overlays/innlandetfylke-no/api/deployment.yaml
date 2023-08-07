@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv-vlfk
+  name: adapter-sikri-arkiv
+  namespace: innlandetfylke-no
 spec:
   template:
     spec:
@@ -17,7 +18,7 @@ spec:
               cpu: "1024m"
           envFrom:
             - secretRef:
-                name: sikri-arkiv-innlandetfylke
+                name: arkiv-sikri-onepassword
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-

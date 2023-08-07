@@ -67,6 +67,7 @@ jobs:
           - org: innlandetfylke-no
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
+            deploy-every-branch: true
           - org: mrfylke-no
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
