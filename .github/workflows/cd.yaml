@@ -41,6 +41,7 @@ jobs:
 
   deploy-to-aks:
     name: ${{ matrix.org }}-${{ matrix.cluster }}
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs: build-and-publish
     strategy:
