@@ -36,17 +36,13 @@ spec:
             - {name: fint.case.defaults.personalmappe.administrativEnhet, value: '28'}
             - {name: fint.case.defaults.personalmappe.saksbehandler, value: '0'}
             - {name: fint.case.defaults.personalmappe.tilgangskode, value: 'P'}
-            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'N/A'}
             - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A'}
-            - {name: fint.case.defaults.sak.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.sak.journalenhet, value: 'N/A'}
             - {name: fint.case.defaults.sak.dokumentType, value: ND }
             - {name: fint.sikri.identity.casetype.default, value: flyt }
             - {name: fint.sikri.identity.casetype.sak, value: flyt }
             - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
-            - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: drosjeloyve }
-            - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak }
-            - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak }
-            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
             - {name: fint.sikri.registry-entry.access-code.downgrade-code, value: G}
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://api.felleskomponent.no/arkiv/kodeverk/provider}

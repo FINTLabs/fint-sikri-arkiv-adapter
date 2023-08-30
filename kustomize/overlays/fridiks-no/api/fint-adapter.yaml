@@ -18,6 +18,4 @@ spec:
   components:
     - arkiv_kodeverk
     - arkiv_noark
-    - arkiv_kulturminnevern
-    - arkiv_samferdsel
     - arkiv_personal
