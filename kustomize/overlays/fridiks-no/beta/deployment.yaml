@@ -8,6 +8,7 @@ spec:
     spec:
       containers:
         - name: adapter-sikri-arkiv
+          image: ghcr.io/fintlabs/fint-sikri-arkiv-adapter:ARKIV-79-df897a8
           envFrom:
             - secretRef:
                 name: arkiv-sikri-fridiks-no
@@ -32,6 +33,10 @@ spec:
             - {name: fint.sikri.identity.casetype.default, value: flyt }
             - {name: fint.sikri.identity.casetype.sak, value: flyt }
             - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
+            - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: drosjeloyve }
+            - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak }
+            - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak }
+            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.personal, value: https://beta.felleskomponent.no/arkiv/personal/provider}
