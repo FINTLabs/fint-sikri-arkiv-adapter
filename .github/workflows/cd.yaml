@@ -53,6 +53,10 @@ jobs:
           - cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
 
+          - org: fridiks-no
+            cluster: aks-beta-fint-2021-11-23
+            deploy-every-branch: true
+
           # Kjører eldre image (beta)
           - org: innlandetfylke-no
             cluster: aks-beta-fint-2021-11-23
