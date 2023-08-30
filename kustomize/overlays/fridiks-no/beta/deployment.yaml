@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adapter-sikri-arkiv
+  namespace: fridiks-no
+spec:
+  template:
+    spec:
+      containers:
+        - name: adapter-sikri-arkiv
+          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
+          envFrom:
+            - secretRef:
+                name: arkiv-sikri-fridiks-no
+            - secretRef:
+                name: sikri-arkiv-beta # fint-adapter
+          env:
+            - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
+            - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
+            - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
+            - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
+            - {name: springfox.title, value: "Elements Adapter for FRID IKS"}
+            - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS'}
+            - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B'}
+            - {name: fint.case.defaults.personalmappe.saksmappeType, value: 'PE'}
+            - {name: fint.case.defaults.personalmappe.administrativEnhet, value: '28'}
+            - {name: fint.case.defaults.personalmappe.saksbehandler, value: '0'}
+            - {name: fint.case.defaults.personalmappe.tilgangskode, value: 'P'}
+            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A'}
+            - {name: fint.case.defaults.sak.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.sak.dokumentType, value: ND }
+            - {name: fint.sikri.identity.casetype.default, value: flyt }
+            - {name: fint.sikri.identity.casetype.sak, value: flyt }
+            - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
+            - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: drosjeloyve }
+            - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak }
+            - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak }
+            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.personal, value: https://beta.felleskomponent.no/arkiv/personal/provider}
