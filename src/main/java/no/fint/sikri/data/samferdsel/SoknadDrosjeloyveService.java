@@ -33,7 +33,7 @@ public class SoknadDrosjeloyveService {
     private final CaseQueryService caseQueryService;
     private final CaseService caseService;
     private final CaseProperties caseProperties;
-    private final SikriIdentity identity;
+    private final SikriIdentityService identityService;
 
     @Value("${fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse:X}")
     @Deprecated
@@ -60,14 +60,18 @@ public class SoknadDrosjeloyveService {
         this.caseQueryService = caseQueryService;
         this.caseService = caseService;
         caseProperties = caseDefaults.getSoknaddrosjeloyve();
-        identity = identityService.getIdentityForClass(SoknadDrosjeloyveResource.class);
+        this.identityService = identityService;
+    }
+
+    private SikriIdentity getSoknadDrosjeloyveIdentity() {
+        return identityService.getIdentityForClass(SoknadDrosjeloyveResource.class);
     }
 
     public SoknadDrosjeloyveResource getDrosjeloyveBySystemId(String id) throws DrosjeloyveNotFoundException {
 
         checkIfKKodeTilleggskodeIsPresent(id);
 
-        return sikriObjectModelService.getDataObjects(identity,
+        return sikriObjectModelService.getDataObjects(getSoknadDrosjeloyveIdentity(),
                 SikriObjectTypes.CASE,
                 "Id=" + id
                         + " AND Series.Id=" + caseProperties.getArkivdel()
@@ -85,7 +89,7 @@ public class SoknadDrosjeloyveService {
     }
 
     private void checkIfKKodeTilleggskodeIsPresent(String id) throws DrosjeloyveNotFoundException {
-        sikriObjectModelService.getDataObjects(identity,
+        sikriObjectModelService.getDataObjects(getSoknadDrosjeloyveIdentity(),
                 SikriObjectTypes.CLASSIFICATION,
                 "ClassId=" + kKodeTilleggskode
                         + " AND caseid=" + id)
@@ -97,7 +101,7 @@ public class SoknadDrosjeloyveService {
 
     public SoknadDrosjeloyveResource getDrosjeloyveByMappeId(String year, String sequenceNumber) throws DrosjeloyveNotFoundException {
 
-        SoknadDrosjeloyveResource SoknadDrosjeloyveResource = sikriObjectModelService.getDataObjects(identity,
+        SoknadDrosjeloyveResource SoknadDrosjeloyveResource = sikriObjectModelService.getDataObjects(getSoknadDrosjeloyveIdentity(),
                 SikriObjectTypes.CASE,
                 "CaseYear=" + year
                         + " AND SequenceNumber=" + sequenceNumber
@@ -119,7 +123,7 @@ public class SoknadDrosjeloyveService {
     }
 
     public List<SoknadDrosjeloyveResource> getAllDrosjeloyve() {
-        return sikriObjectModelService.getDataObjects(identity,
+        return sikriObjectModelService.getDataObjects(getSoknadDrosjeloyveIdentity(),
                 SikriObjectTypes.CASE,
                 "Series.Id=" + caseProperties.getArkivdel()
                         + " AND SecondaryClassification.ClassId=\"" + kKodeFagklasse
@@ -150,21 +154,21 @@ public class SoknadDrosjeloyveService {
         log.info("Create Drosjeløyve søknad");
 
         CaseType caseResponse = noarkService.createCase(
-                identity,
+                getSoknadDrosjeloyveIdentity(),
                 soknadDrosjeloyveFactory.toCaseType(resource),
                 resource);
         Integer caseId = caseResponse.getId();
 
-        return caseService.getCaseBySystemId(identity, caseId.toString())
+        return caseService.getCaseBySystemId(getSoknadDrosjeloyveIdentity(), caseId.toString())
                 .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable get case from Sikri after update"));
     }
 
     public SoknadDrosjeloyveResource updateDrosjeloyve(String query, SoknadDrosjeloyveResource SoknadDrosjeloyveResource) throws CaseNotFound {
-        noarkService.updateCase(identity, caseProperties, query, SoknadDrosjeloyveResource);
+        noarkService.updateCase(getSoknadDrosjeloyveIdentity(), caseProperties, query, SoknadDrosjeloyveResource);
         return caseQueryService
-                .query(identity, query)
+                .query(getSoknadDrosjeloyveIdentity(), query)
                 .map(soknadDrosjeloyveFactory::toFintResource)
                 .findFirst()
                 .orElseThrow(() -> new CaseNotFound("Unable to find updated case for query " + query));
