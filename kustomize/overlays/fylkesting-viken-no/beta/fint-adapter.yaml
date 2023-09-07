@@ -1,0 +1,21 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintAdapter
+metadata:
+  name: sikri-arkiv-fylkesting-beta
+  namespace: viken-no
+  labels:
+    app.kubernetes.io/name: sikri-arkiv-fylkesting-beta
+    app.kubernetes.io/instance: sikri-arkiv-beta_fylkesting-viken-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: sikri-arkiv-adapter
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: fylkesting.viken.no
+
+spec:
+  orgId: viken.no
+  note: Brukes av sikri-arkiv-adapter for Viken fylkesting. Automatisk opprettet ved oppretting av adapter.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_samferdsel

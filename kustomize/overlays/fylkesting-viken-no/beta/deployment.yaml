@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adapter-sikri-arkiv
+  namespace: viken-no
+spec:
+  template:
+    spec:
+      containers:
+        - name: adapter-sikri-arkiv
+          envFrom:
+            - secretRef:
+                name: arkiv-sikri-onepassword-fylkesting
+            - secretRef:
+                name: sikri-arkiv-fylkesting-beta # fint-adapter
+          env:
+            - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
+            - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
+            - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
+            - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
+            - {name: springfox.title, value: "Arkivadapter for Viken fylkesting"}
+
+            - {name: fint.case.defaults.sak.journalenhet, value: 'VFTING'}
+            - {name: fint.case.defaults.sak.dokumentType, value: ND }
+            - {name: fint.sikri.identity.casetype.default, value: flyt }
+            - {name: fint.sikri.identity.casetype.sak, value: flyt }
+            - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: flyt }
+
+            - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
+            - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
+            - {name: fint.adapter.endpoints.providers.samferdsel, value: https://beta.felleskomponent.no/arkiv/samferdsel/provider}
