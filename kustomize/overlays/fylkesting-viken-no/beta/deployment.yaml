@@ -11,6 +11,8 @@ spec:
           envFrom:
             - secretRef:
                 name: arkiv-sikri-onepassword-fylkesting
+            - secretRef:
+                name: sikri-arkiv-fylkesting-beta # fint-adapter
           env:
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
