@@ -1,15 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: mrfylke-no
+namespace: fridiks-no
 
 resources:
   - ../../../base
   - onepassword.yaml
+  - fint-adapter.yaml
 
 commonLabels:
-  app.kubernetes.io/instance: adapter-sikri-arkiv_mrfylke-no
-  fintlabs.no/org-id: mrfylke.no
+  app.kubernetes.io/instance: adapter-sikri-arkiv_fridiks-no
+  fintlabs.no/org-id: fridiks.no
 
 patches:
   

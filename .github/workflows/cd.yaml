@@ -47,27 +47,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ innlandetfylke-no, mrfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no ]
+        org: [ innlandetfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no, fridiks-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
-          #- cluster: aks-beta-fint-2021-11-23
-          #  deploy-every-branch: true
+          - org: fridiks-no
+            cluster: aks-beta-fint-2021-11-23
+            deploy-every-branch: true
 
           # Viken fylkesting (beta)
           - org: fylkesting-viken-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
-
-          # Kjører eldre image (beta)
-          - org: innlandetfylke-no
-            cluster: aks-beta-fint-2021-11-23
-            use-image-from-overlay: true
-          - org: mrfylke-no
-            cluster: aks-beta-fint-2021-11-23
-            use-image-from-overlay: true
-          - org: rogfk-no
-            cluster: aks-beta-fint-2021-11-23
-            use-image-from-overlay: true
 
           # Kjører eldre image (api)
           - org: innlandetfylke-no
@@ -80,7 +70,7 @@ jobs:
             cluster: aks-api-fint-2022-02-08
             use-image-from-overlay: true
 
-    steps: 
+    steps:
       - uses: actions/checkout@v3
 
       - name: Get environment
