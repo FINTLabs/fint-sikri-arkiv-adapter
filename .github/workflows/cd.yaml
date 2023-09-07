@@ -51,6 +51,12 @@ jobs:
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - org: fridiks-no
+            cluster: aks-beta-fint-2021-11-23
+            deploy-every-branch: true
+
+          # Viken fylkesting (beta)
+          - org: fylkesting-viken-no
+            cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
 
           # Kjører eldre image (api)
