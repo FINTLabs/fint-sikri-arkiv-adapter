@@ -19,3 +19,6 @@ spec:
     - arkiv_kodeverk
     - arkiv_noark
     - arkiv_samferdsel
+  assets:
+    - viken.no
+    - fylkesting.viken.no
