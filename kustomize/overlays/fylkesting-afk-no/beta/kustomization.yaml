@@ -6,7 +6,7 @@ namespace: afk-no
 resources:
   - ../../../base
   - onepassword.yaml
-  - fint-adapter.yaml
+#  - fint-adapter.yaml
 
 commonLabels:
   app.kubernetes.io/instance: adapter-sikri-arkiv_fylkesting-afk-no
