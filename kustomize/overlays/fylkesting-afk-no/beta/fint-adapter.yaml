@@ -19,6 +19,3 @@ spec:
     - arkiv_kodeverk
     - arkiv_noark
     - arkiv_samferdsel
-  assets:
-    - afk.no
-    - fylkesting.afk.no
