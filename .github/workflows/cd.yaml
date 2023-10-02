@@ -54,9 +54,6 @@ jobs:
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
 
-          - org: fylkesting-afk-no
-            deploy-every-branch: true
-
           - org: fylkesting-viken-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
