@@ -1,0 +1,21 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintAdapter
+metadata:
+  name: sikri-arkiv-fylkesting-api
+  namespace: afk-no
+  labels:
+    app.kubernetes.io/name: sikri-arkiv-fylkesting-api
+    app.kubernetes.io/instance: sikri-arkiv-api_fylkesting-afk-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: sikri-arkiv-adapter
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: fylkesting.afk.no
+
+spec:
+  orgId: afk.no
+  note: Brukes av sikri-arkiv-adapter for Akershus fylkesting. Automatisk opprettet ved oppretting av adapter.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_samferdsel
