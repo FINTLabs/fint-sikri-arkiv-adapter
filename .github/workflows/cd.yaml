@@ -47,17 +47,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ innlandetfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no, fridiks-no, fylkesting-viken-no ]
+        org: [ innlandetfylke-no, rogfk-no, viken-no, vlfk-no, afk-no, bfk-no, ofk-no, fridiks-no, fylkesting-afk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include: 
           - org: fridiks-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
 
-          - org: fylkesting-viken-no
+          - org: fylkesting-afk-no
             deploy-every-branch: true
 
-          - org: fylkesting-afk-no
+          - org: fylkesting-viken-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
 
