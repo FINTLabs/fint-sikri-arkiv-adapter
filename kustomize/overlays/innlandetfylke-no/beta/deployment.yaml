@@ -95,7 +95,10 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#kode}-${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - Kulturminneloven §8.1 - dispensasjon automatisk freda kulturminne - ${link$matrikkelnummer.kommunenummer#navn} kommune - ${tiltak}' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("Kulturminneloven §8.1.*","")}'}
-            - {name: fint.sikri.identity.casetype.default, value: digisak}
+            - {name: fint.case.defaults.sak.journalenhet, value: 'SAA'}
+            - {name: fint.case.defaults.sak.dokumentType, value: ND}
+            - {name: fint.sikri.identity.casetype.default, value: flyt}
+            - {name: fint.sikri.identity.casetype.sak, value: flyt}
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: samferdsel}
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak}
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
