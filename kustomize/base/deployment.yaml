@@ -58,10 +58,10 @@ spec:
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
                 -Dcom.sun.security.enableAIAcaIssuers=true
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=false
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
             - {name: security.basic.enabled, value: "false"}
             - {name: endpoints.enabled, value: "false"}
@@ -72,5 +72,5 @@ spec:
             - {name: fint.adapter.reject-unknown-events, value: 'false'}
             - {name: fint.file-cache.directory, value: '/temp'}
             - {name: fint.sikri.wsdl-location, value: /app }
-            - {name: logging.level.no.fint.arkiv, value: trace}
-            - {name: logging.level.no.fint.sikri, value: trace}
+            - {name: logging.level.no.fint.arkiv, value: info}
+            - {name: logging.level.no.fint.sikri, value: info}
