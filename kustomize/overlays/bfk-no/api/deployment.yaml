@@ -33,10 +33,10 @@ spec:
             - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS'}
             - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B'}
             - {name: fint.case.defaults.personalmappe.saksmappeType, value: 'PE'}
-            - {name: fint.case.defaults.personalmappe.administrativEnhet, value: '28'}
+            - {name: fint.case.defaults.personalmappe.administrativEnhet, value: '12' } #POK arkiv og dokumentasjonsforvaltning
             - {name: fint.case.defaults.personalmappe.saksbehandler, value: '0'}
             - {name: fint.case.defaults.personalmappe.tilgangskode, value: 'P'}
-            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'FRAAD'}
             - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A'}
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '195'}
