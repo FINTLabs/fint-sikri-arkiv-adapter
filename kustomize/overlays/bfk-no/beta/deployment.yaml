@@ -30,7 +30,7 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '179'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DLØYVE'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'FRAAD'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
             - {name: fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode, value: '&18'}
@@ -43,12 +43,12 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
-            - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '64' }
+            - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '56' } # KULTUR kulturarv
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: SAK }
             - {name: fint.case.defaults.tilskuddfartoy.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentstatus, value: F }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentType, value: ND }
-            - {name: fint.case.defaults.tilskuddfartoy.journalenhet, value: VFRÅD }
+            - {name: fint.case.defaults.tilskuddfartoy.journalenhet, value: FRAAD }
             - {name: fint.case.defaults.tilskuddfartoy.journalpostType, value: I }
             - {name: fint.case.defaults.tilskuddfartoy.journalstatus, value: J } # M, F
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.1.ordning, value: 'EMNE' }
@@ -57,18 +57,18 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.tittel, value: '${fartoyNavn}' }
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.verdi, value: '${kallesignal}' }
             - {name: fint.case.defaults.tilskuddfartoy.korrespondansepartType, value: EA }
-            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '287' }
-            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '287' }
+            #- {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '287' }
+            #- {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '287' }
             - {name: fint.case.defaults.tilskuddfartoy.saksmappeType, value: FARTØY }
             - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - ${soknadsnummer.identifikatorverdi} - Tilskudd Kapittel 1429 Post 74 og dispensasjoner' }
             - {name: fint.case.defaults.tilskuddfartoy.title.records, value: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}' }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '64' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '56' } # KULTUR kulturarv
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: SAK }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentType, value: ND }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalenhet, value: VFRÅD }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalenhet, value: FRAAD }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalpostType, value: I }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalstatus, value: J } # M, F
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.1.ordning, value: 'EMNE' }
@@ -83,12 +83,12 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - Gbnr ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${bygningsnavn} - ${kulturminneId} - Tilskudd Kapittel 1429 post 71 og dispensasjoner' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '64' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '56' } # KULTUR kulturarv
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: SAK }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentstatus, value: F }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentType, value: ND }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalenhet, value: VFRÅD }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalenhet, value: FRAAD }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalpostType, value: I }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalstatus, value: J }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.klassifikasjon.1.ordning, value: 'EMNE' }
@@ -103,7 +103,7 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${kulturminneId} - Søknad om dispensasjon etter § 8 første ledd - ${tiltak}' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("Søknad.*","")}' }
-            - {name: fint.case.defaults.sak.journalenhet, value: 'VFRÅD'}
+            - {name: fint.case.defaults.sak.journalenhet, value: 'FRAAD'}
             - {name: fint.case.defaults.sak.dokumentType, value: ND }
             - {name: fint.sikri.identity.casetype.default, value: flyt }
             - {name: fint.sikri.identity.casetype.sak, value: flyt }
