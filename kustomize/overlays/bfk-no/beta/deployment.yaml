@@ -28,8 +28,8 @@ spec:
             - {name: fint.case.defaults.personalmappe.journalenhet, value: 'FRAAD' }
             - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A' }
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '179'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DLØYVE'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '43'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'FRAAD'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
             - {name: fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse, value: 'N12'}
