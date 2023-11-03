@@ -19,14 +19,14 @@ spec:
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
             - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
             - {name: springfox.title, value: "Elements Adapter for Østfold"}
-            - { name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS' }
-            - { name: fint.case.defaults.personalmappe.saksstatus, value: 'B' }
-            - { name: fint.case.defaults.personalmappe.saksmappeType, value: 'PE' }
-            - { name: fint.case.defaults.personalmappe.administrativEnhet, value: '28' }
-            - { name: fint.case.defaults.personalmappe.saksbehandler, value: '0' }
-            - { name: fint.case.defaults.personalmappe.tilgangskode, value: 'P' }
-            - { name: fint.case.defaults.personalmappe.journalenhet, value: 'SP' }
-            - { name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A' }
+            - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS' }
+            - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B' }
+            - {name: fint.case.defaults.personalmappe.saksmappeType, value: 'PE' }
+            - {name: fint.case.defaults.personalmappe.administrativEnhet, value: '28' }
+            - {name: fint.case.defaults.personalmappe.saksbehandler, value: '0' }
+            - {name: fint.case.defaults.personalmappe.tilgangskode, value: 'P' }
+            - {name: fint.case.defaults.personalmappe.journalenhet, value: 'SP' }
+            - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A' }
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '63'} # SAMF FORVALTN
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DLØYVE'}
@@ -43,6 +43,8 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '1324' } # Evy Heidi Johanne Angell
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '1324' } # Evy Heidi Johanne Angell
             - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '83' } # KNK kulturarv
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: SAK }
             - {name: fint.case.defaults.tilskuddfartoy.avskrivningsmaate, value: TE }
