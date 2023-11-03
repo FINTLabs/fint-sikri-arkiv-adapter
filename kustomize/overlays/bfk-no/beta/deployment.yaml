@@ -28,7 +28,7 @@ spec:
             - {name: fint.case.defaults.personalmappe.journalenhet, value: 'SP' }
             - {name: fint.case.defaults.personalmappe.saksStatusAvsluttetId, value: 'A' }
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '43'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '43'} # SAMF mobilitet
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'SP'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
