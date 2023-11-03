@@ -132,5 +132,5 @@ spec:
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://api.felleskomponent.no/arkiv/kulturminnevern/provider}
             - {name: fint.adapter.endpoints.providers.samferdsel, value: https://api.felleskomponent.no/arkiv/samferdsel/provider}
             - {name: fint.adapter.endpoints.providers.personal, value: https://api.felleskomponent.no/arkiv/personal/provider}
-            - {name: logging.level.no.fint.arkiv, value: trace}
-            - {name: logging.level.no.fint.sikri, value: trace}
+            - {name: logging.level.no.fint.arkiv, value: info}
+            - {name: logging.level.no.fint.sikri, value: info}
