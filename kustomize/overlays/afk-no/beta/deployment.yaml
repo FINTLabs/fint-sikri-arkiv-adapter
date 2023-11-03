@@ -68,8 +68,8 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.tittel, value: '${fartoyNavn}' }
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.verdi, value: '${kallesignal}' }
             - {name: fint.case.defaults.tilskuddfartoy.korrespondansepartType, value: 'EA' }
-            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: 'ALEXANDEY_A' }
-            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: 'ALEXANDEY_A' }
+            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '390' } # ALEXANDEY_A
+            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '390' } # ALEXANDEY_A
             - {name: fint.case.defaults.tilskuddfartoy.saksmappeType, value: 'FARTØY'}
             - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: 'B' }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - ${soknadsnummer.identifikatorverdi} - Tilskudd Kapittel 1429 Post 74 og dispensasjoner' }
@@ -88,8 +88,8 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.2.tittel, value: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.2.verdi, value: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.korrespondansepartType, value: 'EA' }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksansvarlig, value: 'SISSELRI_A' }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksbehandler, value: 'SISSELRI_A' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksansvarlig, value: '391' } # SISSELRI_A
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksbehandler, value: '391' } # SISSELRI_A
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksmappeType, value: 'FRIP' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: 'B' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - Gbnr ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${bygningsnavn} - ${kulturminneId} - Tilskudd Kapittel 1429 post 71 og dispensasjoner' }
