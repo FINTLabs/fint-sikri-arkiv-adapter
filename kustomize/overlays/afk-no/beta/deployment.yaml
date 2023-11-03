@@ -68,8 +68,8 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.tittel, value: '${fartoyNavn}' }
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.verdi, value: '${kallesignal}' }
             - {name: fint.case.defaults.tilskuddfartoy.korrespondansepartType, value: 'EA' }
-            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '390' } # ALEXANDEY_A
-            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '390' } # ALEXANDEY_A
+            - {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: 'ALEXANDEY_A' } # ALEXANDEY_A
+            - {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: 'ALEXANDEY_A' } # ALEXANDEY_A
             - {name: fint.case.defaults.tilskuddfartoy.saksmappeType, value: 'FARTØY'}
             - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: 'B' }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - ${soknadsnummer.identifikatorverdi} - Tilskudd Kapittel 1429 Post 74 og dispensasjoner' }
