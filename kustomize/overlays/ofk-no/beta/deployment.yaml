@@ -113,6 +113,7 @@ spec:
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak }
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak }
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
+            - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
