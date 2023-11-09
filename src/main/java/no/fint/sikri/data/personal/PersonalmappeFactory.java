@@ -86,6 +86,7 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle("Personalmappe - " + fullName);
+        caseType.setPublicTitle(getMarkedTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#")));
 
         //try {
         caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
