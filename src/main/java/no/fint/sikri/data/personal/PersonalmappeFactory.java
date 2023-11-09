@@ -66,6 +66,7 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle("Personalmappe - " + fullName);
+        caseType.setPublicTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#"));
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
         caseType.setFileTypeId(properties.getSaksmappeType());
         caseType.setSeriesId(properties.getArkivdel());
