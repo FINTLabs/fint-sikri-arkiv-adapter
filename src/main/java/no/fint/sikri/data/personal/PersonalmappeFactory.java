@@ -30,6 +30,7 @@ import java.util.List;
 
 import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.getMarkedTitle;
 
 
 @Slf4j
@@ -66,7 +67,7 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
 
         caseType.setTitle("Personalmappe - " + fullName);
-        caseType.setPublicTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#"));
+        caseType.setPublicTitle(getMarkedTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#")));
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
         caseType.setFileTypeId(properties.getSaksmappeType());
         caseType.setSeriesId(properties.getArkivdel());
