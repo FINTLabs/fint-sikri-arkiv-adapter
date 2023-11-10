@@ -8,7 +8,6 @@ spec:
     spec:
       containers:
         - name: adapter-sikri-arkiv
-          image: fintlabsacr.azurecr.io/fint-sikri-arkiv-adapter:2023-04-21-01fd91d
           resources:
             limits:
               memory: "9Gi"
@@ -82,7 +81,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: EMNE }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentType, value: I }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.field.customAttribute1, value: '${link:matrikkelnummer.kommunenummer#kode}/${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.field.customAttribute1, value: '${link$matrikkelnummer.kommunenummer#kode}/${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.field.customAttribute2, value: '${soknadsnummer.identifikatorverdi}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.field.customAttribute3, value: '${kulturminneId}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.journalpostType, value: I }
@@ -98,7 +97,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.skjermingshjemmel, value: 'UO:§26' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.skjermingskontekst, value: JOURNALPOST,DOKUMENT }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.tilgangsrestriksjon, value: UO }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: 'Tilskudd - Freda bygninger i privat eie - ${link:matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - ${bygningsnavn} - søknadsnummer ${soknadsnummer.identifikatorverdi} - kulturminneid: ${kulturminneId}' }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: 'Tilskudd - Freda bygninger i privat eie - ${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - ${bygningsnavn} - søknadsnummer ${soknadsnummer.identifikatorverdi} - kulturminneid: ${kulturminneId}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '${tittel} -' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '14' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: EMNE }

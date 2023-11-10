@@ -56,15 +56,6 @@ jobs:
           - org: fylkesting-viken-no
             cluster: aks-beta-fint-2021-11-23
 
-          # Kjører eldre image (api)
-          - org: innlandetfylke-no
-            cluster: aks-api-fint-2022-02-08
-            use-image-from-overlay: true
-
-          - org: rogfk-no
-            cluster: aks-api-fint-2022-02-08
-            use-image-from-overlay: true
-
     steps:
       - uses: actions/checkout@v4
 
