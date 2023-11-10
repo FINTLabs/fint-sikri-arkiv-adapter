@@ -65,9 +65,11 @@ public class PersonalmappeFactory {
         caseDefaultsService.applyDefaultsToCaseType(properties, personalmappeResource, caseType);
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
-
         caseType.setTitle("Personalmappe - " + fullName);
-        caseType.setPublicTitle(getMarkedTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#")));
+
+        caseType.setPublicTitle(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
+
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
         caseType.setFileTypeId(properties.getSaksmappeType());
         caseType.setSeriesId(properties.getArkivdel());
@@ -84,9 +86,10 @@ public class PersonalmappeFactory {
 
     public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
-
         caseType.setTitle("Personalmappe - " + fullName);
-        caseType.setPublicTitle(getMarkedTitle(String.format("Personalmappe - %s%s%s","#", fullName, "#")));
+
+        caseType.setPublicTitle(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
 
         //try {
         caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
@@ -97,6 +100,10 @@ public class PersonalmappeFactory {
         //}
 
         return caseType;
+    }
+
+    private static String getPersonalmappeTitle(String fullName) {
+        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "#", fullName, "#"));
     }
 
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
