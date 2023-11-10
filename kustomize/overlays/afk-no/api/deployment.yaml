@@ -56,7 +56,7 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
-            - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '488' } # KULTUR Fartøyvern
+            - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '537' } # PKKM formidling
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: SAK }
             - {name: fint.case.defaults.tilskuddfartoy.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentstatus, value: F }
@@ -76,7 +76,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - ${soknadsnummer.identifikatorverdi} - Tilskudd Kapittel 1429 Post 74 og dispensasjoner' }
             - {name: fint.case.defaults.tilskuddfartoy.title.records, value: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}' }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '143' } # KULTUR kulturarv
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '535' } # PKKM kulturminnevern
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: SAK }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
@@ -96,7 +96,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - Gbnr ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${bygningsnavn} - ${kulturminneId} - Tilskudd Kapittel 1429 post 71 og dispensasjoner' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '#{tittel.replaceFirst("Tilskudd Kapittel.*","")}' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '144' } # KULTUR ark
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '535' } # PKKM kulturminnevern
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: SAK }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentstatus, value: F }
