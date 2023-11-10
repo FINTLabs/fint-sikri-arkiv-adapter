@@ -144,7 +144,8 @@ public class PersonalmappeService {
                     .equals(personalmappeFactory.getOfficerId(personalmappeResource))
                     || !caseType.getAdministrativeUnitId()
                     .equals(personalmappeFactory.getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource))
-                    || !caseType.getTitle().contains(fullName);
+                    || !caseType.getTitle().contains(fullName)
+                    || caseType.getPublicTitle().contains(fullName);
 
         } catch (OfficerNotFound | AdministrativeUnitNotFound e) {
             return true;
