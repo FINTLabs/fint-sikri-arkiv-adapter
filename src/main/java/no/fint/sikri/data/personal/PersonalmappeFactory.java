@@ -67,7 +67,7 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
         caseType.setTitle("Personalmappe - " + fullName);
 
-        caseType.setPublicTitle(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitle("Personalmappe - " + fullName);
         caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
 
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
@@ -88,7 +88,7 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
         caseType.setTitle("Personalmappe - " + fullName);
 
-        caseType.setPublicTitle(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitle("Personalmappe - " + fullName);
         caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
 
         //try {
