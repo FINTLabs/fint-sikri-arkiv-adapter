@@ -19,6 +19,7 @@ spec:
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
             - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
             - {name: springfox.title, value: "Elements Adapter for Buskerud"}
+
             - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS' }
             - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B' }
             - {name: fint.case.defaults.personalmappe.saksmappeType, value: 'PE' }
@@ -61,8 +62,8 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.tittel, value: '${fartoyNavn}' }
             - {name: fint.case.defaults.tilskuddfartoy.klassifikasjon.2.verdi, value: '${kallesignal}' }
             - {name: fint.case.defaults.tilskuddfartoy.korrespondansepartType, value: EA }
-            #- {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '287' } # Fartøy håndteres av AFK
-            #- {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '287' }
+            #- {name: fint.case.defaults.tilskuddfartoy.saksansvarlig, value: '' } # Fartøy håndteres av AFK
+            #- {name: fint.case.defaults.tilskuddfartoy.saksbehandler, value: '' }
             - {name: fint.case.defaults.tilskuddfartoy.saksmappeType, value: FARTØY }
             - {name: fint.case.defaults.tilskuddfartoy.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: '${kallesignal} - ${fartoyNavn} - ${soknadsnummer.identifikatorverdi} - Tilskudd Kapittel 1429 Post 74 og dispensasjoner' }
