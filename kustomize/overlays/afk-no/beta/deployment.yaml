@@ -49,9 +49,9 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
             - {name: fint.case.defaults.soknaddrosjeloyve.kKodeFagklasse, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.kKodeTilleggskode, value: '&18'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon, value: 'ORGNR'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.saksstatus, value: 'B'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.ordning, value: 'ORGNR'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.ordning, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.verdi, value: '${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.1.tittel, value: '${organisasjonsnavn}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.ordning, value: 'EMNE'}
