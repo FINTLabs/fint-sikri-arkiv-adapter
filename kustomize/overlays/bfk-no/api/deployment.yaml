@@ -8,6 +8,13 @@ spec:
     spec:
       containers:
         - name: adapter-sikri-arkiv
+          resources:
+            limits:
+              memory: "9Gi"
+              cpu: "4"
+            requests:
+              memory: "7Gi"
+              cpu: "2056m"
           envFrom:
             - secretRef:
                 name: arkiv-sikri-bfk-no
@@ -16,7 +23,7 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-
-                -Xmx8G -verbose:gc
+                -Xmx7G -verbose:gc
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
                 -Dcom.sun.security.enableAIAcaIssuers=true
