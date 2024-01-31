@@ -78,3 +78,34 @@ We support `saksaar`, `sakssekvensnummer`, `arkivdel`, `administrativenhet`, `ti
 - `$filter=klassifikasjon/sekundar/ordning eq 'EMNE' and klassifikasjon/sekundar/verdi eq 'N12'`
 
 PS! It's _not_ possible to filter on both primary and secondary classification in the same filtered query.
+
+## Shielded or marked titles
+
+Parts of titles can be shielded or marked.
+
+* To shield content, use @...@
+* To mark content, use #..#
+
+### Shielding
+
+#### When content is marked with '@'...
+
+* title: `Kompetansemappe - Ola Normann - 01.01.1970`
+* publicTitle: `Kompetansemappe - @Ola Normann@ - @01.01.1970@`
+
+#### Result
+
+* title: `Kompetansemappe - Ola Normann - 01.01.1970`
+* publicTitle: `Kompetansemappe - ***** ***** - *****`
+
+### Marking
+
+#### When name is marked and date is shielded
+
+* title: `Kompetansemappe - Kari Normann - 01.01.1970`
+* publicTitle: `Kompetansemappe - #Kari Normann# - @01.01.1970@`
+
+#### Result
+
+* title: `Kompetansemappe - Kari Normann - 01.01.1970`
+* publicTitle: `Kompetansemappe - ##### ####_ - *****`

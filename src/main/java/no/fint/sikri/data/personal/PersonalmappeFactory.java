@@ -30,6 +30,7 @@ import java.util.List;
 
 import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
+import static no.fint.sikri.data.utilities.SikriUtils.getMarkedTitle;
 
 
 @Slf4j
@@ -64,8 +65,11 @@ public class PersonalmappeFactory {
         caseDefaultsService.applyDefaultsToCaseType(properties, personalmappeResource, caseType);
 
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
-
         caseType.setTitle("Personalmappe - " + fullName);
+
+        caseType.setPublicTitle("Personalmappe - " + fullName);
+        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
+
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
         caseType.setFileTypeId(properties.getSaksmappeType());
         caseType.setSeriesId(properties.getArkivdel());
@@ -82,8 +86,10 @@ public class PersonalmappeFactory {
 
     public CaseType toSikriUpdate(CaseType caseType, PersonalmappeResource personalmappeResource) throws UnableToGetIdFromLink, AdministrativeUnitNotFound, OfficerNotFound {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
-
         caseType.setTitle("Personalmappe - " + fullName);
+
+        caseType.setPublicTitle("Personalmappe - " + fullName);
+        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
 
         //try {
         caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
@@ -94,6 +100,10 @@ public class PersonalmappeFactory {
         //}
 
         return caseType;
+    }
+
+    private static String getPersonalmappeTitle(String fullName) {
+        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "#", fullName, "#"));
     }
 
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
