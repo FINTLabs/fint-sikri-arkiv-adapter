@@ -95,8 +95,8 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksbehandler, value: '17128' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksmappeType, value: TS }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: 'Disp. §8.1 - ${kulturminneId}' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel} -' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - dispensasjon fra kulturminneloven - inngrep i automatisk freda kulturminner - ${tiltak}' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("inngrep i automatisk freda kulturminner","søknad om inngrep i automatisk freda kulturminner")} -' }
             - {name: fint.case.defaults.sak.journalenhet, value: 'VLFKJ'}
             - {name: fint.case.defaults.sak.dokumentType, value: 'ND'}
             - {name: fint.sikri.identity.casetype.default, value: 'flyt' }
