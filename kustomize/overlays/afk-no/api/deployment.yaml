@@ -142,6 +142,7 @@ spec:
 
             - {name: fint.sikri.variantformat, value: P }
             - {name: fint.sikri.registry-entry.access-code.downgrade-code, value: G}
+            - {name: fint.sikri.skip-internal-contacts, value: 'true' }
 
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://api.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://api.felleskomponent.no/arkiv/noark/provider}
