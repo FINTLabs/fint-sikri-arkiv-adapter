@@ -44,6 +44,7 @@ spec:
             - {name: fint.case.coding.saksstatus.B, value: 'B'}
             - {name: fint.case.coding.tilknyttetRegistreringSom.H, value: 'H'}
             - {name: fint.case.coding.tilknyttetRegistreringSom.V, value: 'V'}
+
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '112'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DROSJE'}
@@ -60,6 +61,7 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
+
             - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '920' }
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: KULTM }
             - {name: fint.case.defaults.tilskuddfartoy.journalenhet, value: 'VLFKJ' }
@@ -88,6 +90,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: 'Bygg - ${bygningsnavn} - ${kulturminneId}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '#{tittel} -' }
+
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '920' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: KULTM }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.journalenhet, value: 'VLFKJ' }
@@ -102,16 +105,20 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: 'Disp. §8.1 - ${kulturminneId}' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel} -' }
+
             - {name: fint.case.defaults.sak.journalenhet, value: 'VLFKJ'}
             - {name: fint.case.defaults.sak.dokumentType, value: 'ND'}
+
             - {name: fint.sikri.identity.casetype.default, value: 'flyt' }
             - {name: fint.sikri.identity.casetype.sak, value: 'flyt' }
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: 'drosjeloyve' }
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: 'digisak' }
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: 'digisak' }
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
-            - {name: fint.sikri.skip-internal-contacts, value: 'false' }
+
+            - {name: fint.sikri.skip-internal-contacts, value: 'true' }
             - {name: fint.sikri.variantformat, value: 'P'}
+
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://api.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://api.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://api.felleskomponent.no/arkiv/kulturminnevern/provider}
