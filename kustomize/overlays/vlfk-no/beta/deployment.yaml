@@ -100,8 +100,8 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksbehandler, value: '17128' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksmappeType, value: TS }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - dispensasjon fra kulturminneloven - inngrep i automatisk freda kulturminner - ${tiltak}' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("inngrep i automatisk freda kulturminner","søknad om inngrep i automatisk freda kulturminner")} -' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - dispensasjon frå kulturminneloven §8.1 - ${tiltak}' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: 'Dispensasjon frå kulturminneloven §8.1 -' }
 
             - {name: fint.case.defaults.sak.journalenhet, value: 'VLFKJ'}
             - {name: fint.case.defaults.sak.dokumentType, value: 'ND'}
@@ -111,7 +111,7 @@ spec:
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: 'drosjeloyve' }
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: 'digisak' }
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: 'digisak' }
-            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
+            - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: 'digisak' }
 
             - {name: fint.sikri.skip-internal-contacts, value: 'true' }
             - {name: fint.sikri.variantformat, value: 'P'}
