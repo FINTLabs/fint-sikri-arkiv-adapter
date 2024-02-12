@@ -40,7 +40,7 @@ spec:
             - {name: fint.case.coding.tilknyttetRegistreringSom.H, value: 'H'}
             - {name: fint.case.coding.tilknyttetRegistreringSom.V, value: 'V'}
             - {name: fint.case.defaults.personalmappe.saksstatus, value: B }
-            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '84'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '23'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'LOYVER'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalpostType, value: 'I'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'M'}
