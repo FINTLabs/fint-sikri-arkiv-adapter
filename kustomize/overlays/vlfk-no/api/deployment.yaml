@@ -104,7 +104,7 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksmappeType, value: TS }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - dispensasjon frå kulturminneloven §8.1 - ${tiltak}' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: 'Dispensasjon frå kulturminneloven §8.1 -' }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel} -' }
 
             - {name: fint.case.defaults.sak.journalenhet, value: 'VLFKJ'}
             - {name: fint.case.defaults.sak.dokumentType, value: 'ND'}
