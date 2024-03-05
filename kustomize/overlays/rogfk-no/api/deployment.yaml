@@ -118,7 +118,12 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("inngrep i automatisk freda kulturminner","søknad om inngrep i automatisk freda kulturminner")} -' }
             - {name: fint.file-cache.directory, value: '/temp'}
             - {name: fint.sikri.class.type.create, value: 'false'}
-            - {name: fint.sikri.identity.casetype.default, value: digisak}
+
+            - {name: fint.case.defaults.sak.journalenhet, value: 'RFK' }
+            - {name: fint.case.defaults.sak.dokumentType, value: 'ND' }
+
+            - {name: fint.sikri.identity.casetype.default, value: flyt }
+            - {name: fint.sikri.identity.casetype.sak, value: flyt }
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: samferdsel}
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak}
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
@@ -129,5 +134,6 @@ spec:
             - {name: fint.adapter.endpoints.providers.noark, value: https://api.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://api.felleskomponent.no/arkiv/kulturminnevern/provider}
             - {name: fint.adapter.endpoints.providers.samferdsel, value: https://api.felleskomponent.no/arkiv/samferdsel/provider}
+
             - {name: logging.level.no.fint.arkiv, value: info}
             - {name: logging.level.no.fint.sikri, value: info}
