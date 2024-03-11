@@ -98,7 +98,7 @@ dependencies {
     compile('com.fasterxml.jackson.core:jackson-core:2.14.2')
     compile('com.fasterxml.jackson.core:jackson-databind:2.14.2')
     compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2')
-    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.2')
     compile('org.slf4j:slf4j-api:1.7.36')
 
     compile 'no.fintlabs:fint-antlr:1.1.1'
