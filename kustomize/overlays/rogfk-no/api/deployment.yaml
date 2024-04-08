@@ -57,7 +57,7 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.saksstatus, value: 'B'}
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '14' }
-            - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: EMNE }
+            - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: 'EMNE23' }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentstatus, value: F }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentType, value: I }
             - {name: fint.case.defaults.tilskuddfartoy.field.customAttribute2, value: '${soknadsnummer.identifikatorverdi}' }
@@ -78,7 +78,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: 'Tilskudd - fartøyvern - ${fartoyNavn} - ${kallesignal} - søknadsnr ${soknadsnummer.identifikatorverdi}' }
             - {name: fint.case.defaults.tilskuddfartoy.title.records, value: '${tittel} -' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '14' }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: EMNE }
+            - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: 'EMNE23' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentType, value: I }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.field.customAttribute1, value: '${link$matrikkelnummer.kommunenummer#kode}/${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
@@ -100,7 +100,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: 'Tilskudd - Freda bygninger i privat eie - ${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - ${bygningsnavn} - søknadsnummer ${soknadsnummer.identifikatorverdi} - kulturminneid: ${kulturminneId}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '${tittel} -' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '14' }
-            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: EMNE }
+            - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: 'EMNE23' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.avskrivningsmaate, value: TE }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentstatus, value: F }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.dokumentType, value: I }
