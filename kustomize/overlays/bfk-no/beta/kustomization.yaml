@@ -9,12 +9,12 @@ resources:
   - fint-adapter.yaml
 
 commonLabels:
-  app.kubernetes.io/instance: adapter-sikri-arkiv_bfk-no
+  app.kubernetes.io/instance: adapter-arkiv-sikri_bfk-no
   fintlabs.no/org-id: bfk.no
 
 patches:
   
   - target:
       kind: Deployment
-      name: adapter-sikri-arkiv
+      name: adapter-arkiv-sikri
     path: deployment.yaml

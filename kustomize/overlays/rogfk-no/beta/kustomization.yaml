@@ -8,13 +8,13 @@ resources:
   - onepassword.yaml
 
 commonLabels:
-  app.kubernetes.io/instance: adapter-sikri-arkiv_rogfk-no
+  app.kubernetes.io/instance: adapter-arkiv-sikri_rogfk-no
   fintlabs.no/org-id: rogfk.no
 
 patches:
   
   - target:
       kind: Deployment
-      name: adapter-sikri-arkiv
+      name: adapter-arkiv-sikri
     path: deployment.yaml
 

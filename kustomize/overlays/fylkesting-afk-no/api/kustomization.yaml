@@ -9,29 +9,29 @@ resources:
 #  - fint-adapter.yaml
 
 commonLabels:
-  app.kubernetes.io/instance: adapter-sikri-arkiv_fylkesting-afk-no
+  app.kubernetes.io/instance: adapter-arkiv-sikri_fylkesting-afk-no
   fintlabs.no/org-id: fylkesting.afk.no
 
 patches:
   
   - target:
       kind: Deployment
-      name: adapter-sikri-arkiv
+      name: adapter-arkiv-sikri
     path: deployment.yaml
 
   - target:
       kind: Deployment
-      name: adapter-sikri-arkiv
+      name: adapter-arkiv-sikri
     patch: |-
       - op: replace
         path: "/metadata/name"
-        value: "adapter-sikri-arkiv-fylkesting-afk-no"
+        value: "adapter-arkiv-sikri-fylkesting-afk-no"
       - op: replace
         path: "/spec/selector/matchLabels/app"
-        value: "adapter-sikri-arkiv-fylkesting-afk-no"
+        value: "adapter-arkiv-sikri-fylkesting-afk-no"
       - op: replace
         path: "/spec/template/metadata/labels/app"
-        value: "adapter-sikri-arkiv-fylkesting-afk-no"
+        value: "adapter-arkiv-sikri-fylkesting-afk-no"
       - op: replace
         path: /spec/template/spec/containers/0/name
-        value: "adapter-sikri-arkiv-fylkesting-afk-no"
+        value: "adapter-arkiv-sikri-fylkesting-afk-no"

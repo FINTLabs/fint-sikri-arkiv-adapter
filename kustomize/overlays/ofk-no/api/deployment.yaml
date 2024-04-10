@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv
+  name: adapter-arkiv-sikri
   namespace: ofk-no
 spec:
   template:
     spec:
       containers:
-        - name: adapter-sikri-arkiv
+        - name: adapter-arkiv-sikri
           resources:
             limits:
               memory: "9Gi"

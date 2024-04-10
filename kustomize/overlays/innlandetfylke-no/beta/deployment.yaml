@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv
+  name: adapter-arkiv-sikri
   namespace: innlandetfylke-no
 spec:
   template:
     spec:
       containers:
-        - name: adapter-sikri-arkiv
+        - name: adapter-arkiv-sikri
           envFrom:
             - secretRef:
                 name: arkiv-sikri-onepassword

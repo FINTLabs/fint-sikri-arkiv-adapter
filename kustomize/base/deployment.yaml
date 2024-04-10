@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv
+  name: adapter-arkiv-sikri
   labels:
-    app.kubernetes.io/instance: adapter-sikri-arkiv_fintlabs_no
-    app.kubernetes.io/name: adapter-sikri-arkiv
+    app.kubernetes.io/instance: adapter-arkiv-sikri_fintlabs_no
+    app.kubernetes.io/name: adapter-arkiv-sikri
     fintlabs.no/team: arkiv
     fintlabs.no/org-id: fintlabs.no
 spec:
@@ -14,11 +14,11 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: adapter-sikri-arkiv
+      app: adapter-arkiv-sikri
   template:
     metadata:
       labels:
-        app: adapter-sikri-arkiv
+        app: adapter-arkiv-sikri
       annotations:
           prometheus.io/scrape: "true"
           prometheus.io/port: "8080"
@@ -30,7 +30,7 @@ spec:
           emptyDir: 
             sizeLimit: 1G
       containers:
-        - name: adapter-sikri-arkiv
+        - name: adapter-arkiv-sikri
           image: ghcr.io/fintlabs/fint-sikri-arkiv-adapter:latest
           resources:
             limits:

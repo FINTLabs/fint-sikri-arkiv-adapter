@@ -1,14 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: adapter-sikri-arkiv
+  name: adapter-arkiv-sikri
   namespace: fridiks-no
 spec:
   template:
     spec:
       containers:
-        - name: adapter-sikri-arkiv
-          image: ghcr.io/fintlabs/fint-sikri-arkiv-adapter:ARKIV-79-df897a8
+        - name: adapter-arkiv-sikri
           envFrom:
             - secretRef:
                 name: arkiv-sikri-fridiks-no
