@@ -24,12 +24,6 @@ spec:
                 -Xmx7G -verbose:gc
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
-                -Dcom.sun.security.enableAIAcaIssuers=true
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
@@ -140,5 +134,5 @@ spec:
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://api.felleskomponent.no/arkiv/kulturminnevern/provider}
             - {name: fint.adapter.endpoints.providers.samferdsel, value: https://api.felleskomponent.no/arkiv/samferdsel/provider}
 
-            - {name: logging.level.no.fint.arkiv, value: debug}
-            - {name: logging.level.no.fint.sikri, value: debug}
+            - {name: logging.level.no.fint.arkiv, value: info}
+            - {name: logging.level.no.fint.sikri, value: info}
