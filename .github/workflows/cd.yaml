@@ -52,6 +52,7 @@ jobs:
         include: 
           - cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
+            org: ofk-no
 
     steps:
       - uses: actions/checkout@v4
