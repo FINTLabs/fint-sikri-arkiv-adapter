@@ -91,6 +91,7 @@ public class KorrespondansepartFactory {
         if (StringUtils.isNotBlank(input.getFodselsnummer())) {
             output.setIdTypeId("FNR");
             output.setExternalId(input.getFodselsnummer());
+            output.setUser(Boolean.TRUE);
         } else if (StringUtils.isNotBlank(input.getOrganisasjonsnummer())) {
             output.setIdTypeId("ORG");
             output.setExternalId(input.getOrganisasjonsnummer());
