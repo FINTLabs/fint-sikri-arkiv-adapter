@@ -52,6 +52,8 @@ jobs:
         include: 
           - org: afk-no
             deploy-every-branch: true
+          - org: ofk-no
+            deploy-every-branch: true
 
     steps:
       - uses: actions/checkout@v4
