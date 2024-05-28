@@ -14,6 +14,17 @@ spec:
             - secretRef:
                 name: sikri-arkiv-beta # fint-adapter
           env:
+            - name: JAVA_TOOL_OPTIONS
+              value: >-
+                -Xmx1G -verbose:gc
+                -XX:+ExitOnOutOfMemoryError
+                -Dfile.encoding=UTF-8
+                -Dcom.sun.security.enableAIAcaIssuers=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
