@@ -180,7 +180,7 @@ public class PersonalmappeFactory {
 
     public PersonalmappeResource toFintResource(CaseType input) {
 
-        log.info("CaseType toFintResource", input);
+        log.info("CaseType toFintResource: {}", input);
 
         PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(
                 identityService.getIdentityForClass(PersonalmappeResource.class),
