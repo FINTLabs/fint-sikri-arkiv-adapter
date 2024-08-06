@@ -24,6 +24,7 @@ class NoarkTitleSpec extends Specification {
         "Sak 1 - #Ole Nordmann# og #Lisa Nordmann# søker tilskudd til #vixenawards" | "Sak 1 - Ole Nordmann og Lisa Nordmann søker tilskudd til #vixenawards"
         "Komp - @#Medalen Grethe Ragni# - 311280@"                                  | "Komp - ***** ***** ***** ***** *****"
         "Komp - @#Medalen  Grethe Ragni# - 311280@"                                 | "Komp - *****  ***** ***** ***** *****" // Kan dette ekstra mellomrommet skape trøbbel?
+        "Søknad - Refnr 123 - @Ballestad Egil - @"                                  | "Søknad - Refnr 123 - ***** ***** ***** "
     }
 
     def "Mark title with marked words"() {
@@ -40,6 +41,7 @@ class NoarkTitleSpec extends Specification {
         "Sak 1 - @Ole Nordmann@ (ole@norge.no) oppføring av garasje"     | "Sak 1 - ***** ***** (ole@norge.no) oppføring av garasje"
         "Komp - @#Medalen Grethe Ragni# - 311280@"                       | "Komp - +++++ +++++ ++++_ ***** *****"
         "Komp - #Medalen @Grethe@ Ragni# - 311280"                       | "Komp - ##### ##### ####_ - 311280" // Skjerming inni markering gir ikke mening
+        "Søknad - Refnr 123 - #Ballestad Egil - #"                       | "Søknad - Refnr 123 - ##### ##### ####_ "
     }
 
 }

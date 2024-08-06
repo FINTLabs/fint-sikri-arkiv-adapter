@@ -104,8 +104,10 @@ public enum SikriUtils {
             String match = matcher.group();
 
             String markedMatch = match
-                    .replaceAll("[^\\ ]+", replacement)
-                    .replaceFirst("#####$", "####_");
+                    .replaceAll("#", "")
+                    .replaceAll("@", "")
+                    .replaceAll("[^ ]+", replacement)
+                    .replaceFirst("#####(?= *$)", "####_");
 
             markedTitle = markedTitle.replace(match, markedMatch);
         }
@@ -119,7 +121,7 @@ public enum SikriUtils {
             String match = matcher.group();
 
             String markedMatch = match
-                    .replaceAll("(?!([@#_]+))[^\\ ]+", replacement)
+                    .replaceAll("(?!([@#_]+))[^ ]+", replacement)
                     .replaceAll("#####", "+++++")
                     .replaceAll("####_", "++++_")
                     .replaceFirst("^@", "")
