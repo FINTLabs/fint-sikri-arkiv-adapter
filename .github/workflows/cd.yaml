@@ -50,7 +50,8 @@ jobs:
         org: [ innlandetfylke-no, rogfk-no, vlfk-no, afk-no, bfk-no, ofk-no, fridiks-no, fylkesting-afk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
-          - org: ofk-no
+          - org: afk-no
+            cluster: aks-api-fint-2022-02-08
             deploy-every-branch: true
 
     steps:
