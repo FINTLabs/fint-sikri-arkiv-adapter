@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static no.fint.sikri.data.utilities.FintUtils.getIdFromLink;
 import static no.fint.sikri.data.utilities.SikriUtils.applyParameterFromLink;
@@ -180,7 +181,6 @@ public class PersonalmappeFactory {
 
     public PersonalmappeResource toFintResource(CaseType input) {
 
-
         PersonalmappeResource personalmappe = noarkFactory.applyValuesForSaksmappe(
                 identityService.getIdentityForClass(PersonalmappeResource.class),
                 caseDefaults.getPersonalmappe(),
@@ -188,32 +188,30 @@ public class PersonalmappeFactory {
 
         personalmappe.setNavn(getPersonnavnFromTitle(input.getTitle()));
 
-        personalmappe.addArbeidssted(Link.with(
-                Organisasjonselement.class,
-                "systemid",
-                input.getAdministrativeUnit()
+        Optional.ofNullable(input.getAdministrativeUnit())
+                .map(AdministrativeUnitType::getShortCodeThisLevel)
+                .ifPresent(shortCode -> personalmappe.addArbeidssted(Link.with(
+                        Organisasjonselement.class,
+                        "systemid",
+                        shortCode
+                )));
 
-                        .getShortCodeThisLevel()
+        Optional.ofNullable(input.getOfficerName())
+                .map(UserNameType::getInitials)
+                .ifPresent(initials -> personalmappe.addLeder(Link.with(
+                        Personalressurs.class,
+                        "brukernavn",
+                        initials
+                )));
 
-        ));
+        Optional.ofNullable(input.getPrimaryClassification())
+                .map(ClassificationType::getClassId)
+                .ifPresent(classId -> personalmappe.addPerson(Link.with(
+                        Person.class,
+                        "fodselsnummer",
+                        classId
+                )));
 
-        personalmappe.addLeder(Link.with(
-                Personalressurs.class,
-                "brukernavn",
-                input.getOfficerName()
-
-                        .getInitials()
-
-        ));
-
-        personalmappe.addPerson(Link.with(
-                Person.class,
-                "fodselsnummer",
-                input.getPrimaryClassification()
-
-                        .getClassId()
-
-        ));
         personalmappe.addSelf(
                 Link.with(
                         PersonalmappeResource.class,
