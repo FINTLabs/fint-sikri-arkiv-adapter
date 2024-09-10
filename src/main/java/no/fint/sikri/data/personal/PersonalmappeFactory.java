@@ -171,11 +171,13 @@ public class PersonalmappeFactory {
 
     private Personnavn getPersonnavnFromTitle(String title) {
         String name = StringUtils.substringAfter(title, "-").trim();
-        String firstName = StringUtils.substringAfter(name, " ");
-        String lastName = StringUtils.substringBefore(name, " ");
+        String firstName = StringUtils.substringBeforeLast(name, " ");
+        String lastName = StringUtils.substringAfterLast(name, " ");
+
         Personnavn personnavn = new Personnavn();
         personnavn.setFornavn(firstName);
         personnavn.setEtternavn(lastName);
+
         return personnavn;
     }
 
