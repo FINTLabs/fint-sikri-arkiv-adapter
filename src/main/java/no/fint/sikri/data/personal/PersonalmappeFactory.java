@@ -104,7 +104,7 @@ public class PersonalmappeFactory {
     }
 
     private static String getPersonalmappeTitle(String fullName) {
-        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "#", fullName, "#"));
+        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "@#", fullName, "#@"));
     }
 
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
