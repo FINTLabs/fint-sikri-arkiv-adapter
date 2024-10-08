@@ -1,7 +1,6 @@
 package no.fint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.springfox.loader.EnableSpringfox;
 import no.fint.antlr.EnableFintFilter;
 import no.fint.oauth.OAuthConfig;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableSpringfox
 @EnableScheduling
 @EnableFintFilter
 @Import(OAuthConfig.class)
