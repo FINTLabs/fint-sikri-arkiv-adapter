@@ -42,6 +42,8 @@ public class CaseService {
         odataFilterFieldMapper = new ImmutableMap.Builder<String, String>()
                 .put("saksaar", "CaseYear")
                 .put("sakssekvensnummer", "SequenceNumber")
+                .put("saksdato", "CaseDate")
+                .put("oppdatert", "LastRecordDate")
                 .put("arkivdel", "SeriesId")
                 .put("administrativenhet", "AdministrativeUnitId")
                 .put("tilgangskode", "AccessCodeId")

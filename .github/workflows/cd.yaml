@@ -54,7 +54,7 @@ jobs:
             deploy-every-branch: true
 
           - cluster: aks-api-fint-2022-02-08
-            org: bfk-no
+            org: vlfk-no
             deploy-every-branch: true
 
 
