@@ -22,6 +22,7 @@ import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -55,6 +56,9 @@ public class PersonalmappeFactory {
     private SikriIdentityService identityService;
 
     private CaseProperties properties;
+
+    @Value("${fint.sikri.case.personalmappe.skjermetNavn:false}")
+    private boolean skjermetNavn;
 
     @PostConstruct
     public void init() {
@@ -103,8 +107,12 @@ public class PersonalmappeFactory {
         return caseType;
     }
 
-    private static String getPersonalmappeTitle(String fullName) {
-        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "@#", fullName, "#@"));
+    private String getPersonalmappeTitle(String fullName) {
+        if (skjermetNavn) {
+            return getMarkedTitle(String.format("Personalmappe - %s%s%s", "@#", fullName, "#@"));
+        }
+
+        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "#", fullName, "#"));
     }
 
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
