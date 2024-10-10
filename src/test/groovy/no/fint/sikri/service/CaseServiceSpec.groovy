@@ -29,6 +29,8 @@ class CaseServiceSpec extends Specification {
         "saksaar eq '2023'"                               || "CaseYear='2023'"
         "saksaar eq '2023' and sakssekvensnummer eq '27'" || "CaseYear='2023' AND SequenceNumber='27'"
         "sakssekvensnummer eq '27'"                       || "SequenceNumber='27'"
+        "saksdato eq '01-01-1970'"                        || "CaseDate='01-01-1970'"
+        "oppdatert eq '01-01-1970'"                       || "LastRecordDate='01-01-1970'"
         "arkivdel eq 'Drosje'"                            || "SeriesId='Drosje'"
         "administrativenhet eq '42'"                      || "AdministrativeUnitId='42'"
         "tilgangskode eq 'UO'"                            || "AccessCodeId='UO'"
