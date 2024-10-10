@@ -85,9 +85,9 @@ public final class FintUtils {
 
     public static String getFullnameFromPersonnavn(Personnavn personnavn) {
         return Stream.<String>builder()
-                .add(personnavn.getEtternavn())
                 .add(personnavn.getFornavn())
                 .add(personnavn.getMellomnavn())
+                .add(personnavn.getEtternavn())
                 .build()
                 .filter(StringUtils::isNotBlank).collect(Collectors.joining(" "));
     }
