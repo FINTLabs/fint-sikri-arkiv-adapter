@@ -37,8 +37,10 @@ spec:
             - {name: fint.case.coding.saksstatus.B, value: 'B'}
             - {name: fint.case.coding.tilknyttetRegistreringSom.H, value: 'H'}
             - {name: fint.case.coding.tilknyttetRegistreringSom.V, value: 'V'}
+
             - {name: fint.case.defaults.personalmappe.saksstatus, value: B }
-            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '84'}
+
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '157'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'LOYVER'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalpostType, value: 'I'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'M'}
@@ -54,6 +56,7 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.primarklassifikasjon, value: 'LØYVE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.saksstatus, value: 'B'}
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
+
             - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '14' }
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: EMNE }
             - {name: fint.case.defaults.tilskuddfartoy.dokumentstatus, value: F }
@@ -75,6 +78,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfartoy.tilgangsrestriksjon, value: UO }
             - {name: fint.case.defaults.tilskuddfartoy.title.cases, value: 'Tilskudd - fartøyvern - ${fartoyNavn} - ${kallesignal} - søknadsnr ${soknadsnummer.identifikatorverdi}' }
             - {name: fint.case.defaults.tilskuddfartoy.title.records, value: '${tittel} -' }
+
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.administrativEnhet, value: '14' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.arkivdel, value: EMNE }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.dokumentstatus, value: F }
@@ -97,6 +101,7 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.tilgangsrestriksjon, value: UO }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: 'Tilskudd - Freda bygninger i privat eie - ${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - ${bygningsnavn} - søknadsnummer ${soknadsnummer.identifikatorverdi} - kulturminneid: ${kulturminneId}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.records, value: '${tittel} -' }
+
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.administrativEnhet, value: '14' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.arkivdel, value: EMNE }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.avskrivningsmaate, value: TE }
@@ -114,7 +119,9 @@ spec:
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.saksstatus, value: B }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - gnr ${matrikkelnummer.gardsnummer} bnr ${matrikkelnummer.bruksnummer} - dispensasjon fra kulturminneloven - inngrep i automatisk freda kulturminner - ${tiltak}' }
             - {name: fint.case.defaults.dispensasjonautomatiskfredakulturminne.title.records, value: '#{tittel.replaceFirst("inngrep i automatisk freda kulturminner","søknad om inngrep i automatisk freda kulturminner")} -' }
+
             - {name: fint.file-cache.directory, value: '/temp'}
+
             - {name: fint.sikri.class.type.create, value: 'false'}
             - {name: fint.sikri.identity.casetype.default, value: digisak}
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: samferdsel}
@@ -122,8 +129,10 @@ spec:
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
+
             - {name: logging.level.org.springframework.security, value: 'warn'}
             - {name: logging.level.org.springframework.security.web.FilterChainProxy, value: 'warn'}
+
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
