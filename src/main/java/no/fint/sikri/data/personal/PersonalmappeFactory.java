@@ -72,8 +72,8 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
         caseType.setTitle("Personalmappe - " + fullName);
 
-        caseType.setPublicTitle("Personalmappe - " + fullName);
-        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitle(getPersonalmappePublicTitle(fullName, false));
+        caseType.setPublicTitleNames(getPersonalmappePublicTitle(fullName, true));
 
         caseType.setAccessCodeId(properties.getTilgangsrestriksjon());
         caseType.setFileTypeId(properties.getSaksmappeType());
@@ -93,8 +93,8 @@ public class PersonalmappeFactory {
         String fullName = FintUtils.getFullnameFromPersonnavn(personalmappeResource.getNavn());
         caseType.setTitle("Personalmappe - " + fullName);
 
-        caseType.setPublicTitle("Personalmappe - " + fullName);
-        caseType.setPublicTitleNames(getPersonalmappeTitle(fullName));
+        caseType.setPublicTitle(getPersonalmappePublicTitle(fullName, false));
+        caseType.setPublicTitleNames(getPersonalmappePublicTitle(fullName, true));
 
         //try {
         caseType.setAdministrativeUnitId(getAdministrativeUnitTypeIdFromArbeidssted(personalmappeResource));
@@ -107,12 +107,10 @@ public class PersonalmappeFactory {
         return caseType;
     }
 
-    private String getPersonalmappeTitle(String fullName) {
-        if (skjermetNavn) {
-            return getMarkedTitle(String.format("Personalmappe - %s%s%s", "@#", fullName, "#@"));
-        }
-
-        return getMarkedTitle(String.format("Personalmappe - %s%s%s", "#", fullName, "#"));
+    private String getPersonalmappePublicTitle(String fullName, boolean markedName) {
+        String shielded = skjermetNavn ? "@" : "";
+        String marked = markedName ? "#" : "";
+        return getMarkedTitle(String.format("Personalmappe - %s%s%s%s%s", shielded, marked, fullName, marked, shielded));
     }
 
     public ClassificationType toSikriUpdate(ClassificationType classificationType, PersonalmappeResource personalmappeResource) {
