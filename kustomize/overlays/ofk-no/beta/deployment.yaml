@@ -16,16 +16,19 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=false
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=false
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=false
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
             - {name: fint.case.coding.format.RA-TEKST, value: 'TEXT'}
             - {name: fint.case.coding.format.RA-JPEG, value: 'JPEG'}
             - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
             - {name: springfox.title, value: "Elements Adapter for Østfold"}
+
+            - { name: logging.level.no.fint.arkiv, value: trace }
+            - { name: logging.level.no.fint.sikri, value: trace }
 
             - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS' }
             - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B' }
