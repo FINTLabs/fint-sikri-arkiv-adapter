@@ -228,7 +228,7 @@ public class NoarkService {
                         log.info("DocumentTitle from registryEntryDocument: {}", documentDescription.getDocumentTitle());
 
                         FintPropertyUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription,
-                                p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId"),
+                                p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId", "documentTitle"),
                                 (src, dst) -> dst == null ? src : dst);
 
                         log.info("DocumentTitle after copy: {}", documentDescription.getDocumentTitle());
