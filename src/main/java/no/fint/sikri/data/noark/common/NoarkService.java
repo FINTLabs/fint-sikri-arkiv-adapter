@@ -217,15 +217,21 @@ public class NoarkService {
                     final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
 
+                    log.info("DocumentTitle before workaround: {}", document.getRight().getDocumentDescription().getDocumentTitle());
+
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
 
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
+                        log.info("DocumentTitle from registryEntryDocument: {}", documentDescription.getDocumentTitle());
+
                         FintPropertyUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription,
                                 p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId"),
                                 (src, dst) -> dst == null ? src : dst);
+
+                        log.info("DocumentTitle after copy: {}", documentDescription.getDocumentTitle());
 
                         log.debug("Update 💼 {}", documentDescription);
                         sikriObjectModelService.updateDataObject(identity, documentDescription);
