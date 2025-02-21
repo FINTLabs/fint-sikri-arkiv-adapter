@@ -123,8 +123,8 @@ spec:
             - {name: fint.file-cache.directory, value: '/temp'}
 
             - {name: fint.sikri.class.type.create, value: 'false'}
-            - {name: fint.sikri.identity.casetype.default, value: flyt}
-            - { name: fint.sikri.identity.casetype.sak, value: flyt }
+            - {name: fint.sikri.identity.casetype.default, value: digisak}
+            - {name: fint.sikri.identity.casetype.sak, value: digisak}
             - {name: fint.sikri.identity.casetype.soknaddrosjeloyve, value: samferdsel}
             - {name: fint.sikri.identity.casetype.tilskuddfartoy, value: digisak}
             - {name: fint.sikri.identity.casetype.tilskuddfredabygningprivateie, value: digisak}
