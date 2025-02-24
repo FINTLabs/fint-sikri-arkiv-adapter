@@ -214,26 +214,25 @@ public class NoarkService {
                     final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
 
-                    log.info("DocumentTitle before workaround: {}", document.getRight().getDocumentDescription().getDocumentTitle());
+                    log.trace("DocumentTitle from input source: {}", document.getRight().getDocumentDescription().getDocumentTitle());
 
+                    // Beware that the first document is handled differently
                     if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
-                        // Workaround for first document in every journalpost
-                        log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
-
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
-                        // Keep title from input
-                        Optional.ofNullable(document.getRight().getDocumentDescription().getDocumentTitle()).ifPresent(documentDescription::setDocumentTitle);
+                        log.trace("DocumentTitle from registryEntryDocument: {}", documentDescription.getDocumentTitle());
 
-                        log.info("DocumentTitle from registryEntryDocument: {}", documentDescription.getDocumentTitle());
+                        // Keep title from input if present
+                        Optional.ofNullable(document.getRight().getDocumentDescription().getDocumentTitle())
+                                .ifPresent(documentDescription::setDocumentTitle);
 
                         // When destination properties don't have values, keep properties from input (but not ids)
                         FintPropertyUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription,
                                 p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId"),
                                 (src, dst) -> dst == null ? src : dst);
 
-                        log.info("DocumentTitle after copy: {}", documentDescription.getDocumentTitle());
+                        log.trace("DocumentTitle after copy properties: {}", documentDescription.getDocumentTitle());
 
                         log.debug("Update 💼 {}", documentDescription);
                         sikriObjectModelService.updateDataObject(identity, documentDescription);
@@ -245,11 +244,7 @@ public class NoarkService {
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
-
-                        log.debug("🍷🍷🍷");
-
                     } else {
-                        // All documents except the first
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
 
