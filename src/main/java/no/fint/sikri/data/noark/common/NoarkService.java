@@ -32,10 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -217,15 +214,25 @@ public class NoarkService {
                     final String filePath = sikriDocumentService.uploadFile(identity, checkinDocument.getContent(), checkinDocument.getFilename());
                     log.debug("Uploaded filePath: {}", filePath);
 
-                    if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
-                        log.debug("SIKRI WORKAROUND HACK IN PROGRESS! 🦴");
+                    log.trace("DocumentTitle from input source: {}", document.getRight().getDocumentDescription().getDocumentTitle());
 
+                    // Beware that the first document is handled differently
+                    if (i == 0 && j == 0 && dataObjects != null && dataObjects.size() == 1) {
                         RegistryEntryDocumentType registryEntryDocument = (RegistryEntryDocumentType) dataObjects.get(0);
                         final DocumentDescriptionType documentDescription = registryEntryDocument.getDocumentDescription();
 
+                        log.trace("DocumentTitle from registryEntryDocument: {}", documentDescription.getDocumentTitle());
+
+                        // Keep title from input if present
+                        Optional.ofNullable(document.getRight().getDocumentDescription().getDocumentTitle())
+                                .ifPresent(documentDescription::setDocumentTitle);
+
+                        // When destination properties don't have values, keep properties from input (but not ids)
                         FintPropertyUtils.copyProperties(document.getRight().getDocumentDescription(), documentDescription,
                                 p -> !StringUtils.equalsAny(p.getName(), "id", "dataObjectId", "documentCategoryId"),
                                 (src, dst) -> dst == null ? src : dst);
+
+                        log.trace("DocumentTitle after copy properties: {}", documentDescription.getDocumentTitle());
 
                         log.debug("Update 💼 {}", documentDescription);
                         sikriObjectModelService.updateDataObject(identity, documentDescription);
@@ -237,9 +244,6 @@ public class NoarkService {
                         log.debug("Create 🧾 {}", checkinDocument.getFilename());
                         checkinDocument.setDocumentId(documentDescription.getId());
                         sikriObjectModelService.createDataObject(identity, dokumentobjektFactory.toDocumentObject(checkinDocument, filePath));
-
-                        log.debug("🍷🍷🍷");
-
                     } else {
                         log.debug("Create 💼 {}", document.getRight().getDocumentDescription());
                         final DocumentDescriptionType documentDescription = sikriObjectModelService.createDataObject(identity, document.getRight().getDocumentDescription());
