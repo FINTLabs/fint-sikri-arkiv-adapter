@@ -50,8 +50,8 @@ spec:
 
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '63'} # SAMF FORVALTN
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '188' } # Evy Heidi Johanne Angell
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '188' } # Evy Heidi Johanne Angell
+            #- {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '188' } # Evy Heidi Johanne Angell
+            #- {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '188' } # Evy Heidi Johanne Angell
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'SP'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
