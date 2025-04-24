@@ -32,9 +32,16 @@ public class GetSakHandler implements Handler {
     @Autowired
     private SikriIdentityService identityService;
 
-    @Autowired
-    private MeterRegistry meterRegistry;
+    private final MeterRegistry meterRegistry;
+    private final Counter sakCounter;
 
+    public GetSakHandler(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+
+        sakCounter = Counter.builder("fint-sikri-arkiv-adapter.GetSakHandlerCounter")
+                .description("Arkivlagets kuleramme")
+                .register(meterRegistry);
+    }
 
     @Override
     public void accept(Event<FintLinks> response) {
@@ -42,9 +49,7 @@ public class GetSakHandler implements Handler {
         log.debug("Try to get a sak based on this query: {}", query);
 
         try {
-            Counter sakCounter = Counter.builder("fint-sikri-arkiv-adapter.GetSakHandlerCounter")
-                                    .description("Arkivlagets kuleramme")
-                                            .register(meterRegistry);
+            log.debug("sakCounter before incrementing; {}", sakCounter.count());
             sakCounter.increment();
 
             response.setData(new LinkedList<>());
