@@ -1,5 +1,7 @@
 package no.fint.sikri.handler.noark;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
@@ -30,10 +32,21 @@ public class GetSakHandler implements Handler {
     @Autowired
     private SikriIdentityService identityService;
 
+    @Autowired
+    private MeterRegistry meterRegistry;
+
+
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
+        log.debug("Try to get a sak based on this query: {}", query);
+
         try {
+            Counter sakCounter = Counter.builder("fint-sikri-arkiv-adapter.GetSakHandlerCounter")
+                                    .description("Arkivlagets kuleramme")
+                                            .register(meterRegistry);
+            sakCounter.increment();
+
             response.setData(new LinkedList<>());
             if (!caseQueryService.isValidQuery(query)) {
                 throw new IllegalArgumentException("Invalid query: " + query);
