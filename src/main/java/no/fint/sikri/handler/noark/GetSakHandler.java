@@ -2,6 +2,7 @@ package no.fint.sikri.handler.noark;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
@@ -34,17 +35,22 @@ public class GetSakHandler implements Handler {
 
     private final MeterRegistry meterRegistry;
     private final Counter.Builder sakCounter;
+    private final Timer.Builder sakTimer;
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
         sakCounter = Counter.builder("fint.sikri.sak.counter")
                 .description("The Archive Abacus");
+        sakTimer = Timer.builder("fint.sikri.sak.timer")
+                .description("The Archive Timer");
     }
 
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
         log.debug("Try to get a sak based on this query (and we do even counting and do some time analysis): {}", query);
+
+        Timer.Sample sample = Timer.start(meterRegistry);
 
         try {
             response.setData(new LinkedList<>());
@@ -71,6 +77,9 @@ public class GetSakHandler implements Handler {
             sakCounter.tag("status", response.getStatus().name())
                     .register(meterRegistry)
                     .increment();
+
+            sample.stop(sakTimer.tag("status", response.getStatus().name())
+                    .register(meterRegistry));
         }
     }
 
