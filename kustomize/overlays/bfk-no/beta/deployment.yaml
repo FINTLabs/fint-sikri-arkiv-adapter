@@ -129,4 +129,5 @@ spec:
             - {name: fint.adapter.endpoints.providers.samferdsel, value: https://beta.felleskomponent.no/arkiv/samferdsel/provider}
             - {name: fint.adapter.endpoints.providers.personal, value: https://beta.felleskomponent.no/arkiv/personal/provider}
 
-            - {name: logging.level.no.fint, value: debug}
+            - {name: logging.level.no.fint.arkiv, value: trace}
+            - {name: logging.level.no.fint.sikri, value: trace}

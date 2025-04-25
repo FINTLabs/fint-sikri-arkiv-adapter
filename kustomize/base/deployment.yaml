@@ -72,5 +72,3 @@ spec:
             - {name: fint.adapter.reject-unknown-events, value: 'false'}
             - {name: fint.file-cache.directory, value: '/temp'}
             - {name: fint.sikri.wsdl-location, value: /app }
-            - {name: logging.level.no.fint.arkiv, value: info}
-            - {name: logging.level.no.fint.sikri, value: info}
