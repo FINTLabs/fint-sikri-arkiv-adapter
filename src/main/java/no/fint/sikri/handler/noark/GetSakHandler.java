@@ -33,7 +33,7 @@ public class GetSakHandler implements Handler {
     private SikriIdentityService identityService;
 
     private final MeterRegistry meterRegistry;
-    private Counter.Builder sakCounter;
+    private final Counter.Builder sakCounter;
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
