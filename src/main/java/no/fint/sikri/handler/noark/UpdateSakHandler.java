@@ -100,7 +100,7 @@ public class UpdateSakHandler implements Handler {
         } finally {
             sample.stop(updateSakTimer.tag("request", "updateCase")
                     .tag("status", response.getStatus().name())
-                    .tag("statusCode", response.getStatusCode())
+                    .tag("statusCode", response.getStatusCode() != null ? response.getStatusCode() : "N/A")
                     .register(meterRegistry));
         }
     }
@@ -120,7 +120,7 @@ public class UpdateSakHandler implements Handler {
 
         sample.stop(updateSakTimer.tag("request", "createCase")
                 .tag("status", response.getStatus().name())
-                .tag("statusCode", response.getStatusCode())
+                .tag("statusCode", response.getStatusCode() != null ? response.getStatusCode() : "N/A")
                 .register(meterRegistry));
     }
 
