@@ -35,14 +35,14 @@ public class GetSakHandler implements Handler {
 
     private final MeterRegistry meterRegistry;
     private final Counter.Builder sakCounter;
-    private final Timer.Builder sakTimer;
+    private final Timer.Builder getSakTimer;
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
         sakCounter = Counter.builder("fint.sikri.sak.counter")
                 .description("The Archive Abacus");
-        sakTimer = Timer.builder("fint.sikri.sak.timer")
-                .description("The Archive Timer");
+        getSakTimer = Timer.builder("fint.sikri.sak.timer")
+                .description("The Archive Sak Timer");
     }
 
     @Override
@@ -78,7 +78,7 @@ public class GetSakHandler implements Handler {
                     .register(meterRegistry)
                     .increment();
 
-            sample.stop(sakTimer.tag("status", response.getStatus().name())
+            sample.stop(getSakTimer.tag("status", response.getStatus().name())
                     .register(meterRegistry));
         }
     }

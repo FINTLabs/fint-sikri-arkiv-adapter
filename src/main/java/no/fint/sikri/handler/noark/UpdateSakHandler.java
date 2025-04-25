@@ -2,6 +2,8 @@ package no.fint.sikri.handler.noark;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.CaseDefaults;
 import no.fint.event.model.Event;
@@ -43,6 +45,16 @@ public class UpdateSakHandler implements Handler {
     @Autowired
     private SakService sakService;
 
+    private final MeterRegistry meterRegistry;
+    private final Timer.Builder updateSakTimer;
+
+
+    public UpdateSakHandler(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+        updateSakTimer = Timer.builder("fint.sikri.update-sak.timer")
+                .description("The Archive Update Timer");
+    }
+
     @Override
     public void accept(Event<FintLinks> response) {
         if (response.getData().size() != 1) {
@@ -75,6 +87,9 @@ public class UpdateSakHandler implements Handler {
         if (!validationService.validate(response, sakResource.getJournalpost())) {
             return;
         }
+
+        Timer.Sample sample = Timer.start(meterRegistry);
+
         try {
             SakResource result = sakService.updateGenericCase(query, sakResource);
             response.setData(ImmutableList.of(result));
@@ -82,6 +97,11 @@ public class UpdateSakHandler implements Handler {
         } catch (CaseNotFound e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
+        } finally {
+            sample.stop(updateSakTimer.tag("request", "updateCase")
+                    .tag("status", response.getStatus().name())
+                    .tag("statusCode", response.getStatusCode())
+                    .register(meterRegistry));
         }
     }
 
@@ -91,9 +111,17 @@ public class UpdateSakHandler implements Handler {
         if (!validationService.validate(response, sakResource)) {
             return;
         }
-        SakResource tilskuddFartoy = sakService.createGenericCase(sakResource);
-        response.setData(ImmutableList.of(tilskuddFartoy));
+
+        Timer.Sample sample = Timer.start(meterRegistry);
+
+        SakResource sak = sakService.createGenericCase(sakResource);
+        response.setData(ImmutableList.of(sak));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
+
+        sample.stop(updateSakTimer.tag("request", "createCase")
+                .tag("status", response.getStatus().name())
+                .tag("statusCode", response.getStatusCode())
+                .register(meterRegistry));
     }
 
     @Override
