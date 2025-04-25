@@ -34,13 +34,10 @@ public class GetSakHandler implements Handler {
     private SikriIdentityService identityService;
 
     private final MeterRegistry meterRegistry;
-    private final Counter.Builder sakCounter;
     private final Timer.Builder getSakTimer;
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        sakCounter = Counter.builder("fint.sikri.sak.counter")
-                .description("The Archive Abacus");
         getSakTimer = Timer.builder("fint.sikri.sak.timer")
                 .description("The Archive Sak Timer");
     }
@@ -74,11 +71,9 @@ public class GetSakHandler implements Handler {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
         } finally {
-            sakCounter.tag("status", response.getStatus().name())
-                    .register(meterRegistry)
-                    .increment();
-
-            sample.stop(getSakTimer.tag("status", response.getStatus().name())
+            sample.stop(getSakTimer.tag("request", "getCase")
+                    .tag("status", response.getStatus().name())
+                    .tag("statusCode", response.getStatusCode() != null ? response.getStatusCode() : "N/A")
                     .register(meterRegistry));
         }
     }
