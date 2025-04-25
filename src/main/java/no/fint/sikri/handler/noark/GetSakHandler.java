@@ -33,34 +33,32 @@ public class GetSakHandler implements Handler {
     private SikriIdentityService identityService;
 
     private final MeterRegistry meterRegistry;
-    private final Counter sakCounter;
+    private Counter.Builder sakCounter;
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-
-        sakCounter = Counter.builder("fint-sikri-arkiv-adapter.GetSakHandlerCounter")
-                .description("Arkivlagets kuleramme")
-                .register(meterRegistry);
+        sakCounter = Counter.builder("fint.sikri.sak.counter")
+                .description("The Archive Abacus");
     }
 
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
-        log.debug("Try to get a sak based on this query: {}", query);
+        log.debug("Try to get a sak based on this query (and we do even counting and do some time analysis): {}", query);
 
         try {
-            log.debug("sakCounter before incrementing; {}", sakCounter.count());
-            sakCounter.increment();
-
             response.setData(new LinkedList<>());
+
             if (!caseQueryService.isValidQuery(query)) {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }
+
             caseQueryService
                     .query(identityService.getDefaultIdentity(), query)
                     .map(sakFactory::toFintResource)
                     .forEach(response::addData);
             response.setResponseStatus(ResponseStatus.ACCEPTED);
+
             if (response.getData().isEmpty()) {
                 response.setResponseStatus(ResponseStatus.REJECTED);
                 response.setStatusCode("NOT_FOUND");
@@ -69,6 +67,10 @@ public class GetSakHandler implements Handler {
         } catch (IllegalCaseNumberFormat e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
+        } finally {
+            sakCounter.tag("status", response.getStatus().name())
+                    .register(meterRegistry)
+                    .increment();
         }
     }
 
