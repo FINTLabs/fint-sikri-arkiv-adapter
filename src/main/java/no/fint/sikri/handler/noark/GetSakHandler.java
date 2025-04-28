@@ -1,6 +1,5 @@
 package no.fint.sikri.handler.noark;
 
-import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +37,8 @@ public class GetSakHandler implements Handler {
 
     public GetSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        getSakTimer = Timer.builder("fint.sikri.sak.timer")
-                .description("The Archive Sak Timer");
+        getSakTimer = Timer.builder("fint.arkiv.sak.timer")
+                .description("The Sikri Archive Sak Timer");
     }
 
     @Override

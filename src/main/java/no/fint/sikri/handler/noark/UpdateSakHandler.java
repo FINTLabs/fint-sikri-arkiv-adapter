@@ -51,8 +51,8 @@ public class UpdateSakHandler implements Handler {
 
     public UpdateSakHandler(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        updateSakTimer = Timer.builder("fint.sikri.update-sak.timer")
-                .description("The Archive Update Timer");
+        updateSakTimer = Timer.builder("fint.arkiv.update-sak.timer")
+                .description("The Sikri Archive Update Timer");
     }
 
     @Override
