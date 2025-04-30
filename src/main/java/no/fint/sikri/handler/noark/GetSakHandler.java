@@ -1,5 +1,7 @@
 package no.fint.sikri.handler.noark;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
@@ -30,19 +32,35 @@ public class GetSakHandler implements Handler {
     @Autowired
     private SikriIdentityService identityService;
 
+    private final MeterRegistry meterRegistry;
+    private final Timer.Builder getSakTimer;
+
+    public GetSakHandler(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+        getSakTimer = Timer.builder("fint.arkiv.sak.timer")
+                .description("The Sikri Archive Sak Timer");
+    }
+
     @Override
     public void accept(Event<FintLinks> response) {
         String query = response.getQuery();
+        log.debug("Try to get a sak based on this query (and we do even counting and do some time analysis): {}", query);
+
+        Timer.Sample sample = Timer.start(meterRegistry);
+
         try {
             response.setData(new LinkedList<>());
+
             if (!caseQueryService.isValidQuery(query)) {
                 throw new IllegalArgumentException("Invalid query: " + query);
             }
+
             caseQueryService
                     .query(identityService.getDefaultIdentity(), query)
                     .map(sakFactory::toFintResource)
                     .forEach(response::addData);
             response.setResponseStatus(ResponseStatus.ACCEPTED);
+
             if (response.getData().isEmpty()) {
                 response.setResponseStatus(ResponseStatus.REJECTED);
                 response.setStatusCode("NOT_FOUND");
@@ -51,6 +69,11 @@ public class GetSakHandler implements Handler {
         } catch (IllegalCaseNumberFormat e) {
             response.setResponseStatus(ResponseStatus.REJECTED);
             response.setMessage(e.getMessage());
+        } finally {
+            sample.stop(getSakTimer.tag("request", "getCase")
+                    .tag("status", response.getStatus().name())
+                    .tag("statusCode", response.getStatusCode() != null ? response.getStatusCode() : "N/A")
+                    .register(meterRegistry));
         }
     }
 
