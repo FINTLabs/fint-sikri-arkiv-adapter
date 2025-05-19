@@ -41,7 +41,7 @@ spec:
 
             - {name: fint.case.defaults.personalmappe.saksstatus, value: B }
 
-            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '127'}
+            - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '208'}
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'LOYVER'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalpostType, value: 'I'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'M'}
