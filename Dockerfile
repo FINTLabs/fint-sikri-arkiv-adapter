@@ -1,10 +1,10 @@
-FROM gradle:4.10.2-jdk8-alpine as builder
+FROM gradle:4.10.2-jdk8-alpine AS builder
 USER root
 COPY . .
 RUN gradle --no-daemon build
 
 FROM gcr.io/distroless/java:8
-ENV JAVA_TOOL_OPTIONS -XX:+ExitOnOutOfMemoryError
+ENV JAVA_TOOL_OPTIONS=-XX:+ExitOnOutOfMemoryError
 WORKDIR /app
 COPY --from=builder /home/gradle/src/main/resources/wsdl/*.wsdl /app/
 COPY --from=builder /home/gradle/build/deps/external/*.jar /app/
