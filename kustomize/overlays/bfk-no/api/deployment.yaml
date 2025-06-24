@@ -50,8 +50,8 @@ spec:
 
             - {name: fint.case.defaults.soknaddrosjeloyve.title.cases, value: 'Drosjeløyve - ${organisasjonsnavn} - ${organisasjonsnummer}'}
             - {name: fint.case.defaults.soknaddrosjeloyve.administrativEnhet, value: '43'} # SAMF mobilitet
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '526' } # Bjørn Svendsen
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '526'} # Bjørn Svendsen
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: 'BJORNSV_B' } # Bjørn Svendsen
+            - {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: 'BJORNSV_B'} # Bjørn Svendsen
             - {name: fint.case.defaults.soknaddrosjeloyve.arkivdel, value: 'DROSJE'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalenhet, value: 'SP'}
             - {name: fint.case.defaults.soknaddrosjeloyve.journalstatus, value: 'J'}
