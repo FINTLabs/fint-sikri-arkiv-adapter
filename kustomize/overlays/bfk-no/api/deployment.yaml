@@ -27,10 +27,10 @@ spec:
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
                 -Dcom.sun.security.enableAIAcaIssuers=true
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=false
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=5000
 
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
@@ -151,5 +151,5 @@ spec:
             - { name: fint.adapter.endpoints.providers.samferdsel, value: http://provider-arkiv-samferdsel.default:8080/arkiv/samferdsel/provider }
             - { name: fint.adapter.endpoints.providers.personal, value: http://provider-arkiv-personal.default:8080/arkiv/personal/provider }
 
-            - {name: logging.level.no.fint.arkiv, value: trace}
-            - {name: logging.level.no.fint.sikri, value: trace}
+            - {name: logging.level.no.fint.arkiv, value: info}
+            - {name: logging.level.no.fint.sikri, value: info}
