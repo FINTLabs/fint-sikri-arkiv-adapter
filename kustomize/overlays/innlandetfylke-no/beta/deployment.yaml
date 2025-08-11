@@ -111,6 +111,8 @@ spec:
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
 
+            - {name: fint.adapter.arkiv.ignore-arkivressurs, value: 'true'}
+
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.kulturminne, value: https://beta.felleskomponent.no/arkiv/kulturminnevern/provider}
