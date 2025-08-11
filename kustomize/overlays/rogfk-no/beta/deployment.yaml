@@ -131,6 +131,8 @@ spec:
             - {name: fint.sikri.identity.casetype.dispensasjonautomatiskfredakulturminne, value: digisak }
             - {name: fint.sikri.variantformat, value: P }
 
+            - {name: fint.adapter.arkiv.ignore-arkivressurs, value: 'true'}
+
             - {name: logging.level.org.springframework.security, value: 'warn'}
             - {name: logging.level.org.springframework.security.web.FilterChainProxy, value: 'warn'}
 
