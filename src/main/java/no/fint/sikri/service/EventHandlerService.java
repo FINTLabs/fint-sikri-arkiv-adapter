@@ -118,11 +118,13 @@ public class EventHandlerService {
         actionsHandlerMap = new HashMap<>();
 
         handlers.forEach(h -> h.actions().forEach(a -> {
-            if(!NoarkActions.GET_ALL_ARKIVRESSURS.name().equals(a) && !ignoreArkivressurs) {
+            if(NoarkActions.GET_ALL_ARKIVRESSURS.name().equals(a) && ignoreArkivressurs) {
                 log.debug("FYI: {} is ignored.", a);
-                actionsHandlerMap.put(a, h);
-                supportedActions.add(a);
+                return;
             }
+
+            actionsHandlerMap.put(a, h);
+            supportedActions.add(a);
         }));
         log.info("Registered {} handlers, supporting actions: {}", handlers.size(), supportedActions.getActions());
     }
