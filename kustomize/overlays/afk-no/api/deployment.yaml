@@ -145,6 +145,8 @@ spec:
             - {name: fint.sikri.registry-entry.access-code.downgrade-code, value: G}
             - {name: fint.sikri.skip-internal-contacts, value: 'true' }
 
+            - {name: fint.adapter.arkiv.ignore-arkivressurs, value: 'true'}
+
             - { name: fint.adapter.endpoints.providers.kodeverk, value: http://provider-arkiv-kodeverk.default:8080/arkiv/kodeverk/provider }
             - { name: fint.adapter.endpoints.providers.noark, value: http://provider-arkiv-noark.default:8080/arkiv/noark/provider }
             - { name: fint.adapter.endpoints.providers.kulturminne, value: http://provider-arkiv-kulturminnevern.default:8080/arkiv/kulturminnevern/provider }

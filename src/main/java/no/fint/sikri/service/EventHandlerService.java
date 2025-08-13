@@ -9,10 +9,13 @@ import no.fint.event.model.ResponseStatus;
 import no.fint.event.model.Status;
 import no.fint.event.model.health.Health;
 import no.fint.event.model.health.HealthStatus;
+import no.fint.model.arkiv.noark.NoarkActions;
 import no.fint.model.resource.FintLinks;
 import no.fint.sikri.SupportedActions;
 import no.fint.sikri.handler.Handler;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -41,6 +44,9 @@ public class EventHandlerService {
 
     @Getter
     private Map<String, Handler> actionsHandlerMap;
+
+    @Value("${fint.adapter.arkiv.ignore-arkivressurs:false}")
+    private boolean ignoreArkivressurs;
 
     private Executor executor;
 
@@ -110,7 +116,13 @@ public class EventHandlerService {
     void init() {
         executor = Executors.newSingleThreadExecutor(); // TODO Can we use more threads?
         actionsHandlerMap = new HashMap<>();
+
         handlers.forEach(h -> h.actions().forEach(a -> {
+            if(NoarkActions.GET_ALL_ARKIVRESSURS.name().equals(a) && ignoreArkivressurs) {
+                log.debug("FYI: {} is ignored.", a);
+                return;
+            }
+
             actionsHandlerMap.put(a, h);
             supportedActions.add(a);
         }));

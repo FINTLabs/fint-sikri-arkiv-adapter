@@ -32,6 +32,9 @@ spec:
             - {name: fint.sikri.identity.casetype.default, value: flyt }
             - {name: fint.sikri.identity.casetype.sak, value: flyt }
             - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
+
+            - {name: fint.adapter.arkiv.ignore-arkivressurs, value: 'true'}
+
             - {name: fint.adapter.endpoints.providers.kodeverk, value: https://beta.felleskomponent.no/arkiv/kodeverk/provider}
             - {name: fint.adapter.endpoints.providers.noark, value: https://beta.felleskomponent.no/arkiv/noark/provider}
             - {name: fint.adapter.endpoints.providers.personal, value: https://beta.felleskomponent.no/arkiv/personal/provider}
