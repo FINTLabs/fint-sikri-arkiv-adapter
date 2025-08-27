@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 class MatrikkelParserSpec extends Specification {
 
-    def "Matrikkelresurce with everything set to string"() {
+    def "Matrikkel resource with everything set to string"() {
         given:
         def resource = new MatrikkelnummerResource()
         resource.setBruksnummer("12")
@@ -25,7 +25,7 @@ class MatrikkelParserSpec extends Specification {
         string == "1108-123/12/1/1"
     }
 
-    def "Matrikkelresurce with minimum set to string"() {
+    def "Matrikkel resource with minimum set to string"() {
         given:
         def resource = new MatrikkelnummerResource()
         resource.setBruksnummer("12")

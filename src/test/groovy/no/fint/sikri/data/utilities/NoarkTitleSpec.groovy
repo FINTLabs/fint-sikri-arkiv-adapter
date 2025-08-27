@@ -26,6 +26,9 @@ class NoarkTitleSpec extends Specification {
         "Komp - @#Medalen  Grethe Ragni# - 311280@"                                 | "Komp - *****  ***** ***** ***** *****" // Legg merke til ekstra mellomrom
         "Søknad - Refnr 123 - @Ballestad Egil - @"                                  | "Søknad - Refnr 123 - ***** ***** ***** "
         "Søknad - @Ballestad Egil - @ - Telemark"                                   | "Søknad - ***** ***** *****  - Telemark" // Legg merke til ekstra mellomrom
+        "Søknad - @Tim-Kristoffer Vadla Steen@"                                     | "Søknad - ***** ***** *****"
+        "Søknad - @Tim Kristoffer Vadla Steen@"                                     | "Søknad - ***** ***** ***** *****"
+        "Søknad - @@"                                                               | "Søknad - "
     }
 
     def "Mark title with marked words"() {
@@ -44,6 +47,8 @@ class NoarkTitleSpec extends Specification {
         "Komp - #Medalen @Grethe@ Ragni# - 311280"                       | "Komp - ##### ##### ####_ - 311280" // Skjerming inni markering gir ikke mening
         "Søknad - Refnr 123 - #Ballestad Egil - #"                       | "Søknad - Refnr 123 - ##### ##### ####_ "
         "Søknad - #Ballestad Egil - # - Telemark"                        | "Søknad - ##### ##### ####_  - Telemark"
+        "Søknad - @##@"                                                  | "Søknad - "
+        "Søknad - ##"                                                    | "Søknad - "
     }
 
 }
