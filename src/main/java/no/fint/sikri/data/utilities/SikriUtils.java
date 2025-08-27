@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public enum SikriUtils {
     ;
 
-    private final static String MARKED_REGEX_PATTERN = "#([^#]+)#";
+    private final static String MARKED_REGEX_PATTERN = "#([^#]*)#";
     private final static String SHIELDED_REGEX_PATTERN = "@((\\S+@\\S+\\.\\S+)|([^@]*))@";
 
     public static <T> void applyParameter(T value, Consumer<T> consumer) {
