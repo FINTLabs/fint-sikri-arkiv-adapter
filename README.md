@@ -1,5 +1,5 @@
 # FINT Elements/ePhorte adapter
-This adapter connects Sikris Elements/ePhorte to FINT.
+This adapter connects Sikri Elements/ePhorte to FINT.
 
 It uses the the following webserives:
 - `Object Model Service V3 En`
@@ -86,11 +86,11 @@ PS! It's _not_ possible to filter on both primary and secondary classification i
 Parts of titles can be shielded or marked.
 
 * To shield content, use @...@
-* To mark content, use #..#
+* To mark content, use #...#
 
 ### Shielding
 
-#### When content is marked with '@'...
+#### When content is shielded with '@'...
 
 * title: `Kompetansemappe - Ola Normann - 01.01.1970`
 * publicTitle: `Kompetansemappe - @Ola Normann@ - @01.01.1970@`
