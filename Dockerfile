@@ -1,7 +1,7 @@
 FROM gradle:4.10.2-jdk8-alpine AS builder
 USER root
 COPY . .
-RUN gradle --no-daemon build
+RUN --mount=type=cache,target=/home/gradle/.gradle gradle --no-daemon build
 
 FROM gcr.io/distroless/java:8
 ENV JAVA_TOOL_OPTIONS=-XX:+ExitOnOutOfMemoryError
