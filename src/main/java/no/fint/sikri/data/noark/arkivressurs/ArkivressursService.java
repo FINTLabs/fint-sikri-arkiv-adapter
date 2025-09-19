@@ -55,6 +55,12 @@ public class ArkivressursService {
     }
 
     public Integer lookupUserId(String input) {
+        if (userIdInitialsMap.isEmpty()){
+            log.debug("Arkivressurs: User ID Map is empty, populating");
+            getArkivressurser();
+            log.debug("Arkivressurs: User ID Map contains {} entries", userIdInitialsMap.size());
+        }
+
         log.trace("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
             return Integer.valueOf(input);
