@@ -32,16 +32,9 @@ public class ArkivressursService {
     }
 
     public Stream<ArkivressursResource> getArkivressurser() {
-        final Map<Integer, ArkivressursResource> userMap = sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_NAME, "IsCurrent=true")
-                .stream()
-                .map(UserNameType.class::cast)
-                .peek(u -> {
-                    if (StringUtils.isNotBlank(u.getInitials())) {
-                        userIdInitialsMap.merge(u.getInitials(), u.getId(), Integer::max);
-                    }
-                    log.debug("{} = {}", u.getId(), u.getInitials());
-                })
+        final Map<Integer, ArkivressursResource> userMap = getUserNameTypeAndUpdateUserIdInitialsMap()
                 .collect(Collectors.toMap(UserNameType::getUserId, factory::toFintResource, (a,b) -> b));
+
         log.debug("User ID Map contains {} entries", userIdInitialsMap.size());
         sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_ROLE)
                 .stream()
@@ -54,12 +47,21 @@ public class ArkivressursService {
         return userMap.values().stream();
     }
 
+    private Stream<UserNameType> getUserNameTypeAndUpdateUserIdInitialsMap() {
+        return sikriObjectModelService.getDataObjects(identityService.getDefaultIdentity(), SikriObjectTypes.USER_NAME, "IsCurrent=true")
+                .stream()
+                .map(UserNameType.class::cast)
+                .peek(u -> {
+                    if (StringUtils.isNotBlank(u.getInitials())) {
+                        userIdInitialsMap.merge(u.getInitials(), u.getId(), Integer::max);
+                    }
+                    log.trace("{} = {}", u.getId(), u.getInitials());
+                });
+    }
+
     public Integer lookupUserId(String input) {
-        if (userIdInitialsMap.isEmpty()){
-            log.debug("Arkivressurs: User ID Map is empty, populating");
-            getArkivressurser();
-            log.debug("Arkivressurs: User ID Map contains {} entries", userIdInitialsMap.size());
-        }
+        getUserNameTypeAndUpdateUserIdInitialsMap();
+        log.debug("Arkivressurs: User ID Map updated, now contains {} entries", userIdInitialsMap.size());
 
         log.trace("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
@@ -67,6 +69,7 @@ public class ArkivressursService {
         }
         final Integer id = userIdInitialsMap.getOrDefault(input, 0);
         log.debug("Lookup initials {} = {}", input, id);
+
         return id;
     }
 }
