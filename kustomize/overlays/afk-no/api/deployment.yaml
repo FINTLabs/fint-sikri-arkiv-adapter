@@ -154,4 +154,4 @@ spec:
             - { name: fint.adapter.endpoints.providers.personal, value: http://provider-arkiv-personal.default:8080/arkiv/personal/provider }
 
             - {name: logging.level.no.fint.arkiv, value: info}
-            - {name: logging.level.no.fint.sikri, value: info}
+            - {name: logging.level.no.fint.sikri.data.noark.arkivressurs, value: trace }
