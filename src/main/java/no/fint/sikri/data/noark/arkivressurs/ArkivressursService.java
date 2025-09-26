@@ -12,6 +12,7 @@ import no.fint.sikri.utilities.SikriObjectTypes;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -60,8 +61,8 @@ public class ArkivressursService {
     }
 
     public Integer lookupUserId(String input) {
-        getUserNameTypeAndUpdateUserIdInitialsMap();
-        log.debug("Arkivressurs: User ID Map updated, now contains {} entries", userIdInitialsMap.size());
+        List<UserNameType> userNameTypes = getUserNameTypeAndUpdateUserIdInitialsMap().collect(Collectors.toList());
+        log.debug("Arkivressurs: User ID Map updated, now contains {} entries vs userNameTypes {}", userIdInitialsMap.size(), userNameTypes.size());
 
         log.trace("Lookup initials {}", input);
         if (StringUtils.isNumeric(input)) {
