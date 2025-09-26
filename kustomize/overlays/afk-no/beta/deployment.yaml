@@ -20,10 +20,10 @@ spec:
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
                 -Dcom.sun.security.enableAIAcaIssuers=true
-                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=true
-                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=true
+                -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump=false
+                -Dcom.sun.xml.ws.transport.http.HttpAdapter.dump=false
+                -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dump=false
                 -Dcom.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold=15000
             - {name: springfox.title, value: "Elements Adapter for Akershus"}
             - {name: fint.case.coding.format.RA-PDF, value: 'PDF'}
