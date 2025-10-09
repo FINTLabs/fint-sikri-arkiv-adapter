@@ -6,6 +6,7 @@ namespace: rogfk-no
 resources:
   - ../../../base
   - onepassword.yaml
+  - fint-adapter.yaml
 
 commonLabels:
   app.kubernetes.io/instance: adapter-arkiv-sikri_rogfk-no
