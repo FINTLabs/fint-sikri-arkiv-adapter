@@ -8,9 +8,11 @@ resources:
   - onepassword.yaml
   - fint-adapter.yaml
 
-commonLabels:
-  app.kubernetes.io/instance: adapter-arkiv-sikri_rogfk-no
-  fintlabs.no/org-id: rogfk.no
+labels:
+  - pairs:
+      app.kubernetes.io/instance: adapter-arkiv-sikri_rogfk-no
+      fintlabs.no/org-id: rogfk.no
+    includeSelectors: true
 
 patches:
   
