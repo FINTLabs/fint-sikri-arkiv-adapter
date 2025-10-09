@@ -11,6 +11,8 @@ spec:
           envFrom:
             - secretRef:
                 name: arkiv-sikri-onepassword
+            - secretRef:
+                name: sikri-arkiv-beta # fint-adapter
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-
