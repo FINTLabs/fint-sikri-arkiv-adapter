@@ -28,6 +28,17 @@ public class PartFactory {
         PartResource output = new PartResource();
 
         optionalValue(input.getName()).ifPresent(output::setPartNavn);
+
+        optionalValue(input.getIdentificationTypeId()).ifPresent(identificationTypeId -> {
+            if ("FNR".equalsIgnoreCase(identificationTypeId)) {
+                optionalValue(input.getExternalId()).ifPresent(output::setFodselsnummer);
+            }
+
+            if ("ORG".equalsIgnoreCase(identificationTypeId)) {
+                optionalValue(input.getExternalId()).ifPresent(output::setOrganisasjonsnummer);
+            }
+        });
+
         optionalValue(input.getAttention()).ifPresent(output::setKontaktperson);
 
         Kontaktinformasjon kontakt = new Kontaktinformasjon();
@@ -57,6 +68,16 @@ public class PartFactory {
         output.setCaseId(caseId);
         optionalValue(input.getPartNavn()).ifPresent(output::setName);
         optionalValue(input.getKontaktperson()).ifPresent(output::setAttention);
+
+        optionalValue(input.getFodselsnummer()).ifPresent(fodselsnummer -> {
+            output.setIdentificationTypeId("FNR");
+            output.setExternalId(fodselsnummer);
+        });
+
+        optionalValue(input.getOrganisasjonsnummer()).ifPresent(organisasjonsnummer -> {
+            output.setIdentificationTypeId("ORG");
+            output.setExternalId(organisasjonsnummer);
+        });
 
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getEpostadresse).ifPresent(output::setEmail);
         optionalValue(input.getKontaktinformasjon()).map(Kontaktinformasjon::getTelefonnummer).ifPresent(output::setTelephone);
