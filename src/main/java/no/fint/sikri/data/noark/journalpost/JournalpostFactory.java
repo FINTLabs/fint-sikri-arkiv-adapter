@@ -160,6 +160,7 @@ public class JournalpostFactory {
                 Integer::parseUnsignedInt,
                 registryEntry::setAdministrativeUnitId);
 
+        log.debug("###### --->> {}", journalpostResource.getJournalenhet());
         applyParameterFromLink(journalpostResource.getJournalenhet(), registryEntry::setRegistryManagementUnitId);
 
         applyParameterFromLink(journalpostResource.getOpprettetAv(),
