@@ -40,6 +40,9 @@ public class JournalpostFactory {
     @Value("${fint.sikri.registry-entry.access-code.downgrade-code:}")
     private String downgradeCode;
 
+    @Value("${fint.case.defaults.sak.journalenhet}")
+    private String journalenhet;
+
     @Autowired
     private XmlUtils xmlUtils;
 
@@ -160,7 +163,15 @@ public class JournalpostFactory {
                 Integer::parseUnsignedInt,
                 registryEntry::setAdministrativeUnitId);
 
-        log.debug("###### --->> {}", journalpostResource.getJournalenhet());
+        if (journalpostResource.getJournalenhet() != null && journalpostResource.getJournalenhet().isEmpty()) {
+            String registryManagementUnitId = registryEntry.getCase().getRegistryManagementUnitId();
+            log.debug("The Registry Management Unit (journalenhet) on this case is: {}.", registryManagementUnitId);
+
+            registryEntry.setRegistryManagementUnitId(registryManagementUnitId);
+            log.debug("Journalenhet is: {}, but Registry Management Unit is: {}.",
+                    journalpostResource.getJournalenhet(), registryEntry.getRegistryManagementUnitId());
+        }
+
         applyParameterFromLink(journalpostResource.getJournalenhet(), registryEntry::setRegistryManagementUnitId);
 
         applyParameterFromLink(journalpostResource.getOpprettetAv(),
