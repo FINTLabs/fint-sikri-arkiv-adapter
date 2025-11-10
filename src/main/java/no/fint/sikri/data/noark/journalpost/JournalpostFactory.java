@@ -164,10 +164,11 @@ public class JournalpostFactory {
                 registryEntry::setAdministrativeUnitId);
 
         if (journalpostResource.getJournalenhet() != null && journalpostResource.getJournalenhet().isEmpty()) {
-            String registryManagementUnitId = registryEntry.getCase().getRegistryManagementUnitId();
-            log.debug("The Registry Management Unit (journalenhet) on this case is: {}.", registryManagementUnitId);
+            //String registryManagementUnitId = registryEntry.getCase().getRegistryManagementUnitId();
+            //log.debug("The Registry Management Unit (journalenhet) on this case is: {}.", registryManagementUnitId);
 
-            registryEntry.setRegistryManagementUnitId(registryManagementUnitId);
+            //registryEntry.setRegistryManagementUnitId(registryManagementUnitId);
+            registryEntry.setRegistryManagementUnitId(journalenhet);
             log.debug("Journalenhet is: {}, but Registry Management Unit is: {}.",
                     journalpostResource.getJournalenhet(), registryEntry.getRegistryManagementUnitId());
         }
