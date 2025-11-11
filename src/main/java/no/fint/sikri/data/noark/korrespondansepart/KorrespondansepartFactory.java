@@ -93,7 +93,7 @@ public class KorrespondansepartFactory {
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
 
         optionalValue(input.getKontaktperson())
-                .filter(s -> StringUtils.contains(s,"#"))
+                .filter(s -> !StringUtils.contains(s,"#"))
                 .ifPresent(output::setAttention);
 
         if (StringUtils.isNotBlank(input.getFodselsnummer())) {
