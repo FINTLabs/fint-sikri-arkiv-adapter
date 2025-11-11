@@ -145,8 +145,8 @@ public class KorrespondansepartFactory {
                     } else if (StringUtils.startsWith(type, "I")) {
                         output.setIsResponsible(true);
 
-                        if (StringUtils.isNotBlank(input.getKontaktperson()) && StringUtils.countMatches(input.getKontaktperson(),
-                                "#") == 2) {
+                        if (StringUtils.isNotBlank(input.getKontaktperson()) &&
+                                StringUtils.countMatches(input.getKontaktperson(),"#") == 2) {
                             String[] parts = StringUtils.split(input.getKontaktperson(), "#");
                             Integer adminId = Integer.parseInt(parts[0].trim());
                             String initials = parts[1].trim();
@@ -155,10 +155,7 @@ public class KorrespondansepartFactory {
 
                             Integer officerId = arkivressursService.lookupUserId(initials);
                             log.debug("Officer ID: {}", officerId);
-                            if (officerId > 0) {
-                                output.setOfficerNameId(officerId);
-                            }
-
+                            output.setOfficerNameId(officerId);
                             output.setAdministrativeUnitId(adminId);
                         } else {
                             output.setOfficerNameId(officerNameId);
