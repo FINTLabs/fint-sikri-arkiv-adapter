@@ -155,8 +155,10 @@ public class KorrespondansepartFactory {
 
                             Integer officerId = arkivressursService.lookupUserId(initials);
                             log.debug("Officer ID: {}", officerId);
+                            if (officerId > 0) {
+                                output.setOfficerNameId(officerId);
+                            }
 
-                            output.setOfficerNameId(officerId);
                             output.setAdministrativeUnitId(adminId);
                         } else {
                             output.setOfficerNameId(officerNameId);
