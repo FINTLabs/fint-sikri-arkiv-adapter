@@ -40,6 +40,9 @@ public class JournalpostFactory {
     @Value("${fint.sikri.registry-entry.access-code.downgrade-code:}")
     private String downgradeCode;
 
+    @Value("${fint.case.defaults.sak.journalenhet}")
+    private String journalenhet;
+
     @Autowired
     private XmlUtils xmlUtils;
 
@@ -159,6 +162,14 @@ public class JournalpostFactory {
         applyParameterFromLink(journalpostResource.getAdministrativEnhet(),
                 Integer::parseUnsignedInt,
                 registryEntry::setAdministrativeUnitId);
+
+        if (journalpostResource.getJournalenhet() != null && journalpostResource.getJournalenhet().isEmpty()) {
+            if (isNotBlank(journalenhet)) {
+                registryEntry.setRegistryManagementUnitId(journalenhet);
+            } else {
+                log.warn("No journalenhet found, please specify 'fint.case.defaults.sak.journalenhet'");
+            }
+        }
 
         applyParameterFromLink(journalpostResource.getJournalenhet(), registryEntry::setRegistryManagementUnitId);
 

@@ -8,7 +8,9 @@ import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class KorrespondansepartFactory {
 
     @Value("${fint.sikri.skip-internal-contacts:false}")
     private Boolean skipInternalContacts;
+
+    @Autowired
+    private ArkivressursService arkivressursService;
 
     public KorrespondansepartResource toFintResource(SenderRecipientType input) {
         KorrespondansepartResource output = new KorrespondansepartResource();
@@ -86,7 +91,10 @@ public class KorrespondansepartFactory {
         SenderRecipientType output = new SenderRecipientType();
 
         optionalValue(input.getKorrespondansepartNavn()).ifPresent(output::setName);
-        optionalValue(input.getKontaktperson()).ifPresent(output::setAttention);
+
+        optionalValue(input.getKontaktperson())
+                .filter(s -> !StringUtils.contains(s,"#"))
+                .ifPresent(output::setAttention);
 
         if (StringUtils.isNotBlank(input.getFodselsnummer())) {
             output.setIdTypeId("FNR");
@@ -136,8 +144,24 @@ public class KorrespondansepartFactory {
                         output.setAdministrativeUnitId(0);
                     } else if (StringUtils.startsWith(type, "I")) {
                         output.setIsResponsible(true);
-                        output.setOfficerNameId(officerNameId);
-                        output.setAdministrativeUnitId(administrativeUnitId);
+
+                        if (StringUtils.isNotBlank(input.getKontaktperson()) &&
+                                StringUtils.countMatches(input.getKontaktperson(),"#") == 2) {
+                            String[] parts = StringUtils.split(input.getKontaktperson(), "#");
+                            Integer adminId = Integer.parseInt(parts[0].trim());
+                            String initials = parts[1].trim();
+                            log.debug("Kontaktperson secret FLYT hack: {} (officer initials), {} (administrative unit id)",
+                                    initials, adminId);
+
+                            Integer officerId = arkivressursService.lookupUserId(initials);
+                            log.debug("Officer ID: {}", officerId);
+                            output.setOfficerNameId(officerId);
+                            output.setAdministrativeUnitId(adminId);
+                        } else {
+                            output.setOfficerNameId(officerNameId);
+                            output.setAdministrativeUnitId(administrativeUnitId);
+                        }
+
                         output.setRegistryManagementUnitId(registryManagementUnitId);
                     }
                     if (StringUtils.endsWith(type, "K")) {

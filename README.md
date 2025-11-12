@@ -111,3 +111,10 @@ Parts of titles can be shielded or marked.
 
 * title: `Kompetansemappe - Kari Normann - 01.01.1970`
 * publicTitle: `Kompetansemappe - ##### ####_ - *****`
+
+# Secret FLYT Kontaktperson life hack
+
+If you do your stuff in FINT Flyt, it's now possible to configure a `Korrespondansepart`'s `kontaktperson` with
+two `#` like this; `#1337#CHUCK_A` where `1337` is the id of the administrative unit and `CHUCK_A` is the username.
+
+Use it with care and at your own risk ;-)
