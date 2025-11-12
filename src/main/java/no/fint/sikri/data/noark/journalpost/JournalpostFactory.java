@@ -40,7 +40,7 @@ public class JournalpostFactory {
     @Value("${fint.sikri.registry-entry.access-code.downgrade-code:}")
     private String downgradeCode;
 
-    @Value("${fint.case.defaults.sak.journalenhet}")
+    @Value("${fint.case.defaults.sak.journalenhet:}")
     private String journalenhet;
 
     @Autowired
