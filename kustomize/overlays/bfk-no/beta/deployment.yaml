@@ -46,8 +46,6 @@ spec:
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.2.verdi, value: 'N12'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.ordning, value: 'KTILLEGG'}
             - {name: fint.case.defaults.soknaddrosjeloyve.klassifikasjon.3.verdi, value: '&18'}
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksansvarlig, value: '1040' } # Bjørn Svendsen
-            - {name: fint.case.defaults.soknaddrosjeloyve.saksbehandler, value: '1040' } # Bjørn Svendsen
 
             - {name: fint.case.defaults.tilskuddfartoy.administrativEnhet, value: '56' } # KULTUR kulturarv
             - {name: fint.case.defaults.tilskuddfartoy.arkivdel, value: SAK }
