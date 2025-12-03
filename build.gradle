@@ -67,7 +67,7 @@ dependencies {
     compile('org.glassfish.jersey.core:jersey-common:2.47')
     compile('org.jooq:jool-java-8:0.9.15')
     compile('org.projectlombok:lombok:1.18.42')
-    compile('commons-beanutils:commons-beanutils:1.9.4')
+    compile('commons-beanutils:commons-beanutils:1.11.0')
 
     // Spring adds validation-api 1.x and hibernate-validator 5.x by default, all three dependencies needed to override.
     // Version 6.1.0 does not work :(
