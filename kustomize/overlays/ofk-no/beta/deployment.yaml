@@ -134,7 +134,6 @@ spec:
             - {name: fint.sikri.identity.casetype.personalmappe, value: personal}
 
             - {name: fint.adapter.arkiv.ignore-arkivressurs, value: 'true'}
-            - {name: fint.sikri.skip-internal-contacts, value: 'false' }
 
             - { name: fint.adapter.endpoints.providers.kodeverk, value: http://provider-arkiv-kodeverk.default:8080/arkiv/kodeverk/provider }
             - { name: fint.adapter.endpoints.providers.noark, value: http://provider-arkiv-noark.default:8080/arkiv/noark/provider }
