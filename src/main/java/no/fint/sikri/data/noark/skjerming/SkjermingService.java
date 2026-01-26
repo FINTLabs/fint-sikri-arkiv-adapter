@@ -1,14 +1,14 @@
 package no.fint.sikri.data.noark.skjerming;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.NoarkMetadataService;
-import no.fint.model.arkiv.kodeverk.Skjermingshjemmel;
-import no.fint.model.arkiv.kodeverk.Tilgangsrestriksjon;
-import no.fint.model.felles.basisklasser.Begrep;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
-import no.fint.model.resource.arkiv.noark.SkjermingResource;
+import no.novari.fint.arkiv.NoarkMetadataService;
+import no.novari.fint.model.arkiv.kodeverk.Skjermingshjemmel;
+import no.novari.fint.model.arkiv.kodeverk.Tilgangsrestriksjon;
+import no.novari.fint.model.felles.basisklasser.Begrep;
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
+import no.novari.fint.model.resource.arkiv.noark.SkjermingResource;
 import no.fint.sikri.data.utilities.FintUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.repository.KodeverkRepository;

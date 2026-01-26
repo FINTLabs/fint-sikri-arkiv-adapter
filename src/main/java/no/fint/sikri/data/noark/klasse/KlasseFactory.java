@@ -2,9 +2,9 @@ package no.fint.sikri.data.noark.klasse;
 
 import no.fint.arkiv.sikri.oms.ClassType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
-import no.fint.model.arkiv.noark.Klassifikasjonssystem;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.novari.fint.model.arkiv.noark.Klassifikasjonssystem;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.noark.KlasseResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

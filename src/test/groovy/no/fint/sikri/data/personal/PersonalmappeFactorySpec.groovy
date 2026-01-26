@@ -1,19 +1,16 @@
 package no.fint.sikri.data.personal
 
-import no.fint.arkiv.CaseDefaults
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType
 import no.fint.arkiv.sikri.oms.CaseType
 import no.fint.arkiv.sikri.oms.ClassificationType
 import no.fint.arkiv.sikri.oms.UserNameType
-import no.fint.model.resource.arkiv.personal.PersonalmappeResource
 import no.fint.sikri.data.noark.common.NoarkFactory
 import no.fint.sikri.service.SikriCaseDefaultsService
 import no.fint.sikri.service.SikriIdentityService
 import no.fint.sikri.service.SikriObjectModelService
+import no.novari.fint.arkiv.CaseDefaults
+import no.novari.fint.model.resource.arkiv.personal.PersonalmappeResource
 import spock.lang.Specification
-
-import javax.ws.rs.core.Link
-import java.time.LocalDateTime
 
 class PersonalmappeFactorySpec extends Specification {
 

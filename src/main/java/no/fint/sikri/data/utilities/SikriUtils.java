@@ -1,7 +1,7 @@
 package no.fint.sikri.data.utilities;
 
 import io.netty.util.internal.StringUtil;
-import no.fint.model.resource.Link;
+import no.novari.fint.model.resource.Link;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;

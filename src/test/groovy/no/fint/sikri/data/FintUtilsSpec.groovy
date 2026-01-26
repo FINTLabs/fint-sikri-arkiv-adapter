@@ -1,7 +1,7 @@
 package no.fint.sikri.data
 
-import no.fint.model.felles.Person
-import no.fint.model.resource.Link
+import no.novari.fint.model.felles.Person
+import no.novari.fint.model.resource.Link
 import no.fint.sikri.data.utilities.FintUtils
 import spock.lang.Specification
 

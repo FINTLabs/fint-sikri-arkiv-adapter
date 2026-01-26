@@ -3,7 +3,7 @@ package no.fint.sikri.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.*;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.arkiv.noark.DokumentfilResource;
+import no.novari.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.FileNotFound;
 import no.fint.sikri.data.utilities.FintUtils;

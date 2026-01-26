@@ -1,15 +1,15 @@
 package no.fint.sikri.data.noark.sak;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.model.resource.arkiv.noark.SakResource;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.noark.common.NoarkService;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.CaseQueryService;
 import no.fint.sikri.service.SikriIdentityService;
+import no.novari.fint.arkiv.CaseDefaults;
+import no.novari.fint.arkiv.CaseProperties;
+import no.novari.fint.model.resource.arkiv.noark.SakResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

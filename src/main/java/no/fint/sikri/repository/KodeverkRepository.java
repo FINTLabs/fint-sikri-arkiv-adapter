@@ -2,10 +2,10 @@ package no.fint.sikri.repository;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.arkiv.kodeverk.*;
-import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
-import no.fint.model.resource.arkiv.noark.KlasseResource;
-import no.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
+import no.novari.fint.model.resource.arkiv.kodeverk.*;
+import no.novari.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
+import no.novari.fint.model.resource.arkiv.noark.KlasseResource;
+import no.novari.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;
 import no.fint.sikri.data.noark.administrativenhet.AdministrativEnhetService;
 import no.fint.sikri.data.noark.codes.dokumentstatus.DokumentstatusService;
 import no.fint.sikri.data.noark.codes.dokumenttype.DokumenttypeService;

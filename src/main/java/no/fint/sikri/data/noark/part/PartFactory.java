@@ -1,12 +1,12 @@
 package no.fint.sikri.data.noark.part;
 
 import no.fint.arkiv.sikri.oms.CasePartyType;
-import no.fint.model.felles.kodeverk.iso.Landkode;
-import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.kodeverk.PartRolleResource;
-import no.fint.model.resource.arkiv.noark.PartResource;
-import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.novari.fint.model.felles.kodeverk.iso.Landkode;
+import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.kodeverk.PartRolleResource;
+import no.novari.fint.model.resource.arkiv.noark.PartResource;
+import no.novari.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

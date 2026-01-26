@@ -2,12 +2,12 @@ package no.fint.sikri.data.noark.korrespondansepart;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
-import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
-import no.fint.model.felles.kodeverk.iso.Landkode;
-import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.KorrespondansepartResource;
-import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.novari.fint.model.arkiv.kodeverk.KorrespondansepartType;
+import no.novari.fint.model.felles.kodeverk.iso.Landkode;
+import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.noark.KorrespondansepartResource;
+import no.novari.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

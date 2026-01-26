@@ -1,12 +1,12 @@
 package no.fint.sikri.data.utilities;
 
 import no.fint.arkiv.sikri.oms.*;
-import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
-import no.fint.model.arkiv.noark.Klassifikasjonssystem;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.kodeverk.*;
-import no.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
-import no.fint.model.resource.arkiv.noark.ArkivdelResource;
+import no.novari.fint.model.administrasjon.organisasjon.Organisasjonselement;
+import no.novari.fint.model.arkiv.noark.Klassifikasjonssystem;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.kodeverk.*;
+import no.novari.fint.model.resource.arkiv.noark.AdministrativEnhetResource;
+import no.novari.fint.model.resource.arkiv.noark.ArkivdelResource;
 
 public class BegrepMapper {
 

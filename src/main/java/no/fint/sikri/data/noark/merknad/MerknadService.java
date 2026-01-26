@@ -2,7 +2,7 @@ package no.fint.sikri.data.noark.merknad;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.RemarkType;
-import no.fint.model.resource.arkiv.noark.MerknadResource;
+import no.novari.fint.model.resource.arkiv.noark.MerknadResource;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;

@@ -1,18 +1,18 @@
 package no.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.CaseProperties;
 import no.fint.arkiv.sikri.oms.CaseType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
 import no.fint.arkiv.sikri.oms.DataObject;
-import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.*;
 import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;
 import no.fint.sikri.utilities.SikriObjectTypes;
+import no.novari.fint.arkiv.CaseDefaults;
+import no.novari.fint.arkiv.CaseProperties;
+import no.novari.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

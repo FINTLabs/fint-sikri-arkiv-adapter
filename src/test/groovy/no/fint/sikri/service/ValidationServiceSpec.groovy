@@ -2,9 +2,9 @@ package no.fint.sikri.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.fint.event.model.Event
-import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions
-import no.fint.model.resource.FintLinks
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.novari.fint.model.arkiv.kulturminnevern.KulturminnevernActions
+import no.novari.fint.model.resource.FintLinks
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import spock.lang.Specification
 
 import javax.validation.Validation

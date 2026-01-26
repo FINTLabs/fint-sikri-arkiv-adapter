@@ -3,13 +3,14 @@ package no.fint.sikri.handler.kulturminne;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.CaseDefaults;
+
 import no.fint.event.model.Event;
 import no.fint.event.model.Operation;
 import no.fint.event.model.ResponseStatus;
-import no.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
-import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
+import no.novari.fint.arkiv.CaseDefaults;
+import no.novari.fint.model.arkiv.kulturminnevern.KulturminnevernActions;
+import no.novari.fint.model.resource.FintLinks;
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource;
 import no.fint.sikri.AdapterProps;
 import no.fint.sikri.data.exception.CaseNotFound;
 import no.fint.sikri.data.kulturminne.TilskuddFartoyService;

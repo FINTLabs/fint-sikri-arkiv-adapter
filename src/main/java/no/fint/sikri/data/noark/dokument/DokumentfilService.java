@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.model.resource.arkiv.noark.DokumentfilResource;
+import no.novari.fint.model.resource.arkiv.noark.DokumentfilResource;
 import no.fint.sikri.repository.InternalRepository;
 import no.fint.sikri.service.CachedFileService;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-FROM gradle:4.10.2-jdk8-alpine AS builder
+gradle:4.10.3-jdk8-alpine AS builder
 USER root
 COPY . .
 RUN --mount=type=cache,target=/home/gradle/.gradle gradle --no-daemon build

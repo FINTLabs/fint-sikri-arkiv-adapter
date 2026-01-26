@@ -1,7 +1,7 @@
 package no.fint.sikri.data.noark.codes.journalstatus;
 
 import no.fint.arkiv.sikri.oms.RecordsStatusType;
-import no.fint.model.resource.arkiv.kodeverk.JournalStatusResource;
+import no.novari.fint.model.resource.arkiv.kodeverk.JournalStatusResource;
 import no.fint.sikri.data.utilities.BegrepMapper;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;

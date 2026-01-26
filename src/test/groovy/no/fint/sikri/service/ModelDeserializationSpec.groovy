@@ -1,7 +1,7 @@
 package no.fint.sikri.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
+import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFartoyResource
 import spock.lang.Specification
 
 class ModelDeserializationSpec extends Specification {

@@ -2,12 +2,12 @@ package no.fint.sikri.data.noark.dokument;
 
 import no.fint.arkiv.sikri.oms.DocumentObjectType;
 import no.fint.arkiv.sikri.oms.FileFormatType;
-import no.fint.model.arkiv.kodeverk.Format;
-import no.fint.model.arkiv.kodeverk.Variantformat;
-import no.fint.model.arkiv.noark.Arkivressurs;
-import no.fint.model.arkiv.noark.Dokumentfil;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.DokumentobjektResource;
+import no.novari.fint.model.arkiv.kodeverk.Format;
+import no.novari.fint.model.arkiv.kodeverk.Variantformat;
+import no.novari.fint.model.arkiv.noark.Arkivressurs;
+import no.novari.fint.model.arkiv.noark.Dokumentfil;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.noark.DokumentobjektResource;
 import no.fint.sikri.repository.InternalRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;

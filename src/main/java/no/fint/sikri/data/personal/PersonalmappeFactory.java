@@ -1,15 +1,15 @@
 package no.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.CaseProperties;
+import no.novari.fint.arkiv.CaseDefaults;
 import no.fint.arkiv.sikri.oms.*;
-import no.fint.model.administrasjon.organisasjon.Organisasjonselement;
-import no.fint.model.administrasjon.personal.Personalressurs;
-import no.fint.model.felles.Person;
-import no.fint.model.felles.kompleksedatatyper.Personnavn;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.personal.PersonalmappeResource;
+import no.novari.fint.arkiv.CaseProperties;
+import no.novari.fint.model.administrasjon.organisasjon.Organisasjonselement;
+import no.novari.fint.model.administrasjon.personal.Personalressurs;
+import no.novari.fint.model.felles.Person;
+import no.novari.fint.model.felles.kompleksedatatyper.Personnavn;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.personal.PersonalmappeResource;
 import no.fint.sikri.data.exception.AdministrativeUnitNotFound;
 import no.fint.sikri.data.exception.OfficerNotFound;
 import no.fint.sikri.data.exception.UnableToGetIdFromLink;

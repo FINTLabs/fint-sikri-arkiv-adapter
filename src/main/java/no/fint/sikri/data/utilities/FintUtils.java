@@ -3,11 +3,11 @@ package no.fint.sikri.data.utilities;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.CasePartyType;
 import no.fint.arkiv.sikri.oms.SenderRecipientType;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
-import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
-import no.fint.model.felles.kompleksedatatyper.Personnavn;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.novari.fint.model.felles.kompleksedatatyper.Personnavn;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;

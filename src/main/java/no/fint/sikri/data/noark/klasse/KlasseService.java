@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.arkiv.sikri.oms.ClassType;
 import no.fint.arkiv.sikri.oms.ClassificationSystemType;
 import no.fint.arkiv.sikri.oms.ClassificationType;
-import no.fint.model.resource.arkiv.noark.KlasseResource;
+import no.novari.fint.model.resource.arkiv.noark.KlasseResource;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriIdentityService;
 import no.fint.sikri.service.SikriObjectModelService;

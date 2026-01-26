@@ -1,19 +1,19 @@
 package no.fint.sikri.data.noark.common;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.AdditionalFieldService;
-import no.fint.arkiv.CaseProperties;
-import no.fint.arkiv.TitleService;
 import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
 import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.model.FintComplexDatatypeObject;
-import no.fint.model.arkiv.kodeverk.Saksmappetype;
-import no.fint.model.arkiv.kodeverk.Saksstatus;
-import no.fint.model.arkiv.noark.AdministrativEnhet;
-import no.fint.model.arkiv.noark.Arkivdel;
-import no.fint.model.arkiv.noark.Arkivressurs;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.SaksmappeResource;
+import no.novari.fint.arkiv.AdditionalFieldService;
+import no.novari.fint.arkiv.CaseProperties;
+import no.novari.fint.arkiv.TitleService;
+import no.novari.fint.model.FintComplexDatatypeObject;
+import no.novari.fint.model.arkiv.kodeverk.Saksmappetype;
+import no.novari.fint.model.arkiv.kodeverk.Saksstatus;
+import no.novari.fint.model.arkiv.noark.AdministrativEnhet;
+import no.novari.fint.model.arkiv.noark.Arkivdel;
+import no.novari.fint.model.arkiv.noark.Arkivressurs;
+import no.novari.fint.model.resource.Link;
+
 import no.fint.sikri.data.noark.arkivressurs.ArkivressursService;
 import no.fint.sikri.data.noark.journalpost.JournalpostService;
 import no.fint.sikri.data.noark.klasse.KlasseService;
@@ -25,6 +25,7 @@ import no.fint.sikri.data.utilities.NOARKUtils;
 import no.fint.sikri.data.utilities.SikriUtils;
 import no.fint.sikri.model.SikriIdentity;
 import no.fint.sikri.service.SikriCaseDefaultsService;
+import no.novari.fint.model.resource.arkiv.noark.SaksmappeResource;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
