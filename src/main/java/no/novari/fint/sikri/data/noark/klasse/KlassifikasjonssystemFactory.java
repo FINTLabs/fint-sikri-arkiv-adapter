@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.klasse;
 
-import no.fint.arkiv.sikri.oms.ClassificationSystemType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationSystemType;
 import no.novari.fint.model.arkiv.kodeverk.Klassifikasjonstype;
 import no.novari.fint.model.resource.Link;
 import no.novari.fint.model.resource.arkiv.noark.KlassifikasjonssystemResource;

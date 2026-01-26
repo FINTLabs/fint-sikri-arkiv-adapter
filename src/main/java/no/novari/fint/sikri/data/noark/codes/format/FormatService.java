@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.codes.format;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.FileFormatType;
+import no.novari.fint.arkiv.sikri.oms.FileFormatType;
 import no.novari.fint.model.resource.arkiv.kodeverk.FormatResource;
 import no.novari.fint.sikri.data.utilities.BegrepMapper;
 import no.novari.fint.sikri.service.SikriIdentityService;

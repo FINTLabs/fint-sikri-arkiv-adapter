@@ -2,8 +2,8 @@ package no.novari.fint.sikri.data.samferdsel;
 
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ClassificationType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationType;
 import no.novari.fint.arkiv.CaseProperties;
 import no.novari.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import no.novari.fint.sikri.data.exception.CaseNotFound;

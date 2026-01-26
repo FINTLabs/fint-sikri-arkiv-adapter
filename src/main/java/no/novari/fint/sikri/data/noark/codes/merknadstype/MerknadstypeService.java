@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.codes.merknadstype;
 
-import no.fint.arkiv.sikri.oms.InformationTypeType;
+import no.novari.fint.arkiv.sikri.oms.InformationTypeType;
 import no.novari.fint.model.resource.arkiv.kodeverk.MerknadstypeResource;
 import no.novari.fint.sikri.data.utilities.BegrepMapper;
 import no.novari.fint.sikri.service.SikriIdentityService;

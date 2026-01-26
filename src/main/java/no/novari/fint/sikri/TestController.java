@@ -1,7 +1,7 @@
 package no.novari.fint.sikri;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.DataObject;
+import no.novari.fint.arkiv.sikri.oms.DataObject;
 import no.fint.event.model.Event;
 import no.novari.fint.model.arkiv.kodeverk.KodeverkActions;
 import no.novari.fint.model.resource.FintLinks;

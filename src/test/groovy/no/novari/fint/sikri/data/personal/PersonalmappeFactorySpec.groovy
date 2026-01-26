@@ -1,9 +1,9 @@
 package no.novari.fint.sikri.data.personal
 
-import no.fint.arkiv.sikri.oms.AdministrativeUnitType
-import no.fint.arkiv.sikri.oms.CaseType
-import no.fint.arkiv.sikri.oms.ClassificationType
-import no.fint.arkiv.sikri.oms.UserNameType
+import no.novari.fint.arkiv.sikri.oms.AdministrativeUnitType
+import no.novari.fint.arkiv.sikri.oms.CaseType
+import no.novari.fint.arkiv.sikri.oms.ClassificationType
+import no.novari.fint.arkiv.sikri.oms.UserNameType
 import no.novari.fint.sikri.data.noark.common.NoarkFactory
 import no.novari.fint.sikri.data.personal.PersonalmappeFactory
 import no.novari.fint.sikri.service.SikriCaseDefaultsService

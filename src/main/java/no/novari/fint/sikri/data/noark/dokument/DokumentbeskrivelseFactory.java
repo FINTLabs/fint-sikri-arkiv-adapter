@@ -1,8 +1,8 @@
 package no.novari.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
-import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
+import no.novari.fint.arkiv.sikri.oms.DocumentDescriptionType;
+import no.novari.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
 import no.novari.fint.model.arkiv.kodeverk.DokumentStatus;
 import no.novari.fint.model.arkiv.kodeverk.DokumentType;
 import no.novari.fint.model.arkiv.kodeverk.TilknyttetRegistreringSom;

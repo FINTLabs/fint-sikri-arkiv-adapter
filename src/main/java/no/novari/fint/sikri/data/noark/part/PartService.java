@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.part;
 
-import no.fint.arkiv.sikri.oms.CasePartyType;
+import no.novari.fint.arkiv.sikri.oms.CasePartyType;
 import no.novari.fint.model.resource.arkiv.noark.PartResource;
 import no.novari.fint.model.resource.arkiv.noark.SaksmappeResource;
 import no.novari.fint.sikri.model.SikriIdentity;

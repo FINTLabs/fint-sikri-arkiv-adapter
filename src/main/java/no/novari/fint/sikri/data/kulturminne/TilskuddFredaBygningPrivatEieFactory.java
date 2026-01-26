@@ -2,7 +2,7 @@ package no.novari.fint.sikri.data.kulturminne;
 
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
 import no.novari.fint.model.resource.arkiv.kulturminnevern.TilskuddFredaBygningPrivatEieResource;
 import no.novari.fint.model.resource.felles.kompleksedatatyper.MatrikkelnummerResource;
 import no.novari.fint.sikri.data.noark.common.NoarkFactory;

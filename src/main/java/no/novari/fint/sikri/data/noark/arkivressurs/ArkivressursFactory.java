@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.arkivressurs;
 
-import no.fint.arkiv.sikri.oms.UserNameType;
+import no.novari.fint.arkiv.sikri.oms.UserNameType;
 import no.novari.fint.model.administrasjon.personal.Personalressurs;
 import no.novari.fint.model.resource.Link;
 import no.novari.fint.model.resource.arkiv.noark.ArkivressursResource;

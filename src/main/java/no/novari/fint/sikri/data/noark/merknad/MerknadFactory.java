@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.merknad;
 
-import no.fint.arkiv.sikri.oms.RemarkType;
+import no.novari.fint.arkiv.sikri.oms.RemarkType;
 import no.novari.fint.model.arkiv.kodeverk.Merknadstype;
 import no.novari.fint.model.arkiv.noark.Arkivressurs;
 import no.novari.fint.model.resource.Link;

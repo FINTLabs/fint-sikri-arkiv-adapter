@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.utilities;
 
-import no.fint.arkiv.sikri.oms.*;
+import no.novari.fint.arkiv.sikri.oms.*;
 import no.novari.fint.model.administrasjon.organisasjon.Organisasjonselement;
 import no.novari.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.novari.fint.model.resource.Link;

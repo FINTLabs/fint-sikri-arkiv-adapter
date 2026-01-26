@@ -3,7 +3,7 @@ package no.novari.fint.sikri.data.noark.codes.skjermingshjemmel;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimaps;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.StatutoryAutorityType;
+import no.novari.fint.arkiv.sikri.oms.StatutoryAutorityType;
 import no.novari.fint.model.resource.arkiv.kodeverk.SkjermingshjemmelResource;
 import no.novari.fint.sikri.data.utilities.FintUtils;
 import no.novari.fint.sikri.service.SikriIdentityService;

@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.arkivdel;
 
-import no.fint.arkiv.sikri.oms.SeriesType;
+import no.novari.fint.arkiv.sikri.oms.SeriesType;
 import no.novari.fint.model.resource.arkiv.noark.ArkivdelResource;
 import no.novari.fint.sikri.data.utilities.BegrepMapper;
 import no.novari.fint.sikri.service.SikriIdentityService;

@@ -1,9 +1,9 @@
 package no.novari.fint.sikri.data.noark.journalpost;
 
 import lombok.Data;
-import no.fint.arkiv.sikri.oms.DocumentDescriptionType;
-import no.fint.arkiv.sikri.oms.RegistryEntryType;
-import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.novari.fint.arkiv.sikri.oms.DocumentDescriptionType;
+import no.novari.fint.arkiv.sikri.oms.RegistryEntryType;
+import no.novari.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.novari.fint.sikri.data.noark.dokument.CheckinDocument;
 import org.apache.commons.lang3.tuple.Pair;
 

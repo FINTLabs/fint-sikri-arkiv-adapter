@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.dokument;
 
-import no.fint.arkiv.sikri.oms.DocumentObjectType;
-import no.fint.arkiv.sikri.oms.FileFormatType;
+import no.novari.fint.arkiv.sikri.oms.DocumentObjectType;
+import no.novari.fint.arkiv.sikri.oms.FileFormatType;
 import no.novari.fint.model.arkiv.kodeverk.Format;
 import no.novari.fint.model.arkiv.kodeverk.Variantformat;
 import no.novari.fint.model.arkiv.noark.Arkivressurs;

@@ -1,8 +1,8 @@
 package no.novari.fint.sikri.data.noark.common;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.AdministrativeUnitType;
-import no.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.AdministrativeUnitType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
 import no.novari.fint.arkiv.AdditionalFieldService;
 import no.novari.fint.arkiv.CaseProperties;
 import no.novari.fint.arkiv.TitleService;

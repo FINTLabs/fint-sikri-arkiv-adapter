@@ -2,7 +2,7 @@ package no.novari.fint.sikri.service;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
 import no.novari.fint.sikri.model.SikriIdentity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

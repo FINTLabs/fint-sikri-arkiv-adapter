@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.codes.tilknyttetregistreringsom;
 
-import no.fint.arkiv.sikri.oms.DocumentLinkTypeType;
+import no.novari.fint.arkiv.sikri.oms.DocumentLinkTypeType;
 import no.novari.fint.model.resource.arkiv.kodeverk.TilknyttetRegistreringSomResource;
 import no.novari.fint.sikri.data.utilities.BegrepMapper;
 import no.novari.fint.sikri.service.SikriIdentityService;

@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.korrespondansepart;
 
-import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.novari.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.novari.fint.sikri.model.SikriIdentity;
 import no.novari.fint.sikri.service.SikriObjectModelService;
 import no.novari.fint.sikri.utilities.SikriObjectTypes;

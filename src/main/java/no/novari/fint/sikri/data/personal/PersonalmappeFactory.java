@@ -2,7 +2,7 @@ package no.novari.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.arkiv.CaseDefaults;
-import no.fint.arkiv.sikri.oms.*;
+import no.novari.fint.arkiv.sikri.oms.*;
 import no.novari.fint.arkiv.CaseProperties;
 import no.novari.fint.model.administrasjon.organisasjon.Organisasjonselement;
 import no.novari.fint.model.administrasjon.personal.Personalressurs;

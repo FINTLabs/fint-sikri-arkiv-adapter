@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.dokument;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
+import no.novari.fint.arkiv.sikri.oms.RegistryEntryDocumentType;
 import no.novari.fint.model.resource.arkiv.noark.DokumentbeskrivelseResource;
 import no.novari.fint.sikri.model.SikriIdentity;
 import no.novari.fint.sikri.service.SikriObjectModelService;

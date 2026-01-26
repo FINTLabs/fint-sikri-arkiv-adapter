@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.part;
 
-import no.fint.arkiv.sikri.oms.CasePartyType;
+import no.novari.fint.arkiv.sikri.oms.CasePartyType;
 import no.novari.fint.model.felles.kodeverk.iso.Landkode;
 import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.novari.fint.model.resource.Link;

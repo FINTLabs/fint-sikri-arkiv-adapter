@@ -2,7 +2,7 @@ package no.novari.fint.sikri.data.noark.sak;
 
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
 import no.novari.fint.sikri.data.noark.common.NoarkFactory;
 import no.novari.fint.sikri.service.SikriIdentityService;
 import no.novari.fint.arkiv.CaseProperties;

@@ -1,8 +1,8 @@
 package no.novari.fint.sikri.data.utilities;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.CasePartyType;
-import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.novari.fint.arkiv.sikri.oms.CasePartyType;
+import no.novari.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.novari.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.novari.fint.model.felles.kompleksedatatyper.Personnavn;

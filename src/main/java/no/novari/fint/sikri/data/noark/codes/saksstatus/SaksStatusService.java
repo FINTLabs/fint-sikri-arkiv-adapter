@@ -1,6 +1,6 @@
 package no.novari.fint.sikri.data.noark.codes.saksstatus;
 
-import no.fint.arkiv.sikri.oms.CaseStatusType;
+import no.novari.fint.arkiv.sikri.oms.CaseStatusType;
 import no.novari.fint.model.resource.arkiv.kodeverk.SaksstatusResource;
 import no.novari.fint.sikri.data.utilities.BegrepMapper;
 import no.novari.fint.sikri.service.SikriIdentityService;

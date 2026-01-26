@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.arkiv.CaseProperties;
 import no.novari.fint.arkiv.TitleService;
-import no.fint.arkiv.sikri.oms.*;
+import no.novari.fint.arkiv.sikri.oms.*;
 import no.novari.fint.model.felles.kompleksedatatyper.Identifikator;
 import no.novari.fint.model.resource.arkiv.noark.JournalpostResource;
 import no.novari.fint.model.resource.arkiv.noark.KlasseResource;

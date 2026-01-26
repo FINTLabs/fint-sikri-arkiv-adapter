@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.klasse;
 
-import no.fint.arkiv.sikri.oms.ClassType;
-import no.fint.arkiv.sikri.oms.ClassificationType;
+import no.novari.fint.arkiv.sikri.oms.ClassType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationType;
 import no.novari.fint.model.arkiv.noark.Klassifikasjonssystem;
 import no.novari.fint.model.resource.Link;
 import no.novari.fint.model.resource.arkiv.noark.KlasseResource;

@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.sak;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
 import no.novari.fint.sikri.data.exception.CaseNotFound;
 import no.novari.fint.sikri.data.noark.common.NoarkService;
 import no.novari.fint.sikri.model.SikriIdentity;

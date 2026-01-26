@@ -1,9 +1,9 @@
 package no.novari.fint.sikri.data.noark.klasse;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.ClassType;
-import no.fint.arkiv.sikri.oms.ClassificationSystemType;
-import no.fint.arkiv.sikri.oms.ClassificationType;
+import no.novari.fint.arkiv.sikri.oms.ClassType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationSystemType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationType;
 import no.novari.fint.model.resource.arkiv.noark.KlasseResource;
 import no.novari.fint.sikri.model.SikriIdentity;
 import no.novari.fint.sikri.service.SikriIdentityService;

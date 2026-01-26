@@ -1,7 +1,7 @@
 package no.novari.fint.sikri.data.noark.korrespondansepart;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.novari.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.novari.fint.model.arkiv.kodeverk.KorrespondansepartType;
 import no.novari.fint.model.felles.kodeverk.iso.Landkode;
 import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;

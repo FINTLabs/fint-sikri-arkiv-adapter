@@ -1,9 +1,9 @@
 package no.novari.fint.sikri.data.personal;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.CaseType;
-import no.fint.arkiv.sikri.oms.ClassificationType;
-import no.fint.arkiv.sikri.oms.DataObject;
+import no.novari.fint.arkiv.sikri.oms.CaseType;
+import no.novari.fint.arkiv.sikri.oms.ClassificationType;
+import no.novari.fint.arkiv.sikri.oms.DataObject;
 import no.novari.fint.sikri.data.exception.*;
 import no.novari.fint.sikri.data.utilities.NOARKUtils;
 import no.novari.fint.sikri.model.SikriIdentity;

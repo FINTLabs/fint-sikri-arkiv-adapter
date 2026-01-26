@@ -1,8 +1,8 @@
 package no.novari.fint.sikri.data.noark.journalpost;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.arkiv.sikri.oms.RegistryEntryType;
-import no.fint.arkiv.sikri.oms.SenderRecipientType;
+import no.novari.fint.arkiv.sikri.oms.RegistryEntryType;
+import no.novari.fint.arkiv.sikri.oms.SenderRecipientType;
 import no.novari.fint.model.arkiv.kodeverk.JournalStatus;
 import no.novari.fint.model.arkiv.kodeverk.JournalpostType;
 import no.novari.fint.model.arkiv.noark.Arkivressurs;
