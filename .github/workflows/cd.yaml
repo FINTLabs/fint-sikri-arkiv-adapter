@@ -58,6 +58,9 @@ jobs:
           - org: fridiks-no
             cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
+          - org: ofk-no
+            cluster: aks-beta-fint-2021-11-23
+            deploy-every-branch: true
 
     steps:
       - uses: actions/checkout@v6
