@@ -4,7 +4,6 @@ buildscript {
         js2pVersion = '1.0.1'
     }
     repositories {
-        jcenter()
         mavenCentral()
     }
     dependencies {
