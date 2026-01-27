@@ -46,7 +46,6 @@ repositories {
         url 'https://repo.fintlabs.no/releases'
     }
     mavenCentral()
-    jcenter()
     mavenLocal()
 }
 
@@ -79,7 +78,7 @@ dependencies {
     compile('no.fint:fint-relation-model:1.1.6')
     compile('no.fint:fint-model-resource:0.4.1')
 
-    compile('no.novari:fint-arkiv-case-defaults:5.0.0-rc-4')
+    compile('no.novari:fint-arkiv-case-defaults:5.0.0-rc-5')
     compile("no.novari:fint-arkiv-resource-model-java:${apiVersion}")
     compile("no.novari:fint-administrasjon-resource-model-java:${apiVersion}")
 
