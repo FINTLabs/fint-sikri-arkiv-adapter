@@ -102,8 +102,8 @@ spec:
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.2.tittel, value: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.klassifikasjon.2.verdi, value: '${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer}' }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.korrespondansepartType, value: EA }
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksansvarlig, value: '98'} # Per Stefan Adel
-            - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksbehandler, value: '98'} # Per Stefan Adel
+            #- {name: fint.case.defaults.tilskuddfredabygningprivateie.saksansvarlig, value: '98'} # Per Stefan Adel
+            #- {name: fint.case.defaults.tilskuddfredabygningprivateie.saksbehandler, value: '98'} # Per Stefan Adel
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksmappeType, value: FRIP }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.saksstatus, value: B }
             - {name: fint.case.defaults.tilskuddfredabygningprivateie.title.cases, value: '${link$matrikkelnummer.kommunenummer#navn} kommune - Gbnr ${matrikkelnummer.gardsnummer}/${matrikkelnummer.bruksnummer} - ${bygningsnavn} - ${kulturminneId} - Tilskudd Kapittel 1429 post 71 og dispensasjoner' }
