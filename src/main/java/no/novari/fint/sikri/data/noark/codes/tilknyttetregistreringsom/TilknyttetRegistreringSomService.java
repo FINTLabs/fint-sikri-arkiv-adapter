@@ -1,0 +1,32 @@
+package no.novari.fint.sikri.data.noark.codes.tilknyttetregistreringsom;
+
+import no.novari.fint.arkiv.sikri.oms.DocumentLinkTypeType;
+import no.novari.fint.model.resource.arkiv.kodeverk.TilknyttetRegistreringSomResource;
+import no.novari.fint.sikri.data.utilities.BegrepMapper;
+import no.novari.fint.sikri.service.SikriIdentityService;
+import no.novari.fint.sikri.service.SikriObjectModelService;
+import no.novari.fint.sikri.utilities.SikriObjectTypes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.stream.Stream;
+
+@Service
+public class TilknyttetRegistreringSomService {
+
+    @Autowired
+    private SikriObjectModelService sikriObjectModelService;
+
+    @Autowired
+    private SikriIdentityService identityService;
+
+    public Stream<TilknyttetRegistreringSomResource> getDocumentRelationTable() {
+        return sikriObjectModelService.getDataObjects(
+                identityService.getDefaultIdentity(),
+                SikriObjectTypes.DOCUMENT_LINK_TYPE)
+                .stream()
+                .map(DocumentLinkTypeType.class::cast)
+                .map(BegrepMapper::mapTilknyttetTegistreringSom);
+    }
+
+}
