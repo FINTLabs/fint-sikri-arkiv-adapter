@@ -10,10 +10,10 @@ spec:
         - name: adapter-arkiv-sikri
           resources:
             limits:
-              memory: "7Gi"
+              memory: "9Gi"
               cpu: "2"
             requests:
-              memory: "5Gi"
+              memory: "7Gi"
               cpu: "1024m"
           envFrom:
             - secretRef:
@@ -21,7 +21,7 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: >-
-                -Xmx5G -verbose:gc
+                -Xmx7G -verbose:gc
                 -XX:+ExitOnOutOfMemoryError
                 -Dfile.encoding=UTF-8
                 -Dcom.sun.security.enableAIAcaIssuers=true
