@@ -27,8 +27,8 @@ spec:
             - {name: fint.case.coding.format.RA-TIFF6, value: 'TIFF'}
             - {name: springfox.title, value: "Elements Adapter for Østfold"}
 
-            - { name: logging.level.no.fint.arkiv, value: info }
-            - { name: logging.level.no.fint.sikri, value: info }
+            - { name: logging.level.no.novari.fint.arkiv, value: debug }
+            - { name: logging.level.no.novari.fint.sikri, value: debug }
 
             - {name: fint.case.defaults.personalmappe.arkivdel, value: 'PERS' }
             - {name: fint.case.defaults.personalmappe.saksstatus, value: 'B' }
