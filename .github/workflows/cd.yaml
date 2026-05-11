@@ -26,7 +26,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v4.0.0
+        uses: docker/login-action@v4.1.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -68,7 +68,7 @@ jobs:
 
       - name: Bake manifests with Kustomize
         id: bake
-        uses: azure/k8s-bake@v3
+        uses: azure/k8s-bake@v4
         with:
           renderEngine: 'kustomize'
           kustomizationPath: 'kustomize/overlays/${{ matrix.org }}/${{ steps.environment.outputs.name }}'
@@ -79,7 +79,7 @@ jobs:
           creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.name)] }}"
 
       - name: Set the target cluster
-        uses: azure/aks-set-context@v4
+        uses: azure/aks-set-context@v5
         with:
           cluster-name: ${{ matrix.cluster }}
           resource-group: rg-aks-${{ steps.environment.outputs.name }}
