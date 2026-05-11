@@ -22,7 +22,7 @@ spec:
         observability.fintlabs.no/loki: "true"
       annotations:
           prometheus.io/scrape: "true"
-          prometheus.io/port: "8080"
+          prometheus.io/port: "8091"
           prometheus.io/path: "prometheus"
     spec:
       restartPolicy: Always
@@ -45,7 +45,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: 8080
+              port: 8091
             initialDelaySeconds: 10
             timeoutSeconds: 5
           volumeMounts:
