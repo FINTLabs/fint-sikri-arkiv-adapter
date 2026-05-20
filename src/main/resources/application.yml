@@ -37,3 +37,8 @@ endpoints:
     enabled: true
   metrics:
     enabled: true
+
+spring:
+  output:
+    ansi:
+      enabled: always
