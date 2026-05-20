@@ -37,3 +37,7 @@ endpoints:
     enabled: true
   metrics:
     enabled: true
+
+output:
+  ansi:
+    enabled: always
