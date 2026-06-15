@@ -14,6 +14,21 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: '8'
+          cache: gradle
+
+      - uses: gradle/actions/wrapper-validation@v6
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v6
@@ -56,6 +71,7 @@ jobs:
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
           - cluster: aks-beta-fint-2021-11-23
+            org: vlfk-no
             deploy-every-branch: true
 
     steps:
