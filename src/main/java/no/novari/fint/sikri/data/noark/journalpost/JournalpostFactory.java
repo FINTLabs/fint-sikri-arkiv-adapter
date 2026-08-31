@@ -77,6 +77,7 @@ public class JournalpostFactory {
         journalpost.setOffentligTittel(result.getTitleRestricted());
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
         journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
+        optionalValue(result.getDocumentDate()).map(XmlUtils::javaDate).ifPresent(journalpost::setDokumentetsDato);
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
         // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
@@ -149,6 +150,8 @@ public class JournalpostFactory {
         applyParameter(journalpostResource.getOpprettetDato(), registryEntry::setCreatedDate, xmlUtils::xmlDate);
 
         applyParameter(journalpostResource.getJournalDato(), registryEntry::setRegistryDate, xmlUtils::xmlDate);
+
+        applyParameter(journalpostResource.getDokumentetsDato(), registryEntry::setDocumentDate, xmlUtils::xmlDate);
 
         applyParameterFromLink(journalpostResource.getJournalposttype(), registryEntry::setRegistryEntryTypeId);
 
