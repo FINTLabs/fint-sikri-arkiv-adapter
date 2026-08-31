@@ -24,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,9 +78,18 @@ public class JournalpostFactory {
 
         journalpost.setTittel(result.getTitle());
         journalpost.setOffentligTittel(result.getTitleRestricted());
+
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
-        journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
-        optionalValue(result.getDocumentDate()).map(XmlUtils::javaDate).ifPresent(journalpost::setDokumentetsDato);
+
+        // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~journaldato
+        journalpost.setJournalDato(Date.from(result.getRegistryDate().toGregorianCalendar()
+                .toZonedDateTime().withZoneSameInstant(ZoneOffset.UTC).with(LocalTime.NOON).toInstant()));
+
+        // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~dokumentetsdato
+        optionalValue(result.getDocumentDate())
+                .map(documentDate -> Date.from(documentDate.toGregorianCalendar()
+                        .toZonedDateTime().withZoneSameInstant(ZoneOffset.UTC).with(LocalTime.NOON).toInstant()))
+                .ifPresent(journalpost::setDokumentetsDato);
 
         if (log.isTraceEnabled()) {
             log.trace("OpprettetDato just set to: {}, JournalDato: {} and DokumentetsDato: {}",
