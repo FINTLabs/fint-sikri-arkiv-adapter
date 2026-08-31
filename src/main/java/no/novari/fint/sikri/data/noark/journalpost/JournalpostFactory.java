@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
@@ -82,13 +83,17 @@ public class JournalpostFactory {
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
 
         // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~journaldato
-        journalpost.setJournalDato(Date.from(result.getRegistryDate().toGregorianCalendar()
-                .toZonedDateTime().withZoneSameInstant(ZoneOffset.UTC).with(LocalTime.NOON).toInstant()));
+        optionalValue(result.getRegistryDate())
+                .map(date -> LocalDate.of(date.getYear(), date.getMonth(), date.getDay()))
+                .map(date -> date.atTime(LocalTime.NOON).toInstant(ZoneOffset.UTC))
+                .map(Date::from)
+                .ifPresent(journalpost::setJournalDato);
 
         // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~dokumentetsdato
         optionalValue(result.getDocumentDate())
-                .map(documentDate -> Date.from(documentDate.toGregorianCalendar()
-                        .toZonedDateTime().withZoneSameInstant(ZoneOffset.UTC).with(LocalTime.NOON).toInstant()))
+                .map(date -> LocalDate.of(date.getYear(), date.getMonth(), date.getDay()))
+                .map(date -> date.atTime(LocalTime.NOON).toInstant(ZoneOffset.UTC))
+                .map(Date::from)
                 .ifPresent(journalpost::setDokumentetsDato);
 
         if (log.isTraceEnabled()) {
