@@ -87,13 +87,6 @@ public class JournalpostFactory {
                 .map(SikriUtils::toUtcNoonDate)
                 .ifPresent(journalpost::setDokumentetsDato);
 
-        if (log.isTraceEnabled()) {
-            log.trace("OpprettetDato just set to: {}, JournalDato: {} and DokumentetsDato: {}",
-                    journalpost.getOpprettetDato(), journalpost.getJournalDato(), journalpost.getDokumentetsDato());
-            log.trace("All dates based on the RegistryEntryType values {} (CreatedDate), {} (RegistryDate) and {} (DocumentDate)",
-                    result.getCreatedDate(), result.getRegistryDate(), result.getDocumentDate());
-        }
-
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
         // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
@@ -168,9 +161,6 @@ public class JournalpostFactory {
         applyParameter(journalpostResource.getJournalDato(), registryEntry::setRegistryDate, xmlUtils::xmlDate);
 
         applyParameter(journalpostResource.getDokumentetsDato(), registryEntry::setDocumentDate, xmlUtils::xmlDate);
-        if(log.isTraceEnabled()) {
-            log.trace("Registry Entry set document date to: {}", journalpostResource.getDokumentetsDato());
-        }
 
         applyParameterFromLink(journalpostResource.getJournalposttype(), registryEntry::setRegistryEntryTypeId);
 
@@ -246,5 +236,4 @@ public class JournalpostFactory {
 
         return result;
     }
-
 }
