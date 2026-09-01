@@ -18,17 +18,14 @@ import no.novari.fint.sikri.data.noark.korrespondansepart.KorrespondansepartServ
 import no.novari.fint.sikri.data.noark.merknad.MerknadService;
 import no.novari.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.novari.fint.sikri.data.noark.skjerming.SkjermingService;
+import no.novari.fint.sikri.data.utilities.SikriUtils;
 import no.novari.fint.sikri.data.utilities.XmlUtils;
 import no.novari.fint.sikri.model.SikriIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.util.Collections;
-import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -83,17 +80,11 @@ public class JournalpostFactory {
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
 
         // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~journaldato
-        optionalValue(result.getRegistryDate())
-                .map(date -> LocalDate.of(date.getYear(), date.getMonth(), date.getDay()))
-                .map(date -> date.atTime(LocalTime.NOON).toInstant(ZoneOffset.UTC))
-                .map(Date::from)
-                .ifPresent(journalpost::setJournalDato);
+        journalpost.setJournalDato(toUtcNoonDate(result.getRegistryDate()));
 
         // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~dokumentetsdato
         optionalValue(result.getDocumentDate())
-                .map(date -> LocalDate.of(date.getYear(), date.getMonth(), date.getDay()))
-                .map(date -> date.atTime(LocalTime.NOON).toInstant(ZoneOffset.UTC))
-                .map(Date::from)
+                .map(SikriUtils::toUtcNoonDate)
                 .ifPresent(journalpost::setDokumentetsDato);
 
         if (log.isTraceEnabled()) {
