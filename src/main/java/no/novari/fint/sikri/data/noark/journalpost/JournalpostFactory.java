@@ -18,6 +18,7 @@ import no.novari.fint.sikri.data.noark.korrespondansepart.KorrespondansepartServ
 import no.novari.fint.sikri.data.noark.merknad.MerknadService;
 import no.novari.fint.sikri.data.noark.nokkelord.NokkelordService;
 import no.novari.fint.sikri.data.noark.skjerming.SkjermingService;
+import no.novari.fint.sikri.data.utilities.SikriUtils;
 import no.novari.fint.sikri.data.utilities.XmlUtils;
 import no.novari.fint.sikri.model.SikriIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +76,17 @@ public class JournalpostFactory {
 
         journalpost.setTittel(result.getTitle());
         journalpost.setOffentligTittel(result.getTitleRestricted());
+
         journalpost.setOpprettetDato(result.getCreatedDate().toGregorianCalendar().getTime());
-        journalpost.setJournalDato(result.getRegistryDate().toGregorianCalendar().getTime());
+
+        // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~journaldato
+        journalpost.setJournalDato(toUtcNoonDate(result.getRegistryDate()));
+
+        // See https://informasjonsmodell.felleskomponent.no/docs/noark_journalpost/~dokumentetsdato
+        optionalValue(result.getDocumentDate())
+                .map(SikriUtils::toUtcNoonDate)
+                .ifPresent(journalpost::setDokumentetsDato);
+
         journalpost.setJournalAr(String.valueOf(result.getRegisterYear()));
         journalpost.setJournalPostnummer(Long.valueOf(result.getDocumentNumber()));
         // TODO journalpost.setJournalSekvensnummer(Long.valueOf(result.getSequenceNumber()));
@@ -149,6 +159,8 @@ public class JournalpostFactory {
         applyParameter(journalpostResource.getOpprettetDato(), registryEntry::setCreatedDate, xmlUtils::xmlDate);
 
         applyParameter(journalpostResource.getJournalDato(), registryEntry::setRegistryDate, xmlUtils::xmlDate);
+
+        applyParameter(journalpostResource.getDokumentetsDato(), registryEntry::setDocumentDate, xmlUtils::xmlDate);
 
         applyParameterFromLink(journalpostResource.getJournalposttype(), registryEntry::setRegistryEntryTypeId);
 
@@ -224,5 +236,4 @@ public class JournalpostFactory {
 
         return result;
     }
-
 }
