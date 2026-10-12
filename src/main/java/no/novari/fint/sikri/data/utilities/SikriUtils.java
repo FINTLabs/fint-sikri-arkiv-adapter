@@ -14,6 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.util.Date;
+
 public enum SikriUtils {
     ;
 
@@ -71,6 +77,14 @@ public enum SikriUtils {
 
     public static <T, U> Function<U, Optional<T>> optionalValueFn(Function<U, T> function) {
         return f -> optionalValue(function.apply(f));
+    }
+
+    public static Date toUtcNoonDate(XMLGregorianCalendar input) {
+        if (input == null) {
+            return null;
+        }
+        LocalDate date = LocalDate.of(input.getYear(), input.getMonth(), input.getDay());
+        return Date.from(date.atTime(LocalTime.NOON).toInstant(ZoneOffset.UTC));
     }
 
     public static URL getURL(String location) throws MalformedURLException {

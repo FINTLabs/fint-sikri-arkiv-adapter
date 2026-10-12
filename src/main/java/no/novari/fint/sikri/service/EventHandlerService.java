@@ -71,11 +71,11 @@ public class EventHandlerService {
         } catch (IllegalArgumentException e) {
             log.warn("Illegal arguments in event {}: {}", response, e.getMessage());
             response.setResponseStatus(ResponseStatus.REJECTED);
-            response.setMessage(e.getMessage());
+            response.setMessage(withQuery(e.getMessage(), response.getQuery()));
         } catch (Exception e) {
             log.error("Error handling event {}", response, e);
             response.setResponseStatus(ResponseStatus.ERROR);
-            response.setMessage(e.getMessage());
+            response.setMessage(withQuery(e.getMessage(), response.getQuery()));
         } finally {
             if (response.getData() != null) {
                 log.info("{}: Response for {}: {}, {} items", component, response.getAction(), response.getResponseStatus(), response.getData().size());
@@ -85,6 +85,13 @@ public class EventHandlerService {
             }
             eventResponseService.postResponse(component, response);
         }
+    }
+
+    private static String withQuery(String message, String query) {
+        if (query == null || query.isEmpty()) {
+            return message;
+        }
+        return message + " (query=" + query + ")";
     }
 
     public void postHealthCheckResponse(String component, Event event) {
