@@ -59,7 +59,7 @@ dependencies {
     wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics:1.11.1'
 
     compile('com.google.guava:guava:33.6.0-jre')
-    compile('com.github.spotbugs:spotbugs-annotations:4.9.8')
+    compile('com.github.spotbugs:spotbugs-annotations:4.10.2')
     compile('org.apache.commons:commons-lang3:3.20.0')
     compile('org.apache.tika:tika-core:2.9.4')
     compile('org.glassfish.jersey.core:jersey-client:2.48')
