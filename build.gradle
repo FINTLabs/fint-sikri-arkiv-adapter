@@ -95,10 +95,10 @@ dependencies {
     compile 'io.projectreactor:reactor-core:3.8.7'
 
     compile('com.fasterxml.jackson.core:jackson-annotations:2.22')
-    compile('com.fasterxml.jackson.core:jackson-core:2.22.3')
-    compile('com.fasterxml.jackson.core:jackson-databind:2.22.3')
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.3')
-    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.3')
+    compile('com.fasterxml.jackson.core:jackson-core:2.22.4')
+    compile('com.fasterxml.jackson.core:jackson-databind:2.22.4')
+    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.4')
+    compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.4')
     compile('org.slf4j:slf4j-api:2.0.20')
 
     compile 'no.fintlabs:fint-antlr:1.2.0'
