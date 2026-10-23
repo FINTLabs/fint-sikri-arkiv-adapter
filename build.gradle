@@ -60,7 +60,7 @@ dependencies {
 
     compile('com.google.guava:guava:33.6.0-jre')
     compile('com.github.spotbugs:spotbugs-annotations:4.10.4')
-    compile('org.apache.commons:commons-lang3:3.20.0')
+    compile('org.apache.commons:commons-lang3:3.21.0')
     //This is the final 2.x release. The 2.x branch and support for Java 8 are now at End Of Life.
     compile('org.apache.tika:tika-core:2.9.4')
     compile('org.glassfish.jersey.core:jersey-client:2.48')
