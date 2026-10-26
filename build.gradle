@@ -86,7 +86,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     // This is as far as our circumstances can take us right now!
-    compile('io.micrometer:micrometer-registry-prometheus:1.12.13')
+    compile('io.micrometer:micrometer-registry-prometheus:1.16.8')
     compile('io.micrometer:micrometer-spring-legacy:1.3.20')
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
