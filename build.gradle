@@ -71,8 +71,8 @@ dependencies {
     // Spring adds validation-api 1.x and hibernate-validator 5.x by default, all three dependencies needed to override.
     // This is as far as Java 8 can take us right now!
     compile 'jakarta.validation:jakarta.validation-api:2.0.2'
-    compile 'org.hibernate.validator:hibernate-validator:6.2.5.Final'
-    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.2.5.Final'
+    compile 'org.hibernate.validator:hibernate-validator:6.2.6.Final'
+    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.2.6.Final'
 
     compile('no.fint:fint-sse:2.0.1')
     compile('no.fint:fint-event-model:3.3.1')
