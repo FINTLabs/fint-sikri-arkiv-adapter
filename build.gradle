@@ -72,8 +72,8 @@ dependencies {
     // Spring adds validation-api 1.x and hibernate-validator 5.x by default, all three dependencies needed to override.
     // This is as far as Java 8 can take us right now!
     compile 'jakarta.validation:jakarta.validation-api:2.0.2'
-    compile 'org.hibernate.validator:hibernate-validator:6.2.5.Final'
-    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.2.5.Final'
+    compile 'org.hibernate.validator:hibernate-validator:6.2.6.Final'
+    compile 'org.hibernate.validator:hibernate-validator-annotation-processor:6.2.6.Final'
 
     compile('no.fint:fint-sse:2.0.1')
     compile('no.fint:fint-event-model:3.3.1')
@@ -92,7 +92,7 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
     compile 'com.azure:azure-storage-blob:12.36.0'
-    compile 'io.projectreactor:reactor-core:3.8.7'
+    compile 'io.projectreactor:reactor-core:3.8.8'
 
     compile('com.fasterxml.jackson.core:jackson-annotations:2.22')
     compile('com.fasterxml.jackson.core:jackson-core:2.22.4')
@@ -106,7 +106,7 @@ dependencies {
     testCompile('cglib:cglib-nodep:3.3.0')
     testCompile('org.spockframework:spock-spring:1.3-groovy-2.5')
     testCompile('org.spockframework:spock-core:1.3-groovy-2.5')
-    testCompile('net.bytebuddy:byte-buddy:1.18.10')
+    testCompile('net.bytebuddy:byte-buddy:1.18.16')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
