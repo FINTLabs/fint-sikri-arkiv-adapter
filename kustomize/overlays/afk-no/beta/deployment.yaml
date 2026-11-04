@@ -146,4 +146,4 @@ spec:
             - { name: fint.adapter.endpoints.providers.samferdsel, value: http://provider-arkiv-samferdsel.default:8080/arkiv/samferdsel/provider }
             - { name: fint.adapter.endpoints.providers.personal, value: http://provider-arkiv-personal.default:8080/arkiv/personal/provider }
 
-            - {name: logging.level.no.novari, value: debug }
+            - {name: logging.level.no.novari, value: info }
