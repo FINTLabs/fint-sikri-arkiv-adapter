@@ -100,7 +100,7 @@ dependencies {
     compile('com.fasterxml.jackson.core:jackson-databind:2.22.4')
     compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.4')
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.4')
-    compile('org.slf4j:slf4j-api:2.0.20')
+    compile('org.slf4j:slf4j-api:1.7.36')
 
     compile 'no.fintlabs:fint-antlr:1.2.0'
 
@@ -165,4 +165,4 @@ test {
     }
 }
 
-apply from: 'https://raw.githubusercontent.com/FINTlibs/fint-buildscripts/v1.6.0/dependencyReport.gradle'
+    apply from: 'https://raw.githubusercontent.com/FINTlibs/fint-buildscripts/v1.6.0/dependencyReport.gradle'
