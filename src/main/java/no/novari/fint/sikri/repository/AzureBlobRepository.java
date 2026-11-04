@@ -90,7 +90,7 @@ public class AzureBlobRepository extends InternalRepository {
             resource.setFilnavn(metadata.get("filename"));
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        blobClient.download(out);
+        blobClient.downloadStream(out);
         resource.setData(Base64.getEncoder().encodeToString(out.toByteArray()));
         return resource;
     }
