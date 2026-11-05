@@ -42,6 +42,8 @@ public class AzureBlobRepository extends InternalRepository {
 
     @PostConstruct
     public void init() {
+        logThreadInfo("init");
+
         blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
         blobContainerClient = blobServiceClient.getBlobContainerClient(containerName);
         if (!blobContainerClient.exists()) {
@@ -52,6 +54,8 @@ public class AzureBlobRepository extends InternalRepository {
 
     @Override
     public void putFile(Event<FintLinks> event, DokumentfilResource resource) throws IOException {
+        logThreadInfo("putFile");
+
         String systemId = getNextSystemId();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
         BlobClient blobClient = blobContainerClient.getBlobClient(systemId);
@@ -79,29 +83,49 @@ public class AzureBlobRepository extends InternalRepository {
 
     @Override
     public DokumentfilResource silentGetFile(String recNo) {
+        logThreadInfo("silentGetFile - getBlobClient");
         BlobClient blobClient = blobContainerClient.getBlobClient(recNo);
+
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(recNo));
         Map<String, String> metadata = blobClient.getProperties().getMetadata();
         resource.setFormat(metadata.get("format"));
+
         try {
             resource.setFilnavn(URLDecoder.decode(metadata.get("filename"), StandardCharsets.UTF_8.name()));
         } catch (UnsupportedEncodingException e) {
             resource.setFilnavn(metadata.get("filename"));
         }
+
+        logThreadInfo("silentGetFile - downloadStream");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         blobClient.downloadStream(out);
         resource.setData(Base64.getEncoder().encodeToString(out.toByteArray()));
+
         return resource;
     }
 
     @Override
     public boolean health() {
+        logThreadInfo("health");
         return blobContainerClient.exists();
     }
 
     @Override
     public boolean exists(String recNo) {
+        logThreadInfo("exists");
         return blobContainerClient.getBlobClient(recNo).exists();
+    }
+
+    private void logThreadInfo(String operation) {
+        Thread thread = Thread.currentThread();
+
+        log.info(
+                "Current Thread Info: Blob {} - thread={}, id={}, interrupted={}",
+                operation,
+                thread.getName(),
+                thread.getId(),
+                thread.isInterrupted()
+        );
     }
 }
