@@ -24,6 +24,13 @@ public class FintEventListener extends AbstractEventListener {
     @Override
     public void onEvent(Event event) {
         log.info("{}: Processing event {} for {} - {}", component, event.getAction(), event.getOrgId(), event.getCorrId());
+
+        Thread thread = Thread.currentThread();
+        log.info("Current Thread info: thread={}, id={}, interrupted={}",
+                thread.getName(),
+                thread.getId(),
+                thread.isInterrupted());
+
         eventHandler.handleEvent(component, event);
     }
 }
