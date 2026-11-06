@@ -37,12 +37,13 @@ public class AzureBlobRepository extends InternalRepository {
     @Value("${fint.internal-files.container-name}")
     private String containerName;
 
-    private BlobServiceClient blobServiceClient;
     private BlobContainerClient blobContainerClient;
 
     @PostConstruct
     public void init() {
-        blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                .connectionString(connectionString)
+                .buildClient();
         blobContainerClient = blobServiceClient.getBlobContainerClient(containerName);
         if (!blobContainerClient.exists()) {
             blobContainerClient.create();
@@ -80,18 +81,22 @@ public class AzureBlobRepository extends InternalRepository {
     @Override
     public DokumentfilResource silentGetFile(String recNo) {
         BlobClient blobClient = blobContainerClient.getBlobClient(recNo);
+
         DokumentfilResource resource = new DokumentfilResource();
         resource.setSystemId(FintUtils.createIdentifikator(recNo));
         Map<String, String> metadata = blobClient.getProperties().getMetadata();
         resource.setFormat(metadata.get("format"));
+
         try {
             resource.setFilnavn(URLDecoder.decode(metadata.get("filename"), StandardCharsets.UTF_8.name()));
         } catch (UnsupportedEncodingException e) {
             resource.setFilnavn(metadata.get("filename"));
         }
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        blobClient.download(out);
+        blobClient.downloadStream(out);
         resource.setData(Base64.getEncoder().encodeToString(out.toByteArray()));
+
         return resource;
     }
 
