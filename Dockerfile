@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java:8 AS runtime-base
+FROM gcr.io/distroless/java:11 AS runtime-base
 
 FROM eclipse-temurin:8-jdk AS certificates
 COPY --from=runtime-base /etc/ssl/certs/java/cacerts /tmp/truststore.jks
