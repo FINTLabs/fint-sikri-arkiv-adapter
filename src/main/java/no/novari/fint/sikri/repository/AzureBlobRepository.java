@@ -37,14 +37,13 @@ public class AzureBlobRepository extends InternalRepository {
     @Value("${fint.internal-files.container-name}")
     private String containerName;
 
-    private BlobServiceClient blobServiceClient;
     private BlobContainerClient blobContainerClient;
 
     @PostConstruct
     public void init() {
-        logThreadInfo("init");
-
-        blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                .connectionString(connectionString)
+                .buildClient();
         blobContainerClient = blobServiceClient.getBlobContainerClient(containerName);
         if (!blobContainerClient.exists()) {
             blobContainerClient.create();
@@ -54,8 +53,6 @@ public class AzureBlobRepository extends InternalRepository {
 
     @Override
     public void putFile(Event<FintLinks> event, DokumentfilResource resource) throws IOException {
-        logThreadInfo("putFile");
-
         String systemId = getNextSystemId();
         resource.setSystemId(FintUtils.createIdentifikator(systemId));
         BlobClient blobClient = blobContainerClient.getBlobClient(systemId);
@@ -83,7 +80,6 @@ public class AzureBlobRepository extends InternalRepository {
 
     @Override
     public DokumentfilResource silentGetFile(String recNo) {
-        logThreadInfo("silentGetFile - getBlobClient");
         BlobClient blobClient = blobContainerClient.getBlobClient(recNo);
 
         DokumentfilResource resource = new DokumentfilResource();
@@ -97,7 +93,6 @@ public class AzureBlobRepository extends InternalRepository {
             resource.setFilnavn(metadata.get("filename"));
         }
 
-        logThreadInfo("silentGetFile - downloadStream");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         blobClient.downloadStream(out);
         resource.setData(Base64.getEncoder().encodeToString(out.toByteArray()));
@@ -107,25 +102,11 @@ public class AzureBlobRepository extends InternalRepository {
 
     @Override
     public boolean health() {
-        logThreadInfo("health");
         return blobContainerClient.exists();
     }
 
     @Override
     public boolean exists(String recNo) {
-        logThreadInfo("exists");
         return blobContainerClient.getBlobClient(recNo).exists();
-    }
-
-    private void logThreadInfo(String operation) {
-        Thread thread = Thread.currentThread();
-
-        log.info(
-                "Current Thread Info: Blob {} - thread={}, id={}, interrupted={}",
-                operation,
-                thread.getName(),
-                thread.getId(),
-                thread.isInterrupted()
-        );
     }
 }
