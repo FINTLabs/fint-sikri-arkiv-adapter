@@ -1,6 +1,6 @@
-FROM gcr.io/distroless/java:11 AS runtime-base
+FROM gcr.io/distroless/java:8 AS runtime-base
 
-FROM eclipse-temurin:25-jdk AS certificates
+FROM eclipse-temurin:8-jdk AS certificates
 COPY --from=runtime-base /etc/ssl/certs/java/cacerts /tmp/truststore.jks
 COPY certs/globalsign-root-r46.crt /tmp/globalsign-root-r46.crt
 RUN keytool -importcert -noprompt \
