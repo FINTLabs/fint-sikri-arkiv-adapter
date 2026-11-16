@@ -58,8 +58,8 @@ dependencies {
     wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics-runtime:1.11.1'
     wsdl2java 'org.jvnet.jaxb2_commons:jaxb2-basics:1.11.1'
 
-    compile('com.google.guava:guava:33.6.0-jre')
-    compile('com.github.spotbugs:spotbugs-annotations:4.10.4')
+    compile('com.google.guava:guava:33.8.0-jre')
+    compile('com.github.spotbugs:spotbugs-annotations:4.10.5')
     compile('org.apache.commons:commons-lang3:3.21.0')
     //This is the final 2.x release. The 2.x branch and support for Java 8 are now at End Of Life.
     compile('org.apache.tika:tika-core:2.9.4')
@@ -91,7 +91,7 @@ dependencies {
     compile('io.micrometer:micrometer-spring-legacy:1.3.20')
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
-    compile 'com.azure:azure-storage-blob:12.36.0'
+    compile 'com.azure:azure-storage-blob:12.37.2'
     compile 'io.projectreactor:reactor-core:3.8.8'
 
     compile('com.fasterxml.jackson.core:jackson-annotations:2.22')
@@ -107,7 +107,7 @@ dependencies {
     testCompile('cglib:cglib-nodep:3.3.0')
     testCompile('org.spockframework:spock-spring:1.3-groovy-2.5')
     testCompile('org.spockframework:spock-core:1.3-groovy-2.5')
-    testCompile('net.bytebuddy:byte-buddy:1.18.16')
+    testCompile('net.bytebuddy:byte-buddy:1.18.17')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
