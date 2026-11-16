@@ -122,4 +122,4 @@ spec:
             - { name: fint.adapter.endpoints.providers.samferdsel, value: http://provider-arkiv-samferdsel.default:8080/arkiv/samferdsel/provider }
 
             - {name: logging.level.no.fint.arkiv, value: debug }
-            - {name: logging.level.no.fint.sikri, value: debug }
+            - {name: logging.level.no.novari.fint.sikri, value: trace }
