@@ -19,4 +19,5 @@ COPY build/deps/external/*.jar /app/
 COPY build/deps/fint/*.jar /app/
 COPY build/libs/fint-sikri-arkiv-adapter-*.jar /app/fint-sikri-arkiv-adapter.jar
 ENV fint.sikri.wsdl-location=/app/
+ENTRYPOINT ["java", "-jar"]
 CMD ["/app/fint-sikri-arkiv-adapter.jar"]
