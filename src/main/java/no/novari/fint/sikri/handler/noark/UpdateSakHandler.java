@@ -118,6 +118,11 @@ public class UpdateSakHandler implements Handler {
         response.setData(ImmutableList.of(sak));
         response.setResponseStatus(ResponseStatus.ACCEPTED);
 
+        log.info("Create case with mappeId: {}. Status: {}. StatusCode: {}",
+                sak.getMappeId() != null ? sak.getMappeId().getIdentifikatorverdi(): "N/A",
+                response.getStatus().name(),
+                response.getStatusCode() != null ? response.getStatusCode() : "N/A");
+
         sample.stop(updateSakTimer.tag("request", "createCase")
                 .tag("status", response.getStatus().name())
                 .tag("statusCode", response.getStatusCode() != null ? response.getStatusCode() : "N/A")
