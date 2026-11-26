@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8 AS runtime-base
+FROM eclipse-temurin:24 AS runtime-base
 
 ENV JAVA_TOOL_OPTIONS=-XX:+ExitOnOutOfMemoryError
 
