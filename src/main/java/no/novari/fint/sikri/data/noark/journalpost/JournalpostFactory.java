@@ -105,6 +105,7 @@ public class JournalpostFactory {
         optionalValue(skjermingService.getSkjermingResource(result::getAccessCodeId, result::getPursuant)).ifPresent(
                 journalpost::setSkjerming);
 
+        // TODO: Give FINT Flyt an helping downgrading hand
         if (isNotBlank(result.getDowngradingCodeId())) {
             Avskrivning avskrivning = new Avskrivning();
             avskrivning.setAvskrivningsmate(result.getDowngradingCodeId());
@@ -200,6 +201,7 @@ public class JournalpostFactory {
             }
         }
 
+        // TODO: Give FINT Flyt an helping downgrading hand
         optionalValue(journalpostResource.getAvskrivning()).map(Avskrivning::getAvskrivningsmate)
                 .ifPresent(registryEntry::setDowngradingCodeId);
         optionalValue(journalpostResource.getAvskrivning()).map(Avskrivning::getAvskrivningsdato)
